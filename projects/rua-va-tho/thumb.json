@@ -1,0 +1,26 @@
+{
+  "title": "Rùa và Thỏ - ảnh bìa",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "cast": {
+    "tho": {"body": "white", "ears": "bunny", "tail": "bunny", "sash": "red"},
+    "rua": {"body": "green", "shell": "turtle", "headband": "green"}
+  },
+  "shots": [
+    {
+      "start": 0,
+      "end": 1.2,
+      "elements": [
+        {"type": "prop", "name": "ground", "x": 540, "y": 1330, "params": {"w": 1080}},
+        {"type": "prop", "name": "finishLine", "x": 540, "y": 1330, "params": {"w": 360, "h": 460, "label": "ĐÍCH"}, "from": 0},
+        {"type": "actor", "cast": "rua", "x": 230, "y": 1330, "scale": 0.65, "facing": 1,
+         "acting": [{"t": 0, "pose": "celebrate", "expr": "happy"}]},
+        {"type": "actor", "cast": "tho", "x": 860, "y": 1330, "scale": 0.65, "facing": -1,
+         "acting": [{"t": 0, "pose": "sad", "expr": "embarrassed"}]},
+        {"type": "text", "text": "CHẬM MÀ", "x": 540, "y": 290, "size": 230, "color": "green", "from": 0},
+        {"type": "text", "text": "THẮNG?", "x": 540, "y": 540, "size": 260, "color": "red", "from": 0}
+      ]
+    }
+  ]
+}
