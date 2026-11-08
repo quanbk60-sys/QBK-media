@@ -14,6 +14,24 @@
   "narration.txt",
   "script.md",
   "sources.md",
-  "captions-phrases.txt"
- ]
+  "captions-phrases.txt",
+  "audio/narration.wav",
+  "captions-audio.json"
+ ],
+ "tts": {
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Bodi",
+  "duration_s": 72.48,
+  "usage": {
+   "promptTokenCount": 323,
+   "candidatesTokenCount": 1812,
+   "totalTokenCount": 2135,
+   "serviceTier": "standard"
+  },
+  "captions": {
+   "file": "captions-audio.json",
+   "phrases": 48,
+   "pauses": 54
+  }
+ }
 }
