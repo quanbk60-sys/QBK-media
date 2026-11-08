@@ -11,6 +11,11 @@ description: Săn trend cho kênh QBK. Tìm xu hướng, sự kiện và ngày l
 3. **Chủ đề luôn được xem (evergreen)** hợp với các mảng của kênh: lịch sử, khoa học "vì sao", ngụ ngôn, tâm lý, hoạt hình vui.
 4. **Dữ liệu của chính kênh** (khi đã có `studio/stats`): thể loại hay phong cách nào đang được xem nhiều.
 
+## Nguồn đã kiểm tra được trong môi trường QBK-media (08/11/2026)
+- **Google Trends VN (đọc được):** `curl -s "https://trends.google.com/trending/rss?geo=VN"`. RSS gồm từ khóa và `ht:approx_traffic`. Lọc bỏ bóng đá, showbiz và chính trị.
+- **TikTok, từng video (đọc được):** `https://www.tiktok.com/oembed?url=<link video>` trả về tiêu đề, tác giả, ảnh bìa. Dùng khi người dùng dán link trend.
+- **TikTok Creative Center (chưa đọc được):** mở bằng trình duyệt Chromium thì trả về trang trống, có thể do TikTok chặn truy cập tự động. Ghi "không có dữ liệu", không đoán.
+
 ## Chấm điểm mỗi ý tưởng (thang 1–5)
 | Tiêu chí | Ý nghĩa |
 |---|---|
