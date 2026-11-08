@@ -19,3 +19,4 @@ Trạng thái: `ý tưởng` → `đang làm` → `xong` → `đã đăng`. Nhà
 | 13 | Khoa học | Vì sao bầu trời màu xanh | Ánh sáng Mặt Trời có đủ màu, sao ta chỉ thấy xanh? (style: bang-phan) trend 2026-11-08 | ý tưởng | |
 | 14 | Cổ tích | Sự tích Ông Công Ông Táo | Vì sao cá chép đưa ông Táo lên trời? (style: dan-gian) trend 2026-11-08, hạn 29/01 (kiểm lại ngày 23 tháng Chạp) | ý tưởng | |
 | 15 | Ngụ ngôn | Ếch ngồi đáy giếng | Thế giới của bạn to bằng cái miệng giếng (style: giay-muc) trend 2026-11-08 | ý tưởng | |
+| 16 | Địa lý | Rừng Amazon | Yêu cầu từ app (style: ban-do-toi) | đang làm | projects/rung-amazon |
