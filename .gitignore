@@ -3,3 +3,5 @@ node_modules/
 projects/**/cache/
 *.wav
 .env
+projects/*/output/check*
+projects/*/output/.*
