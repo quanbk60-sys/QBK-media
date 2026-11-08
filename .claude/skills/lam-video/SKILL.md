@@ -18,6 +18,7 @@ Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude
 | 5 | `kiem-dinh` (sonnet) | `qa.md`: lỗi được trả về đúng agent, tối đa 2 vòng |
 | 6 | `phat-hanh` (sonnet) | `publish.md`, `output/thumbnail.png` |
 | ⏸ | **Người dùng duyệt video hoàn chỉnh** | Góp ý được ghi vào `feedback.md`, rồi làm lại |
+| ★ | `nghien-cuu-mau` (sonnet) | Khi người dùng gửi **mẫu tham khảo**: thẻ kiến thức trong `studio/references/`, gói phong cách mới (skill `hoc-mau`) |
 
 Các bước độc lập nhau thì chạy song song: lồng tiếng song song với họa sĩ; phát hành song song với kiểm định bản final.
 
@@ -39,6 +40,9 @@ Các bước độc lập nhau thì chạy song song: lồng tiếng song song v
 6. **Bài học.** Góp ý nào áp dụng được cho mọi video sau (ví dụ "giọng chậm quá", "không thích tiếng bút") thì thêm vào `studio/lessons.md` thành một quy tắc ngắn. Nếu sửa được ở gốc (mặc định của engine hoặc công cụ) thì sửa ở gốc luôn.
 7. **Khi người dùng duyệt:** cập nhật `checkpoint.json` (`stage: done`) và `studio/topics.md` (`xong`).
 8. **Lưu công việc:** commit và push sau mỗi mốc. Không commit `node_modules` hay các file render thử.
+
+## Mẫu tham khảo
+Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiều mẫu thì chạy song song). Trước khi phân cảnh, đạo diễn đọc thẻ trong `studio/references/` của phong cách định dùng. Mục "Còn thiếu" trong các thẻ là danh sách việc của họa sĩ.
 
 ## Chọn phong cách (`"style"` trong scene.json; xem `node studio/engine/catalog.mjs`)
 | Thể loại | Phong cách gợi ý |

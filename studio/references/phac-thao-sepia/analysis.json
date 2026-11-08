@@ -1,0 +1,55 @@
+{
+ "video": "41460c79-Screen_Recording_20261108_202424_Zalo.mp4",
+ "duration_s": 13.24,
+ "size": "1080x1708",
+ "fps": "120/1",
+ "crop": [
+  0.06,
+  0.2
+ ],
+ "cuts": 1,
+ "cut_times": [
+  4.68
+ ],
+ "avg_shot_s": 6.62,
+ "palette": [
+  {
+   "hex": "#BFB9AD",
+   "share": 0.238
+  },
+  {
+   "hex": "#07070A",
+   "share": 0.227
+  },
+  {
+   "hex": "#A09A8F",
+   "share": 0.195
+  },
+  {
+   "hex": "#544E48",
+   "share": 0.138
+  },
+  {
+   "hex": "#121318",
+   "share": 0.126
+  },
+  {
+   "hex": "#DDD8D0",
+   "share": 0.076
+  }
+ ],
+ "brightness": 0.41,
+ "colourfulness": 0.05,
+ "audio": {
+  "sound_ratio": 0.95,
+  "mean_db": -19.4,
+  "max_db": -1.5
+ },
+ "files": {
+  "contact": "contact.png",
+  "frames": [
+   "f00.png",
+   "f01.png"
+  ]
+ }
+}
