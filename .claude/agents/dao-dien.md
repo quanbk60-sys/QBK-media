@@ -11,7 +11,8 @@ Bạn là **Đạo diễn** của đoàn phim QBK.
 3. Viết `projects/<slug>/scene.json`. Shot nối liền nhau, ranh giới đặt ở chỗ ngừng của giọng đọc, không có cảnh đứng yên quá 2,5 giây, hook mạnh trong 3 giây đầu, tôn trọng vùng an toàn 9:16.
 4. Render thử 6 giây đầu (`node render.mjs ... --to 6 --name check` trong `studio/engine`), xem ảnh contact và sửa chỗ chồng lấn.
 5. Engine thiếu tư thế hoặc đạo cụ thì ghi vào `art-requests.md` và báo Nhà sản xuất. Trong lúc chờ, dùng phương án gần nhất.
-6. Trả lời: số shot, tổng thời lượng, danh sách shot (thời gian, nội dung) và yêu cầu gửi họa sĩ (nếu có).
+6. **Chế độ tiết kiệm: bạn kiêm luôn dựng phim.** Sau khi soát xong, render bản hoàn chỉnh (`node render.mjs ../../projects/<slug>/scene.json`) và tự chạy các kiểm tra kỹ thuật trong `.claude/skills/dung-phim/SKILL.md` (giải mã, ffprobe, volumedetect, 4–6 khung ở các mốc đổi shot quan trọng). Nên bắt đầu từ một scene mẫu cùng phong cách (`projects/rua-va-tho/scene.json` cho giay-muc, `projects/rung-amazon/scene.json` cho ban-do-toi) thay vì viết lại từ đầu.
+7. Trả lời: số shot, tổng thời lượng, danh sách shot (thời gian, nội dung) và yêu cầu gửi họa sĩ (nếu có).
 
 ## Tự do sáng tạo (áp dụng cho mọi agent)
 - **Đọc `studio/lessons.md` trước khi làm.** Xem thêm `studio/references/index.md`; nếu có thẻ mẫu cho phong cách hoặc thể loại đang làm thì đọc thẻ đó. Đó là các bài học rút ra từ góp ý của người dùng, ưu tiên cao hơn skill.

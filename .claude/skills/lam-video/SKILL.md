@@ -7,6 +7,15 @@ description: Đoàn phim QBK. Từ một chủ đề, làm trọn video hoạt h
 
 Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude/agents/`, giữ tiến độ trong `checkpoint.json`, rồi **gửi người dùng video hoàn chỉnh để duyệt**. Người dùng chỉ ra những điểm cần sửa, bạn chuyển từng điểm về đúng agent, làm lại và gửi lại. Những gì rút ra được ghi thành **bài học** trong `studio/lessons.md`.
 
+## Chế độ tiết kiệm (mặc định, người dùng yêu cầu 08/11/2026)
+- **Dựng ở session mới**, không trong chat dài: app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB`. Chat chính chỉ dùng để bàn kế hoạch.
+- **Model:** biên kịch Sonnet. Chủ đề lịch sử, chính trị hoặc nhạy cảm thì truyền `model: "opus"` khi giao. Đạo diễn Opus. Kiểm định, họa sĩ Sonnet. Lồng tiếng, phát hành Haiku.
+- **Đạo diễn kiêm dựng phim.** Chỉ gọi `dung-phim` khi render lỗi phức tạp.
+- **Họa sĩ chỉ chạy khi thật thiếu đồ.** Ưu tiên ghép đạo cụ có sẵn (`node studio/engine/catalog.mjs`).
+- **Kiểm định nhẹ** (nguồn, phụ đề, 6–8 khung, âm lượng), tối đa 1 vòng sửa tự động.
+- **Báo cáo ngắn**, không đọc lại file lớn khi không cần, không render thử nhiều lần.
+- Có nhiều yêu cầu trong app thì làm luôn trong một lần chạy.
+
 ## Đoàn phim và model
 | Bước | Agent (model) | Đầu ra |
 |---|---|---|

@@ -1,0 +1,2318 @@
+{
+ "width": 1080,
+ "height": 1920,
+ "fps": 30,
+ "style": "ban-do-toi",
+ "narration": {
+  "path": "audio/narration.wav",
+  "lead": 0.15
+ },
+ "captions": {
+  "path": "captions-audio.json",
+  "lead": 0.15,
+  "y": 1420,
+  "size": 58
+ },
+ "cast": {
+  "dan": {
+   "hat": "cap",
+   "hatColor": "gold",
+   "sash": "green",
+   "sashX": false,
+   "belt": "green"
+  }
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 2.5,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 900,
+     "zoom": 1.12
+    },
+    {
+     "t": 2.5,
+     "x": 540,
+     "y": 960,
+     "zoom": 1.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1000
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 540,
+     "y": 1330,
+     "scale": 0.85,
+     "params": {
+      "h": 470
+     },
+     "draw": {
+      "at": 0,
+      "dur": 1.0,
+      "hand": false
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 210,
+     "params": {
+      "w": 700,
+      "label": "AMAZON TẠO RA",
+      "big": "20% Ô-XY",
+      "bigSize": 150,
+      "bigColor": "gold"
+     },
+     "enter": "pop",
+     "to": 1.0
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 210,
+     "params": {
+      "w": 700,
+      "label": "AMAZON TẠO RA",
+      "big": "20% Ô-XY",
+      "bigSize": 150,
+      "bigColor": "gold",
+      "strike": true
+     },
+     "from": 1.0
+    },
+    {
+     "type": "text",
+     "text": "NGỘ NHẬN",
+     "x": 560,
+     "y": 610,
+     "size": 130,
+     "color": "red",
+     "font": "sans",
+     "bold": true,
+     "rotate": -0.08,
+     "enter": "pop",
+     "from": 1.15
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "drum",
+     "gain": 0.5
+    },
+    {
+     "t": 1.0,
+     "kind": "thud",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 2.5,
+   "end": 4.61,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 960,
+     "zoom": 1.0
+    },
+    {
+     "t": 2.11,
+     "x": 560,
+     "y": 930,
+     "zoom": 1.06
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1000
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 360,
+     "y": 1330,
+     "scale": 0.75,
+     "params": {
+      "h": 470
+     },
+     "track": [
+      {
+       "t": 0,
+       "x": 540,
+       "scale": 0.85
+      },
+      {
+       "t": 0.6,
+       "x": 360,
+       "scale": 0.75
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 820,
+      "label": "NGỘ NHẬN PHỔ BIẾN",
+      "title": "“Amazon tạo ra 20%\nô-xy của Trái Đất”",
+      "titleSize": 48,
+      "big": "20%",
+      "bigSize": 130,
+      "bigColor": "gold",
+      "strike": true,
+      "source": "NGUỒN: National Geographic, Oxford"
+     }
+    },
+    {
+     "type": "text",
+     "text": "NGỘ NHẬN",
+     "x": 720,
+     "y": 510,
+     "size": 110,
+     "color": "red",
+     "font": "sans",
+     "bold": true,
+     "rotate": -0.1,
+     "enter": "pop",
+     "from": 1.45
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 1150,
+     "y": 1330,
+     "scale": 0.6,
+     "facing": -1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "stand",
+       "expr": "neutral",
+       "cycle": "walk"
+      },
+      {
+       "t": 1.0,
+       "pose": "stand",
+       "expr": "neutral"
+      },
+      {
+       "t": 1.4,
+       "pose": "point",
+       "expr": "determined",
+       "snap": true
+      }
+     ],
+     "track": [
+      {
+       "t": 0,
+       "x": 1150
+      },
+      {
+       "t": 1.0,
+       "x": 830,
+       "ease": "linear"
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.42,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 4.61,
+   "end": 6.14,
+   "camera": [
+    {
+     "t": 0,
+     "x": 560,
+     "y": 930,
+     "zoom": 1.06
+    },
+    {
+     "t": 1.53,
+     "x": 470,
+     "y": 900,
+     "zoom": 1.15
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1000
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 360,
+     "y": 1330,
+     "scale": 0.75,
+     "params": {
+      "h": 470
+     }
+    },
+    {
+     "type": "prop",
+     "name": "arrow",
+     "x": 380,
+     "y": 760,
+     "params": {
+      "dx": 160,
+      "dy": -320,
+      "bend": -0.25,
+      "color": "green"
+     },
+     "ptrack": [
+      {
+       "t": 0.1,
+       "progress": 0
+      },
+      {
+       "t": 0.9,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "Ô-XY",
+     "x": 640,
+     "y": 450,
+     "size": 80,
+     "color": "green",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 0.7
+    },
+    {
+     "type": "text",
+     "text": "CÂY + VI SINH VẬT",
+     "x": 470,
+     "y": 290,
+     "size": 84,
+     "color": "gold",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 0.0
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 830,
+     "y": 1330,
+     "scale": 0.6,
+     "facing": -1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "point",
+       "expr": "determined"
+      },
+      {
+       "t": 0.5,
+       "pose": "scratchHead",
+       "expr": "surprised",
+       "cycle": "scratch"
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.55,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 6.14,
+   "end": 8.61,
+   "camera": [
+    {
+     "t": 0,
+     "x": 470,
+     "y": 900,
+     "zoom": 1.15
+    },
+    {
+     "t": 2.47,
+     "x": 540,
+     "y": 930,
+     "zoom": 1.05
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1000
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 360,
+     "y": 1330,
+     "scale": 0.75,
+     "params": {
+      "h": 470
+     }
+    },
+    {
+     "type": "prop",
+     "name": "arrow",
+     "x": 380,
+     "y": 760,
+     "params": {
+      "dx": 160,
+      "dy": -320,
+      "bend": -0.25,
+      "color": "green"
+     }
+    },
+    {
+     "type": "prop",
+     "name": "arrow",
+     "x": 560,
+     "y": 430,
+     "params": {
+      "dx": -40,
+      "dy": 880,
+      "bend": -0.35,
+      "color": "red",
+      "dashed": true
+     },
+     "ptrack": [
+      {
+       "t": 0,
+       "progress": 0
+      },
+      {
+       "t": 1.4,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 760,
+      "label": "Ô-XY RÒNG CỦA AMAZON",
+      "big": "≈ 0",
+      "bigSize": 130,
+      "bigColor": "gold",
+      "source": "NGUỒN: National Geographic, Oxford"
+     },
+     "enter": "pop",
+     "from": 1.2
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 830,
+     "y": 1330,
+     "scale": 0.6,
+     "facing": -1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "scratchHead",
+       "expr": "surprised",
+       "cycle": "scratch"
+      },
+      {
+       "t": 1.3,
+       "pose": "scared",
+       "expr": "surprised",
+       "snap": true
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.1,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 8.61,
+   "end": 10.2,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 930,
+     "zoom": 1.05
+    },
+    {
+     "t": 1.59,
+     "x": 540,
+     "y": 880,
+     "zoom": 0.62,
+     "ease": "out"
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 2000
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": -260,
+     "y": 1330,
+     "scale": 0.7,
+     "params": {
+      "h": 440
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 60,
+     "y": 1330,
+     "scale": 0.8,
+     "params": {
+      "h": 500
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 1020,
+     "y": 1330,
+     "scale": 0.8,
+     "params": {
+      "h": 480
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 1330,
+     "y": 1330,
+     "scale": 0.7,
+     "params": {
+      "h": 430
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 360,
+     "y": 1330,
+     "scale": 0.75,
+     "params": {
+      "h": 470
+     }
+    },
+    {
+     "type": "prop",
+     "name": "parrot",
+     "x": -300,
+     "y": 500,
+     "scale": 0.8,
+     "track": [
+      {
+       "t": 0.2,
+       "x": -300
+      },
+      {
+       "t": 1.59,
+       "x": 1400,
+       "ease": "linear"
+      }
+     ]
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 830,
+     "y": 1330,
+     "scale": 0.6,
+     "facing": 1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "point",
+       "expr": "grin",
+       "snap": true
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "LẠ HƠN NHIỀU",
+     "x": 540,
+     "y": 300,
+     "size": 130,
+     "color": "gold",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 0.75
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.35
+    },
+    {
+     "t": 0.7,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 10.2,
+   "end": 13.08,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 980,
+     "zoom": 1.0
+    },
+    {
+     "t": 2.88,
+     "x": 540,
+     "y": 940,
+     "zoom": 1.04
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "southAmericaMap",
+     "x": 560,
+     "y": 1010,
+     "scale": 0.75,
+     "params": {
+      "fill": 0
+     },
+     "ptrack": [
+      {
+       "t": 0,
+       "fill": 0
+      },
+      {
+       "t": 1.0,
+       "fill": 0
+      },
+      {
+       "t": 2.2,
+       "fill": 1,
+       "ease": "out"
+      }
+     ],
+     "draw": {
+      "at": 0,
+      "dur": 1.2,
+      "hand": false
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 900,
+      "label": "DIỆN TÍCH VÙNG AMAZON",
+      "big": "6,7 TRIỆU KM²",
+      "bigColor": "gold",
+      "source": "NGUỒN: WWF"
+     },
+     "enter": "pop",
+     "from": 1.5
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.45,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 13.08,
+   "end": 16.52,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 940,
+     "zoom": 1.04
+    },
+    {
+     "t": 3.44,
+     "x": 520,
+     "y": 900,
+     "zoom": 1.12
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "southAmericaMap",
+     "x": 560,
+     "y": 1010,
+     "scale": 0.75
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 900,
+      "label": "SO VỚI VIỆT NAM",
+      "big": "×20",
+      "bigSize": 120,
+      "bigColor": "gold",
+      "bars": [
+       {
+        "label": "Vùng Amazon",
+        "value": 1,
+        "color": "green",
+        "text": "6,7 tr km²"
+       },
+       {
+        "label": "Việt Nam",
+        "value": 0.05,
+        "color": "gold",
+        "text": "0,33 tr km²"
+       }
+      ],
+      "source": "NGUỒN: WWF, Britannica"
+     },
+     "ptrack": [
+      {
+       "t": 0,
+       "progress": 0
+      },
+      {
+       "t": 1.0,
+       "progress": 1
+      }
+     ],
+     "to": 1.4,
+     "exit": "fade"
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 900,
+      "label": "TRẢI TRÊN",
+      "title": "9 quốc gia\nvà vùng lãnh thổ",
+      "titleSize": 60,
+      "source": "NGUỒN: WWF, Britannica"
+     },
+     "enter": "pop",
+     "from": 1.42
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 589,
+     "y": 874,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.5,
+       "progress": 0
+      },
+      {
+       "t": 1.75,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 502,
+     "y": 952,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.62,
+       "progress": 0
+      },
+      {
+       "t": 1.87,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 394,
+     "y": 883,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.74,
+       "progress": 0
+      },
+      {
+       "t": 1.99,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 365,
+     "y": 810,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.8599999999999999,
+       "progress": 0
+      },
+      {
+       "t": 2.11,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 414,
+     "y": 766,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.98,
+       "progress": 0
+      },
+      {
+       "t": 2.23,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 482,
+     "y": 727,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 2.1,
+       "progress": 0
+      },
+      {
+       "t": 2.35,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 550,
+     "y": 747,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 2.2199999999999998,
+       "progress": 0
+      },
+      {
+       "t": 2.4699999999999998,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 580,
+     "y": 761,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 2.34,
+       "progress": 0
+      },
+      {
+       "t": 2.59,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "pin",
+     "x": 614,
+     "y": 758,
+     "params": {
+      "size": 0.6,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 2.46,
+       "progress": 0
+      },
+      {
+       "t": 2.71,
+       "progress": 1
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 1.5,
+     "kind": "tap",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 16.52,
+   "end": 18.91,
+   "camera": [
+    {
+     "t": 0,
+     "x": 520,
+     "y": 820,
+     "zoom": 1.6
+    },
+    {
+     "t": 0.9,
+     "x": 540,
+     "y": 960,
+     "zoom": 1.0
+    },
+    {
+     "t": 2.39,
+     "x": 560,
+     "y": 950,
+     "zoom": 1.03
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "southAmericaMap",
+     "x": 560,
+     "y": 1010,
+     "scale": 0.75,
+     "alpha": 1,
+     "to": 0.6,
+     "exit": "fade"
+    },
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1600
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 120,
+     "y": 1330,
+     "scale": 0.62,
+     "params": {
+      "h": 420
+     },
+     "enter": "drop",
+     "from": 0.05
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 330,
+     "y": 1330,
+     "scale": 0.72,
+     "params": {
+      "h": 480
+     },
+     "enter": "drop",
+     "from": 0.16999999999999998
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 560,
+     "y": 1330,
+     "scale": 0.8,
+     "params": {
+      "h": 520
+     },
+     "enter": "drop",
+     "from": 0.29
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 790,
+     "y": 1330,
+     "scale": 0.7,
+     "params": {
+      "h": 460
+     },
+     "enter": "drop",
+     "from": 0.41
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 980,
+     "y": 1330,
+     "scale": 0.6,
+     "params": {
+      "h": 400
+     },
+     "enter": "drop",
+     "from": 0.53
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": -80,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     },
+     "enter": "drop",
+     "from": 0.65
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 1180,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     },
+     "enter": "drop",
+     "from": 0.77
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 820,
+      "label": "SỐ CÂY Ở AMAZON",
+      "big": "390 TỶ CÂY",
+      "bigColor": "gold",
+      "source": "NGUỒN: Science 2013"
+     },
+     "enter": "pop",
+     "from": 1.0
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.95,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 18.91,
+   "end": 21.23,
+   "camera": [
+    {
+     "t": 0,
+     "x": 560,
+     "y": 950,
+     "zoom": 1.03
+    },
+    {
+     "t": 2.32,
+     "x": 600,
+     "y": 930,
+     "zoom": 1.08
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1600
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 120,
+     "y": 1330,
+     "scale": 0.62,
+     "params": {
+      "h": 420
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 330,
+     "y": 1330,
+     "scale": 0.72,
+     "params": {
+      "h": 480
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 560,
+     "y": 1330,
+     "scale": 0.8,
+     "params": {
+      "h": 520
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 790,
+     "y": 1330,
+     "scale": 0.7,
+     "params": {
+      "h": 460
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 980,
+     "y": 1330,
+     "scale": 0.6,
+     "params": {
+      "h": 400
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": -80,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 1180,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     }
+    },
+    {
+     "type": "prop",
+     "name": "parrot",
+     "x": -300,
+     "y": 640,
+     "scale": 0.7,
+     "track": [
+      {
+       "t": 0.1,
+       "x": -300,
+       "y": 680
+      },
+      {
+       "t": 2.32,
+       "x": 1400,
+       "y": 600,
+       "ease": "linear"
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 820,
+      "label": "SỐ LOÀI ĐÃ BIẾT TRÊN TRÁI ĐẤT",
+      "big": "≥ 10%",
+      "bigColor": "gold",
+      "bars": [
+       {
+        "label": "Có ở Amazon",
+        "value": 0.1,
+        "color": "gold",
+        "text": "ít nhất 1/10"
+       }
+      ],
+      "source": "NGUỒN: WWF"
+     },
+     "ptrack": [
+      {
+       "t": 0.2,
+       "progress": 0
+      },
+      {
+       "t": 1.2,
+       "progress": 1
+      }
+     ],
+     "enter": "pop"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 21.23,
+   "end": 24.32,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 980,
+     "zoom": 1.0
+    },
+    {
+     "t": 3.09,
+     "x": 560,
+     "y": 1000,
+     "zoom": 1.08
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "riverPath",
+     "x": 540,
+     "y": 1010,
+     "scale": 0.68,
+     "rotate": -0.95,
+     "params": {
+      "w": 46
+     },
+     "ptrack": [
+      {
+       "t": 0,
+       "progress": 0
+      },
+      {
+       "t": 2.0,
+       "progress": 1
+      }
+     ],
+     "draw": {
+      "at": 0,
+      "dur": 0.6,
+      "hand": false
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 860,
+      "label": "SÔNG AMAZON ĐỔ RA BIỂN",
+      "big": "1/5",
+      "bigSize": 130,
+      "bigColor": "gold",
+      "bars": [
+       {
+        "label": "Lượng nước sông cả thế giới",
+        "value": 0.2,
+        "color": "navy",
+        "text": "≈1/5"
+       }
+      ],
+      "source": "NGUỒN: Britannica"
+     },
+     "ptrack": [
+      {
+       "t": 1.0,
+       "progress": 0
+      },
+      {
+       "t": 2.2,
+       "progress": 1
+      }
+     ],
+     "enter": "pop",
+     "from": 0.9
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "splash",
+     "gain": 0.3
+    },
+    {
+     "t": 0.85,
+     "kind": "pop",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 24.32,
+   "end": 26.94,
+   "camera": [
+    {
+     "t": 0,
+     "x": 560,
+     "y": 1000,
+     "zoom": 1.08
+    },
+    {
+     "t": 1.2,
+     "x": 540,
+     "y": 900,
+     "zoom": 0.95
+    },
+    {
+     "t": 2.62,
+     "x": 540,
+     "y": 880,
+     "zoom": 0.95
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "riverPath",
+     "x": 540,
+     "y": 1010,
+     "scale": 0.68,
+     "rotate": -0.95,
+     "params": {
+      "w": 46
+     }
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 160,
+     "y": 620,
+     "params": {
+      "dx": 760,
+      "dy": -120,
+      "n": 4,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 0.5,
+       "progress": 0
+      },
+      {
+       "t": 1.8,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "SÔNG TRÊN TRỜI?",
+     "x": 540,
+     "y": 300,
+     "size": 120,
+     "color": "gold",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 1.0
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.3,
+     "kind": "whoosh",
+     "gain": 0.3
+    },
+    {
+     "t": 0.95,
+     "kind": "pop",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 26.94,
+   "end": 29.51,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 900,
+     "zoom": 1.0
+    },
+    {
+     "t": 2.57,
+     "x": 500,
+     "y": 880,
+     "zoom": 1.08
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1100
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 440,
+     "y": 1330,
+     "scale": 0.9,
+     "params": {
+      "h": 470
+     },
+     "enter": "fade"
+    },
+    {
+     "type": "prop",
+     "name": "arrow",
+     "x": 440,
+     "y": 1290,
+     "params": {
+      "dx": 0,
+      "dy": -420,
+      "bend": 0.08,
+      "color": "navy",
+      "dashed": true
+     },
+     "ptrack": [
+      {
+       "t": 0.1,
+       "progress": 0
+      },
+      {
+       "t": 0.9,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 420,
+     "y": 560,
+     "params": {
+      "dx": 80,
+      "dy": -360,
+      "n": 3,
+      "gap": 70,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.0,
+       "progress": 0
+      },
+      {
+       "t": 2.2,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 860,
+     "y": 1330,
+     "scale": 0.58,
+     "facing": -1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "point",
+       "expr": "calm"
+      },
+      {
+       "t": 1.0,
+       "pose": "think",
+       "expr": "happy",
+       "blend": 0.4
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.0,
+     "kind": "wind",
+     "gain": 0.25,
+     "dur": 1.5
+    }
+   ]
+  },
+  {
+   "start": 29.51,
+   "end": 32.78,
+   "camera": [
+    {
+     "t": 0,
+     "x": 500,
+     "y": 880,
+     "zoom": 1.08
+    },
+    {
+     "t": 1.0,
+     "x": 540,
+     "y": 930,
+     "zoom": 1.0
+    },
+    {
+     "t": 3.27,
+     "x": 540,
+     "y": 960,
+     "zoom": 0.97
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1600
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 140,
+     "y": 1330,
+     "scale": 0.6,
+     "params": {
+      "h": 400
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 440,
+     "y": 1330,
+     "scale": 0.7,
+     "params": {
+      "h": 440
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 760,
+     "y": 1330,
+     "scale": 0.62,
+     "params": {
+      "h": 420
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 1000,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     }
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 140,
+     "y": 900,
+     "params": {
+      "dx": 60,
+      "dy": -300,
+      "n": 2,
+      "gap": 60
+     }
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 440,
+     "y": 900,
+     "params": {
+      "dx": 60,
+      "dy": -300,
+      "n": 2,
+      "gap": 60
+     }
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 760,
+     "y": 900,
+     "params": {
+      "dx": 60,
+      "dy": -300,
+      "n": 2,
+      "gap": 60
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 860,
+      "label": "THEO MỘT ƯỚC TÍNH",
+      "title": "Rừng đẩy lên trời mỗi ngày",
+      "titleSize": 46,
+      "big": "20 TỶ TẤN",
+      "bigColor": "navy",
+      "source": "NGUỒN: Nobre 2014, ước tính"
+     },
+     "enter": "pop",
+     "from": 0.1
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 0.8,
+     "kind": "wind",
+     "gain": 0.2,
+     "dur": 2.2
+    }
+   ]
+  },
+  {
+   "start": 32.78,
+   "end": 35.4,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 960,
+     "zoom": 0.97
+    },
+    {
+     "t": 2.62,
+     "x": 540,
+     "y": 900,
+     "zoom": 1.05
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1600
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 140,
+     "y": 1330,
+     "scale": 0.6,
+     "params": {
+      "h": 400
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 440,
+     "y": 1330,
+     "scale": 0.7,
+     "params": {
+      "h": 440
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 760,
+     "y": 1330,
+     "scale": 0.62,
+     "params": {
+      "h": 420
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 1000,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 860,
+      "label": "MỖI NGÀY · THEO MỘT ƯỚC TÍNH",
+      "title": "Sông bay lớn hơn\nsông Amazon",
+      "titleSize": 52,
+      "bars": [
+       {
+        "label": "Hơi nước lên trời",
+        "value": 1,
+        "color": "navy",
+        "text": "20 tỷ tấn"
+       },
+       {
+        "label": "Sông Amazon ra biển",
+        "value": 0.85,
+        "color": "waterDeep",
+        "text": "17 tỷ tấn"
+       }
+      ],
+      "source": "NGUỒN: Nobre 2014, ước tính"
+     },
+     "ptrack": [
+      {
+       "t": 0.1,
+       "progress": 0.0
+      },
+      {
+       "t": 1.6,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "20 > 17",
+     "x": 540,
+     "y": 830,
+     "size": 150,
+     "color": "gold",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 1.75
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.7,
+     "kind": "drum",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 35.4,
+   "end": 38.28,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 940,
+     "zoom": 1.0
+    },
+    {
+     "t": 2.88,
+     "x": 520,
+     "y": 960,
+     "zoom": 1.1
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "southAmericaMap",
+     "x": 560,
+     "y": 1010,
+     "scale": 0.75
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 755,
+     "y": 805,
+     "params": {
+      "dx": -215,
+      "dy": 254,
+      "n": 3,
+      "gap": 34,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 0.1,
+       "progress": 0
+      },
+      {
+       "t": 2.0,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "cloud",
+     "x": 560,
+     "y": 1068,
+     "scale": 0.55,
+     "enter": "pop",
+     "from": 1.9
+    },
+    {
+     "type": "text",
+     "text": "GIÓ",
+     "x": 900,
+     "y": 600,
+     "size": 70,
+     "color": "navy",
+     "font": "sans",
+     "bold": true,
+     "enter": "fade",
+     "from": 0.2
+    },
+    {
+     "type": "text",
+     "text": "→ MƯA",
+     "x": 748,
+     "y": 988,
+     "size": 64,
+     "color": "navy",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 2.0
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "wind",
+     "gain": 0.35,
+     "dur": 2.6
+    }
+   ]
+  },
+  {
+   "start": 38.28,
+   "end": 40.56,
+   "camera": [
+    {
+     "t": 0,
+     "x": 520,
+     "y": 960,
+     "zoom": 1.1
+    },
+    {
+     "t": 2.28,
+     "x": 540,
+     "y": 900,
+     "zoom": 1.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "southAmericaMap",
+     "x": 560,
+     "y": 1010,
+     "scale": 0.75
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 755,
+     "y": 805,
+     "params": {
+      "dx": -215,
+      "dy": 254,
+      "n": 5,
+      "gap": 30,
+      "color": "gold"
+     },
+     "track": [
+      {
+       "t": 0,
+       "alpha": 0.6
+      },
+      {
+       "t": 1.2,
+       "alpha": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "cloud",
+     "x": 560,
+     "y": 1068,
+     "scale": 0.55
+    },
+    {
+     "type": "text",
+     "text": "SÔNG BAY",
+     "x": 540,
+     "y": 330,
+     "size": 200,
+     "color": "gold",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 1.1
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.05,
+     "kind": "drum",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 40.56,
+   "end": 42.55,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 900,
+     "zoom": 1.0
+    },
+    {
+     "t": 1.99,
+     "x": 520,
+     "y": 880,
+     "zoom": 1.12
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "southAmericaMap",
+     "x": 560,
+     "y": 1010,
+     "scale": 0.75,
+     "params": {
+      "lost": 0
+     },
+     "ptrack": [
+      {
+       "t": 0.3,
+       "lost": 0
+      },
+      {
+       "t": 1.7,
+       "lost": 1,
+       "ease": "out"
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 755,
+     "y": 805,
+     "params": {
+      "dx": -215,
+      "dy": 254,
+      "n": 3,
+      "gap": 34
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 190,
+     "params": {
+      "w": 820,
+      "label": "RỪNG AMAZON ĐÃ MẤT HẲN",
+      "big": "~17%",
+      "bigSize": 140,
+      "bigColor": "red",
+      "source": "NGUỒN: WWF 2022"
+     },
+     "enter": "pop",
+     "from": 0.25
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.35,
+     "kind": "crack",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 42.55,
+   "end": 44.18,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 960,
+     "zoom": 1.0
+    },
+    {
+     "t": 1.63,
+     "x": 540,
+     "y": 930,
+     "zoom": 1.06
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1100
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 160,
+     "y": 1330,
+     "scale": 0.55,
+     "params": {
+      "h": 380
+     }
+    },
+    {
+     "type": "prop",
+     "name": "stump",
+     "x": 390,
+     "y": 1330,
+     "scale": 0.75,
+     "enter": "pop",
+     "from": 0.05
+    },
+    {
+     "type": "prop",
+     "name": "stump",
+     "x": 600,
+     "y": 1330,
+     "scale": 0.75,
+     "enter": "pop",
+     "from": 0.2
+    },
+    {
+     "type": "prop",
+     "name": "stump",
+     "x": 960,
+     "y": 1330,
+     "scale": 0.75,
+     "enter": "pop",
+     "from": 0.35
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 120,
+     "y": 700,
+     "params": {
+      "dx": 820,
+      "dy": -160,
+      "n": 4,
+      "strength": 1
+     },
+     "ptrack": [
+      {
+       "t": 0.3,
+       "strength": 1
+      },
+      {
+       "t": 1.5,
+       "strength": 0.12
+      }
+     ]
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 780,
+     "y": 1330,
+     "scale": 0.58,
+     "facing": -1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "stand",
+       "expr": "surprised"
+      },
+      {
+       "t": 0.6,
+       "pose": "sad",
+       "expr": "sad",
+       "blend": 0.5
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "SÔNG BAY YẾU DẦN",
+     "x": 540,
+     "y": 300,
+     "size": 96,
+     "color": "red",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 0.65
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "thud",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 44.18,
+   "end": 47.8,
+   "camera": [
+    {
+     "t": 0,
+     "x": 540,
+     "y": 900,
+     "zoom": 0.95
+    },
+    {
+     "t": 3.62,
+     "x": 540,
+     "y": 960,
+     "zoom": 1.06
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1330,
+     "params": {
+      "w": 1000
+     }
+    },
+    {
+     "type": "prop",
+     "name": "jungleTree",
+     "x": 360,
+     "y": 1330,
+     "scale": 0.75,
+     "params": {
+      "h": 470
+     }
+    },
+    {
+     "type": "prop",
+     "name": "infoPanel",
+     "x": 540,
+     "y": 400,
+     "params": {
+      "w": 620,
+      "label": "AMAZON TẠO RA",
+      "big": "20% Ô-XY",
+      "bigSize": 120,
+      "bigColor": "gold",
+      "strike": true
+     },
+     "enter": "pop",
+     "from": 0.1
+    },
+    {
+     "type": "text",
+     "text": "BẠN TỪNG TIN?",
+     "x": 540,
+     "y": 260,
+     "size": 120,
+     "color": "gold",
+     "font": "sans",
+     "bold": true,
+     "enter": "pop",
+     "from": 0.0
+    },
+    {
+     "type": "prop",
+     "name": "question",
+     "x": 640,
+     "y": 820,
+     "params": {
+      "size": 260,
+      "color": "gold"
+     },
+     "enter": "pop",
+     "motion": "bob",
+     "from": 1.1
+    },
+    {
+     "type": "actor",
+     "cast": "dan",
+     "x": 830,
+     "y": 1330,
+     "scale": 0.62,
+     "facing": -1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "point",
+       "expr": "grin",
+       "snap": true
+      },
+      {
+       "t": 1.9,
+       "pose": "cheer",
+       "expr": "happy",
+       "snap": true
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 1.85,
+     "kind": "chime",
+     "gain": 0.35
+    }
+   ]
+  }
+ ]
+}
