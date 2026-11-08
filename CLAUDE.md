@@ -1,0 +1,21 @@
+# QBK Media: xưởng video ngắn vẽ bằng code
+
+Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người que 9:16 cho TikTok và YouTube Shorts: lời đọc tiếng Việt, phụ đề, âm thanh, toàn bộ hình **vẽ bằng code** (miễn phí, không giới hạn, nhân vật cử động được).
+
+## Bắt đầu
+- Làm video: `/lam-video <chủ đề>` hoặc "làm video tiếp theo". Skill `.claude/skills/lam-video` điều phối 7 agent trong `.claude/agents/`: bien-kich, long-tieng, dao-dien, hoa-si, dung-phim, kiem-dinh, phat-hanh.
+- Hai điểm người dùng duyệt: **kịch bản** và **bản xem thử khoảng 20 giây**.
+
+## Cấu trúc
+- `studio/engine/`: engine hoạt hình (Node + @napi-rs/canvas + ffmpeg). `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Lần đầu chạy `npm ci` trong thư mục này.
+- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `cutout.py` (xóa nền ảnh ngoài).
+- `studio/topics.md`: danh sách chủ đề.
+- `projects/<slug>/`: mỗi video một thư mục (brief, script, sources, audio, scene.json, output, publish, checkpoint).
+- `.claude/skills/directing-stickman-videos/`: skill gốc của bên thứ ba (MIT), dùng cho cách làm bằng ảnh AI. Có sửa nhỏ, xem UPSTREAM.md.
+
+## Quy tắc
+- Không bịa dữ kiện. Mọi khẳng định phải có trong `sources.md`.
+- Miễn phí trước. Gọi dịch vụ trả phí chỉ khi người dùng đồng ý và đã báo chi phí.
+- API key do proxy của môi trường tự gắn (Network secrets). Không hỏi, không dán key.
+- Không tự đăng lên mạng xã hội.
+- Commit và push lên nhánh làm việc sau mỗi mốc. Không commit `node_modules`.
