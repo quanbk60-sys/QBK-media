@@ -1,1 +1,14 @@
-{"stage": "brief", "topic": "Rùa và Thỏ", "approvals": {}, "paid_calls": 0, "next": "bien-kich"}
+{
+ "stage": "script_review",
+ "topic": "Rùa và Thỏ",
+ "approvals": {},
+ "paid_calls": 0,
+ "next": "user approves script",
+ "files": [
+  "brief.md",
+  "narration.txt",
+  "script.md",
+  "sources.md",
+  "captions-phrases.txt"
+ ]
+}
