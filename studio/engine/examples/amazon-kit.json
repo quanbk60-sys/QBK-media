@@ -1,0 +1,26 @@
+{
+  "width": 1080, "height": 1920, "fps": 30, "style": "ban-do-toi",
+  "shots": [
+    {"start": 0, "end": 2.5, "background": "paper",
+     "elements": [
+       {"type": "prop", "name": "southAmericaMap", "x": 540, "y": 800, "params": {"fill": 1}, "ptrack": [{"t": 0, "fill": 0}, {"t": 1.5, "fill": 1, "ease": "out"}, {"t": 2.5, "lost": 0.8}], "draw": {"at": 0, "dur": 1.0}},
+       {"type": "prop", "name": "pin", "x": 480, "y": 700, "from": 1.0, "params": {"label": "MANAUS", "side": 1}},
+       {"type": "prop", "name": "infoPanel", "x": 540, "y": 1280, "params": {"w": 900, "label": "HAI CÁCH NHÌN", "title": "Amazon sản xuất\nbao nhiêu oxy?", "big": "20%", "strike": true, "bars": [{"label": "Cách nhìn A", "value": 0.9, "color": "red", "text": "90%"}, {"label": "Cách nhìn B", "value": 0.2, "color": "green", "text": "20%"}], "source": "Nguồn minh họa, kiểm thử engine"}, "ptrack": [{"t": 0, "progress": 0}, {"t": 2.2, "progress": 1}]}
+     ]},
+    {"start": 2.5, "end": 5.0, "background": "paper",
+     "elements": [
+       {"type": "prop", "name": "riverPath", "x": 320, "y": 700, "scale": 0.8, "params": {"w": 50}, "ptrack": [{"t": 0, "progress": 0}, {"t": 2, "progress": 1}], "draw": {"at": 0, "dur": 1.5}},
+       {"type": "prop", "name": "vaporFlow", "x": 480, "y": 700, "params": {"dx": 520, "dy": -250, "strength": 1}, "ptrack": [{"t": 0, "strength": 1}, {"t": 2.5, "strength": 0.15}]},
+       {"type": "prop", "name": "vaporFlow", "x": 480, "y": 1000, "params": {"dx": 520, "dy": -150, "strength": 0.15, "n": 3}},
+       {"type": "prop", "name": "parrot", "x": 600, "y": 400, "scale": 0.8, "draw": {"at": 0, "dur": 1.0}}
+     ]},
+    {"start": 5.0, "end": 7.5, "background": "paper",
+     "elements": [
+       {"type": "prop", "name": "jungleTree", "x": 220, "y": 1500, "scale": 0.8, "draw": {"at": 0, "dur": 1.2}},
+       {"type": "prop", "name": "jungleTree", "x": 600, "y": 1560, "scale": 1.0, "params": {"h": 600}},
+       {"type": "prop", "name": "jungleTree", "x": 900, "y": 1500, "scale": 0.7},
+       {"type": "prop", "name": "stump", "x": 480, "y": 1700, "scale": 1.2, "draw": {"at": 0.5, "dur": 0.8}},
+       {"type": "prop", "name": "ground", "x": 540, "y": 1710, "params": {"w": 1000}}
+     ]}
+  ]
+}

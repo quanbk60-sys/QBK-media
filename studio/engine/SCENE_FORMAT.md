@@ -88,6 +88,12 @@ Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu t
 | `zzz` (chữ Z bay lên, mờ dần, lặp). Neo ngay trên đầu người ngủ | `size` (1), `color` (navy), `speed` (1) |
 | `dust` (bụi + vệt tốc độ sau người chạy, tự hoạt hình). Neo ở chân người chạy; cho `track` chạy cùng `x` với nhân vật | `dir` (1 = người chạy nhìn sang phải, bụi bay sang trái; -1 ngược lại), `size`, `n` số cụm (5), `progress` 0..1 độ mạnh, `lines: false` bỏ vệt tốc độ, `color` |
 | `thought` = `thoughtBubble` (bóng nghĩ). Neo gần đầu người nghĩ | `dx`, `dy` tâm bóng (170, -260), `w`, `h`, `text`, `size`, `color`, `icon: "pillow"` (hình gối), `iconColor`, `progress` 0..1 (chấm rồi bóng hiện ra) |
+| `infoPanel` (bảng thông tin nền tối cho video bản đồ; neo = GIỮA CẠNH TRÊN, cao tự tính; dùng màu theo style) | `w` (760), `label` (nhãn nhỏ viết hoa, vàng), `title` (`\n` tách dòng), `titleSize`, `big` (số lớn), `bigSize`, `bigColor`, `strike` (gạch đỏ qua số ngộ nhận), `bars` [{`label`, `value` 0..1, `color`, `text`}] (tối đa 4), `progress` 0..1 (thanh mọc dần, so le), `source` (tự thêm "NGUỒN: ") |
+| `southAmericaMap` (Nam Mỹ MINH HỌA, đơn giản hóa, không chính xác địa lý; neo tâm, ~600x880) | `fill` 0..1 (Amazon loang dần, mặc định 1), `lost` 0..1 (mép đông nam đỏ gạch), `color`, `land`, `label` (mặc định "BẢN ĐỒ MINH HỌA", "" để ẩn) |
+| `pin` (chấm định vị + vòng lan + nhãn; neo = điểm cần chỉ) | `label`, `color` (gold), `side` (1 phải / -1 trái / 0 trên), `size`, `progress` |
+| `riverPath` (sông uốn nhìn từ trên, to dần về cửa sông, 2 nhánh phụ; ~560x900) | `progress` 0..1 (vẽ dần), `w` (44), `color` (waterDeep), `branches: false` |
+| `vaporFlow` ("sông bay": đường cong nét đứt trôi theo t) | `strength` 0..1 (yếu thì mờ và đứt đoạn), `dx`, `dy` (hướng, 700/-250), `n` (4), `gap` (46), `progress`, `color` (navy) |
+| `jungleTree` (cây nhiệt đới cao, tán nhiều tầng, dây leo; neo gốc), `stump` (gốc cây bị chặt, không lửa/cưa), `parrot` (vẹt bay ngang, vỗ cánh) | `h`, `color`, `sway` / `size`, `color` / `dir`, `size`, `color` |
 
 ### `text`
 `{"type": "text", "text": "938", "x": 540, "y": 330, "size": 300, "color": "red", "font": "hand"|"sans", "enter": "pop"}`

@@ -173,6 +173,145 @@ export const PROPS = {
     if (p.text) { ctx.fillStyle = color(p.color || 'ink'); ctx.font = `bold ${p.size || 56}px Hand`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.text, 0, p.icon ? 75 : 0); }
     ctx.restore();
   },
+  // --- v3 (bản đồ dữ liệu: Rừng Amazon) ---
+  // Bảng thông tin. Neo = GIỮA CẠNH TRÊN; chiều cao tự tính. p.w (760), p.label (nhãn nhỏ viết hoa, vàng), p.title ("\n" tách dòng),
+  // p.big (số lớn), p.bigColor, p.strike (gạch ngang đỏ qua số), p.bars [{label,value 0..1,color,text}], p.progress 0..1 (thanh mọc dần),
+  // p.source (dòng nguồn; tự thêm "NGUỒN: " nếu thiếu), p.titleSize, p.bigSize
+  infoPanel(ctx, p) {
+    const w = p.w || 760, pad = 36, inner = w - pad * 2, pr = Math.max(0, Math.min(1, p.progress ?? 1));
+    const tl = p.title ? String(p.title).split('\n') : [];
+    const tsz = Math.min(p.titleSize || 50, inner / (Math.max(1, ...tl.map(s => s.length)) * 0.56));
+    const big = p.big != null ? String(p.big) : '', bsz = Math.min(p.bigSize || 140, inner / (Math.max(1, big.length) * 0.6));
+    const bars = (p.bars || []).slice(0, 4);
+    let src = p.source ? String(p.source) : ''; if (src) src = /^ngu[oồ]n\s*:/i.test(src) ? src.replace(/^ngu[oồ]n/i, 'NGUỒN') : 'NGUỒN: ' + src;
+    const sl = src ? wrapText(src, Math.floor(inner / (26 * 0.54))) : [];
+    let h = pad;
+    if (p.label) h += 44; if (tl.length) h += tl.length * tsz * 1.2 + 14; if (big) h += bsz * 1.1 + 10; h += bars.length * 84; if (sl.length) h += sl.length * 30 + 10;
+    h += pad - 6; if (h < 120) h = 120;
+    ctx.beginPath(); ctx.roundRect(-w / 2, 0, w, h, 20); ctx.globalAlpha = 0.92; ctx.fillStyle = color('paper'); ctx.fill(); ctx.globalAlpha = 1;
+    ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.globalAlpha = 0.75; ctx.stroke(); ctx.globalAlpha = 1;
+    const L = -w / 2 + pad; let y = pad;
+    if (p.label) { line(ctx, [[L, y + 2], [L + 10, y + 2]], 5, 'gold'); sansText(ctx, p.label, L + 22, y - 10, 30, 'gold'); y += 44; }
+    for (const s of tl) { sansText(ctx, s, L, y, tsz, INK); y += tsz * 1.2; }
+    if (tl.length) y += 14;
+    if (big) {
+      sansText(ctx, big, L, y, bsz, p.bigColor || INK);
+      if (p.strike) { const bw = big.length * bsz * 0.58; line(ctx, [[L - 12, y + bsz * 0.52], [L + bw + 12, y + bsz * 0.5]], 14, 'red'); }
+      y += bsz * 1.1 + 10;
+    }
+    bars.forEach((b, i) => {
+      const k = Math.max(0, Math.min(1, pr * (1 + 0.3 * (bars.length - 1)) - 0.3 * i)), v = Math.max(0, Math.min(1, b.value ?? 0.5)) * k;
+      sansText(ctx, b.label || '', L, y, 30, INK);
+      if (b.text) sansText(ctx, b.text, L + inner, y, 30, b.color || 'gold', 'right');
+      ctx.beginPath(); ctx.roundRect(L, y + 40, inner, 26, 13); ctx.globalAlpha = 0.25; ctx.fillStyle = INK; ctx.fill(); ctx.globalAlpha = 1;
+      if (v > 0.002) { ctx.beginPath(); ctx.roundRect(L, y + 40, Math.max(26, inner * v), 26, 13); ctx.fillStyle = color(b.color || 'gold'); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.stroke(); }
+      y += 84;
+    });
+    sl.forEach((s, i) => { ctx.globalAlpha = 0.65; sansText(ctx, s, L, y + 6 + i * 30, 26, INK); ctx.globalAlpha = 1; });
+  },
+  // Bản đồ Nam Mỹ MINH HỌA (đường bờ đơn giản hóa, không chính xác địa lý). Neo = tâm (~600x880 px).
+  // p.fill 0..1 (vùng Amazon loang dần, mặc định 1), p.lost 0..1 (mép đông nam chuyển đỏ gạch), p.label (nhãn góc, mặc định "BẢN ĐỒ MINH HỌA"; "" để ẩn),
+  // p.land (màu đất liền), p.color (màu Amazon, mặc định green)
+  southAmericaMap(ctx, p) {
+    const fill = Math.max(0, Math.min(1, p.fill ?? 1)), lost = Math.max(0, Math.min(1, p.lost ?? 0));
+    blobPath(ctx, SA_COAST.map(saP)); ctx.fillStyle = color(p.land || 'white'); ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+    if (fill > 0.01) {
+      const c = saP(-63, -4), k = Math.max(0.05, fill);
+      ctx.save(); ctx.translate(c[0], c[1]); ctx.scale(k, k); ctx.translate(-c[0], -c[1]);
+      ctx.globalAlpha = Math.min(1, fill * 3); blobPath(ctx, SA_AMAZON.map(saP)); ctx.fillStyle = color(p.color || 'green'); ctx.fill(); ctx.lineWidth = 4 / k; ctx.strokeStyle = INK; ctx.stroke();
+      if (lost > 0.01) {
+        const E = SA_LOST_E.map(saP), I = SA_LOST_I.map(saP), inner = E.map((e, i) => [e[0] + (I[i][0] - e[0]) * lost, e[1] + (I[i][1] - e[1]) * lost]).reverse();
+        ctx.beginPath(); [...E, ...inner].forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fillStyle = color('red'); ctx.fill(); ctx.lineWidth = 3 / k; ctx.stroke();
+      }
+      ctx.restore(); ctx.globalAlpha = 1;
+    }
+    const lb = p.label ?? 'BẢN ĐỒ MINH HỌA';
+    if (lb) { ctx.globalAlpha = 0.7; sansText(ctx, lb, 300, 400, 26, INK, 'right'); ctx.globalAlpha = 1; }
+  },
+  // Ghim địa danh: neo = đúng điểm cần chỉ. p.label (chữ, nên viết hoa), p.color (gold), p.side 1 = nhãn bên phải / -1 trái / 0 phía trên (mặc định 1), p.size (1), p.progress 0..1 (hiện dần)
+  pin(ctx, p, t) {
+    const pr = Math.max(0, Math.min(1, p.progress ?? 1)), sz = p.size ?? 1, c = p.color || 'gold', side = p.side ?? 1;
+    if (pr <= 0) return;
+    ctx.save(); ctx.scale(sz, sz); ctx.globalAlpha = Math.min(1, pr * 2);
+    const ph = (t * 0.9) % 1; ctx.beginPath(); ctx.arc(0, 0, 22 + ph * 26, 0, Math.PI * 2); ctx.lineWidth = 4; ctx.strokeStyle = color(c); ctx.globalAlpha = Math.min(1, pr * 2) * (1 - ph); ctx.stroke(); ctx.globalAlpha = Math.min(1, pr * 2);
+    ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2); ctx.fillStyle = color(c); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    if (p.label && pr > 0.4) {
+      const fs = 34, tw = String(p.label).length * fs * 0.6 + 28, x0 = side > 0 ? 34 : side < 0 ? -34 - tw : -tw / 2, y0 = side === 0 ? -34 - 52 : -26;
+      ctx.beginPath(); ctx.roundRect(x0, y0, tw, 52, 12); ctx.globalAlpha = 0.9; ctx.fillStyle = color('paper'); ctx.fill(); ctx.globalAlpha = 1; ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.stroke();
+      sansText(ctx, p.label, x0 + tw / 2, y0 + 7, fs, INK, 'center');
+    }
+    ctx.restore();
+  },
+  // Sông uốn lượn nhìn từ trên, từ góc trên-trái xuống góc dưới-phải (~560x900), to dần về cửa sông, có 2 nhánh phụ.
+  // p.progress 0..1 (vẽ dần), p.w bề rộng ở cửa sông (44), p.color (waterDeep), p.branches (false = bỏ nhánh)
+  riverPath(ctx, p) {
+    const pr = Math.max(0, Math.min(1, p.progress ?? 1)), W = p.w || 44, c = p.color || 'waterDeep', N = 70;
+    const main = []; for (let i = 0; i <= N; i++) { const u = i / N; main.push([-250 + 500 * u + 90 * Math.sin(u * Math.PI * 5) * (1 - 0.25 * u), -450 + 900 * u]); }
+    const wd = u => W * (0.25 + 0.75 * u);
+    const paths = [{pts: main, k: pr, w0: 0.25, w1: 1}];
+    if (p.branches !== false) for (const [uj, sx, sy] of [[0.35, 230, -300], [0.62, -290, 60]]) {
+      const J = main[Math.round(uj * N)], pts = []; for (let i = 0; i <= 24; i++) { const u = i / 24, bx = sx + (J[0] - sx) * u, by = sy + (J[1] - sy) * u; pts.push([bx + 40 * Math.sin(u * 9) * (1 - u), by + 30 * Math.cos(u * 7) * (1 - u)]); }
+      paths.push({pts, k: Math.max(0, Math.min(1, pr / uj)), w0: 0.18, w1: 0.45});
+    }
+    for (const pass of [0, 1]) for (const b of paths) {
+      const n = Math.floor((b.pts.length - 1) * b.k);
+      for (let i = 0; i < n; i++) { const u = i / (b.pts.length - 1), w = W * (b.w0 + (b.w1 - b.w0) * u) * (b === paths[0] ? 1 : 1);
+        line(ctx, [b.pts[i], b.pts[i + 1]], pass ? w : w + 10, pass ? c : INK); }
+    }
+  },
+  // "Sông bay": vài đường cong nét đứt song song trôi dọc theo hướng (dx,dy). p.strength 0..1 (yếu thì mờ và đứt đoạn),
+  // p.dx, p.dy (hướng, mặc định 700,-250), p.n số đường (4), p.gap khoảng cách (46), p.color (navy), p.progress 0..1 (dài ra dần)
+  vaporFlow(ctx, p, t) {
+    const dx = p.dx ?? 700, dy = p.dy ?? -250, st = Math.max(0, Math.min(1, p.strength ?? 1)), n = p.n || 4, gap = p.gap ?? 46, pr = Math.max(0, Math.min(1, p.progress ?? 1)), c = p.color || 'navy';
+    const L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, per = 0.045, ph = (t * 0.35) % 1;
+    for (let r = 0; r < n; r++) {
+      const off = (r - (n - 1) / 2) * gap, bend = 0.22 + (r % 2) * 0.06;
+      const P = u => { const bx = dx * u, by = dy * u, a = Math.sin(u * Math.PI) * L * bend; return [bx + nx * (off + a), by + ny * (off + a)]; };
+      for (let k = -1; k < 1 / (per * 2) + 1; k++) {
+        const u0 = (k + ph) * per * 2, u1 = u0 + per;
+        if (u0 < 0 || u1 > pr) continue;
+        const hsh = Math.abs(Math.sin((k + r * 7 + Math.floor(t * 0.35)) * 12.9898 + r * 78.233)) % 1;
+        if (st < 1 && hsh > 0.25 + 0.75 * st) continue;
+        const pts = []; for (let j = 0; j <= 4; j++) pts.push(P(u0 + (u1 - u0) * j / 4));
+        ctx.globalAlpha = 0.3 + 0.7 * st; line(ctx, pts, 12, INK); line(ctx, pts, 7, c);
+        if (k % 3 === 0 && st > 0.3) { const q = P(u0 + per * 0.3); ctx.beginPath(); ctx.arc(q[0] + nx * 18, q[1] + ny * 18, 6, 0, Math.PI * 2); ctx.fillStyle = color(c); ctx.fill(); }
+      }
+      ctx.globalAlpha = 1;
+    }
+  },
+  // Cây rừng nhiệt đới cao, tán nhiều tầng, dây leo. Neo = gốc. p.h chiều cao thân (520), p.color (green), p.sway (1)
+  jungleTree(ctx, p, t) {
+    const h = p.h || 520, c = p.color || 'green', sw = Math.sin(t * 1.2) * 7 * (p.sway ?? 1);
+    poly(ctx, [[-62, 0], [-24, -90], [-16, -h], [18, -h], [26, -90], [66, 0]], 'wood', 5);
+    line(ctx, [[-8, -60], [-6, -h * 0.5]], 3, '#6b4a2b'); line(ctx, [[12, -80], [10, -h * 0.7]], 3, '#6b4a2b');
+    const tier = (x, y, rx, ry, col) => { ctx.beginPath(); ctx.ellipse(x + sw * (-y / h), y, rx, ry, 0, 0, Math.PI * 2); ctx.fillStyle = color(col); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); };
+    tier(-60, -h * 0.62, 150, 62, '#3F6B34'); tier(70, -h * 0.78, 140, 58, '#3F6B34');
+    tier(0, -h * 0.9, 210, 80, c); tier(-30, -h - 40, 150, 62, c);
+    for (const [x, y0, l] of [[-120, -h * 0.9 + 40, 200], [90, -h * 0.9 + 50, 260], [-30, -h * 0.62 + 40, 170]]) {
+      const pts = []; for (let i = 0; i <= 6; i++) pts.push([x + Math.sin(i + x) * 8 + sw * 0.3, y0 + l * i / 6]); line(ctx, pts, 5, '#3F6B34');
+      for (let i = 2; i <= 6; i += 2) poly(ctx, [[pts[i][0], pts[i][1]], [pts[i][0] + 18, pts[i][1] + 8], [pts[i][0] + 4, pts[i][1] + 24]], c, 3);
+    }
+  },
+  // Gốc cây bị chặt (không lửa, không cưa máy). Neo = chân. p.size (1), p.color (wood)
+  stump(ctx, p) {
+    const s = p.size ?? 1, c = p.color || 'wood'; ctx.save(); ctx.scale(s, s);
+    poly(ctx, [[-120, 6], [-70, -40], [-62, -120], [62, -120], [70, -40], [120, 6], [60, 12], [-60, 12]], c, 5);
+    line(ctx, [[-30, -30], [-26, -100]], 3, '#6b4a2b'); line(ctx, [[34, -34], [30, -96]], 3, '#6b4a2b');
+    ctx.beginPath(); ctx.ellipse(0, -120, 62, 22, 0, 0, Math.PI * 2); ctx.fillStyle = '#E3C08D'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    for (const k of [0.62, 0.3]) { ctx.beginPath(); ctx.ellipse(0, -120, 62 * k, 22 * k, 0, 0, Math.PI * 2); ctx.lineWidth = 3; ctx.stroke(); }
+    ctx.restore();
+  },
+  // Vẹt đuôi dài bay ngang (đỏ/vàng/xanh). Neo = tâm thân. p.dir 1 = bay sang phải, p.size (1), p.color (red)
+  parrot(ctx, p, t) {
+    const dir = p.dir ?? 1, s = p.size ?? 1, flap = Math.sin(t * 9) * 0.5; ctx.save(); ctx.scale(dir * s, s);
+    poly(ctx, [[-40, 0], [-190, 36], [-230, 62], [-226, 90], [-190, 82], [-200, 112], [-160, 104], [-50, 38]], 'navy', 5);
+    ctx.beginPath(); ctx.ellipse(0, 0, 70, 38, -0.25, 0, Math.PI * 2); ctx.fillStyle = color(p.color || 'red'); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    ctx.save(); ctx.translate(-5, -10); ctx.rotate(-0.4 - flap); poly(ctx, [[0, 0], [-50, -70], [-100, -80], [-60, -20], [-30, 10]], 'gold', 5); ctx.restore();
+    ctx.beginPath(); ctx.arc(62, -30, 28, 0, Math.PI * 2); ctx.fillStyle = color(p.color || 'red'); ctx.fill(); ctx.stroke();
+    poly(ctx, [[84, -42], [112, -28], [96, -6], [86, -14]], 'gold', 4);
+    ctx.beginPath(); ctx.arc(66, -38, 6, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill();
+    ctx.restore();
+  },
 };
 PROPS.finishFlag = PROPS.checkerFlag;
 PROPS.thoughtBubble = PROPS.thought;
@@ -193,4 +332,11 @@ function puff(ctx, x, y, r, fill) {
     ctx.quadraticCurveTo(x + r * 1.35 * Math.cos(b), y + r * 1.1 * Math.sin(b), x + r * Math.cos(a2), y + r * 0.8 * Math.sin(a2)); }
   ctx.closePath(); ctx.fillStyle = color(fill); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
 }
+function sansText(ctx, s, x, y, size, c, align = 'left') { ctx.font = `bold ${Math.round(size)}px Sans`; ctx.textAlign = align; ctx.textBaseline = 'top'; ctx.fillStyle = color(c); ctx.fillText(String(s), x, y); }
+function wrapText(s, max) { const out = []; let cur = ''; for (const w of s.split(/\s+/)) { if (cur && (cur + ' ' + w).length > max) { out.push(cur); cur = w; } else cur = cur ? cur + ' ' + w : w; } if (cur) out.push(cur); return out; }
+function blobPath(ctx, pts) { const n = pts.length, mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; ctx.beginPath(); const m0 = mid(pts[n - 1], pts[0]); ctx.moveTo(m0[0], m0[1]); for (let i = 0; i < n; i++) { const m = mid(pts[i], pts[(i + 1) % n]); ctx.quadraticCurveTo(pts[i][0], pts[i][1], m[0], m[1]); } ctx.closePath(); }
+const saP = (lon, lat) => Array.isArray(lon) ? saP(lon[0], lon[1]) : [(lon + 58) * 13, -(lat + 22) * 13];
+const SA_COAST = [[-77, 8.5], [-75.5, 10.8], [-72, 12], [-71.5, 10.5], [-68, 10.7], [-64, 10.6], [-61, 10.5], [-60, 8.5], [-57, 6], [-52, 5], [-50, 1.5], [-50, 0], [-47, -1], [-44, -2.5], [-40, -3], [-37, -5], [-35, -7], [-35, -9], [-37.5, -12], [-39, -15], [-39.5, -18], [-41, -22], [-44, -23], [-48, -26], [-48.7, -28.5], [-51, -31], [-53, -34], [-56, -34.8], [-58, -34.5], [-57, -36.5], [-62, -39], [-65, -41], [-64.5, -43], [-67, -46], [-66, -48], [-69, -51], [-68.5, -53], [-66, -55], [-70, -55], [-73, -53], [-75, -50], [-74, -46], [-73.5, -42], [-73.5, -37], [-71.5, -32], [-71.5, -28], [-70.5, -23], [-70.3, -18], [-76, -14], [-78, -10], [-81, -6], [-80, -3], [-80.5, -1], [-79.5, 2], [-77.5, 4]];
+const SA_AMAZON = [[-77, 1], [-73, 3], [-67, 4.5], [-61, 5.5], [-56, 3], [-51, 1.5], [-49.5, -1.5], [-49, -5], [-52, -8], [-56, -10.5], [-61, -12.5], [-66, -12], [-70, -11.5], [-74, -9.5], [-77, -5], [-78, -1.5]];
+const SA_LOST_E = [[-49, -5], [-52, -8], [-56, -10.5], [-61, -12.5], [-66, -12]], SA_LOST_I = [[-53, -3.5], [-55, -6], [-58, -8], [-62, -9], [-66, -8.5]];
 export const PROP_NAMES = Object.keys(PROPS);
