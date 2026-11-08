@@ -1,0 +1,9 @@
+{
+  "kind": "image",
+  "model": "gemini-3-pro-image",
+  "requested_at": "2026-11-08T10:10:59.362Z",
+  "request_id": "23114a5b-e045-4ba8-b3da-3cd99b383b19",
+  "status": "failed_or_unknown",
+  "warning": "One request only; inspect provider history before retrying",
+  "error": "Provider HTTP 429; response body deliberately omitted"
+}
