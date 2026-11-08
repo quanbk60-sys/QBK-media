@@ -1,0 +1,1 @@
+{"stage":"script_review","style":"B1","ratio":"9:16","language":"vi","tts":{"provider":"google-gemini","model":"gemini-3.8-flash-tts","voice":"Bodi","verified":false},"image_model":null,"approvals":{},"paid_calls":0,"next":"User approves script v1 + image tier, then 20s sample (shots 1-5)"}
