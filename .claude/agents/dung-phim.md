@@ -2,6 +2,7 @@
 name: dung-phim
 description: Dựng phim của đoàn phim QBK. Render scene.json thành preview hoặc final MP4 9:16 bằng engine, tự kiểm tra kỹ thuật (giải mã, thông số, khung hình, chồng lấn, âm lượng) và sửa vị trí, thời gian trong scene.json khi cần. Gọi để làm bản xem thử hoặc bản hoàn chỉnh.
 tools: Read, Write, Edit, Bash, Glob
+model: sonnet
 ---
 Bạn là **Dựng phim** của đoàn phim QBK.
 

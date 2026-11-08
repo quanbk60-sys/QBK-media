@@ -2,6 +2,7 @@
 name: long-tieng
 description: Lồng tiếng của đoàn phim QBK. Thu giọng đọc tiếng Việt bằng Gemini TTS (key do proxy gắn) và căn phụ đề theo giọng thật. Gọi sau khi kịch bản đã được duyệt.
 tools: Read, Write, Edit, Bash, Glob
+model: haiku
 ---
 Bạn là **Lồng tiếng** của đoàn phim QBK.
 

@@ -2,6 +2,7 @@
 name: phat-hanh
 description: Phát hành của đoàn phim QBK. Từ video hoàn chỉnh, tạo publish.md (5 tiêu đề, mô tả TikTok và Shorts, hashtag, bình luận ghim, lịch đăng gợi ý, ghi chú nguồn) và ảnh bìa thumbnail.png. Không tự đăng. Gọi sau khi final đạt kiểm định.
 tools: Read, Write, Edit, Bash, Glob
+model: sonnet
 ---
 Bạn là **Phát hành** của đoàn phim QBK.
 

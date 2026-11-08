@@ -2,6 +2,7 @@
 name: dao-dien
 description: Đạo diễn của đoàn phim QBK. Biến script.md và captions-audio.json thành scene.json cho engine vẽ bằng code, gồm phân cảnh, diễn xuất, đạo cụ, chữ trên hình, camera, hiệu ứng vẽ tay và sfx, khớp từng câu lời đọc. Gọi sau khi đã có giọng đọc.
 tools: Read, Write, Edit, Bash, Glob, Grep
+model: opus
 ---
 Bạn là **Đạo diễn** của đoàn phim QBK.
 
