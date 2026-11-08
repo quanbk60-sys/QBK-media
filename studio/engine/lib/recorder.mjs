@@ -42,19 +42,20 @@ export function strokeLength(ops) { return ops.filter(o => o.k === 's').reduce((
 
 // Play ops onto a real ctx. reveal: undefined = all; else {ink: 0..1 of total stroke length drawn, fill: 0..1 alpha of fills}
 // Returns the pen tip (device coords) while drawing.
-export function play(ctx, ops, reveal) {
+export function play(ctx, ops, reveal, style) {
+  const map = style?.map || (c => c), ls = style?.lineScale ?? 1;
   let budget = reveal ? reveal.ink * strokeLength(ops) : Infinity, tip = null;
   ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   for (const o of ops) {
     ctx.globalAlpha = o.a ?? 1;
     if (o.k === 'f') {
       const fa = reveal ? reveal.fill : 1; if (fa <= 0) continue;
-      ctx.globalAlpha *= fa; ctx.fillStyle = o.c; ctx.beginPath();
+      ctx.globalAlpha *= fa; ctx.fillStyle = map(o.c); ctx.beginPath();
       for (const p of o.paths) p.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
       ctx.fill();
     } else if (o.k === 's') {
       if (budget <= 0) continue;
-      ctx.strokeStyle = o.c; ctx.lineWidth = o.w; ctx.beginPath();
+      ctx.strokeStyle = map(o.c); ctx.lineWidth = o.w * ls; ctx.beginPath();
       for (const p of o.paths) {
         if (budget <= 0) break;
         ctx.moveTo(p[0][0], p[0][1]);
@@ -67,7 +68,7 @@ export function play(ctx, ops, reveal) {
       ctx.stroke();
     } else if (o.k === 't') {
       const ta = reveal ? reveal.fill : 1; if (ta <= 0) continue;
-      ctx.save(); ctx.globalAlpha *= ta; ctx.setTransform(...o.m); ctx.font = o.font; ctx.textAlign = o.align; ctx.textBaseline = o.base; ctx.fillStyle = o.c; ctx.fillText(o.text, 0, 0); ctx.restore();
+      ctx.save(); ctx.globalAlpha *= ta; ctx.setTransform(...o.m); ctx.font = o.font; ctx.textAlign = o.align; ctx.textBaseline = o.base; ctx.fillStyle = map(o.c); ctx.fillText(o.text, 0, 0); ctx.restore();
     }
   }
   ctx.restore();

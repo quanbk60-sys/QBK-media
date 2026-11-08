@@ -1,0 +1,126 @@
+{
+ "style": "pop",
+ "width": 1080,
+ "height": 1920,
+ "fps": 30,
+ "duration": 2.6,
+ "captions": {
+  "items": [
+   {
+    "start": 0.2,
+    "end": 2.5,
+    "text": "Phong cách 5/9: Pop sặc sỡ"
+   }
+  ],
+  "y": 1420,
+  "size": 56
+ },
+ "cast": {
+  "tho": {
+   "ears": "bunny",
+   "tail": "bunny",
+   "sash": "red",
+   "belt": "red"
+  },
+  "rua": {
+   "body": "green",
+   "shell": "turtle",
+   "headband": "green"
+  }
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 2.6,
+   "elements": [
+    {
+     "type": "text",
+     "text": "POP SẶC SỠ",
+     "x": 540,
+     "y": 420,
+     "size": 120,
+     "color": "red",
+     "enter": "pop"
+    },
+    {
+     "type": "prop",
+     "name": "sun",
+     "x": 880,
+     "y": 640,
+     "scale": 0.6
+    },
+    {
+     "type": "prop",
+     "name": "tree",
+     "x": 200,
+     "y": 1300,
+     "scale": 0.8,
+     "draw": {
+      "at": 0,
+      "dur": 1.2,
+      "hand": false
+     }
+    },
+    {
+     "type": "prop",
+     "name": "ground",
+     "x": 540,
+     "y": 1300
+    },
+    {
+     "type": "actor",
+     "cast": "tho",
+     "x": 470,
+     "y": 1300,
+     "scale": 0.62,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "stand",
+       "expr": "smug"
+      },
+      {
+       "t": 0.8,
+       "pose": "celebrate",
+       "expr": "grin",
+       "snap": true,
+       "cycle": "jump"
+      }
+     ]
+    },
+    {
+     "type": "actor",
+     "cast": "rua",
+     "y": 1300,
+     "scale": 0.62,
+     "track": [
+      {
+       "t": 0,
+       "x": 700
+      },
+      {
+       "t": 2.6,
+       "x": 840,
+       "ease": "linear"
+      }
+     ],
+     "acting": [
+      {
+       "t": 0,
+       "pose": "stand",
+       "expr": "determined",
+       "cycle": "crawl"
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  }
+ ]
+}

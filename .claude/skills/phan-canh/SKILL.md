@@ -10,6 +10,14 @@ description: Đạo diễn. Biến kịch bản và giọng đọc đã căn th�
 **Đầu ra:** `projects/<slug>/scene.json`.
 **Mẫu tham khảo:** `projects/bach-dang-938/scene.json`.
 
+## Phong cách
+Đặt `"style": "<tên>"` ở cấp scene theo `brief.md`. Danh sách lấy từ `node studio/engine/catalog.mjs`, bảng gợi ý theo thể loại nằm trong skill `lam-video`. Có thể đổi `"background"` riêng cho từng shot (ví dụ hoàng hôn), engine sẽ tự đổi màu theo phong cách. Mỗi phong cách có nhịp riêng:
+- `pop`: cắt nhanh, nhiều chữ bật ra.
+- `phac-thao`: cảnh dài, tĩnh, camera đẩy chậm. Phụ đề tự nằm trong dải đen dưới.
+- `ban-do-toi`: chữ kiểu infographic, có dòng "NGUỒN:".
+- `phim-cam`: chữ đặt trong khung kiểu phim câm.
+Xem mẫu ở `studio/engine/examples/styles/`.
+
 ## Cách chia shot
 1. Lấy mốc thời gian từ `captions-audio.json`. **Ranh giới shot đặt đúng chỗ ngừng hoặc đầu một cụm lời.** Thời gian shot = thời gian giọng đọc + `lead` (0,15).
 2. Mỗi shot dài khoảng 1,5–4 giây. Các shot nối liền nhau từ 0 đến hết giọng đọc + 0,4 giây.

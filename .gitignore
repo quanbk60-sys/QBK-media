@@ -5,3 +5,4 @@ projects/**/cache/
 .env
 projects/*/output/check*
 projects/*/output/.*
+studio/engine/examples/styles/out/

@@ -4,12 +4,14 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 
 ## Bắt đầu
 - Làm video: `/lam-video <chủ đề>` hoặc "làm video tiếp theo". Skill `.claude/skills/lam-video` điều phối 7 agent trong `.claude/agents/`: bien-kich, long-tieng, dao-dien, hoa-si, dung-phim, kiem-dinh, phat-hanh.
-- Hai điểm người dùng duyệt: **kịch bản** và **bản xem thử khoảng 20 giây**.
+- Quy trình v2: đoàn phim làm **trọn video** rồi gửi người dùng duyệt. Người dùng chỉ ra các điểm cần sửa, Nhà sản xuất chuyển về đúng agent, làm lại và gửi lại. Góp ý dùng được cho mọi video sau được ghi vào `studio/lessons.md`.
+- 9 gói phong cách (`"style"` trong scene.json), gợi ý theo thể loại trong skill `lam-video`.
+- Agent được tự sáng tạo ngoài skill, ghi lý do vào `notes.md`. Luật cứng giữ nguyên.
 
 ## Cấu trúc
 - `studio/engine/`: engine hoạt hình (Node + @napi-rs/canvas + ffmpeg). `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Lần đầu chạy `npm ci` trong thư mục này.
 - `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `cutout.py` (xóa nền ảnh ngoài).
-- `studio/topics.md`: danh sách chủ đề.
+- `studio/topics.md`: danh sách chủ đề. `studio/lessons.md`: bài học từ góp ý (mọi agent đọc trước khi làm).
 - `projects/<slug>/`: mỗi video một thư mục (brief, script, sources, audio, scene.json, output, publish, checkpoint).
 - `.claude/skills/directing-stickman-videos/`: skill gốc của bên thứ ba (MIT), dùng cho cách làm bằng ảnh AI. Có sửa nhỏ, xem UPSTREAM.md.
 

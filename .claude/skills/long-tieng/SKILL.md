@@ -18,7 +18,14 @@ ffprobe -v error -show_entries format=duration -of csv=p=0 projects/<slug>/audio
 - Gặp lỗi **429 Free Tier**: TTS thường vẫn còn hạn mức miễn phí. Đợi một lúc, hoặc thử model `gemini-3.8-flash-lite-tts`, hoặc báo Nhà sản xuất. **Không** tự chuyển sang dịch vụ trả phí.
 - Không thêm chỉ dẫn diễn cảm vào văn bản. Dùng đúng giọng đã chọn.
 - Ghi vào `checkpoint.json`: model, giọng, thời lượng, và số token nếu có trong phần `usage`.
-- Nếu thời lượng lệch mục tiêu quá 20%, báo Nhà sản xuất để biên kịch chỉnh lời. **Không** kéo giãn hay nén giọng.
+- Nếu thời lượng (sau khi tăng tốc) lệch mục tiêu quá 20%, báo Nhà sản xuất để biên kịch chỉnh lời. Ngoài tempo theo brief, không tự kéo giãn hay nén thêm.
+
+## Tốc độ (mặc định 1,2x theo bài học)
+Sau khi thu giọng, tăng tốc theo `brief.md` (mặc định 1,2). Lệnh này giữ bản gốc ở `audio/narration-orig.wav` và tự căn lại phụ đề:
+```bash
+python3 studio/tools/retime.py projects/<slug> 1.2
+```
+Lúc này chưa có `scene.json` nên lệnh chỉ đổi giọng và phụ đề. Về sau muốn đổi tốc độ, chạy lại với hệ số mới: lệnh tự co giãn cả `scene.json`.
 
 ## Căn phụ đề
 ```bash

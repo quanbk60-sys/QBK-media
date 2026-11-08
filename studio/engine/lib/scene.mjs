@@ -8,6 +8,7 @@ import {drawCharacter, blendPose, applyCycle, POSES, EXPR} from './character.mjs
 import {PROPS} from './props.mjs';
 import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
+import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -22,6 +23,7 @@ export function loadScene(file) {
   const cap = s.captions || {};
   let items = cap.items || (cap.path ? JSON.parse(fs.readFileSync(path.join(base, cap.path), 'utf8')) : []);
   const lead = cap.lead ?? s.narration?.lead ?? 0;
+  s.styleDef = getStyle(s.style);
   s.captionStyle = {y: cap.y ?? Math.round(s.height * 0.73), size: cap.size ?? 58, color: cap.color || '#2A2723', maxWidth: s.width - 120};
   s.captionItems = items.map(c => ({start: c.start + lead, end: c.end + lead, text: c.text}));
   if (!s.duration) s.duration = Math.max(...s.shots.map(x => x.end), ...s.captionItems.map(c => c.end + 0.4), 1);
@@ -94,7 +96,8 @@ function recordElement(s, e, t, sceneT) {
     const params = {...(e.params || {}), ...sampleTrack(e.ptrack, t, Object.keys(Object.assign({}, ...(e.ptrack || [{}]))).filter(k => k !== 't' && k !== 'ease'))};
     PROPS[e.name](R, params, sceneT);
   } else if (e.type === 'text') {
-    R.font = `${e.bold ? 'bold ' : ''}${e.size || 120}px ${e.font === 'sans' ? 'Sans' : 'Hand'}`; R.textAlign = e.align || 'center'; R.textBaseline = 'middle'; R.fillStyle = color(e.color || 'ink'); R.fillText(e.text, 0, 0);
+    const sans = e.font ? e.font === 'sans' : s.styleDef.titleFont === 'Sans';
+    R.font = `${e.bold || sans ? 'bold ' : ''}${Math.round((e.size || 120) * (sans && !e.font ? 0.82 : 1))}px ${sans ? 'Sans' : 'Hand'}`; R.textAlign = e.align || 'center'; R.textBaseline = 'middle'; R.fillStyle = color(e.color || 'ink'); R.fillText(e.text, 0, 0);
   }
   return R;
 }
@@ -106,7 +109,8 @@ export function makeRenderer(s) {
     const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1);
     const t = T - sh.start;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = color(sh.background || s.background || 'paper'); ctx.fillRect(0, 0, s.width, s.height);
+    const ST = s.styleDef, fno = Math.round(T * s.fps);
+    if (sh.background || s.background) { ctx.fillStyle = ST.map(color(sh.background || s.background)); ctx.fillRect(0, 0, s.width, s.height); } else paintBackground(ctx, ST, s.width, s.height, fno);
     const camKeys = sh.camera?.length ? [{zoom: 1, x: s.width / 2, y: s.height / 2, ...sh.camera[0]}, ...sh.camera.slice(1)] : null; // missing fields on the first key default to the frame centre
     const cam = sampleTrack(camKeys, t, ['zoom', 'x', 'y']);
     const z = cam.zoom ?? 1, cx = cam.x ?? s.width / 2, cy = cam.y ?? s.height / 2;
@@ -124,9 +128,9 @@ export function makeRenderer(s) {
       if (e.draw) {
         const at = e.draw.at ?? e.from ?? 0, dur = e.draw.dur ?? 1.5;
         const ink = clamp((t - at) / (dur * 0.78)), fill = clamp((t - at - dur * 0.72) / (dur * 0.28));
-        const tip = play(ctx, R.ops, {ink, fill});
+        const tip = play(ctx, R.ops, {ink, fill}, s.styleDef);
         if (ink > 0 && ink < 1 && e.draw.hand !== false) { pen = tip; drawing = true; }
-      } else play(ctx, R.ops);
+      } else play(ctx, R.ops, undefined, s.styleDef);
       ctx.restore();
       // auto footsteps / hammer hits
       const key = `${sh.start}:${idx}`;
@@ -135,10 +139,11 @@ export function makeRenderer(s) {
     }
     if (pen) { const [px, py] = ctx.getTransform().transformPoint ? [ctx.getTransform().a * pen[0] + ctx.getTransform().e, ctx.getTransform().d * pen[1] + ctx.getTransform().f] : pen; drawHand(ctx, pen[0], pen[1], T, 1, py > s.captionStyle.y - 470); }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
+    paintOverlay(ctx, ST, s.width, s.height, fno);
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
     if (cue) { const st = s.captionStyle; ctx.font = `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.lineWidth = 10; ctx.strokeStyle = 'rgba(243,234,219,.9)'; ctx.strokeText(cue.text, s.width / 2, st.y); ctx.fillStyle = st.color; ctx.fillText(cue.text, s.width / 2, st.y); }
+      ctx.lineWidth = 10; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = (s.captions?.color) || ST.caption?.color || st.color; ctx.fillText(cue.text, s.width / 2, cy); }
     return {drawing};
   }
   return {cv, ctx, frame, events};

@@ -18,6 +18,11 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | Phụ đề | ~1420 | Tự vẽ từ `captions`. Không đặt vật thể chính ở 1370–1470 |
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
+## Phong cách (`style`)
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi`.
+
+Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
+
 ## Cấu trúc
 
 ```json

@@ -1,51 +1,65 @@
 ---
 name: lam-video
-description: Đoàn phim QBK. Từ một chủ đề, làm ra video hoạt hình người que 9:16 (TikTok, YouTube Shorts) vẽ 100% bằng code, có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc muốn chạy cả đoàn phim.
+description: Đoàn phim QBK. Từ một chủ đề, làm trọn video hoạt hình 9:16 (TikTok, YouTube Shorts) vẽ 100% bằng code với 9 gói phong cách, có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
 ---
 
-# /lam-video: Nhà sản xuất điều phối đoàn phim
+# /lam-video: Nhà sản xuất điều phối đoàn phim (quy trình v2)
 
-Bạn là **Nhà sản xuất**. Bạn không tự làm mọi việc mà giao cho từng thành viên trong đoàn (subagent trong `.claude/agents/`), giữ tiến độ trong `checkpoint.json` và dừng ở **2 điểm duyệt** của người dùng.
+Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude/agents/`, giữ tiến độ trong `checkpoint.json`, rồi **gửi người dùng video hoàn chỉnh để duyệt**. Người dùng chỉ ra những điểm cần sửa, bạn chuyển từng điểm về đúng agent, làm lại và gửi lại. Những gì rút ra được ghi thành **bài học** trong `studio/lessons.md`.
 
-## Đoàn phim
-| Bước | Agent | Skill tham chiếu | Đầu ra |
-|---|---|---|---|
-| 0 | (Nhà sản xuất) | `y-tuong-chu-de` | Chọn chủ đề, tạo thư mục dự án, ghi `brief.md` |
-| 1 | `bien-kich` | `viet-kich-ban` | `script.md`, `narration.txt`, `sources.md`, `captions-phrases.txt` |
-| ⏸ | **Người dùng duyệt kịch bản** | | |
-| 2 | `long-tieng` | `long-tieng` | `audio/narration.wav`, `captions-audio.json` |
-| 3 | `dao-dien` | `phan-canh`, `am-thanh` | `scene.json` (phân cảnh, diễn xuất, chữ trên hình, sfx) |
-| 3b | `hoa-si` (khi cần) | `ve-bang-code` | Tư thế, đạo cụ mới trong engine |
-| 4 | `dung-phim` | `dung-phim` | `output/preview.mp4` (khoảng 20 giây đầu) |
-| 5 | `kiem-dinh` | `kiem-dinh` | `qa.md`: đạt hoặc danh sách lỗi, trả về đúng agent để sửa |
-| ⏸ | **Người dùng duyệt bản xem thử** | | |
-| 6 | `dung-phim` | `dung-phim` | `output/final.mp4` + `.srt` |
-| 7 | `kiem-dinh` | `kiem-dinh` | QA toàn phim |
-| 8 | `phat-hanh` | `phat-hanh` | `publish.md`, `output/thumbnail.png` |
+## Đoàn phim và model
+| Bước | Agent (model) | Đầu ra |
+|---|---|---|
+| 0 | Nhà sản xuất | `brief.md` (có **phong cách**), `checkpoint.json` |
+| 1 | `bien-kich` (opus) | `narration.txt`, `script.md`, `sources.md`, `captions-phrases.txt` |
+| 2 | `long-tieng` (haiku) ∥ `hoa-si` (sonnet, khi cần đồ mới) | `audio/narration.wav` (mặc định 1,2x), `captions-audio.json` / engine |
+| 3 | `dao-dien` (opus) | `scene.json` |
+| 4 | `dung-phim` (sonnet) | `output/final.mp4` |
+| 5 | `kiem-dinh` (sonnet) | `qa.md`: lỗi được trả về đúng agent, tối đa 2 vòng |
+| 6 | `phat-hanh` (sonnet) | `publish.md`, `output/thumbnail.png` |
+| ⏸ | **Người dùng duyệt video hoàn chỉnh** | Góp ý được ghi vào `feedback.md`, rồi làm lại |
+
+Các bước độc lập nhau thì chạy song song: lồng tiếng song song với họa sĩ; phát hành song song với kiểm định bản final.
 
 ## Quy trình
-1. **Nhận yêu cầu.**
-   - Có chủ đề thì dùng chủ đề đó.
-   - Người dùng nói "video tiếp theo" thì lấy mục `ý tưởng` đầu tiên trong `studio/topics.md`.
-   - Chưa có chủ đề thì đề xuất 3 chủ đề theo skill `y-tuong-chu-de`.
-2. **Tạo dự án** `projects/<slug>/`, với slug không dấu, nối bằng gạch ngang. Ghi `brief.md` gồm chủ đề, mảng nội dung, phong cách, đối tượng, độ dài (mặc định 60–90 giây), nền tảng, giọng đọc (mặc định Gemini `gemini-3.8-flash-tts`, giọng Bodi). Tạo `checkpoint.json`:
-   `{"stage":"brief","topic":...,"approvals":{},"paid_calls":0,"next":"bien-kich"}`.
-3. **Giao việc tuần tự** bằng Agent tool. Mỗi lần giao phải ghi rõ đường dẫn dự án, việc cần làm, file đầu vào và đầu ra. Đọc kết quả rồi cập nhật `checkpoint.json` (`stage`, `next`, và các file đã có).
-4. **Điểm duyệt 1, kịch bản.** Gửi người dùng lời đọc đầy đủ, bảng sử liệu tóm tắt (đã xác nhận, cần đối chiếu, đã bỏ) và danh sách cảnh. Dừng và chờ duyệt. Người dùng yêu cầu sửa thì giao lại `bien-kich`.
-5. Duyệt xong thì chạy bước 2 → 3 (→ 3b) → 4 → 5. Nếu `kiem-dinh` báo lỗi, giao lại đúng agent, **tối đa 2 vòng**, rồi mới hỏi người dùng.
-6. **Điểm duyệt 2, bản xem thử.** Gửi file `preview.mp4` (SendUserFile), nói rõ những gì đã kiểm tra và những gì máy không tự kiểm tra được (chất lượng âm thanh do người nghe đánh giá). Dừng và chờ duyệt.
-7. Duyệt xong thì chạy bước 6 → 7 → 8. Gửi `final.mp4` và `thumbnail.png`, tóm tắt `publish.md`. Cập nhật `studio/topics.md` sang trạng thái `xong`.
-8. **Lưu công việc:** commit và push sau mỗi điểm duyệt và khi xong phim. Không commit `node_modules`. Video MP4 trên 50MB thì hỏi người dùng trước.
+1. **Nhận yêu cầu.** Có chủ đề thì dùng chủ đề đó. Người dùng nói "video tiếp theo" thì lấy mục `ý tưởng` đầu tiên trong `studio/topics.md`. Chưa có chủ đề thì đề xuất 3 chủ đề (skill `y-tuong-chu-de`).
+2. **Tạo dự án** `projects/<slug>/`. Ghi `brief.md` gồm: chủ đề, mảng, **phong cách** (chọn theo bảng dưới, hoặc theo yêu cầu người dùng), đối tượng, độ dài 45–75 giây, giọng (Gemini `gemini-3.8-flash-tts`, Bodi, tempo 1,2). Tạo `checkpoint.json`.
+3. **Chạy đủ các bước 1 → 6** mà không dừng chờ người dùng, trừ khi người dùng dặn "duyệt kịch bản trước", hoặc chủ đề nhạy cảm (chính trị, tranh chấp lãnh thổ, nhân vật còn sống) thì dừng hỏi sau bước 1. Báo tiến độ một dòng ở mỗi mốc lớn.
+4. **Gửi người dùng** `final.mp4`, `thumbnail.png` và `publish.md` (SendUserFile), kèm tóm tắt ngắn: phong cách, độ dài, nguồn đã kiểm chứng, những chỗ agent làm khác skill (lấy từ `notes.md`), và lưu ý rằng âm thanh cần người nghe đánh giá.
+5. **Vòng góp ý.** Người dùng chỉ ra các điểm cần sửa:
+   - Ghi vào `feedback.md` mục `## Vòng N`, mỗi điểm một dòng, kèm **agent chịu trách nhiệm**:
+     - nội dung, lời → `bien-kich`
+     - giọng, tốc độ → `long-tieng` (`retime.py` để đổi tốc độ)
+     - nhịp, bố cục, diễn xuất, chữ trên hình, âm thanh hiệu ứng → `dao-dien`
+     - nhân vật, đạo cụ, động tác, phong cách → `hoa-si`
+     - lỗi render → `dung-phim`
+     - tiêu đề, ảnh bìa → `phat-hanh`
+   - Sửa nhỏ, mang tính cơ học (đổi một tham số, tắt một âm thanh) thì Nhà sản xuất tự làm cho nhanh. Còn lại giao agent, các agent khác nhau làm song song.
+   - Render lại, cho `kiem-dinh` soát **đúng những chỗ đã sửa**, rồi gửi lại người dùng.
+6. **Bài học.** Góp ý nào áp dụng được cho mọi video sau (ví dụ "giọng chậm quá", "không thích tiếng bút") thì thêm vào `studio/lessons.md` thành một quy tắc ngắn. Nếu sửa được ở gốc (mặc định của engine hoặc công cụ) thì sửa ở gốc luôn.
+7. **Khi người dùng duyệt:** cập nhật `checkpoint.json` (`stage: done`) và `studio/topics.md` (`xong`).
+8. **Lưu công việc:** commit và push sau mỗi mốc. Không commit `node_modules` hay các file render thử.
+
+## Chọn phong cách (`"style"` trong scene.json; xem `node studio/engine/catalog.mjs`)
+| Thể loại | Phong cách gợi ý |
+|---|---|
+| Ngụ ngôn, kể chuyện | `giay-muc` (vẽ tay giấy mực) |
+| Cổ tích VN, lễ Tết, lịch sử VN | `dan-gian`, `giay-muc` |
+| Khoa học, "vì sao…?" | `bang-phan` |
+| Lịch sử thế giới, công trình, phát minh | `ban-ve` |
+| Địa lý, chiến tranh–hiệp ước, kinh tế | `ban-do-toi` |
+| Tâm lý, kỹ năng, năng suất | `so-tay`, `phac-thao` |
+| Hoạt hình vui, meme | `pop` |
+| Bí ẩn, chuyện lạ | `phim-cam` |
+Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
 ## Nguyên tắc
-- **Không bịa dữ kiện.** Lịch sử, khoa học hay số liệu đều phải có nguồn trong `sources.md`. Không chắc thì bỏ hoặc nói giảm. Chuyện vui hư cấu thì ghi rõ là hư cấu.
-- **Miễn phí trước:** engine vẽ bằng code, Gemini TTS gói miễn phí. Chỉ gọi dịch vụ trả phí khi người dùng đồng ý, và phải báo chi phí trước.
-- **Không tự đăng** lên TikTok hay YouTube. Người dùng tự đăng bằng `publish.md`.
-- Mỗi bước giữ được file của bước trước. Nếu bị ngắt giữa chừng, đọc `checkpoint.json` rồi làm tiếp, không làm lại từ đầu.
-- Báo tiến độ ngắn gọn cho người dùng ở mỗi mốc lớn.
+- **Agent được sáng tạo.** Skill là hướng dẫn, không phải luật cứng. Luật cứng xem trong file của từng agent: không bịa, nội dung an toàn, không che phụ đề, không tự đăng, không trả phí khi chưa được đồng ý.
+- **Miễn phí trước.** Mọi agent đọc `studio/lessons.md` trước khi làm.
+- Bị ngắt giữa chừng thì đọc `checkpoint.json` và làm tiếp, không làm lại từ đầu.
 
 ## Công cụ của studio
-- Engine: `studio/engine/` (render.mjs, catalog.mjs, SCENE_FORMAT.md). Lần đầu chạy `npm ci` trong thư mục này.
-- Công cụ phụ: `studio/tools/tts.py`, `studio/tools/align.py`, `studio/tools/cutout.py`.
-- Danh sách chủ đề: `studio/topics.md`.
-- Phim mẫu đầy đủ: `projects/bach-dang-938/`.
+- Engine `studio/engine/`: `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Video mẫu 9 phong cách: `studio/engine/examples/styles/`.
+- `studio/tools/`: `tts.py`, `align.py`, `retime.py` (đổi tốc độ giọng và co giãn cả scene theo), `cutout.py`.
+- `studio/topics.md` (chủ đề), `studio/lessons.md` (bài học).
+- Phim mẫu: `projects/rua-va-tho/` (đầy đủ quy trình), `projects/bach-dang-938/`.
