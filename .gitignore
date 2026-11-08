@@ -1,0 +1,5 @@
+node_modules/
+# Video projects / generated media (keep out of git unless explicitly added)
+projects/**/cache/
+*.wav
+.env
