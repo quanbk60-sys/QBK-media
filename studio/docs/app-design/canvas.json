@@ -1,0 +1,15 @@
+{"v":3,"createdOnFiles":{"v":1,"at":"2026-11-08T15:25:00Z"},"title":"App QBK Studio","launch":{"view":"canvas"},"pages":[],
+"boards":{
+"Main.dc.html":{"x":0,"y":0,"w":390,"h":844,"title":"1. Trang chủ"},
+"TaoVideo.dc.html":{"x":470,"y":0,"w":390,"h":844,"title":"2. Làm video mới"},
+"DuyetVideo.dc.html":{"x":940,"y":0,"w":390,"h":844,"title":"3. Duyệt và góp ý"},
+"DangBai.dc.html":{"x":1410,"y":0,"w":390,"h":844,"title":"4. Bộ đăng bài"},
+"ThuVienMau.dc.html":{"x":1880,"y":0,"w":390,"h":844,"title":"5. Thư viện mẫu"},
+"DoanPhim.dc.html":{"x":2350,"y":0,"w":390,"h":844,"title":"6. Đoàn phim và bài học"}
+},
+"order":["Main.dc.html","TaoVideo.dc.html","DuyetVideo.dc.html","DangBai.dc.html","ThuVienMau.dc.html","DoanPhim.dc.html"],
+"notes":{
+"t1":{"x":0,"y":-300,"text":"App QBK Studio · điều hành đoàn phim trên điện thoại","kind":"title1","maxW":2740},
+"n1":{"x":0,"y":-170,"w":560,"text":"Luồng chính: Trang chủ → Làm video mới (chủ đề + phong cách) → đoàn phim tự làm → Duyệt và góp ý (bấm vào mốc giây để ghi chỗ cần sửa) → Bộ đăng bài. Thư viện mẫu: gửi video mẫu để đoàn phim học. Đoàn phim: xem agent nào đang làm gì và các bài học đã ghi.","fill":"orange"}
+},
+"designSystems":[]}
