@@ -14,3 +14,8 @@ Trạng thái: `ý tưởng` → `đang làm` → `xong` → `đã đăng`. Nhà
 | 8 | Lịch sử VN | Lý Thường Kiệt và sông Như Nguyệt | Bài thơ được cho là bản tuyên ngôn độc lập đầu tiên | ý tưởng | |
 | 9 | Hoạt hình vui | Một ngày của người hay trì hoãn | "Để mai làm" và cái kết | ý tưởng | |
 | 10 | Lịch sử thế giới | Kim tự tháp được xây thế nào | Không có cần cẩu, họ đã làm cách nào? | ý tưởng | |
+| 11 | Lịch sử VN | Hội nghị Văn hóa toàn quốc 24/11/1946 | Vì sao 24/11 là Ngày Văn hóa Việt Nam? (style: giay-muc) trend 2026-11-08, hạn 23/11 | ý tưởng | |
+| 12 | Lịch sử VN | Toàn quốc kháng chiến 19/12/1946 | Đêm Hà Nội nổ súng, 80 năm trước (style: ban-do-toi) trend 2026-11-08, hạn 18/12 | ý tưởng | |
+| 13 | Khoa học | Vì sao bầu trời màu xanh | Ánh sáng Mặt Trời có đủ màu, sao ta chỉ thấy xanh? (style: bang-phan) trend 2026-11-08 | ý tưởng | |
+| 14 | Cổ tích | Sự tích Ông Công Ông Táo | Vì sao cá chép đưa ông Táo lên trời? (style: dan-gian) trend 2026-11-08, hạn 29/01 (kiểm lại ngày 23 tháng Chạp) | ý tưởng | |
+| 15 | Ngụ ngôn | Ếch ngồi đáy giếng | Thế giới của bạn to bằng cái miệng giếng (style: giay-muc) trend 2026-11-08 | ý tưởng | |
