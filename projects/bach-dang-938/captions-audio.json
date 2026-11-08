@@ -37,8 +37,14 @@
  },
  {
   "start": 10.22,
+  "end": 10.85,
+  "text": "Kiều Công Tiễn",
+  "at_pause": false
+ },
+ {
+  "start": 10.85,
   "end": 11.7,
-  "text": "Kiều Công Tiễn giết Dương Đình Nghệ",
+  "text": "giết Dương Đình Nghệ",
   "at_pause": false
  },
  {
@@ -67,8 +73,14 @@
  },
  {
   "start": 18.37,
+  "end": 18.99,
+  "text": "Kiều Công Tiễn",
+  "at_pause": false
+ },
+ {
+  "start": 18.99,
   "end": 20.77,
-  "text": "Kiều Công Tiễn cầu cứu nhà Nam Hán.",
+  "text": "cầu cứu nhà Nam Hán.",
   "at_pause": true
  },
  {
@@ -79,8 +91,14 @@
  },
  {
   "start": 22.02,
+  "end": 23.19,
+  "text": "là Lưu Hoằng Tháo",
+  "at_pause": false
+ },
+ {
+  "start": 23.19,
   "end": 24.68,
-  "text": "là Lưu Hoằng Tháo đem thủy quân sang,",
+  "text": "đem thủy quân sang,",
   "at_pause": true
  },
  {
@@ -103,8 +121,14 @@
  },
  {
   "start": 29.21,
+  "end": 30.31,
+  "text": "Kiều Công Tiễn",
+  "at_pause": false
+ },
+ {
+  "start": 30.31,
   "end": 31.19,
-  "text": "Kiều Công Tiễn đã bị Ngô Quyền giết.",
+  "text": "đã bị Ngô Quyền giết.",
   "at_pause": true
  },
  {
@@ -151,8 +175,14 @@
  },
  {
   "start": 43.55,
+  "end": 45.55,
+  "text": "Quân sĩ đóng cọc gỗ lớn",
+  "at_pause": false
+ },
+ {
+  "start": 45.55,
   "end": 46.57,
-  "text": "Quân sĩ đóng cọc gỗ lớn xuống lòng sông,",
+  "text": "xuống lòng sông,",
   "at_pause": true
  },
  {
@@ -223,8 +253,14 @@
  },
  {
   "start": 63.91,
+  "end": 64.34,
+  "text": "Ngô Quyền",
+  "at_pause": false
+ },
+ {
+  "start": 64.34,
   "end": 65.57,
-  "text": "Ngô Quyền dốc toàn quân đánh trả.",
+  "text": "dốc toàn quân đánh trả.",
   "at_pause": true
  },
  {

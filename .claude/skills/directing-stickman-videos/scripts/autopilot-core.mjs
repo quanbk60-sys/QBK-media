@@ -72,6 +72,7 @@ export function loadProject(file, {seconds} = {}) {
   const rangeEnd = Math.min(duration, seconds ?? duration);
   const scoped = seconds !== undefined;
   if (p.captionSize !== undefined) number(p.captionSize, 'caption size', 20, 64);
+  if (p.captionY !== undefined) number(p.captionY, 'caption y', 60, designPlane(p).height - 40);
   if (!Array.isArray(p.shots) || !p.shots.length) throw new Error('Shots required');
   const shots = scoped ? p.shots.filter(s => s.start < rangeEnd).map(s => ({...s, layers: Array.isArray(s.layers) ? visibleLayers(s.layers, s.start, rangeEnd) : s.layers})) : p.shots;
   if (!shots.length) throw new Error('Shots required in the preview range');

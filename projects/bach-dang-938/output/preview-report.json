@@ -1,0 +1,58 @@
+{
+  "fingerprint": "7efd3fe171d5c9e72256f2c6a340d0e7cb0e51b3b72ba2f017b2f421f82bd5ca",
+  "preview_seconds": 21,
+  "output": "/home/user/QBK-media/projects/bach-dang-938/output/preview.mp4",
+  "output_sha256": "845f1f3ab48215e36d60aa99bd937db78f435fdb9cce9e4851578320630480f7",
+  "original_voice_sha256": "1b3ed9e87dcc3cded3ff64f00710918aa882f28a1914ef2121cc258061d57534",
+  "original_voice_duration": 92.92,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 630,
+  "duration": 21,
+  "cache_hits": 3,
+  "shot_count": 8,
+  "full_decode": "pass",
+  "caption_count": 15,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/user/QBK-media/.claude/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/01-warship.png",
+      "sha256": "2aec8f39feb34227810046a1ef8ea8c07f877731ee68fac638a805f8b6810999"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/02-shore-soldier.png",
+      "sha256": "93c79df539ea01bac409191f88bbf5bd712272accec6852cce5e6902ce5bbcd0"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/03-assassination.png",
+      "sha256": "e2703b0516fcee78849bf5e96a05701b3e5f94b59bd6ac5236695857744a83b9"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/04-seal.png",
+      "sha256": "0602ab317a1527563744b6c30dda3acc4362b4d883cd0178337b68ab9b8887de"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/05-ngo-quyen-march.png",
+      "sha256": "95a8bf2cb88973d9b7fcb40f13b9c3ef9cef14443b0cda36ed09c56f40fe79f3"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/06-kieu-cornered.png",
+      "sha256": "c999b4611d92bf3d82259d894e62cf11fbb89233e2a816791826d37761e0e816"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/art/cut/07-kieu-letter.png",
+      "sha256": "51e828649904be92f9e236e550afa4c21aefaa1fa8b8330d27f343c8e0d69769"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/audio/narration.wav",
+      "sha256": "1b3ed9e87dcc3cded3ff64f00710918aa882f28a1914ef2121cc258061d57534"
+    },
+    {
+      "path": "/home/user/QBK-media/projects/bach-dang-938/fonts/PatrickHand-Regular.ttf",
+      "sha256": "0f173b3e6cb6d1af25babf7f0057c5ac4ee11f9992b0469bb817e967ef4ad0fc"
+    }
+  ]
+}

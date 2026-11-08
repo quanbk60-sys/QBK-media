@@ -1,12 +1,47 @@
 {
-  "stage": "sample_assets",
-  "style": "B1", "ratio": "9:16", "language": "vi",
-  "approvals": {"script_v1": "2026-11-08", "image_tier": "balanced (pro cast sheet, flash scenes)", "sample_budget": "< 1 USD"},
-  "tts": {"provider": "google-gemini", "model": "gemini-3.8-flash-tts", "voice": "Bodi", "output": "audio/narration.wav", "duration_s": 92.92, "tier": "free tier (no charge)", "listening_review": "pending (user)"},
-  "captions": {"file": "captions-audio.json", "method": "pause-snapped DP, syllable-proportional; Whisper model host blocked in this env", "review": "pending"},
-  "fonts": {"hand": "fonts/PatrickHand-Regular.ttf (OFL, full Vietnamese)", "caption": "skill NotoSans (Vietnamese ok)"},
-  "images": {"status": "blocked", "reason": "API key on Gemini Free Tier: image models have 0 quota (HTTP 429). Enable billing in AI Studio.", "attempts": "art/failed/*.request.json (no images produced, no charge)"},
-  "env_notes": ["Run gemini-media.mjs with NODE_USE_ENV_PROXY=1 so Node fetch goes through the credential-injecting proxy; without it Google returns 400."],
-  "paid_calls": 0,
-  "next": "After billing enabled: generate prompts/00-cast (gemini-3-pro-image) then 01-07 (gemini-3.1-flash-image), key out white, compose shots 0-20.77s, preview."
+ "stage": "sample_review",
+ "style": "B1",
+ "ratio": "9:16",
+ "language": "vi",
+ "approvals": {
+  "script_v1": "2026-11-08",
+  "image_tier": "balanced (pro cast sheet, flash scenes)",
+  "sample_budget": "< 1 USD"
+ },
+ "tts": {
+  "provider": "google-gemini",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Bodi",
+  "output": "audio/narration.wav",
+  "duration_s": 92.92,
+  "tier": "free tier (no charge)",
+  "listening_review": "pending (user)"
+ },
+ "captions": {
+  "file": "captions-audio.json",
+  "method": "pause-snapped DP, syllable-proportional; Whisper model host blocked in this env",
+  "review": "pending"
+ },
+ "fonts": {
+  "hand": "fonts/PatrickHand-Regular.ttf (OFL, full Vietnamese)",
+  "caption": "skill NotoSans (Vietnamese ok)"
+ },
+ "images": {
+  "status": "sample done",
+  "source": "user-generated in Gemini app (free), cast sheet + 7 scenes",
+  "processing": "tools/cutout.py (white->alpha, Kieu sash tinted green in 06)"
+ },
+ "env_notes": [
+  "Run gemini-media.mjs with NODE_USE_ENV_PROXY=1 so Node fetch goes through the credential-injecting proxy; without it Google returns 400."
+ ],
+ "paid_calls": 0,
+ "next": "User reviews preview picture+sound; on approval run approve, then produce remaining ~23 scene images for shots 9-17",
+ "preview": {
+  "file": "output/preview.mp4",
+  "seconds": 21,
+  "size": "1080x1920",
+  "captionSize": 64,
+  "captionY": 1650,
+  "sfx": "B1 procedural only (tap/paper/pop); file SFX not supported in B1"
+ }
 }
