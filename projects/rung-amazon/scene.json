@@ -3,6 +3,7 @@
  "height": 1920,
  "fps": 30,
  "style": "ban-do-toi",
+ "textFollowsCamera": true,
  "narration": {
   "path": "audio/narration.wav",
   "lead": 0.15
@@ -191,9 +192,9 @@
     {
      "type": "text",
      "text": "NGỘ NHẬN",
-     "x": 720,
-     "y": 510,
-     "size": 110,
+     "x": 700,
+     "y": 470,
+     "size": 84,
      "color": "red",
      "font": "sans",
      "bold": true,
@@ -310,8 +311,8 @@
     {
      "type": "text",
      "text": "Ô-XY",
-     "x": 640,
-     "y": 450,
+     "x": 720,
+     "y": 490,
      "size": 80,
      "color": "green",
      "font": "sans",
@@ -417,7 +418,7 @@
      "y": 430,
      "params": {
       "dx": -40,
-      "dy": 880,
+      "dy": 800,
       "bend": -0.35,
       "color": "red",
       "dashed": true
@@ -441,7 +442,7 @@
      "params": {
       "w": 760,
       "label": "Ô-XY RÒNG CỦA AMAZON",
-      "big": "≈ 0",
+      "big": "~0",
       "bigSize": 130,
       "bigColor": "gold",
       "source": "NGUỒN: National Geographic, Oxford"
@@ -511,11 +512,11 @@
     {
      "type": "prop",
      "name": "jungleTree",
-     "x": -260,
+     "x": -240,
      "y": 1330,
-     "scale": 0.7,
+     "scale": 0.75,
      "params": {
-      "h": 440
+      "h": 460
      }
     },
     {
@@ -523,15 +524,15 @@
      "name": "jungleTree",
      "x": 60,
      "y": 1330,
-     "scale": 0.8,
+     "scale": 0.6,
      "params": {
-      "h": 500
+      "h": 420
      }
     },
     {
      "type": "prop",
      "name": "jungleTree",
-     "x": 1020,
+     "x": 1200,
      "y": 1330,
      "scale": 0.8,
      "params": {
@@ -541,7 +542,7 @@
     {
      "type": "prop",
      "name": "jungleTree",
-     "x": 1330,
+     "x": 1480,
      "y": 1330,
      "scale": 0.7,
      "params": {
@@ -643,7 +644,8 @@
      "y": 1010,
      "scale": 0.75,
      "params": {
-      "fill": 0
+      "fill": 0,
+      "label": ""
      },
      "ptrack": [
       {
@@ -665,6 +667,18 @@
       "dur": 1.2,
       "hand": false
      }
+    },
+    {
+     "type": "text",
+     "text": "BẢN ĐỒ MINH HỌA",
+     "x": 245,
+     "y": 1180,
+     "size": 26,
+     "color": "ink",
+     "font": "sans",
+     "alpha": 0.7,
+     "enter": "fade",
+     "from": 0.8
     },
     {
      "type": "prop",
@@ -713,7 +727,20 @@
      "name": "southAmericaMap",
      "x": 560,
      "y": 1010,
-     "scale": 0.75
+     "scale": 0.75,
+     "params": {
+      "label": ""
+     }
+    },
+    {
+     "type": "text",
+     "text": "BẢN ĐỒ MINH HỌA",
+     "x": 245,
+     "y": 1180,
+     "size": 26,
+     "color": "ink",
+     "font": "sans",
+     "alpha": 0.7
     },
     {
      "type": "prop",
@@ -994,8 +1021,23 @@
      "x": 560,
      "y": 1010,
      "scale": 0.75,
+     "params": {
+      "label": ""
+     },
      "alpha": 1,
-     "to": 0.6,
+     "to": 0.45,
+     "exit": "fade"
+    },
+    {
+     "type": "text",
+     "text": "BẢN ĐỒ MINH HỌA",
+     "x": 245,
+     "y": 1180,
+     "size": 26,
+     "color": "ink",
+     "font": "sans",
+     "alpha": 0.7,
+     "to": 0.45,
      "exit": "fade"
     },
     {
@@ -1017,7 +1059,7 @@
       "h": 420
      },
      "enter": "drop",
-     "from": 0.05
+     "from": 0.25
     },
     {
      "type": "prop",
@@ -1029,7 +1071,7 @@
       "h": 480
      },
      "enter": "drop",
-     "from": 0.16999999999999998
+     "from": 0.35
     },
     {
      "type": "prop",
@@ -1041,7 +1083,7 @@
       "h": 520
      },
      "enter": "drop",
-     "from": 0.29
+     "from": 0.45
     },
     {
      "type": "prop",
@@ -1053,7 +1095,7 @@
       "h": 460
      },
      "enter": "drop",
-     "from": 0.41
+     "from": 0.55
     },
     {
      "type": "prop",
@@ -1065,7 +1107,7 @@
       "h": 400
      },
      "enter": "drop",
-     "from": 0.53
+     "from": 0.65
     },
     {
      "type": "prop",
@@ -1077,7 +1119,7 @@
       "h": 380
      },
      "enter": "drop",
-     "from": 0.65
+     "from": 0.75
     },
     {
      "type": "prop",
@@ -1089,7 +1131,7 @@
       "h": 380
      },
      "enter": "drop",
-     "from": 0.77
+     "from": 0.8500000000000001
     },
     {
      "type": "prop",
@@ -1127,9 +1169,9 @@
     },
     {
      "t": 2.32,
-     "x": 600,
+     "x": 545,
      "y": 930,
-     "zoom": 1.08
+     "zoom": 1.05
     }
    ],
    "elements": [
@@ -1216,18 +1258,18 @@
      "type": "prop",
      "name": "parrot",
      "x": -300,
-     "y": 640,
+     "y": 700,
      "scale": 0.7,
      "track": [
       {
        "t": 0.1,
        "x": -300,
-       "y": 680
+       "y": 720
       },
       {
        "t": 2.32,
        "x": 1400,
-       "y": 600,
+       "y": 660,
        "ease": "linear"
       }
      ]
@@ -1238,16 +1280,16 @@
      "x": 540,
      "y": 190,
      "params": {
-      "w": 820,
+      "w": 900,
       "label": "SỐ LOÀI ĐÃ BIẾT TRÊN TRÁI ĐẤT",
-      "big": "≥ 10%",
+      "big": "ÍT NHẤT 10%",
       "bigColor": "gold",
       "bars": [
        {
         "label": "Có ở Amazon",
         "value": 0.1,
         "color": "gold",
-        "text": "ít nhất 1/10"
+        "text": "1/10"
        }
       ],
       "source": "NGUỒN: WWF"
@@ -1285,9 +1327,9 @@
     },
     {
      "t": 3.09,
-     "x": 560,
-     "y": 1000,
-     "zoom": 1.08
+     "x": 540,
+     "y": 940,
+     "zoom": 1.06
     }
    ],
    "elements": [
@@ -1325,29 +1367,13 @@
      "params": {
       "w": 860,
       "label": "SÔNG AMAZON ĐỔ RA BIỂN",
-      "big": "1/5",
+      "big": "~1/5",
       "bigSize": 130,
       "bigColor": "gold",
-      "bars": [
-       {
-        "label": "Lượng nước sông cả thế giới",
-        "value": 0.2,
-        "color": "navy",
-        "text": "≈1/5"
-       }
-      ],
+      "title": "lượng nước sông cả thế giới",
+      "titleSize": 44,
       "source": "NGUỒN: Britannica"
      },
-     "ptrack": [
-      {
-       "t": 1.0,
-       "progress": 0
-      },
-      {
-       "t": 2.2,
-       "progress": 1
-      }
-     ],
      "enter": "pop",
      "from": 0.9
     }
@@ -1371,9 +1397,9 @@
    "camera": [
     {
      "t": 0,
-     "x": 560,
-     "y": 1000,
-     "zoom": 1.08
+     "x": 540,
+     "y": 940,
+     "zoom": 1.06
     },
     {
      "t": 1.2,
@@ -1427,7 +1453,7 @@
      "text": "SÔNG TRÊN TRỜI?",
      "x": 540,
      "y": 300,
-     "size": 120,
+     "size": 100,
      "color": "gold",
      "font": "sans",
      "bold": true,
@@ -1852,16 +1878,29 @@
      "name": "southAmericaMap",
      "x": 560,
      "y": 1010,
-     "scale": 0.75
+     "scale": 0.75,
+     "params": {
+      "label": ""
+     }
+    },
+    {
+     "type": "text",
+     "text": "BẢN ĐỒ MINH HỌA",
+     "x": 245,
+     "y": 1180,
+     "size": 26,
+     "color": "ink",
+     "font": "sans",
+     "alpha": 0.7
     },
     {
      "type": "prop",
      "name": "vaporFlow",
-     "x": 755,
-     "y": 805,
+     "x": 800,
+     "y": 800,
      "params": {
-      "dx": -215,
-      "dy": 254,
+      "dx": -380,
+      "dy": 20,
       "n": 3,
       "gap": 34,
       "progress": 0
@@ -1869,6 +1908,29 @@
      "ptrack": [
       {
        "t": 0.1,
+       "progress": 0
+      },
+      {
+       "t": 1.05,
+       "progress": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 440,
+     "y": 805,
+     "params": {
+      "dx": 90,
+      "dy": 300,
+      "n": 3,
+      "gap": 34,
+      "progress": 0
+     },
+     "ptrack": [
+      {
+       "t": 1.05,
        "progress": 0
       },
       {
@@ -1880,17 +1942,17 @@
     {
      "type": "prop",
      "name": "cloud",
-     "x": 560,
-     "y": 1068,
-     "scale": 0.55,
+     "x": 540,
+     "y": 1150,
+     "scale": 0.5,
      "enter": "pop",
      "from": 1.9
     },
     {
      "type": "text",
      "text": "GIÓ",
-     "x": 900,
-     "y": 600,
+     "x": 800,
+     "y": 650,
      "size": 70,
      "color": "navy",
      "font": "sans",
@@ -1900,9 +1962,9 @@
     },
     {
      "type": "text",
-     "text": "→ MƯA",
-     "x": 748,
-     "y": 988,
+     "text": "MƯA",
+     "x": 720,
+     "y": 1150,
      "size": 64,
      "color": "navy",
      "font": "sans",
@@ -1943,17 +2005,53 @@
      "name": "southAmericaMap",
      "x": 560,
      "y": 1010,
-     "scale": 0.75
+     "scale": 0.75,
+     "params": {
+      "label": ""
+     }
+    },
+    {
+     "type": "text",
+     "text": "BẢN ĐỒ MINH HỌA",
+     "x": 245,
+     "y": 1180,
+     "size": 26,
+     "color": "ink",
+     "font": "sans",
+     "alpha": 0.7
     },
     {
      "type": "prop",
      "name": "vaporFlow",
-     "x": 755,
+     "x": 800,
+     "y": 800,
+     "params": {
+      "dx": -380,
+      "dy": 20,
+      "n": 3,
+      "gap": 30,
+      "color": "gold"
+     },
+     "track": [
+      {
+       "t": 0,
+       "alpha": 0.6
+      },
+      {
+       "t": 1.2,
+       "alpha": 1
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 440,
      "y": 805,
      "params": {
-      "dx": -215,
-      "dy": 254,
-      "n": 5,
+      "dx": 90,
+      "dy": 300,
+      "n": 3,
       "gap": 30,
       "color": "gold"
      },
@@ -1971,16 +2069,16 @@
     {
      "type": "prop",
      "name": "cloud",
-     "x": 560,
-     "y": 1068,
-     "scale": 0.55
+     "x": 540,
+     "y": 1150,
+     "scale": 0.5
     },
     {
      "type": "text",
      "text": "SÔNG BAY",
      "x": 540,
      "y": 330,
-     "size": 200,
+     "size": 160,
      "color": "gold",
      "font": "sans",
      "bold": true,
@@ -2021,7 +2119,8 @@
      "y": 1010,
      "scale": 0.75,
      "params": {
-      "lost": 0
+      "lost": 0,
+      "label": ""
      },
      "ptrack": [
       {
@@ -2036,13 +2135,35 @@
      ]
     },
     {
+     "type": "text",
+     "text": "BẢN ĐỒ MINH HỌA",
+     "x": 245,
+     "y": 1180,
+     "size": 26,
+     "color": "ink",
+     "font": "sans",
+     "alpha": 0.7
+    },
+    {
      "type": "prop",
      "name": "vaporFlow",
-     "x": 755,
+     "x": 800,
+     "y": 800,
+     "params": {
+      "dx": -380,
+      "dy": 20,
+      "n": 3,
+      "gap": 34
+     }
+    },
+    {
+     "type": "prop",
+     "name": "vaporFlow",
+     "x": 440,
      "y": 805,
      "params": {
-      "dx": -215,
-      "dy": 254,
+      "dx": 90,
+      "dy": 300,
       "n": 3,
       "gap": 34
      }

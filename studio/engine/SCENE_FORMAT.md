@@ -132,6 +132,7 @@ Một số âm được tạo **tự động**: tiếng bút khi bàn tay vẽ, 
 
 ## Camera
 `"camera": [{"t": 0, "zoom": 1}, {"t": 3, "zoom": 1.15, "x": 540, "y": 1000}]`: thiếu `x`, `y`, `zoom` ở keyframe đầu thì mặc định là tâm khung (540, 960) và zoom 1, camera lia dần từ đó: phóng to hoặc lia về một điểm.
+- `"textFollowsCamera": true` (cấp scene, nên bật cho phim mới): chữ bên trong đạo cụ và phần tử `text` đi theo camera như mọi nét vẽ khác. Mặc định `false` để giữ nguyên các phim cũ (trước đây chữ bỏ qua camera nên lệch khỏi khung `infoPanel` khi phóng to/lia).
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).

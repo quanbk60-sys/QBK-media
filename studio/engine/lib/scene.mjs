@@ -128,9 +128,9 @@ export function makeRenderer(s) {
       if (e.draw) {
         const at = e.draw.at ?? e.from ?? 0, dur = e.draw.dur ?? 1.5;
         const ink = clamp((t - at) / (dur * 0.78)), fill = clamp((t - at - dur * 0.72) / (dur * 0.28));
-        const tip = play(ctx, R.ops, {ink, fill}, s.styleDef);
+        const tip = play(ctx, R.ops, {ink, fill}, s.styleDef, s.textFollowsCamera);
         if (ink > 0 && ink < 1 && e.draw.hand !== false) { pen = tip; drawing = true; }
-      } else play(ctx, R.ops, undefined, s.styleDef);
+      } else play(ctx, R.ops, undefined, s.styleDef, s.textFollowsCamera);
       ctx.restore();
       // auto footsteps / hammer hits
       const key = `${sh.start}:${idx}`;

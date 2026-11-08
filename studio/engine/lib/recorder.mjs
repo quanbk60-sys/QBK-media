@@ -42,7 +42,8 @@ export function strokeLength(ops) { return ops.filter(o => o.k === 's').reduce((
 
 // Play ops onto a real ctx. reveal: undefined = all; else {ink: 0..1 of total stroke length drawn, fill: 0..1 alpha of fills}
 // Returns the pen tip (device coords) while drawing.
-export function play(ctx, ops, reveal, style) {
+export function play(ctx, ops, reveal, style, textFollowsCamera = false) {
+  const B = textFollowsCamera ? ctx.getTransform() : null; // compose text matrices with the camera (opt-in, scene.textFollowsCamera)
   const map = style?.map || (c => c), ls = style?.lineScale ?? 1;
   let budget = reveal ? reveal.ink * strokeLength(ops) : Infinity, tip = null;
   ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -68,7 +69,7 @@ export function play(ctx, ops, reveal, style) {
       ctx.stroke();
     } else if (o.k === 't') {
       const ta = reveal ? reveal.fill : 1; if (ta <= 0) continue;
-      ctx.save(); ctx.globalAlpha *= ta; ctx.setTransform(...o.m); ctx.font = o.font; ctx.textAlign = o.align; ctx.textBaseline = o.base; ctx.fillStyle = map(o.c); ctx.fillText(o.text, 0, 0); ctx.restore();
+      ctx.save(); ctx.globalAlpha *= ta; if (B) { const m = o.m; ctx.setTransform(B.a * m[0] + B.c * m[1], B.b * m[0] + B.d * m[1], B.a * m[2] + B.c * m[3], B.b * m[2] + B.d * m[3], B.a * m[4] + B.c * m[5] + B.e, B.b * m[4] + B.d * m[5] + B.f); } else ctx.setTransform(...o.m); ctx.font = o.font; ctx.textAlign = o.align; ctx.textBaseline = o.base; ctx.fillStyle = map(o.c); ctx.fillText(o.text, 0, 0); ctx.restore();
     }
   }
   ctx.restore();
