@@ -21,7 +21,7 @@
  "tts": {
   "model": "gemini-3.8-flash-tts",
   "voice": "Bodi",
-  "duration_s": 72.48,
+  "duration_s": 60.42,
   "usage": {
    "promptTokenCount": 323,
    "candidatesTokenCount": 1812,
@@ -32,7 +32,9 @@
    "file": "captions-audio.json",
    "phrases": 48,
    "pauses": 54
-  }
+  },
+  "tempo": 1.2,
+  "tempo_note": "ffmpeg atempo on narration-orig.wav (pitch preserved)"
  },
  "qa": {
   "round1": "CẦN SỬA (3 lỗi hình) → đã sửa, producer verified frames 3.9/6.2/13.4/19.9s"
