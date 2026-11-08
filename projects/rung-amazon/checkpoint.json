@@ -1,1 +1,10 @@
-{"stage":"brief","topic":"Rừng Amazon","source":"app request yocaz4bhrbk7cjphrczo","approvals":{"script":"not required (gateScript false)"},"paid_calls":0,"next":"bien-kich"}
+{
+ "stage": "voice+art",
+ "topic": "Rừng Amazon",
+ "source": "app request yocaz4bhrbk7cjphrczo",
+ "approvals": {
+  "script": "not required (gateScript false)"
+ },
+ "paid_calls": 0,
+ "next": "long-tieng + hoa-si"
+}
