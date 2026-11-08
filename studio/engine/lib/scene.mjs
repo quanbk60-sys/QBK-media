@@ -107,7 +107,8 @@ export function makeRenderer(s) {
     const t = T - sh.start;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = color(sh.background || s.background || 'paper'); ctx.fillRect(0, 0, s.width, s.height);
-    const cam = sampleTrack(sh.camera, t, ['zoom', 'x', 'y']);
+    const camKeys = sh.camera?.length ? [{zoom: 1, x: s.width / 2, y: s.height / 2, ...sh.camera[0]}, ...sh.camera.slice(1)] : null; // missing fields on the first key default to the frame centre
+    const cam = sampleTrack(camKeys, t, ['zoom', 'x', 'y']);
     const z = cam.zoom ?? 1, cx = cam.x ?? s.width / 2, cy = cam.y ?? s.height / 2;
     ctx.setTransform(z, 0, 0, z, s.width / 2 - cx * z, s.height / 2 - cy * z);
     let pen = null, drawing = false;
