@@ -29,7 +29,7 @@ const events = [];
 for (const sh of s.shots) for (const x of sh.sfx || []) events.push({...x, t: sh.start + x.t - from});
 for (const e of R.events) events.push({...e, t: e.t - from});
 let runStart = null;
-drawFlags.forEach((d, i) => { if (d && runStart === null) runStart = i; if ((!d || i === drawFlags.length - 1) && runStart !== null) { events.push({t: runStart / s.fps, kind: 'scribble', dur: (i - runStart) / s.fps, gain: s.scribbleGain ?? 0.18}); runStart = null; } });
+drawFlags.forEach((d, i) => { if (d && runStart === null) runStart = i; if ((!d || i === drawFlags.length - 1) && runStart !== null) { events.push({t: runStart / s.fps, kind: 'scribble', dur: (i - runStart) / s.fps, gain: s.scribbleGain ?? 0}); runStart = null; } });
 writeWav(tmpA, mixTrack(to - from, events.filter(e => e.t < to - from)));
 
 const inputs = ['-i', tmpV, '-i', tmpA], filters = [];

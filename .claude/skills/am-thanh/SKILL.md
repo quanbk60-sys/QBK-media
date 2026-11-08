@@ -22,7 +22,7 @@ description: Thiết kế âm thanh cho video QBK, gồm sfx tổng hợp không
 | Chiến thắng, lên ngôi | `gong` hoặc `cheer` | 0,3–0,5 |
 | Kết, câu hỏi cuối | `chime` | 0,3 |
 
-**Tự động có:** tiếng bút khi bàn tay vẽ (chỉnh bằng `scribbleGain` ở cấp scene, mặc định 0,18), tiếng bước chân khi `walk` hoặc `run`, tiếng búa khi `hammer`.
+**Tự động có:** tiếng bút khi bàn tay vẽ (chỉnh bằng `scribbleGain` ở cấp scene, mặc định 0 = tắt vì người dùng QBK không thích; muốn bật thì đặt 0,1–0,2), tiếng bước chân khi `walk` hoặc `run`, tiếng búa khi `hammer`.
 
 ## Quy tắc trộn
 - **Giọng đọc luôn nổi bật nhất.** SFX không trùng lên chữ quan trọng của câu.

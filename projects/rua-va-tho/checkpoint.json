@@ -1,14 +1,18 @@
 {
- "stage": "preview_review",
+ "stage": "final",
  "topic": "Rùa và Thỏ",
  "approvals": {
   "script_v1": {
    "by": "user",
    "note": "Duyệt; mặc định: Ê-dốp, giữ câu xuất xứ, KIÊU = THUA"
+  },
+  "preview": {
+   "by": "user",
+   "note": "Duyệt tốc độ 1.2x; bỏ tiếng bút (scribbleGain 0)"
   }
  },
  "paid_calls": 0,
- "next": "user approves preview → final render",
+ "next": "render final → kiem-dinh → phat-hanh",
  "files": [
   "brief.md",
   "narration.txt",
