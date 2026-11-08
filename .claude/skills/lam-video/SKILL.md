@@ -18,12 +18,13 @@ Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude
 | 5 | `kiem-dinh` (sonnet) | `qa.md`: lỗi được trả về đúng agent, tối đa 2 vòng |
 | 6 | `phat-hanh` (sonnet) | `publish.md`, `output/thumbnail.png` |
 | ⏸ | **Người dùng duyệt video hoàn chỉnh** | Góp ý được ghi vào `feedback.md`, rồi làm lại |
+| ☆ | `san-trend` (sonnet) | Khi cần ý tưởng hoặc lên lịch tuần: báo cáo trong `studio/trends/`, chủ đề mới trong `topics.md` (skill `san-trend`) |
 | ★ | `nghien-cuu-mau` (sonnet) | Khi người dùng gửi **mẫu tham khảo**: thẻ kiến thức trong `studio/references/`, gói phong cách mới (skill `hoc-mau`) |
 
 Các bước độc lập nhau thì chạy song song: lồng tiếng song song với họa sĩ; phát hành song song với kiểm định bản final.
 
 ## Quy trình
-1. **Nhận yêu cầu.** Có chủ đề thì dùng chủ đề đó. Người dùng nói "video tiếp theo" thì lấy mục `ý tưởng` đầu tiên trong `studio/topics.md`. Chưa có chủ đề thì đề xuất 3 chủ đề (skill `y-tuong-chu-de`).
+1. **Nhận yêu cầu.** Có chủ đề thì dùng chủ đề đó. Người dùng nói "video tiếp theo" thì lấy mục `ý tưởng` đầu tiên trong `studio/topics.md`. Chưa có chủ đề thì lấy từ báo cáo trend gần nhất, hoặc giao `san-trend` tìm mới, rồi đề xuất 3 chủ đề. Chủ đề có hạn đăng (ngày lễ, ngày kỷ niệm) được ưu tiên trước.
 2. **Tạo dự án** `projects/<slug>/`. Ghi `brief.md` gồm: chủ đề, mảng, **phong cách** (chọn theo bảng dưới, hoặc theo yêu cầu người dùng), đối tượng, độ dài 45–75 giây, giọng (Gemini `gemini-3.8-flash-tts`, Bodi, tempo 1,2). Tạo `checkpoint.json`.
 3. **Chạy đủ các bước 1 → 6** mà không dừng chờ người dùng, trừ khi người dùng dặn "duyệt kịch bản trước", hoặc chủ đề nhạy cảm (chính trị, tranh chấp lãnh thổ, nhân vật còn sống) thì dừng hỏi sau bước 1. Báo tiến độ một dòng ở mỗi mốc lớn.
 4. **Gửi người dùng** `final.mp4`, `thumbnail.png` và `publish.md` (SendUserFile), kèm tóm tắt ngắn: phong cách, độ dài, nguồn đã kiểm chứng, những chỗ agent làm khác skill (lấy từ `notes.md`), và lưu ý rằng âm thanh cần người nghe đánh giá.
