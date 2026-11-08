@@ -90,5 +90,107 @@ export const PROPS = {
     poly(ctx, [[-380, -300], [80, -300], [40, -150], [120, -40], [60, 80], [140, 200], [80, 300], [-380, 300]], '#E6D7AE', 5);
     line(ctx, [[-300, -120], [-120, -60], [0, 20], [80, 80]], 10, 'waterDeep');
   },
+
+  // --- v2 (Rùa và Thỏ) ---
+  // finish line: checkered strip on the ground + two posts with a tape. p.w width, p.h post height, p.broken 0..1 (tape snaps and falls),
+  // p.tape (false = no posts/tape), p.tapeColor, p.label (text on a banner across the posts, e.g. "ĐÍCH")
+  finishLine(ctx, p, t) {
+    const w = p.w || 700, h = p.h || 330, br = Math.max(0, Math.min(1, p.broken ?? 0)), tape = p.tape !== false, tc = p.tapeColor || 'red';
+    checkerStrip(ctx, w, p.rows || 2);
+    if (!tape) return;
+    for (const x of [-w / 2, w / 2]) { poly(ctx, [[x - 11, 4], [x + 11, 4], [x + 9, -h], [x - 9, -h]], 'white', 5); for (let k = 1; k < 4; k++) poly(ctx, [[x - 10, -h * k / 4], [x + 10, -h * k / 4], [x + 10, -h * k / 4 + 24], [x - 10, -h * k / 4 + 24]], 'red', 3); }
+    if (p.label) { poly(ctx, [[-w / 2 - 20, -h - 90], [w / 2 + 20, -h - 90], [w / 2 + 20, -h - 10], [-w / 2 - 20, -h - 10]], 'white', 6);
+      ctx.fillStyle = color(p.labelColor || 'red'); ctx.font = `bold ${p.labelSize || 64}px Hand`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.label, 0, -h - 48); }
+    const ty = -h * 0.55, half = w / 2, flut = Math.sin(t * 5) * 6;
+    if (br <= 0) { // taut, slight sag + flutter
+      const pts = []; for (let i = 0; i <= 20; i++) { const u = i / 20, x = -half + u * w; pts.push([x, ty + Math.sin(u * Math.PI) * (14 + flut)]); }
+      ribbon(ctx, pts, 22, tc);
+    } else { // two halves swing down from their posts
+      for (const s of [-1, 1]) { const ang = br * 1.35, L = half * (1 - 0.15 * br), pts = [];
+        for (let i = 0; i <= 12; i++) { const u = i / 12, a = ang * (0.6 + 0.4 * u) + Math.sin(t * 7 + u * 3) * 0.06 * br; pts.push([s * half - s * u * L * Math.cos(a), ty + u * L * Math.sin(a)]); }
+        ribbon(ctx, pts, 22, tc); }
+    }
+  },
+  // start line: checkered strip only (no posts). p.w, p.rows, p.label (painted text in front of the strip)
+  startLine(ctx, p) {
+    checkerStrip(ctx, p.w || 700, p.rows || 2);
+    if (p.label) { ctx.fillStyle = color(p.labelColor || 'ink'); ctx.font = `bold ${p.labelSize || 54}px Hand`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.label, 0, 70); }
+  },
+  // chequered flag planted in the ground, waving. p.h pole height, p.size flag width, p.wind amplitude (default 1)
+  checkerFlag(ctx, p, t) {
+    const h = p.h || 420, W = p.size || 200, H = W * 0.7, nx = 5, ny = 4, amp = 14 * (p.wind ?? 1);
+    poly(ctx, [[-30, 6], [30, 6], [20, -10], [-20, -10]], '#9b8f75', 4);
+    const pt = (u, v) => [8 + u * W, -h + v * H + Math.sin(t * 6 - u * 3.2) * amp * u + u * 6];
+    const pts = []; for (let i = 0; i <= nx; i++) pts.push(pt(i / nx, 0)); for (let i = nx; i >= 0; i--) pts.push(pt(i / nx, 1));
+    poly(ctx, pts, 'white', 6);
+    for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) if ((i + j) % 2 === 0) {
+      const a = pt(i / nx, j / ny), b = pt((i + 1) / nx, j / ny), c = pt((i + 1) / nx, (j + 1) / ny), d = pt(i / nx, (j + 1) / ny);
+      poly(ctx, [a, b, c, d], INK, 0); }
+    poly(ctx, pts, null, 6);
+    poly(ctx, [[-8, 0], [8, 0], [8, -h - 10], [-8, -h - 10]], 'wood', 5);
+    ctx.beginPath(); ctx.arc(0, -h - 20, 14, 0, Math.PI * 2); ctx.fillStyle = color('gold'); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+  },
+  // "Z z z" rising and fading in a loop. Origin = just above the sleeper's head. p.size (default 1), p.color, p.speed
+  zzz(ctx, p, t) {
+    const sz = p.size ?? 1, col = color(p.color || 'navy'), per = 2.4 / (p.speed ?? 1);
+    for (let i = 0; i < 3; i++) {
+      const u = ((t / per + i / 3) % 1), s = (34 + 46 * u) * sz, x = (20 + u * 120 + Math.sin(u * 6 + i) * 18) * sz, y = -u * 260 * sz;
+      ctx.save(); ctx.globalAlpha = Math.min(1, u * 5) * (1 - Math.pow(u, 3)); ctx.translate(x, y); ctx.rotate(-0.15 + Math.sin(t * 2 + i) * 0.1);
+      line(ctx, [[-s / 2, -s / 2], [s / 2, -s / 2], [-s / 2, s / 2], [s / 2, s / 2]], 16 * sz * (0.6 + 0.4 * u) + 6, INK);
+      line(ctx, [[-s / 2, -s / 2], [s / 2, -s / 2], [-s / 2, s / 2], [s / 2, s / 2]], 8 * sz * (0.6 + 0.4 * u), col);
+      ctx.restore();
+    }
+  },
+  // dust puffs + speed lines kicked up behind a runner. Origin = runner's feet on the ground.
+  // p.dir 1 = runner faces right (dust trails to the left), -1 opposite; p.size; p.n puffs; p.progress 0..1 intensity (default 1); p.lines (false = no speed lines)
+  dust(ctx, p, t) {
+    const dir = p.dir ?? 1, sz = p.size ?? 1, n = p.n || 5, pr = p.progress ?? 1, per = 0.7;
+    if (pr <= 0) return;
+    for (let i = 0; i < n; i++) {
+      const u = (t / per + i / n) % 1, r = (34 + 56 * u) * sz * (0.5 + 0.5 * pr), x = -dir * (50 + u * 320 * pr) * sz, y = -(18 + u * 80 + (i % 2) * 20) * sz;
+      ctx.save(); ctx.globalAlpha = Math.min(1, 1.6 * (1 - u)); puff(ctx, x, y, r, p.color || '#DCC8A2'); ctx.restore();
+    }
+    if (p.lines !== false) for (let k = 0; k < 3; k++) { const y = -(90 + k * 70) * sz, L = (130 + 50 * ((k * 7 + Math.floor(t * 12)) % 3)) * pr * sz, x0 = -dir * (90 + k * 30) * sz;
+      line(ctx, [[x0, y], [x0 - dir * L, y]], 6, 'rgba(42,39,35,.6)'); }
+  },
+  // thought bubble: cloud with trailing dots toward the origin (put the origin near the thinker's head).
+  // p.dx, p.dy bubble centre offset (default 170, -260); p.w, p.h; p.text, p.size, p.color; p.icon 'pillow'; p.progress 0..1 (dots then cloud appear)
+  thought(ctx, p) {
+    const dx = p.dx ?? 170, dy = p.dy ?? -260, W = p.w || 300, H = p.h || 200, pr = p.progress ?? 1;
+    for (let i = 0; i < 3; i++) { if (pr < (i + 1) * 0.15) break; const u = (i + 1) / 4; ctx.beginPath(); ctx.arc(dx * u * 0.8, dy * u * 0.75, 10 + i * 7, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); }
+    if (pr < 0.5) return;
+    ctx.save(); ctx.translate(dx, dy); const k = Math.min(1, (pr - 0.5) * 2); ctx.scale(k, k);
+    ctx.beginPath(); const n = 9;
+    for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, b = (i + 0.5) / n * Math.PI * 2, a2 = (i + 1) / n * Math.PI * 2;
+      if (!i) ctx.moveTo(W / 2 * Math.cos(a), H / 2 * Math.sin(a));
+      ctx.quadraticCurveTo(W / 2 * 1.28 * Math.cos(b), H / 2 * 1.32 * Math.sin(b), W / 2 * Math.cos(a2), H / 2 * Math.sin(a2)); }
+    ctx.closePath(); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+    if (p.icon === 'pillow') {
+      ctx.beginPath(); ctx.moveTo(-90, -40); ctx.quadraticCurveTo(0, -60, 90, -40); ctx.quadraticCurveTo(110, 0, 90, 40); ctx.quadraticCurveTo(0, 60, -90, 40); ctx.quadraticCurveTo(-110, 0, -90, -40); ctx.closePath();
+      ctx.fillStyle = color(p.iconColor || '#BFD7EA'); ctx.fill(); ctx.lineWidth = 5; ctx.stroke();
+      line(ctx, [[-60, -10], [-30, 4]], 4); line(ctx, [[40, 10], [62, -6]], 4);
+    }
+    if (p.text) { ctx.fillStyle = color(p.color || 'ink'); ctx.font = `bold ${p.size || 56}px Hand`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.text, 0, p.icon ? 75 : 0); }
+    ctx.restore();
+  },
 };
+PROPS.finishFlag = PROPS.checkerFlag;
+PROPS.thoughtBubble = PROPS.thought;
+
+function checkerStrip(ctx, w, rows) { // checkered band lying on the ground (slightly wider at the front)
+  const top = -20, bot = 26, n = Math.max(2, Math.round(w / 40)), hw = y => w / 2 + 12 * (y - top) / (bot - top), X = (i, y) => (-1 + 2 * i / n) * hw(y);
+  const edge = [[-hw(top), top], [hw(top), top], [hw(bot), bot], [-hw(bot), bot]];
+  poly(ctx, edge, 'white', 0);
+  for (let r = 0; r < rows; r++) { const y0 = top + (bot - top) * r / rows, y1 = top + (bot - top) * (r + 1) / rows;
+    for (let i = 0; i < n; i++) if ((i + r) % 2 === 0) poly(ctx, [[X(i, y0), y0], [X(i + 1, y0), y0], [X(i + 1, y1), y1], [X(i, y1), y1]], INK, 0); }
+  poly(ctx, edge, null, 5);
+}
+function ribbon(ctx, pts, wd, col) { line(ctx, pts, wd + 10, INK); line(ctx, pts, wd, col); }
+function puff(ctx, x, y, r, fill) {
+  ctx.beginPath(); const n = 6;
+  for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, b = (i + 0.5) / n * Math.PI * 2, a2 = (i + 1) / n * Math.PI * 2;
+    if (!i) ctx.moveTo(x + r * Math.cos(a), y + r * 0.8 * Math.sin(a));
+    ctx.quadraticCurveTo(x + r * 1.35 * Math.cos(b), y + r * 1.1 * Math.sin(b), x + r * Math.cos(a2), y + r * 0.8 * Math.sin(a2)); }
+  ctx.closePath(); ctx.fillStyle = color(fill); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+}
 export const PROP_NAMES = Object.keys(PROPS);

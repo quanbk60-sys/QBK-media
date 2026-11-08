@@ -88,7 +88,7 @@ function recordElement(s, e, t, sceneT) {
   if (e.type === 'actor') {
     const A = acting(e, t);
     const blinkAt = e.blinks || [1.3, 4.1, 7.2];
-    R._actor = drawCharacter(R, {costume: {...s.cast[e.cast], ...(e.costume || {})}, pose: A.pose, expr: A.expr, facing: e.facing ?? 1, t: sceneT, blink: blinkAt.some(b => Math.abs(t - b) < 0.07), wind: e.wind ?? (A.cycle === 'run' ? 2.5 : A.cycle === 'walk' ? 1.8 : 1)});
+    R._actor = drawCharacter(R, {costume: {...s.cast[e.cast], ...(e.costume || {})}, pose: A.pose, expr: A.expr, facing: e.facing ?? 1, t: sceneT, blink: blinkAt.some(b => Math.abs(t - b) < 0.07), wind: e.wind ?? ({run: 2.5, sprint: 3.2, walk: 1.8, jump: 1.8}[A.cycle] || 1)});
     R._contact = A.pose.contact; R._cycle = A.cycle; R._impact = A.pose.impact;
   } else if (e.type === 'prop') {
     const params = {...(e.params || {}), ...sampleTrack(e.ptrack, t, Object.keys(Object.assign({}, ...(e.ptrack || [{}]))).filter(k => k !== 't' && k !== 'ease'))};
@@ -129,7 +129,7 @@ export function makeRenderer(s) {
       ctx.restore();
       // auto footsteps / hammer hits
       const key = `${sh.start}:${idx}`;
-      if (R._cycle === 'walk' || R._cycle === 'run') { const c = Math.sign(R._contact || 0), p = lastContact.get(key); if (p !== undefined && c !== p && c !== 0) events.push({t: T, kind: 'step', gain: 0.35}); lastContact.set(key, c); }
+      if (['walk', 'run', 'crawl', 'sprint'].includes(R._cycle)) { const c = Math.sign(R._contact || 0), p = lastContact.get(key); if (p !== undefined && c !== p && c !== 0) events.push({t: T, kind: 'step', gain: R._cycle === 'crawl' ? 0.25 : 0.35}); lastContact.set(key, c); }
       if (R._cycle === 'hammer') { const c = Math.sign(R._impact || 0), p = lastContact.get(key); if (p === 1 && c === -1) events.push({t: T, kind: 'hammer', gain: 0.4}); lastContact.set(key, c); }
     }
     if (pen) { drawHand(ctx, pen[0], pen[1], T); }
