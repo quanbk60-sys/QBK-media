@@ -1,5 +1,5 @@
 {
- "stage": "voice+art",
+ "stage": "preview_review",
  "topic": "Rùa và Thỏ",
  "approvals": {
   "script_v1": {
@@ -8,7 +8,7 @@
   }
  },
  "paid_calls": 0,
- "next": "long-tieng + hoa-si (parallel), then dao-dien",
+ "next": "user approves preview → final render",
  "files": [
   "brief.md",
   "narration.txt",
@@ -33,5 +33,8 @@
    "phrases": 48,
    "pauses": 54
   }
+ },
+ "qa": {
+  "round1": "CẦN SỬA (3 lỗi hình) → đã sửa, producer verified frames 3.9/6.2/13.4/19.9s"
  }
 }
