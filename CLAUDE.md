@@ -8,6 +8,9 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 - 9 gói phong cách (`"style"` trong scene.json), gợi ý theo thể loại trong skill `lam-video`.
 - Agent được tự sáng tạo ngoài skill, ghi lý do vào `notes.md`. Luật cứng giữ nguyên.
 
+## App QBK Studio
+- App trên điện thoại: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/qbk-studio.html`). Người dùng giao chủ đề, duyệt, góp ý trong app. Cách đọc và ghi dữ liệu: mục "App QBK Studio" trong skill `lam-video`.
+
 ## Cấu trúc
 - `studio/engine/`: engine hoạt hình (Node + @napi-rs/canvas + ffmpeg). `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Lần đầu chạy `npm ci` trong thư mục này.
 - `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài).

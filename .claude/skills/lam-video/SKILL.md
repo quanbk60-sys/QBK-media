@@ -58,6 +58,24 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Bí ẩn, chuyện lạ | `phim-cam` |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
+
+## App QBK Studio (điện thoại)
+App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/qbk-studio.html`). Người dùng giao việc và duyệt trong app; Nhà sản xuất đọc và ghi cơ sở dữ liệu của app bằng tool `ArtifactData`.
+
+| Collection / doc | Ai ghi | Nội dung |
+|---|---|---|
+| `requests` | App | Chủ đề mới: `topic, genre, style, length, gateScript, status: "moi"`. Khi nhận việc, Nhà sản xuất đổi thành `"da-nhan"` và tạo `videos/<slug>` |
+| `videos/<slug>` | Nhà sản xuất, app | `title, genre, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Giọng, Phân cảnh, Dựng, Kiểm định), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
+| `feedback` | App | `video, round, items[{t, at, text}], status: "moi"`. Chuyển từng mục cho đúng agent, xong thì đổi `status` thành `"da-xu-ly"` |
+| `tiktokLinks` | App | Link TikTok người dùng lưu. Đọc tiêu đề qua `https://www.tiktok.com/oembed?url=…`, ghi `title, author` |
+| `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu |
+
+**Mỗi lần chạy** (khi người dùng nhắn "chạy đi" hoặc lịch tự động gọi):
+1. Đọc `requests` có `status == "moi"` và `feedback` có `status == "moi"`.
+2. Cập nhật `app/crew` (agent nào đang làm) và `videos/<slug>.stage` ở mỗi mốc.
+3. Video xong: tải `final.mp4` và `thumbnail.png` lên app (`Artifact` với `asset: true`, file video ≤ 15MB), ghi `video`, `thumb`, `publish`, `report`, `status: "cho-duyet"`, `round + 1`.
+4. Mọi lần ghi phải truyền `if_version` của bản đã đọc.
+
 ## Nguyên tắc
 - **Agent được sáng tạo.** Skill là hướng dẫn, không phải luật cứng. Luật cứng xem trong file của từng agent: không bịa, nội dung an toàn, không che phụ đề, không tự đăng, không trả phí khi chưa được đồng ý.
 - **Miễn phí trước.** Mọi agent đọc `studio/lessons.md` trước khi làm.
