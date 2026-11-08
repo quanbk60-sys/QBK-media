@@ -5,7 +5,7 @@ Trạng thái: `ý tưởng` → `đang làm` → `xong` → `đã đăng`. Nhà
 | # | Mảng | Chủ đề | Góc kể (hook) | Trạng thái | Dự án |
 |---|---|---|---|---|---|
 | 1 | Lịch sử VN | Trận Bạch Đằng 938 | Trận thủy chiến mà thủy triều đánh chìm thuyền giặc | đang làm | projects/bach-dang-938 |
-| 2 | Ngụ ngôn | Rùa và Thỏ | Kẻ nhanh nhất lại về đích sau cùng | ý tưởng | |
+| 2 | Ngụ ngôn | Rùa và Thỏ | Kẻ nhanh nhất lại về đích sau cùng | đang làm | projects/rua-va-tho |
 | 3 | Hoạt hình vui | Nếu mèo đi làm văn phòng | Sếp mới của bạn… là một con mèo | ý tưởng | |
 | 4 | Lịch sử VN | Hai Bà Trưng khởi nghĩa | Hai người phụ nữ khiến cả một đạo quân phải rút | ý tưởng | |
 | 5 | Tâm lý | Quy tắc 2 phút chống trì hoãn | Việc khó nhất là… 2 phút đầu tiên | ý tưởng | |
