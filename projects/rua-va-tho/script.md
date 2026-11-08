@@ -48,12 +48,12 @@ Chọn cách **(a)**: dựng nhanh, giữ nguyên hệ khớp, tư thế, chu k�
 | 24 | 53,3–54,9 | Cả khu rừng reo hò. | Khán giả `cheer`, `happy`; Rùa tư thế ăn mừng (sfx `cheer`) | — |
 | 25 | 54,9–57,1 | Thỏ chỉ biết gãi tai, xấu hổ. | Thỏ đến sau, tư thế gãi tai (mới), `sad`, tai cụp | xấu hổ |
 | 26 | 57,1–61,0 | Bài học là: chậm mà chắc, còn hơn nhanh mà chủ quan. | `panel` chia đôi: trái Rùa + dấu tích, phải Thỏ ngủ + dấu gạch | **CHẬM MÀ CHẮC** |
-| 27 | 61,0–64,1 | Giỏi đến đâu mà kiêu ngạo, cũng có thể thua. | Thỏ đứng một mình, `sad`, cúi đầu; `arrow` đi xuống | kiêu ngạo = thua |
+| 27 | 61,0–64,1 | Giỏi đến đâu mà kiêu ngạo, cũng có thể thua. | Thỏ đứng một mình, `sad`, cúi đầu; `arrow` đi xuống | KIÊU = THUA |
 | 28 | 64,1–66,7 | Còn bạn, bạn giống Rùa hay giống Thỏ? | Hai ô `panel`: Rùa / Thỏ, `question` ở giữa (sfx `pop` ×2) | **RÙA hay THỎ?** |
 | 29 | 66,7–68,6 | Bình luận cho mình biết nhé! | Rùa và Thỏ cùng vẫy tay (`waveA`/`waveB`), `happy` | bình luận nhé |
 
 Ghi chú dựng:
-- Cảnh 27, chữ "kiêu ngạo = thua" dài hơn 3 từ: đạo diễn có thể rút thành **KIÊU = THUA** hoặc bỏ.
+- Cảnh 27, chữ "KIÊU = THUA" dài hơn 3 từ: đạo diễn có thể rút thành **KIÊU = THUA** hoặc bỏ.
 - Không có cảnh bạo lực; Thỏ thua nhưng không bị chế giễu ác ý, chỉ "xấu hổ" nhẹ.
 - Từ "Ê-dốp" là phiên âm tiếng Việt phổ biến của Aesop, viết vậy để giọng đọc không đọc sai chữ Latin.
 

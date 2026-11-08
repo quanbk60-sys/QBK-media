@@ -1,9 +1,14 @@
 {
- "stage": "script_review",
+ "stage": "voice+art",
  "topic": "Rùa và Thỏ",
- "approvals": {},
+ "approvals": {
+  "script_v1": {
+   "by": "user",
+   "note": "Duyệt; mặc định: Ê-dốp, giữ câu xuất xứ, KIÊU = THUA"
+  }
+ },
  "paid_calls": 0,
- "next": "user approves script",
+ "next": "long-tieng + hoa-si (parallel), then dao-dien",
  "files": [
   "brief.md",
   "narration.txt",
