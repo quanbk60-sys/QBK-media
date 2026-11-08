@@ -1,5 +1,5 @@
 {
- "stage": "final",
+ "stage": "done",
  "topic": "Rùa và Thỏ",
  "approvals": {
   "script_v1": {
@@ -12,7 +12,7 @@
   }
  },
  "paid_calls": 0,
- "next": "render final → kiem-dinh → phat-hanh",
+ "next": "user posts (publish.md)",
  "files": [
   "brief.md",
   "narration.txt",
@@ -41,6 +41,7 @@
   "tempo_note": "ffmpeg atempo on narration-orig.wav (pitch preserved)"
  },
  "qa": {
-  "round1": "CẦN SỬA (3 lỗi hình) → đã sửa, producer verified frames 3.9/6.2/13.4/19.9s"
+  "round1": "CẦN SỬA (3 lỗi hình) → đã sửa, producer verified frames 3.9/6.2/13.4/19.9s",
+  "final": "CẦN SỬA (tay vẽ che phụ đề 2 chỗ) → engine: hand flips above when pen is low; re-rendered, producer verified 31s/45s"
  }
 }

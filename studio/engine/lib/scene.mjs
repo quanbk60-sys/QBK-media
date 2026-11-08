@@ -133,7 +133,7 @@ export function makeRenderer(s) {
       if (['walk', 'run', 'crawl', 'sprint'].includes(R._cycle)) { const c = Math.sign(R._contact || 0), p = lastContact.get(key); if (p !== undefined && c !== p && c !== 0) events.push({t: T, kind: 'step', gain: R._cycle === 'crawl' ? 0.25 : 0.35}); lastContact.set(key, c); }
       if (R._cycle === 'hammer') { const c = Math.sign(R._impact || 0), p = lastContact.get(key); if (p === 1 && c === -1) events.push({t: T, kind: 'hammer', gain: 0.4}); lastContact.set(key, c); }
     }
-    if (pen) { drawHand(ctx, pen[0], pen[1], T); }
+    if (pen) { const [px, py] = ctx.getTransform().transformPoint ? [ctx.getTransform().a * pen[0] + ctx.getTransform().e, ctx.getTransform().d * pen[1] + ctx.getTransform().f] : pen; drawHand(ctx, pen[0], pen[1], T, 1, py > s.captionStyle.y - 470); }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);

@@ -1,7 +1,8 @@
 // The drawing hand: pen tip at (x, y), hand + sleeve trailing down-right.
-export function drawHand(ctx, x, y, t, scale = 1) {
+// flip=true: the hand reaches down from above (used when the pen is low, so the sleeve never covers captions)
+export function drawHand(ctx, x, y, t, scale = 1, flip = false) {
   const bob = Math.sin(t * 30) * 1.5, INK = '#2A2723';
-  ctx.save(); ctx.translate(x, y + bob); ctx.scale(scale, scale); ctx.rotate(-0.62);
+  ctx.save(); ctx.translate(x, y + bob); ctx.scale(scale, flip ? -scale : scale); ctx.rotate(-0.62);
   ctx.fillStyle = 'rgba(0,0,0,.10)'; ctx.beginPath(); ctx.ellipse(18, 205, 70, 150, 0, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = '#1d1d1f'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-7, 26); ctx.lineTo(7, 26); ctx.closePath(); ctx.fill();
   ctx.fillStyle = '#2d2d31'; ctx.fillRect(-9, 26, 18, 150);
