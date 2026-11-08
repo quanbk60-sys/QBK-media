@@ -111,7 +111,13 @@ a.link{color:var(--navy)}
   const STATUS = {
     "dang-lam": ["Đang làm","p-work"], "cho-duyet": ["Chờ duyệt","p-wait"], "dang-sua": ["Đang sửa","p-work"],
     "da-duyet": ["Đã duyệt · chờ đăng","p-ok"], "da-dang": ["Đã đăng","p-navy"], "tam-dung": ["Tạm dừng","p-mute"]};
-  const S = { videos: [], requests: [], feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, ready: false,
+  const TRIGGER = "trig_01S2GWJmEdKSxZesBjXC3gFB"; // tác vụ "Đoàn phim QBK: nhận việc từ app"
+  async function fireCrew(why) {
+    if (!S.mcp) return false;
+    try { await S.mcp.callTool("Claude Code Remote", "fire_trigger", { trigger_id: TRIGGER, text: why }); return true; }
+    catch (e) { console.warn("fire_trigger", e?.code); return false; }
+  }
+  const S = { mcp: null, videos: [], requests: [], feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, ready: false,
     sel: null, draftFb: [], form: { topic: "", genre: "Khoa học", style: "bang-phan", length: 60, gate: false } };
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -179,7 +185,7 @@ a.link{color:var(--navy)}
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
       ${waiting.length ? `<h2>Cần bạn duyệt</h2>${waiting.map(v => videoCard(v)).join("")}` : ""}
       ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${esc(r.genre)} · ${esc(styleName(r.style))} · chờ đoàn phim nhận</div></div><span class="pill p-mute">Mới</span></div>`).join("")}</div>
-        <p class="small">Đoàn phim nhận yêu cầu khi lịch tự động chạy, hoặc ngay khi bạn nhắn "chạy đi" cho Claude.</p>` : ""}
+        <p class="small">Đoàn phim được gọi ngay khi bạn gửi. Nếu yêu cầu nằm ở đây quá 10 phút, nhắn "chạy đi" cho Claude.</p>` : ""}
       ${working.length ? `<h2>Đang làm</h2>${working.map(v => videoCard(v)).join("")}` : ""}
       ${ready.length ? `<h2>Chờ đăng</h2>${ready.map(v => videoCard(v)).join("")}` : ""}
       ${S.ready && !waiting.length && !working.length && !ready.length && !pending.length ? `<div class="empty">Chưa có video nào đang làm. Bấm "Làm video mới" hoặc chọn một trend.</div>` : ""}
@@ -327,7 +333,8 @@ a.link{color:var(--navy)}
         e.preventDefault(); if (!f.topic.trim() || !S.db) return;
         try { await S.db.collection("requests").add({ topic: f.topic.trim(), genre: f.genre, style: f.style, length: f.length, gateScript: f.gate, status: "moi", createdAt: nowISO() });
           S.form = { topic: "", genre: "Khoa học", style: "bang-phan", length: 60, gate: false };
-          toast("Đã giao cho đoàn phim. Nhắn \"chạy đi\" cho Claude để bắt đầu ngay."); go("home");
+          go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + f.topic.trim());
+          toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
         } catch (err) { toast("Chưa gửi được: " + (err?.code === "quota_exceeded" ? "cơ sở dữ liệu đã đầy." : "thử lại sau ít phút.")); }
       };
     }
@@ -340,10 +347,11 @@ a.link{color:var(--navy)}
         try { const round = v.round || 1;
           await S.db.collection("feedback").add({ video: v.id, round, items: S.draftFb.map(x => ({ t: Math.round(x.t * 10) / 10, at: mmss(x.t), text: x.text })), status: "moi", createdAt: nowISO() });
           await S.db.doc("videos/" + v.id).update({ status: "dang-sua", stage: "Phân cảnh", stageNote: `Chờ đoàn phim sửa theo ${S.draftFb.length} góp ý vòng ${round}`, updatedAt: nowISO() });
-          S.draftFb = []; toast("Đã gửi góp ý. Đoàn phim sẽ sửa và gửi lại."); go("home");
+          S.draftFb = []; go("home"); const ok = await fireCrew("Góp ý mới cho video " + v.id);
+          toast(ok ? "Đã gửi góp ý và gọi đoàn phim sửa ngay." : "Đã lưu góp ý. Nhắn \"chạy đi\" cho Claude để đoàn phim sửa.");
         } catch { toast("Chưa gửi được góp ý, thử lại sau."); } };
       $("#approve").onclick = async () => { if (!v) return;
-        try { await S.db.doc("videos/" + v.id).update({ status: "da-duyet", approvedAt: nowISO(), updatedAt: nowISO() }); toast("Đã duyệt. Mở bộ đăng bài để đăng."); go("post"); }
+        try { await S.db.doc("videos/" + v.id).update({ status: "da-duyet", approvedAt: nowISO(), updatedAt: nowISO() }); toast("Đã duyệt. Mở bộ đăng bài để đăng."); go("post"); if (!v.publish) fireCrew("Video " + v.id + " đã duyệt, cần bộ đăng bài"); }
         catch { toast("Chưa duyệt được, thử lại sau."); } };
     }
     if (r === "post") {
@@ -374,6 +382,7 @@ a.link{color:var(--navy)}
   (async () => {
     const db = await window.claude?.use?.("db").catch(() => null);
     S.dl = await window.claude?.use?.("downloads").catch(() => null);
+    S.mcp = await window.claude?.use?.("mcp").catch(() => null);
     if (!db) { S.ready = true; render(); return; }
     S.db = db;
     const live = (ref, fn) => ref.onSnapshot(fn, () => { S.ready = true; render(); });

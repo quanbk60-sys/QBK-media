@@ -70,7 +70,9 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 | `tiktokLinks` | App | Link TikTok người dùng lưu. Đọc tiêu đề qua `https://www.tiktok.com/oembed?url=…`, ghi `title, author` |
 | `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu |
 
-**Mỗi lần chạy** (khi người dùng nhắn "chạy đi" hoặc lịch tự động gọi):
+**Kích hoạt:** app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB` ("Đoàn phim QBK: nhận việc từ app") ngay khi người dùng gửi yêu cầu, góp ý hoặc duyệt. Mỗi lần kích hoạt mở một session cloud mới chạy prompt của tác vụ. Người dùng cũng có thể nhắn "chạy đi" trong chat.
+
+**Mỗi lần chạy:**
 1. Đọc `requests` có `status == "moi"` và `feedback` có `status == "moi"`.
 2. Cập nhật `app/crew` (agent nào đang làm) và `videos/<slug>.stage` ở mỗi mốc.
 3. Video xong: tải `final.mp4` và `thumbnail.png` lên app (`Artifact` với `asset: true`, file video ≤ 15MB), ghi `video`, `thumb`, `publish`, `report`, `status: "cho-duyet"`, `round + 1`.
