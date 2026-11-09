@@ -5,7 +5,7 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 ## Bắt đầu
 - Làm video: `/lam-video <chủ đề>` hoặc "làm video tiếp theo". Skill `.claude/skills/lam-video` điều phối 9 agent trong `.claude/agents/`: bien-kich, long-tieng, dao-dien, hoa-si, dung-phim, kiem-dinh, phat-hanh, nghien-cuu-mau, san-trend.
 - Quy trình v2: đoàn phim làm **trọn video** rồi gửi người dùng duyệt. Người dùng chỉ ra các điểm cần sửa, Nhà sản xuất chuyển về đúng agent, làm lại và gửi lại. Góp ý dùng được cho mọi video sau được ghi vào `studio/lessons.md`.
-- 9 gói phong cách (`"style"` trong scene.json), gợi ý theo thể loại trong skill `lam-video`.
+- 10 gói phong cách (`"style"` trong scene.json), gợi ý theo thể loại trong skill `lam-video`.
 - Agent được tự sáng tạo ngoài skill, ghi lý do vào `notes.md`. Luật cứng giữ nguyên.
 
 ## App QBK Studio

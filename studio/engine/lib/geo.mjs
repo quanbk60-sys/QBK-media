@@ -77,7 +77,12 @@ function satmap(ctx, e, t, s, v) {
   ctx.save(); ctx.globalAlpha = fadeA({...e, enter: e.enter ?? 'none'}, t); ctx.imageSmoothingQuality = 'high';
   ctx.fillStyle = '#05080C'; ctx.fillRect(0, 0, s.width, s.height);
   const Wv = worldPx(v.zoom);
-  const vis = sat.levels.filter(l => l.z <= v.zoom + 1.6);
+  // draw only levels that cover the whole frame (no visible seams between imagery of different dates);
+  // the sharpest covering level wins, a partial sharper level is used only when nothing covers.
+  const rect = l => { const Wz = worldPx(l.z), k = Wv / Wz; return {k, dx: s.width / 2 + (l.x0 / Wz - v.c[0]) * Wv, dy: s.height / 2 + (l.y0 / Wz - v.c[1]) * Wv}; };
+  const covers = l => { if (l.world) return true; const {k, dx, dy} = rect(l); return dx <= 0 && dy <= 0 && dx + l.w * k >= s.width && dy + l.h * k >= s.height; };
+  const cand = sat.levels.filter(l => l.z <= v.zoom + 1.6), full = cand.filter(covers).at(-1);
+  const vis = full ? [full] : cand;
   for (const l of vis) {
     const Wz = worldPx(l.z), k = Wv / Wz, dx = s.width / 2 + (l.x0 / Wz - v.c[0]) * Wv, dy = s.height / 2 + (l.y0 / Wz - v.c[1]) * Wv;
     if (dx > s.width || dy > s.height || dx + l.w * k < 0 || dy + l.h * k < 0) continue;
@@ -126,7 +131,7 @@ function pinShape(ctx, x, y, size, fill) {
 }
 function tagBox(ctx, x, y, text, o = {}) {
   const size = o.size ?? 30; ctx.font = `${size}px ${F.black}`; const tw = ctx.measureText(text).width, padX = size * 0.45, ic = o.icon ? size * 0.9 : 0, w = tw + padX * 2 + ic, h = size * 1.55;
-  const bx = o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2, by = y - h / 2;
+  const bx = Math.max(24, Math.min(1080 - 24 - w, o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2)), by = y - h / 2;
   ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 12; ctx.fillStyle = o.bg ? col(o.bg) : WHITE; rr(ctx, bx, by, w, h, 6); ctx.fill(); ctx.shadowBlur = 0;
   if (o.icon) pinShape(ctx, bx + padX + ic * 0.32, by + h * 0.8, size / 48, o.bg === 'orange' ? WHITE : DARK);
   ctx.fillStyle = o.color ? col(o.color) : DARK; ctx.textBaseline = 'middle'; ctx.textAlign = 'left'; ctx.fillText(text, bx + padX + ic, by + h / 2 + 1); ctx.restore();
@@ -140,7 +145,7 @@ function marker(ctx, e, t, s, v) {
   if (e.label) { const side = e.side ?? 1, ly = y - 35 * (e.size ?? 1.6) - (e.labelDy ?? 0); ctx.globalAlpha = a * clamp((k - 0.25) / 0.3); tagBox(ctx, side === 0 ? x : x + side * 48, side === 0 ? ly - 70 : ly, e.label, {align: side === 0 ? 'center' : side > 0 ? 'left' : 'right', size: e.labelSize ?? 30, bg: e.labelBg, color: e.labelColor}); }
   ctx.restore();
 }
-function tag(ctx, e, t, s, v) { const [x, y] = pos(e, t, s, v); ctx.save(); ctx.globalAlpha = fadeA(e, t); const k = backOut(clamp(local(e, t) / 0.4)); ctx.translate(x, y); ctx.scale(0.7 + 0.3 * k, 0.7 + 0.3 * k); tagBox(ctx, 0, 0, e.text, {size: e.size, icon: e.icon, bg: e.bg, color: e.color, align: e.align}); ctx.restore(); }
+function tag(ctx, e, t, s, v) { const [x, y] = pos(e, t, s, v); ctx.save(); ctx.globalAlpha = fadeA(e, t); const k = backOut(clamp(local(e, t) / 0.4)); ctx.translate(x, y); ctx.scale(0.7 + 0.3 * k, 0.7 + 0.3 * k); ctx.translate(-x, -y); tagBox(ctx, x, y, e.text, {size: e.size, icon: e.icon, bg: e.bg, color: e.color, align: e.align}); ctx.restore(); }
 function polyline(e, s, v) { return e.path.map(p => project(v, s, p[0], p[1])); }
 function partial(pts, p) {
   const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
@@ -167,7 +172,7 @@ function chaikin(P) { if (P.length < 3) return P; const o = [P[0]]; for (let i =
 function area(ctx, e, t, s, v) {
   if (!v) return; const P = chaikin(polyline(e, s, v)), c = col(e.color), a = fadeA(e, t), pulse = e.pulse ? 0.75 + 0.25 * Math.sin(local(e, t) * 4) : 1;
   ctx.save(); ctx.globalAlpha = a * (e.fillAlpha ?? 0.28) * pulse; ctx.fillStyle = c; ctx.beginPath(); P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fill();
-  ctx.globalAlpha = a; ctx.strokeStyle = c; ctx.lineWidth = e.width ?? 5; ctx.setLineDash(e.dashed === false ? [] : [16, 10]); ctx.stroke(); ctx.restore();
+  if (e.width !== 0) { ctx.globalAlpha = a; ctx.strokeStyle = c; ctx.lineWidth = e.width ?? 5; ctx.setLineDash(e.dashed === false ? [] : [16, 10]); ctx.stroke(); } ctx.restore();
 }
 function dots(ctx, e, t, s, v) {
   const k = local(e, t), a = fadeA(e, t), c = col(e.color), st = e.stagger ?? 0.06;
@@ -178,7 +183,7 @@ function title(ctx, e, t, s) {
   const k = local(e, t), a = fadeA({...e, enter: e.enter ?? 'none'}, t), align = e.align || 'left', x = e.x ?? (align === 'center' ? s.width / 2 : 66), maxW = s.width - 2 * 60;
   let y = e.y ?? 300; const size = e.size ?? 108;
   ctx.save(); ctx.globalAlpha = a; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 3;
-  if (e.kicker) { const ks = e.kickerSize ?? Math.round(size * 0.42); fitFont(ctx, e.kicker, F.italic, ks, maxW); ctx.globalAlpha = a * clamp(k / 0.3); ctx.fillStyle = col(e.kickerColor || 'orange'); ctx.fillText(e.kicker.toUpperCase(), x, y); y += size * 0.98; ctx.globalAlpha = a; }
+  if (e.kicker) { const ks = e.kickerSize ?? Math.round(size * 0.42); fitFont(ctx, e.kicker.toUpperCase(), F.italic, ks, maxW); ctx.globalAlpha = a * clamp(k / 0.3); ctx.fillStyle = col(e.kickerColor || 'orange'); ctx.fillText(e.kicker.toUpperCase(), x, y); y += size * 0.98; ctx.globalAlpha = a; }
   const lines = String(e.title || '').split('\n'), td = e.typing === false ? 0 : (e.typeDur ?? 0.5), total = lines.join('').length; let shown = td ? Math.floor(clamp((k - (e.kicker ? 0.12 : 0)) / td) * total + 0.001) : total;
   for (const ln of lines) { const sz = fitFont(ctx, ln.toUpperCase(), F.black, size, maxW); ctx.fillStyle = col(e.color || 'white'); ctx.fillText(ln.toUpperCase().slice(0, Math.max(0, shown)), x, y); shown -= ln.length; y += sz * 1.02; }
   if (e.sub) for (const ln of String(e.sub).split('\n')) { const ss = e.subSize ?? Math.round(size * 0.78), q = clamp((k - td - 0.05) / 0.3); const sz = fitFont(ctx, ln.toUpperCase(), F.black, ss, maxW); ctx.globalAlpha = a * q; ctx.fillStyle = col(e.subColor || 'orange'); ctx.fillText(ln.toUpperCase(), x + (1 - ease(q)) * (align === 'center' ? 0 : -30), y); y += sz * 1.02; }

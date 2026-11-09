@@ -1,6 +1,6 @@
 {
  "slug": "bach-dang-ve-tinh",
- "stage": "script-done",
+ "stage": "qa-done",
  "style": "ve-tinh",
  "round": 0,
  "tts": {
@@ -10,5 +10,7 @@
   "model": "gemini-3.8-flash-tts",
   "voice": "Bodi",
   "duration_orig_s": 74.72
- }
+ },
+ "video": "output/bach-dang-ve-tinh.mp4",
+ "duration_s": 63.3
 }

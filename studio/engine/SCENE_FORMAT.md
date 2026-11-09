@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi`.
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối).
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -133,6 +133,32 @@ Một số âm được tạo **tự động**: tiếng bút khi bàn tay vẽ, 
 ## Camera
 `"camera": [{"t": 0, "zoom": 1}, {"t": 3, "zoom": 1.15, "x": 540, "y": 1000}]`: thiếu `x`, `y`, `zoom` ở keyframe đầu thì mặc định là tâm khung (540, 960) và zoom 1, camera lia dần từ đó: phóng to hoặc lia về một điểm.
 - `"textFollowsCamera": true` (cấp scene, nên bật cho phim mới): chữ bên trong đạo cụ và phần tử `text` đi theo camera như mọi nét vẽ khác. Mặc định `false` để giữ nguyên các phim cũ (trước đây chữ bỏ qua camera nên lệch khỏi khung `infoPanel` khi phóng to/lia).
+
+## Phong cách vệ tinh (`ve-tinh`, `lib/geo.mjs`)
+Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/references/ve-tinh-anh-that/card.md`. Phim mẫu: `projects/bach-dang-ve-tinh/` (`build_scene.py`).
+
+- Cấp scene: `"satmap": "sat/satmap.json"` (tạo bằng `studio/tools/satmap.py`). Dòng ghi nguồn Esri tự hiện ở góc trên phải khi shot có `satmap` hoặc `globe`.
+- Cấp shot: `"view": [{"t": 0, "lat": 20.9, "lon": 106.77, "zoom": 11}, {"t": 3, "lat": …, "lon": …, "zoom": 13, "ease": "ease"}]`. Zoom theo thang Web Mercator (2 ≈ cả Trái Đất, 6 ≈ Việt Nam, 12 ≈ một con sông, 14 ≈ một phường). Khi zoom vào, điểm đích trôi mượt về giữa khung; khi zoom ra, điểm gốc trôi mượt. Shot vệ tinh **không dùng `camera`**.
+- Mọi phần tử có thể đặt theo tọa độ: `"geo": [lat, lon]` (+ `dx`, `dy`) thay cho `x`, `y`.
+
+| Phần tử (`type`) | Thuộc tính |
+|---|---|
+| `satmap` | nền vệ tinh theo `view`. `dim` 0..1, `shade: false` bỏ dải tối trên/dưới |
+| `stars`, `globe` | nền sao; quả địa cầu theo cùng `view` (zoom ≤ ~5,5, rồi cắt sang `satmap` cùng tâm và zoom là liền mạch). Cần mức `world` trong satmap |
+| `marker` | ghim trắng + vòng lan, `geo`, `label`, `side` (1 phải, -1 trái, 0 trên), `color`, `size` |
+| `tag` | nhãn hộp: `text`, `geo` hoặc `x,y`, `align`, `size`, `icon: true` (ghim nhỏ), `bg` (white/orange/blue/red), `color` |
+| `route` | đường đi phát sáng: `path` [[lat,lon],…] (tự làm mượt), `color`, `width`, `dashed`, `head` (`arrow`/`dot`), `grow: {at, dur}` vẽ dần, `label`, `labelAt` 0..1, `labelDx`, `labelDy`, `track` (alpha) |
+| `area` | vùng khoanh: `path`, `color`, `fillAlpha`, `pulse`, `dashed`, `width` (0 = không viền) |
+| `dots` | chấm (cọc, điểm): `points` [[lat,lon]…], `size`, `stagger`, `color` |
+| `title` | `kicker` (cam nghiêng), `title` (trắng siêu đậm, gõ từng chữ; `typing: false` tắt), `sub` (cam), `badge`, `x`, `y`, `size` (108), `align` |
+| `photo` | thẻ polaroid bay lên: `path`, `x`, `y`, `w`, `ratio` (cắt khung), `focus` [fx,fy], `rotate`, `kenburns` (1,08), `credit` (**bắt buộc** tác giả · giấy phép), `caption`. `full: true` → ảnh nền toàn khung, `dim` |
+| `stats` | ô số liệu: `items` [{`icon`, `value`, `label`}], `y`, `w`, `stagger`, `valueSize`. Icon: calendar, ship, stake, water, sword, crown, clock, pin, people, flag, area, ruler |
+| `clouds` | mây trôi: `n`, `y0`, `y1`, `speed`, `opacity` |
+| `note` | chú thích nhỏ ("*minh họa"): `text`, `x`, `y` |
+| `shade` | dải tối trên/dưới thêm: `top`, `bottom` |
+
+Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
+Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).
