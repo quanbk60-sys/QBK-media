@@ -1,95 +1,80 @@
 ---
 name: lam-video
-description: Đoàn phim QBK. Từ một chủ đề, làm trọn video 9:16 (TikTok, YouTube Shorts) theo đúng phong cách người dùng chọn (vẽ code, ảnh thật, 3D, ảnh AI + chuyển động code), có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
+description: Đoàn phim QBK. Từ một chủ đề, làm trọn video 9:16 (TikTok, YouTube Shorts) theo 4 phong cách (Anime · hoạt hình động, Anime · ảnh tĩnh, Vệ tinh · địa lý, Thí nghiệm 3D · khoa học), mỗi phong cách một dây chuyền chỉ gọi đúng các agent cần, có cổng duyệt rẻ trước bước đắt, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
 ---
 
-# /lam-video: Nhà sản xuất điều phối đoàn phim (quy trình v2)
+# /lam-video: Nhà sản xuất điều phối đoàn phim (quy trình v3, 10/11/2026)
 
-Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude/agents/`, giữ tiến độ trong `checkpoint.json`, rồi **gửi người dùng video hoàn chỉnh để duyệt**. Người dùng chỉ ra những điểm cần sửa, bạn chuyển từng điểm về đúng agent, làm lại và gửi lại. Những gì rút ra được ghi thành **bài học** trong `studio/lessons.md`.
+Bạn là **Nhà sản xuất**. Đọc yêu cầu, **chọn một dây chuyền theo phong cách**, chỉ gọi các agent của dây chuyền đó, dừng ở các **cổng duyệt** người dùng bật, giữ tiến độ trong `checkpoint.json` và `videos/<slug>` trong app. Nguyên tắc: **duyệt ở bước rẻ trước khi làm bước đắt**; không "làm thử rồi sửa" bằng tiền.
 
-## Chế độ tiết kiệm (mặc định, người dùng yêu cầu 08/11/2026)
-- **Dựng ở session mới**, không trong chat dài: app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB`. Chat chính chỉ dùng để bàn kế hoạch.
-- **Model:** biên kịch Sonnet. Chủ đề lịch sử, chính trị hoặc nhạy cảm thì truyền `model: "opus"` khi giao. Đạo diễn, họa sĩ Opus. Kiểm định, dự toán Sonnet. Lồng tiếng, phát hành Haiku.
-- **Đạo diễn kiêm dựng phim.** Chỉ gọi `dung-phim` khi render lỗi phức tạp.
-- **Họa sĩ chỉ chạy khi thật thiếu đồ.** Ưu tiên ghép đạo cụ có sẵn (`node studio/engine/catalog.mjs`).
-- **Kiểm định nhẹ** (nguồn, phụ đề, 6–8 khung, âm lượng), tối đa 1 vòng sửa tự động.
-- **Báo cáo ngắn**, không đọc lại file lớn khi không cần, không render thử nhiều lần.
-- Có nhiều yêu cầu trong app thì làm luôn trong một lần chạy.
+## Phong cách (chỉ 4, học thêm sau qua `nghien-cuu-mau`)
+| id | Tên trong app | Hình làm bằng | Hợp với |
+|---|---|---|---|
+| `anime-dong` | Anime · hoạt hình động | Khung hình Gemini → clip chuyển động Gemini Omni (`genvideo.py`) → ghép `assemble.py` | Truyện, cổ tích, nhân vật có diễn xuất |
+| `anime-tinh` | Anime · ảnh tĩnh | Khung hình Gemini đẹp, chuyển động nhẹ bằng code (đẩy máy, lia, hạt sáng, ánh đèn) → `assemble.py`; cảnh có nhân vật đi trong cảnh dùng `studio/engine3d/phong-canh.mjs` | Kể chuyện nhẹ, tâm sự, thư giãn, rẻ |
+| `ve-tinh` | Vệ tinh · địa lý | Ảnh vệ tinh Esri + ảnh Wikimedia, engine 2D (`lib/geo.mjs`) | Địa lý, trận đánh có địa điểm, công trình |
+| `thi-nghiem` | Thí nghiệm 3D · khoa học | 3D thực tế `studio/engine3d/render3d.mjs` | Khoa học đời thường, cách làm, mẹo dân gian |
+Các phong cách 2D cũ (giấy mực, bảng phấn, pop...) **đã gỡ khỏi app**; engine 2D vẫn giữ vì `ve-tinh` dùng. Không dùng người que, không làm người thật: nhân vật người luôn vẽ kiểu anime.
 
-## Đoàn phim và model
-| Bước | Agent (model) | Đầu ra |
-|---|---|---|
-| 0 | Nhà sản xuất | `brief.md` (có **phong cách**), `checkpoint.json` |
-| 1 | `bien-kich` (opus) | `narration.txt`, `script.md`, `sources.md`, `captions-phrases.txt` |
-| 1b | `du-toan` (sonnet) | `estimate.md`, `estimate.json`: chi phí cả video (ảnh AI, video AI, giọng, dựng), so với trần. Ghi vào `videos/<slug>.estimate`, `stage: "Dự toán"`. **Vượt trần thì dừng** đến khi người dùng bấm "Duyệt chi phí" trong app (`estimate.approved`) hoặc đồng ý trong chat |
-| 2 | `long-tieng` (haiku) ∥ `hoa-si` (opus, khi cần đồ mới) | `audio/narration.wav` (mặc định 1,2x), `captions-audio.json` / engine |
-| 3 | `dao-dien` (opus) | `scene.json` |
-| 4 | `dung-phim` (sonnet) | `output/final.mp4` |
-| 5 | `kiem-dinh` (sonnet) | `qa.md`: lỗi được trả về đúng agent, tối đa 2 vòng |
-| 6 | `phat-hanh` (sonnet) | `publish.md`, `output/thumbnail.png` |
-| ⏸ | **Người dùng duyệt video hoàn chỉnh** | Góp ý được ghi vào `feedback.md`, rồi làm lại |
-| ☆ | `san-trend` (sonnet) | Khi cần ý tưởng hoặc lên lịch tuần: báo cáo trong `studio/trends/`, chủ đề mới trong `topics.md` (skill `san-trend`) |
-| ★ | `nghien-cuu-mau` (sonnet) | Khi người dùng gửi **mẫu tham khảo**: thẻ kiến thức trong `studio/references/`, gói phong cách mới (skill `hoc-mau`) |
+## Dây chuyền: phong cách nào gọi agent nào
+| Bước | anime-dong | anime-tinh | ve-tinh, thi-nghiem |
+|---|---|---|---|
+| 1 Kịch bản | `bien-kich` (truyện hư cấu, không cần nguồn; có lời hay không theo yêu cầu) | `bien-kich` | `bien-kich` (**bắt buộc** kiểm chứng `sources.md`) |
+| 2 Bảng phân cảnh | `dao-dien` → `storyboard.md` | `dao-dien` → `storyboard.md` | `dao-dien` → `scene.json` / `scene3d.json` |
+| ⛳ Cổng 1 | Kịch bản (+ bảng phân cảnh) nếu người dùng bật | như trái | như trái |
+| 3 Dự toán | `du-toan` | `du-toan` | `du-toan` (thường 0đ) |
+| ⛳ Cổng 2 | Duyệt chi phí khi vượt trần (luôn có với Omni lần đầu của phim) | khi vượt trần | khi vượt trần |
+| 4 Mỹ thuật | `chi-dao-my-thuat` → `art-bible.md`, tờ nhân vật | `chi-dao-my-thuat` (dùng lại thư viện khi được) | không gọi |
+| 5 Khung hình | `hoa-si` → `keys/sNN.png` | `hoa-si` → khung 2K | `hoa-si` chỉ khi thiếu đạo cụ |
+| 6 Animatic | `dung-phim` `--animatic` | (khung chính là phim) | không |
+| ⛳ Cổng 3 | **Duyệt animatic trước khi quay** (mặc định bật) | Duyệt khung hình nếu bật | không |
+| 7 Giọng | `long-tieng` nếu có lời | `long-tieng` nếu có lời | `long-tieng` |
+| 8 Quay | `quay-phim` (Omni, giới hạn làm lại) | không | không (engine dựng) |
+| 9 Âm thanh | `am-thanh` | `am-thanh` | đạo diễn kiêm (sfx trong scene) |
+| 10 Dựng | `dung-phim` `assemble.py` | `dung-phim` | đạo diễn kiêm `render.mjs` / `render3d.mjs` |
+| 11 Kiểm định | `kiem-dinh` (nhân vật đồng nhất, tay chân méo) | `kiem-dinh` | `kiem-dinh` (nguồn, phụ đề) |
+| 12 Phát hành | `phat-hanh` | `phat-hanh` | `phat-hanh` |
+| ⛳ Cổng 4 | Người dùng duyệt video | | |
+Agent không có trong cột của phong cách thì **không gọi**. Bước độc lập chạy song song (giọng ∥ khung hình; kiểm định ∥ phát hành). Ngoài dây chuyền: `nghien-cuu-mau` khi người dùng gửi mẫu học phong cách.
 
-Các bước độc lập nhau thì chạy song song: lồng tiếng song song với họa sĩ; phát hành song song với kiểm định bản final.
+## Model
+Biên kịch Sonnet (lịch sử, nhạy cảm thì Opus). Đạo diễn, chỉ đạo mỹ thuật, họa sĩ Opus. Dự toán, quay phim, âm thanh, dựng, kiểm định, phát hành, nghiên cứu mẫu Sonnet. Lồng tiếng Haiku.
 
 ## Quy trình
-1. **Nhận yêu cầu.** Có chủ đề thì dùng chủ đề đó. Người dùng nói "video tiếp theo" thì lấy mục `ý tưởng` đầu tiên trong `studio/topics.md`. Chưa có chủ đề thì lấy từ báo cáo trend gần nhất, hoặc giao `san-trend` tìm mới, rồi đề xuất 3 chủ đề. Chủ đề có hạn đăng (ngày lễ, ngày kỷ niệm) được ưu tiên trước.
-2. **Tạo dự án** `projects/<slug>/`. Ghi `brief.md` gồm: chủ đề, mảng, **phong cách** (chọn theo bảng dưới, hoặc theo yêu cầu người dùng), đối tượng, độ dài 45–75 giây, giọng (Gemini `gemini-3.8-flash-tts`, Bodi, tempo 1,2). Tạo `checkpoint.json`.
-3. **Chạy đủ các bước 1 → 6** (có bước 1b dự toán) mà không dừng chờ người dùng, trừ khi dự toán vượt trần (dừng ở bước Dự toán, chờ duyệt chi phí), trừ khi người dùng dặn "duyệt kịch bản trước", hoặc chủ đề nhạy cảm (chính trị, tranh chấp lãnh thổ, nhân vật còn sống) thì dừng hỏi sau bước 1. Báo tiến độ một dòng ở mỗi mốc lớn.
-4. **Gửi người dùng** `final.mp4`, `thumbnail.png` và `publish.md` (SendUserFile), kèm tóm tắt ngắn: phong cách, độ dài, nguồn đã kiểm chứng, những chỗ agent làm khác skill (lấy từ `notes.md`), và lưu ý rằng âm thanh cần người nghe đánh giá.
-5. **Vòng góp ý.** Người dùng chỉ ra các điểm cần sửa:
-   - Ghi vào `feedback.md` mục `## Vòng N`, mỗi điểm một dòng, kèm **agent chịu trách nhiệm**:
-     - nội dung, lời → `bien-kich`
-     - giọng, tốc độ → `long-tieng` (`retime.py` để đổi tốc độ)
-     - nhịp, bố cục, diễn xuất, chữ trên hình, âm thanh hiệu ứng → `dao-dien`
-     - nhân vật, đạo cụ, động tác, phong cách → `hoa-si`
-     - lỗi render → `dung-phim`
-     - tiêu đề, ảnh bìa → `phat-hanh`
-   - Sửa nhỏ, mang tính cơ học (đổi một tham số, tắt một âm thanh) thì Nhà sản xuất tự làm cho nhanh. Còn lại giao agent, các agent khác nhau làm song song.
-   - Render lại, cho `kiem-dinh` soát **đúng những chỗ đã sửa**, rồi gửi lại người dùng.
-6. **Bài học.** Góp ý nào áp dụng được cho mọi video sau (ví dụ "giọng chậm quá", "không thích tiếng bút") thì thêm vào `studio/lessons.md` thành một quy tắc ngắn. Nếu sửa được ở gốc (mặc định của engine hoặc công cụ) thì sửa ở gốc luôn.
-7. **Khi người dùng duyệt:** cập nhật `checkpoint.json` (`stage: done`) và `studio/topics.md` (`xong`).
-8. **Lưu công việc:** commit và push sau mỗi mốc. Không commit `node_modules` hay các file render thử.
+1. **Nhận yêu cầu** từ app (`requests`: `topic, style, length, gateScript, gateAnimatic, narration, voice`) hoặc chat. Chưa rõ phong cách thì chọn theo bảng trên và ghi lý do.
+2. **Tạo dự án** `projects/<slug>/`, `brief.md` (chủ đề, phong cách, dây chuyền, độ dài, có lời đọc không, giọng, các cổng bật), `checkpoint.json`. Tạo `videos/<slug>` trong app (`status: "dang-lam"`, `stage`).
+3. **Chạy dây chuyền** theo bảng, dừng ở cổng nào người dùng bật. Ở mỗi cổng: ghi nội dung cần duyệt vào app (xem mục App), đặt trạng thái chờ, kết thúc lượt chạy. Người dùng bấm duyệt trong app thì app gọi lại đoàn phim, lượt sau làm tiếp từ bước sau cổng.
+4. **Gửi người dùng** video hoàn chỉnh (app + SendUserFile khi đang chat), kèm báo cáo ngắn: phong cách, độ dài, chi phí thực tế so với dự toán, chỗ còn khác ý.
+5. **Vòng góp ý:** ghi `feedback.md`, giao đúng agent (lời → biên kịch; nhịp, góc máy → đạo diễn; nhân vật, màu → chỉ đạo mỹ thuật, họa sĩ; chuyển động cảnh → quay phim; nhạc, tiếng → âm thanh; ghép, màu → dựng; tiêu đề → phát hành). Chỉ làm lại đúng cảnh bị góp ý, không quay lại cả phim.
+6. **Bài học:** góp ý dùng được cho mọi phim sau thì ghi `studio/lessons.md`; sửa được ở gốc (công cụ, skill) thì sửa luôn.
+7. **Lưu công việc:** commit và push sau mỗi mốc. Không commit `node_modules`, `final.mp4`.
+
+## Chế độ tiết kiệm
+- Chỉ gọi agent có trong dây chuyền. Đạo diễn kiêm dựng ở `ve-tinh`, `thi-nghiem`.
+- Dùng lại thư viện `studio/ai-art/` (nhân vật, bối cảnh) trước khi vẽ mới.
+- Omni chỉ chạy sau cổng 3 và trong trần đã duyệt; mỗi cảnh làm lại tối đa 2 lần.
+- Báo cáo ngắn, không render thử nhiều lần.
 
 ## Mẫu tham khảo
-Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiều mẫu thì chạy song song). Trước khi phân cảnh, đạo diễn đọc thẻ trong `studio/references/` của phong cách định dùng. Mục "Còn thiếu" trong các thẻ là danh sách việc của họa sĩ.
-
-## Chọn phong cách (`"style"` trong scene.json; xem `node studio/engine/catalog.mjs`)
-| Thể loại | Phong cách gợi ý |
-|---|---|
-| Ngụ ngôn, kể chuyện | `giay-muc` (vẽ tay giấy mực) |
-| Cổ tích VN, lễ Tết, lịch sử VN | `dan-gian`, `giay-muc` |
-| Khoa học, "vì sao…?" | `bang-phan` |
-| Lịch sử thế giới, công trình, phát minh | `ban-ve` |
-| Địa lý, chiến tranh–hiệp ước, kinh tế | `ban-do-toi` |
-| Tâm lý, kỹ năng, năng suất | `so-tay`, `phac-thao` |
-| Hoạt hình vui, meme | `pop` |
-| Bí ẩn, chuyện lạ | `phim-cam` |
-| Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
-| Thư giãn, chill, trích dẫn, tâm sự | `phong-canh-3d`: **dựng bằng `studio/engine3d/phong-canh.mjs`** với tranh nền và vật thể AI có sẵn trong `studio/ai-art/phong-canh/` (người đạp xe đổ dốc, cảnh biển và núi, nhạc êm tự tổng hợp). Xem `studio/engine3d/README.md`, mẫu `projects/_mau/phong-canh-ai/`. **Bắt buộc có chuyển động thật**: nhân vật đi bộ hoặc đạp xe trong thế giới trôi theo phối cảnh, chân bước bằng code (`drawLegs`), cỏ hoa lướt qua. **Không được làm slideshow ảnh tĩnh + zoom/lia** |
-| Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
-Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
-
+Người dùng gửi mẫu thì giao `nghien-cuu-mau`. Đạo diễn và chỉ đạo mỹ thuật đọc thẻ trong `studio/references/` của phong cách định dùng.
 
 ## App QBK Studio (điện thoại)
 App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/qbk-studio.html`). Người dùng giao việc và duyệt trong app; Nhà sản xuất đọc và ghi cơ sở dữ liệu của app bằng tool `ArtifactData`.
 
 | Collection / doc | Ai ghi | Nội dung |
 |---|---|---|
-| `requests` | App | Chủ đề mới: `topic, genre, style, length, gateScript, voice` (tên giọng Gemini người dùng chọn, mặc định `Bodi`; ghi vào brief.md và truyền `--voice` cho `tts.py`), `status: "moi"`. Khi nhận việc, Nhà sản xuất đổi thành `"da-nhan"` và tạo `videos/<slug>` |
-| `videos/<slug>` | Nhà sản xuất, app | `title, genre, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Dự toán, Giọng, Phân cảnh, Dựng, Kiểm định), `estimate` (nội dung `estimate.json` của agent `du-toan`: `usd, cap, items[], needApproval, approved, spent`; app hiện dòng chi phí và nút "Duyệt chi phí", bấm thì `approved: true` và gọi lại đoàn phim; video xong thì cập nhật `spent` từ `studio/costs.jsonl`), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
+| `requests` | App | Chủ đề mới: `topic, style, length, gateScript` (duyệt kịch bản trước), `gateAnimatic` (duyệt animatic/khung hình trước khi quay, mặc định bật với anime-dong), `narration` (true/false: có lời đọc không), `voice` (giọng Gemini, mặc định `Bodi`; truyền `--voice` cho `tts.py`), `status: "moi"`. Khi nhận việc, đổi thành `"da-nhan"` và tạo `videos/<slug>` |
+| `videos/<slug>` | Nhà sản xuất, app | `title, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Dự toán, Mỹ thuật, Quay, Dựng, Kiểm định), `script, scriptStatus`, `animatic, animaticStatus`, `estimate` (nội dung `estimate.json` của agent `du-toan`: `usd, cap, items[], needApproval, approved, spent`; app hiện dòng chi phí và nút "Duyệt chi phí", bấm thì `approved: true` và gọi lại đoàn phim; video xong thì cập nhật `spent` từ `studio/costs.jsonl`), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
 | `feedback` | App | `video, round, items[{t, at, text}], status: "moi"`. Chuyển từng mục cho đúng agent, xong thì đổi `status` thành `"da-xu-ly"` |
-| `tiktokLinks` | App | Link TikTok người dùng lưu (`status: "moi"`). Đọc bằng `python3 studio/tools/tiktok.py <url>` (hỗ trợ link rút gọn vt.tiktok.com), ghi `title, author` (tên kênh · độ dài · lượt xem), `fullUrl`, `status: "da-doc"` |
 | `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |
 | `app/voices` | Nhà sản xuất | Danh sách giọng nghe thử: `default, tempo, list: [{id, name, desc, sample}]` (`sample` là id asset, video nhỏ có tiếng). Thêm giọng mới: tạo mẫu bằng `tts.py` với `sampleText`, tăng tốc 1,2x, gói thành mp4 có hình tĩnh (kho asset không nhận file chỉ có tiếng), tải lên rồi thêm vào `list` |
 | `app/styles` | Nhà sản xuất | `full: true`, `list: [{id, name, thumb, color, note, genres, engine}]`: **toàn bộ** phong cách app hiển thị (ảnh xem trước, mô tả, thứ tự). Thêm, sửa hoặc ẩn phong cách ở đây, không cần đăng lại app |
-| `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu. **Khi đổi vai trò agent (file trong `.claude/agents/`), thêm bài học hoặc học phong cách mới thì cập nhật luôn `app/crew`** (`agents[].note`, `headline`, `lessons`, `references`) |
+| `app/crew`, `app/stats` | Nhà sản xuất | Trạng thái agent và bài học, số liệu. **Khi đổi vai trò agent (file trong `.claude/agents/`), thêm bài học hoặc học phong cách mới thì cập nhật luôn `app/crew`** (`agents[].note`, `headline`, `lessons`, `references`) |
 
 **Kích hoạt:** app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB` ("Đoàn phim QBK: nhận việc từ app") ngay khi người dùng gửi yêu cầu, góp ý hoặc duyệt. Mỗi lần kích hoạt mở một session cloud mới chạy prompt của tác vụ. Người dùng cũng có thể nhắn "chạy đi" trong chat.
 
 **Mỗi lần chạy:**
-1. Đọc `requests`, `feedback`, `tiktokLinks` và `styleRequests` có `status == "moi"`. Link TikTok thì đọc ngay (nhanh, làm trước).
+1. Đọc `requests`, `feedback`, `styleRequests` có `status == "moi"`, và `videos` vừa được người dùng duyệt ở một cổng (`scriptStatus`, `estimate.approved`, `animaticStatus` = `"da-duyet"`) để làm tiếp.
 2. Cập nhật `app/crew` (agent nào đang làm) và `videos/<slug>.stage` ở mỗi mốc.
 3. Video xong: tải `final.mp4` và `thumbnail.png` lên app (`Artifact` với `asset: true`, file video ≤ 15MB), ghi `video`, `thumb`, `publish`, `report`, `status: "cho-duyet"`, `round + 1`.
 4. Mọi lần ghi phải truyền `if_version` của bản đã đọc.
@@ -97,7 +82,8 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
    - Bấm duyệt: app đặt `scriptStatus: "da-duyet"`, `stage: "Dự toán"` và gọi lại đoàn phim. Lần chạy đó **làm tiếp** từ bước 1b (dự toán) đến hết.
    - Gửi góp ý: app thêm `feedback` có `kind: "script"` và đặt `scriptStatus: "dang-sua"`. Giao `bien-kich` sửa, ghi lại `script`, đặt `scriptStatus: "cho-duyet"` rồi dừng chờ duyệt lần nữa. Đổi feedback thành `"da-xu-ly"`.
    - Nếu `projects/<slug>` chưa có trong repo (phiên trước không push được), dựng lại `brief.md` từ request và `narration.txt` từ `videos/<slug>.script`, rồi làm tiếp.
-6. Người dùng có thể **xóa video** trong app (doc `videos/<slug>` biến mất, video và ảnh bìa bị xóa). Đang làm mà thấy doc đã mất thì dừng video đó, không tạo lại doc. Giữ thư mục `projects/<slug>` trong repo.
+6. **Cổng 3: duyệt animatic** (request `gateAnimatic: true`, mặc định với `anime-dong`): dựng animatic, tải lên app, ghi `videos/<slug>.animatic` (id asset), `animaticStatus: "cho-duyet"`, `stage: "Mỹ thuật"`, rồi dừng. Người dùng bấm "Duyệt, bắt đầu quay" thì app đặt `animaticStatus: "da-duyet"`, `stage: "Quay"` và gọi lại đoàn phim; trước khi gọi `quay-phim`, ghi `studio/budget.json` → `video_projects.<slug> = {"usd": phần video AI của dự toán đã duyệt}`. Gửi góp ý thì app thêm `feedback` có `kind: "animatic"`: sửa đúng cảnh (đạo diễn/họa sĩ), dựng lại animatic, chờ duyệt lần nữa.
+7. Người dùng có thể **xóa video** trong app (doc `videos/<slug>` biến mất, video và ảnh bìa bị xóa). Đang làm mà thấy doc đã mất thì dừng video đó, không tạo lại doc. Giữ thư mục `projects/<slug>` trong repo.
 
 ### Học phong cách từ app (`styleRequests`)
 1. Đổi `status` thành `"dang-hoc"`, ghi `result` ngắn ở mỗi bước (app hiện dòng này).

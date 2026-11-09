@@ -26,6 +26,11 @@ now = datetime.datetime.now(datetime.timezone.utc)
 vmonth = sum(r['usd'] for r in rows if r.get('kind') == 'video' and r['time'][:7] == now.strftime('%Y-%m'))
 b = json.load(open(BUDGET)) if os.path.exists(BUDGET) else {}
 cap_m, cap_job = b.get('video_month_usd', 0), b.get('video_per_job_usd', 0)
+# Dự toán được người dùng duyệt trong app -> Nhà sản xuất ghi video_projects[<slug>] = {"usd": tổng tiền video AI đã duyệt}
+vp = b.get('video_projects', {}).get(project)
+if vp:
+    used = sum(r['usd'] for r in rows if r.get('kind') == 'video' and r.get('project') == project)
+    cap_job = max(cap_job, vp['usd'] - used); cap_m = max(cap_m, vmonth + vp['usd'] - used)
 status = {"model": model, "est_usd": round(est, 3), "video_month_spent": round(vmonth, 3), "video_month_cap": cap_m, "per_job_cap": cap_job}
 if '--dry' in args: print(json.dumps(status)); sys.exit(0)
 if est > cap_job + 1e-9: sys.exit(f"DỪNG: ước tính {est:.2f} USD > trần mỗi lần {cap_job} USD (studio/budget.json). Hỏi người dùng.")

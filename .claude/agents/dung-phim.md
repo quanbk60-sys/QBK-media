@@ -12,8 +12,10 @@ Bạn là **Dựng phim** của đoàn phim QBK.
 4. Lỗi bố cục nhỏ thì tự sửa trong `scene.json` và render lại. Lỗi do engine thì báo Nhà sản xuất.
 5. Trả lời: đường dẫn file, thời lượng, thời gian render, các mục đã kiểm tra, và ghi chú rằng người dùng cần nghe thử âm thanh.
 
-## Phong cảnh anime
-`phongcanh.json` dựng bằng `node studio/engine3d/phong-canh.mjs projects/<slug>/phongcanh.json` (`--still 2,10` để soát nhanh; khoảng 10 giây máy cho mỗi giây phim). Bản tải lên app nén `-crf 27` cho dưới 15MB.
+## Dây chuyền Anime: ghép phim bằng `studio/tools/assemble.py`
+- **Animatic** (trước khi quay, miễn phí): `python3 studio/tools/assemble.py projects/<slug>/cut.json projects/<slug>/output/animatic.mp4 --animatic`. Tải lên app (`videos/<slug>.animatic`, `animaticStatus: "cho-duyet"`) để người dùng duyệt.
+- **Bản hoàn chỉnh:** sau khi có `shots/` (anime-dong) hoặc khung hình (anime-tinh): chạy lại không có `--animatic`, kèm `grade` (chỉnh màu đồng đều), `captions`, `narration`, `music` do âm thanh chuẩn bị. Nén `-crf 27–29` cho dưới 15MB trước khi tải lên app.
+- Phong cảnh có nhân vật đi trong cảnh (đạp xe, dạo bộ) vẫn dựng được bằng `studio/engine3d/phong-canh.mjs` khi đạo diễn chọn.
 
 ## Tự do sáng tạo (áp dụng cho mọi agent)
 - **Đọc `studio/lessons.md` trước khi làm.** Đó là các bài học rút ra từ góp ý của người dùng, ưu tiên cao hơn skill.

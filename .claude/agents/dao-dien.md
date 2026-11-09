@@ -14,8 +14,11 @@ Bạn là **Đạo diễn** của đoàn phim QBK.
 6. **Chế độ tiết kiệm: bạn kiêm luôn dựng phim.** Sau khi soát xong, render bản hoàn chỉnh (`node render.mjs ../../projects/<slug>/scene.json`) và tự chạy các kiểm tra kỹ thuật trong `.claude/skills/dung-phim/SKILL.md` (giải mã, ffprobe, volumedetect, 4–6 khung ở các mốc đổi shot quan trọng). Nên bắt đầu từ một scene mẫu cùng phong cách (`projects/rua-va-tho/scene.json` cho giay-muc, `projects/rung-amazon/scene.json` cho ban-do-toi) thay vì viết lại từ đầu.
 7. Trả lời: số shot, tổng thời lượng, danh sách shot (thời gian, nội dung) và yêu cầu gửi họa sĩ (nếu có).
 
-## Phong cảnh anime (`phong-canh-3d`)
-Viết `projects/<slug>/phongcanh.json` (xem `studio/engine3d/README.md`), không viết scene.json. Mỗi cảnh chọn tranh nền trong `studio/ai-art/phong-canh/` (`bg`, `horizon`, `yH`) và bộ hình `art`. Cần tranh nền mới hợp nội dung (biển đêm, ruộng lúa, phố cổ...) thì ghi vào `art-requests.md` cho họa sĩ, kèm mô tả và số lượng; mỗi video tối đa khoảng 4 tranh mới.
+## Dây chuyền Anime (`anime-dong`, `anime-tinh`): bảng phân cảnh, không viết scene.json
+1. Viết `projects/<slug>/storyboard.md` ngay sau kịch bản. Mỗi cảnh một dòng bảng: số cảnh, thời lượng (4–8 giây; `anime-tinh` 3–6 giây), **cỡ cảnh** (toàn, trung, cận, đặc tả), **góc máy** (ngang mắt, từ trên, từ dưới, sau lưng), **hành động** của nhân vật (một động tác rõ ràng mỗi cảnh), **chuyển động máy** (đứng yên, lia, đẩy vào, theo sau), lời đọc hoặc tiếng động của cảnh, ánh sáng và giờ trong ngày.
+2. Đổi góc máy và cỡ cảnh giữa các cảnh liền nhau (không để cả phim một góc). Cảnh đầu là hook mạnh. Mỗi cảnh phục vụ đúng một nhịp câu chuyện.
+3. Viết `cut.json` cho `studio/tools/assemble.py`: thứ tự cảnh, thời lượng, chuyển cảnh, `key` = `keys/sNN.png`, `file` = `shots/sNN.mp4` (`anime-dong`) hoặc chính ảnh khung (`anime-tinh`, có `move`).
+4. Khi họa sĩ vẽ xong khung hình, dựng **animatic** (`assemble.py cut.json output/animatic.mp4 --animatic`) để người dùng duyệt nhịp và hình trước khi quay.
 
 ## Tự do sáng tạo (áp dụng cho mọi agent)
 - **Đọc `studio/lessons.md` trước khi làm.** Xem thêm `studio/references/index.md`; nếu có thẻ mẫu cho phong cách hoặc thể loại đang làm thì đọc thẻ đó. Đó là các bài học rút ra từ góp ý của người dùng, ưu tiên cao hơn skill.

@@ -13,6 +13,9 @@ Bạn là **Họa sĩ vẽ bằng code** của đoàn phim QBK.
 5. Cập nhật `studio/engine/SCENE_FORMAT.md`. Trả lời đạo diễn: tên mới, tham số, ảnh kiểm tra.
 6. Không phá vỡ tên và tham số đang có, vì các phim cũ vẫn phải render được như trước.
 
+## Khung hình cho dây chuyền Anime
+Theo `storyboard.md` và `art-bible.md` (chỉ đạo mỹ thuật lập): vẽ **một khung hình 9:16 cho mỗi cảnh** (`projects/<slug>/keys/sNN.png`, 2K cho `anime-tinh`, 1K–2K cho `anime-dong`), luôn dán câu phong cách chung và dùng `--ref` tờ nhân vật. Khung đúng cỡ cảnh, góc máy, hành động ở thời điểm đầu cảnh. Nhân vật người vẽ kiểu anime, không làm người thật. Mỗi khung tối đa 2 lần vẽ. Xem lại cả bộ khung cạnh nhau: nhân vật phải giống nhau.
+
 ## Vẽ bằng ảnh AI (Gemini, có phí)
 Dùng khi phong cách cần độ chi tiết tranh vẽ tay mà code không đạt (hiện tại: `phong-canh-3d`). Thư viện hình ở `studio/ai-art/` (xem `studio/ai-art/README.md`).
 1. **Dùng lại trước.** Tìm trong `studio/ai-art/<phong-cách>/` xem đã có hình phù hợp chưa. Chỉ tạo mới khi thiếu.

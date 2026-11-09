@@ -579,6 +579,8 @@ for (const sh of S.shots) {
   sh._art = {tree: await Promise.all((a.tree || []).map(load)), house: await load(a.house), stone: await load(a.stone), cyclistTop: a.cyclist ? await load(a.cyclist + '-top').catch(() => undefined) : undefined, cyclistBike: a.cyclist ? await load(a.cyclist + '-bike').catch(() => undefined) : undefined, flower: await Promise.all((sh.flowersArt || a.flower || []).map(load)), bush: await Promise.all((a.bush || []).map(load)), cyclist: await load(a.cyclist)};
 }
 for (const sh of S.shots) if (sh._art) Object.assign(sh._art, sh._artExtra);
+if (opt('--audio-only')) { // chỉ tạo nhạc êm + gió + chim cho phim ghép từ clip (assemble.py): --audio-only out.wav --dur 40
+  writeWav(opt('--audio-only'), ambience(Number(opt('--dur', dur)), S.music !== false)); console.log(opt('--audio-only')); process.exit(0); }
 const renderers = S.shots.map(sh => ({sh, f: makeShotRenderer(sh)}));
 const XF = S.crossfade ?? 0.6;
 function frameAt(t) {
