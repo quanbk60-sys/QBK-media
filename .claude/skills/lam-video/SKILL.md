@@ -75,11 +75,12 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 
 | Collection / doc | Ai ghi | Nội dung |
 |---|---|---|
-| `requests` | App | Chủ đề mới: `topic, genre, style, length, gateScript, status: "moi"`. Khi nhận việc, Nhà sản xuất đổi thành `"da-nhan"` và tạo `videos/<slug>` |
+| `requests` | App | Chủ đề mới: `topic, genre, style, length, gateScript, voice` (tên giọng Gemini người dùng chọn, mặc định `Bodi`; ghi vào brief.md và truyền `--voice` cho `tts.py`), `status: "moi"`. Khi nhận việc, Nhà sản xuất đổi thành `"da-nhan"` và tạo `videos/<slug>` |
 | `videos/<slug>` | Nhà sản xuất, app | `title, genre, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Giọng, Phân cảnh, Dựng, Kiểm định), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
 | `feedback` | App | `video, round, items[{t, at, text}], status: "moi"`. Chuyển từng mục cho đúng agent, xong thì đổi `status` thành `"da-xu-ly"` |
 | `tiktokLinks` | App | Link TikTok người dùng lưu (`status: "moi"`). Đọc bằng `python3 studio/tools/tiktok.py <url>` (hỗ trợ link rút gọn vt.tiktok.com), ghi `title, author` (tên kênh · độ dài · lượt xem), `fullUrl`, `status: "da-doc"` |
 | `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |
+| `app/voices` | Nhà sản xuất | Danh sách giọng nghe thử: `default, tempo, list: [{id, name, desc, sample}]` (`sample` là id asset, video nhỏ có tiếng). Thêm giọng mới: tạo mẫu bằng `tts.py` với `sampleText`, tăng tốc 1,2x, gói thành mp4 có hình tĩnh (kho asset không nhận file chỉ có tiếng), tải lên rồi thêm vào `list` |
 | `app/styles` | Nhà sản xuất | `list: [{id, name, color, note, genres}]`: phong cách đoàn phim học thêm. App tự hiện chúng trong mục Làm video, không cần đăng lại app |
 | `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu |
 
