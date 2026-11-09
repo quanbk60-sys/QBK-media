@@ -33,6 +33,9 @@ export const STYLES = {
   've-tinh':   {label: 'Vệ tinh ảnh thật', genres: 'địa lý, lịch sử chiến trận, công trình, dự án (ảnh vệ tinh + ảnh thật)', bg: '#05080C', deco: 'none', ink: '#FFFFFF', body: '#1A1F26', lineScale: 0.9,
                  palette: {red: '#E5484D', navy: '#3FB6FF', gold: '#FF8A1F', green: '#46C46B', water: '#1B3A52', waterDeep: '#2C5878', paper: '#05080C', sky: '#0B1118'},
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.9)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 12, titleFont: 'Sans'},
+  'thi-nghiem': {label: 'Thí nghiệm cổ', genres: 'khoa học đời thường, cách làm, mẹo dân gian, đồ vật (khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng)', bg: '#E9E6E0', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
+                 layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
+                 caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 

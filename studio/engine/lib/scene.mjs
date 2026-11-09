@@ -28,7 +28,9 @@ export function loadScene(file) {
   let items = cap.items || (cap.path ? JSON.parse(fs.readFileSync(path.join(base, cap.path), 'utf8')) : []);
   const lead = cap.lead ?? s.narration?.lead ?? 0;
   s.styleDef = getStyle(s.style);
-  s.captionStyle = {y: cap.y ?? Math.round(s.height * 0.73), size: cap.size ?? 58, color: cap.color || '#2A2723', maxWidth: s.width - 120};
+  // blurband layout: draw a 16:9 band; render.mjs places it in the middle of the 9:16 frame over a blurred enlarged copy
+  if (s.styleDef.layout === 'blurband') { s.outHeight = s.height; s.height = Math.round(s.width * 9 / 16 / 2) * 2; }
+  s.captionStyle = {y: cap.y ?? (s.outHeight ? s.height - 62 : Math.round(s.height * 0.73)), size: cap.size ?? (s.outHeight ? 46 : 58), color: cap.color || '#2A2723', maxWidth: s.width - 120};
   s.captionItems = items.map(c => ({start: c.start + lead, end: c.end + lead, text: c.text}));
   if (!s.duration) s.duration = Math.max(...s.shots.map(x => x.end), ...s.captionItems.map(c => c.end + 0.4), 1);
   validate(s);
@@ -154,7 +156,19 @@ export function makeRenderer(s) {
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
     if (cue) { const st = s.captionStyle; ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', st.size) : `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = (s.captions?.color) || ST.caption?.color || st.color; ctx.fillText(cue.text, s.width / 2, cy); }
+      ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; const fill = (s.captions?.color) || ST.caption?.color || st.color;
+      if (ST.captionHighlight) { // word by word, the longest word (the keyword) in highlight colour
+        const text = ST.captionWords ? cue.text.toUpperCase() : cue.text, words = text.split(' '), sp = ctx.measureText(' ').width;
+        // keyword: a word written *like this* in the captions file, otherwise the longest non-filler word
+        const STOP = new Set(['ĐƯỢC','THÌ','LÀ','VÀ','CỦA','NHỮNG','MỘT','CÁC','CHO','VỚI','NÀY','ĐÓ','KHI','ĐÃ','SẼ','ĐANG','RỒI','CŨNG','NHƯNG','MÀ','NÊN','VÌ','BẠN','NÓ','TA','RA','VÀO','LÊN','XUỐNG','HẲN','RẤT','CÒN','NHƯ','TỪ','TRONG','TRÊN','DƯỚI','ĐỂ','CÓ']);
+        const bare = w => w.replace(/[^\p{L}\p{N}]/gu, '');
+        let key = words.findIndex(w => /^\*.*\*[.,!?:;]*$/.test(w));
+        if (key < 0) key = words.reduce((k, w, i) => { const sc = x => STOP.has(bare(x)) ? 0 : bare(x).length; return sc(w) > sc(words[k]) ? i : k; }, 0);
+        words.forEach((w, i) => { words[i] = w.replace(/\*/g, ''); });
+        const ws = words.map(w => ctx.measureText(w).width);
+        let x = s.width / 2 - (ws.reduce((a, b) => a + b, 0) + sp * (words.length - 1)) / 2; ctx.textAlign = 'left';
+        words.forEach((w, i) => { ctx.strokeText(w, x, cy); ctx.fillStyle = i === key && words.length > 1 ? ST.captionHighlight : fill; ctx.fillText(w, x, cy); x += ws[i] + sp; });
+      } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
     return {drawing};
   }
   return {cv, ctx, frame, events};
@@ -171,5 +185,9 @@ export function fitCaptions(s) {
     const a = words.slice(0, best).join(' '), b = words.slice(best).join(' '), split = c.start + (c.end - c.start) * a.length / c.text.length;
     push({start: c.start, end: split, text: a}); push({start: split, end: c.end, text: b});
   };
-  s.captionItems.forEach(push); s.captionItems = out;
+  let items = s.captionItems;
+  const N = s.styleDef.captionWords;
+  if (N) items = items.flatMap(c => { const w = c.text.split(' '), parts = []; for (let i = 0; i < w.length; i += N) parts.push(w.slice(i, i + N).join(' '));
+    const tot = parts.reduce((a, p) => a + p.length, 0); let t = c.start; return parts.map(p => { const d = (c.end - c.start) * p.length / tot, r = {start: t, end: t + d, text: p}; t += d; return r; }); });
+  items.forEach(push); s.captionItems = out;
 }

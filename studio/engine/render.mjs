@@ -16,7 +16,7 @@ const name = opt('--name', from > 0 || to < s.duration ? 'preview' : 'final');
 const tmpV = path.join(out, `.${name}.video.mp4`), tmpA = path.join(out, `.${name}.sfx.wav`), mp4 = path.join(out, `${name}.mp4`);
 
 const R = makeRenderer(s), frames = Math.round((to - from) * s.fps), drawFlags = [];
-const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${s.width}x${s.height}`, '-r', `${s.fps}`, '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'medium', tmpV], {stdio: ['pipe', 'inherit', 'inherit']});
+const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${s.width}x${s.height}`, '-r', `${s.fps}`, '-i', '-', ...(s.outHeight ? ['-vf', `split[a][b];[a]scale=${s.width}:${s.outHeight}:force_original_aspect_ratio=increase,crop=${s.width}:${s.outHeight},boxblur=60:2,eq=brightness=-0.08:saturation=0.9[bg];[bg][b]overlay=0:${(s.outHeight - s.height) / 2}`] : []), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'medium', tmpV], {stdio: ['pipe', 'inherit', 'inherit']});
 const t0 = Date.now();
 for (let i = 0; i < frames; i++) {
   const T = from + i / s.fps, r = R.frame(T); drawFlags.push(r.drawing);

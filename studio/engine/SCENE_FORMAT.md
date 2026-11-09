@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 

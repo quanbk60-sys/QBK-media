@@ -65,6 +65,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Tâm lý, kỹ năng, năng suất | `so-tay`, `phac-thao` |
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
+| Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem` (khung 16:9 giữa + nền mờ, ảnh thật hoặc hình vẽ code) |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
@@ -95,6 +96,8 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 2. Lấy mẫu: `python3 studio/tools/tiktok.py <url> --download projects/_mau/<id>.mp4`. Nếu báo `download_error` vì mạng (máy chủ video của TikTok chưa mở), ghi `status: "loi"`, `result: "Chưa tải được video mẫu: cần mở mạng tới v16-webapp-prime.us.tiktok.com, hoặc gửi file video cho Claude trong chat"`, rồi dừng yêu cầu này.
 3. Giao `nghien-cuu-mau` theo skill `hoc-mau` (kèm `name`, `note` của người dùng): viết thẻ trong `studio/references/<slug>/`, thêm gói phong cách vào `studio/engine/lib/styles.mjs` (hoặc module mới như `lib/geo.mjs` của `ve-tinh`), cập nhật `SCENE_FORMAT.md` và bảng chọn phong cách ở trên.
 4. Render một đoạn thử khoảng 8 giây bằng phong cách mới để kiểm tra.
+   - Mẫu dùng thứ engine không làm được (3D thực tế, quay thật, ảnh AI): **không bỏ cuộc**. Giữ những gì dựng được: bố cục khung, kiểu chữ, màu, nhịp cắt, chuyển động camera. Thay phần hình bằng ảnh thật (Wikimedia) hoặc hình vẽ code. Ghi rõ phần "thay thế" trong thẻ và trong `result`. Ví dụ: `thi-nghiem` học từ một mẫu 3D.
+   - Thật sự không làm được gì thì đặt `status: "loi"` (app hiện "Cần bạn xem"), **không bao giờ** đặt `"xong"` khi chưa thêm phong cách vào `app/styles`.
 5. Thêm vào `app/styles.list` mục `{id, name, color, note, genres}`: `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
 6. Đặt `status: "xong"`, `result` là tóm tắt ngắn (đã có gì, còn thiếu gì). Commit và push.
 
