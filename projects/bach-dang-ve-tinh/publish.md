@@ -14,7 +14,7 @@
 
 ## 2. Mô tả TikTok
 
-Ba lần quân xâm lược thất bại trên cùng một dòng sông. Cọc gỗ 938, 981, 1288 và chuyện thủy triều. Xem đến cuối để biết trận nào đáng nể nhất.
+Một dòng sông, ba lần đánh bại quân xâm lược: 938, 981, 1288. Cọc gỗ, thủy triều và những bãi cọc vẫn còn ở Quảng Yên. Bạn chọn trận nào?
 
 (Đoạn trên: 150 ký tự đầu là phần quan trọng nhất.)
 
@@ -22,7 +22,7 @@ Hashtag: #LichSuVietNam #SongBachDang #TranHungDao #NgoQuyen #LichSu
 
 ## 3. Mô tả YouTube Shorts
 
-Sông Bạch Đằng, giữa Quảng Ninh và Hải Phòng, gắn với ba trận: năm 938 (Ngô Quyền), năm 981 (Lê Hoàn) và năm 1288 (Trần Hưng Đạo). Ở cả ba trận, cọc gỗ và thủy triều đóng vai trò chính. Bãi cọc ở Quảng Yên được đo tuổi bằng các-bon phóng xạ, thế kỷ 13, khớp năm 1288.
+Sông Bạch Đằng, giữa Quảng Ninh và Hải Phòng, gắn với ba trận: năm 938 (Ngô Quyền), năm 981 (Lê Hoàn) và năm 1288 (Trần Hưng Đạo). Năm 938 và 1288, cọc gỗ cắm lòng sông cùng thủy triều đã đánh tan thủy quân giặc. Bãi cọc ở Quảng Yên được đo tuổi bằng các-bon phóng xạ, thế kỷ 13, khớp năm 1288.
 
 Nguồn tham khảo: en.wikipedia.org (Battle of Bạch Đằng, Battle of Bạch Đằng (1288)); tienphong.vn, nhandan.vn, news.laodong.vn (bãi cọc Quảng Yên).
 

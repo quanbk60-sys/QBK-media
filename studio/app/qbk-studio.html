@@ -104,9 +104,10 @@ a.link{color:var(--navy)}
   const STYLES = [
     ["giay-muc","Giấy mực","#F3EADB"],["bang-phan","Bảng phấn","#2F4A3A"],["ban-ve","Bản vẽ kỹ thuật","#1F4E8C"],
     ["so-tay","Sổ tay","#FFFDF6"],["pop","Pop sặc sỡ","#FFD23F"],["dan-gian","Tranh dân gian","#EFE2C4"],
-    ["phim-cam","Phim câm","#1A1A1A"],["phac-thao","Phác thảo điện ảnh","#BFB9AD"],["ban-do-toi","Bản đồ dữ liệu tối","#14202B"]];
+    ["phim-cam","Phim câm","#1A1A1A"],["phac-thao","Phác thảo điện ảnh","#BFB9AD"],["ban-do-toi","Bản đồ dữ liệu tối","#14202B"],["ve-tinh","Vệ tinh · ảnh thật","linear-gradient(135deg,#1d3b2a,#0b1118 55%,#FF8A1F)"]];
+  const STYLE_NOTE = {"ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
   const GENRES = ["Lịch sử","Khoa học","Ngụ ngôn","Hoạt hình vui","Tâm lý","Địa lý"];
-  const GENRE_STYLE = {"Lịch sử":"giay-muc","Khoa học":"bang-phan","Ngụ ngôn":"giay-muc","Hoạt hình vui":"pop","Tâm lý":"so-tay","Địa lý":"ban-do-toi"};
+  const GENRE_STYLE = {"Lịch sử":"giay-muc","Khoa học":"bang-phan","Ngụ ngôn":"giay-muc","Hoạt hình vui":"pop","Tâm lý":"so-tay","Địa lý":"ve-tinh"};
   const STEPS = ["Kịch bản","Giọng","Phân cảnh","Dựng","Kiểm định"];
   const STATUS = {
     "dang-lam": ["Đang làm","p-work"], "cho-duyet": ["Chờ duyệt","p-wait"], "dang-sua": ["Đang sửa","p-work"],
@@ -179,7 +180,7 @@ a.link{color:var(--navy)}
     const ready = S.videos.filter(v => v.status === "da-duyet");
     const pending = S.requests.filter(r => r.status === "moi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
-    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng video ngắn vẽ bằng code</p></div></div>
+    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng video ngắn: vẽ bằng code và ảnh vệ tinh</p></div></div>
       <a class="btn primary big" href="#new">Làm video mới</a>
       <div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
@@ -202,7 +203,8 @@ a.link{color:var(--navy)}
       <div class="col"><span class="f" style="font-size:13px;font-weight:700">Thể loại</span>
         <div class="chips">${GENRES.map(g => `<button type="button" class="chip" data-genre="${g}" aria-pressed="${f.genre === g}">${g}</button>`).join("")}</div></div>
       <div class="col"><div class="row between"><span style="font-size:13px;font-weight:700">Phong cách</span><span class="small">Gợi ý theo thể loại</span></div>
-        <div class="styles">${STYLES.map(([id, n, c]) => `<button type="button" class="sty" data-style="${id}" aria-pressed="${f.style === id}"><i style="background:${c}"></i>${n}</button>`).join("")}</div></div>
+        <div class="styles">${STYLES.map(([id, n, c]) => `<button type="button" class="sty" data-style="${id}" aria-pressed="${f.style === id}"><i style="background:${c}"></i>${n}</button>`).join("")}</div>
+        ${STYLE_NOTE[f.style] ? `<span class="small">${esc(STYLE_NOTE[f.style])}</span>` : ""}</div>
       <div class="card col">
         <div class="row between"><label for="len" style="font-size:14px">Độ dài</label><b id="lenv" style="font-variant-numeric:tabular-nums">${f.length} giây</b></div>
         <input id="len" type="range" min="45" max="90" step="5" value="${f.length}" style="width:100%;accent-color:var(--red)">

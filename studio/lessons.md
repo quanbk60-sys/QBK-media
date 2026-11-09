@@ -18,5 +18,13 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 ## Nội dung
 - Truyện ngụ ngôn: đọc tên tác giả theo phiên âm tiếng Việt (Ê-dốp), nói "tương truyền", không khẳng định. *(Rùa và Thỏ)*
 
+## Phong cách vệ tinh (`ve-tinh`)
+- Người dùng chọn "Vệ tinh · ảnh thật" trong app thì **không vẽ người que**. Dùng ảnh vệ tinh Esri (`studio/tools/satmap.py`) và ảnh thật Wikimedia (`studio/tools/commons.py`). Làm theo `studio/references/ve-tinh-anh-that/card.md`, mẫu `projects/bach-dang-ve-tinh/build_scene.py`. *(Người dùng, 09/11/2026)*
+- Đường sông, đường tiến quân, ghim phải **dò lại trên ảnh vệ tinh** (`satgrid.py`, chồng đường lên ảnh z14) trước khi render. Bản đầu Bạch Đằng vẽ đường cắt ngang đất liền. *(Bạch Đằng ve-tinh)*
+- Ảnh thật chỉ dùng khi rõ tác giả và giấy phép (CC0, PD, CC BY, CC BY-SA), ghi ngay dưới ảnh và trong publish.md. API Commons hay báo 429 thì tra trang File: bằng tìm kiếm web, tải ảnh từ upload.wikimedia.org. *(Bạch Đằng ve-tinh)*
+- Vị trí không có nguồn chính xác (bãi cọc, hướng tiến quân) thì ghi "minh họa" hoặc "gần đúng" trên hình. *(Bạch Đằng ve-tinh)*
+- Bản đăng: nén lại khoảng 1,65 Mbps và chuẩn hóa âm lượng về −14 LUFS (ảnh vệ tinh làm file gốc nặng 70MB). Không commit file gốc. *(Bạch Đằng ve-tinh)*
+- Mô tả đăng bài không được nói quá kịch bản (ví dụ "cả ba trận đều dùng cọc" là sai). *(Bạch Đằng ve-tinh)*
+
 ## Vận hành
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*
