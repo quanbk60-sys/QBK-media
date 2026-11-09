@@ -11,6 +11,7 @@ cut.json:
  "narration": "audio/narration.wav", "narrationLead": 0.3,        # tuỳ chọn
  "music": "audio/music.wav", "musicGain": 0.35,                    # tuỳ chọn (tạo bằng phong-canh.mjs --audio-only)
  "keepClipAudio": false,
+ "aspect": "9:16",                   # hoặc "16:9" (YouTube ngang)
  "captions": "captions-audio.json"}  # tuỳ chọn: [{start, end, text}], vẽ chữ trắng viền đen phía dưới
 - Clip ảnh (.png/.jpg) thành đoạn chuyển động nhẹ: move = push (đẩy vào), pull (lùi ra), panL, panR.
 - --animatic: bản thô để duyệt trước khi quay: mọi cảnh dùng ảnh khung đầu (file "key" của clip nếu có), 720p, nhanh.
@@ -18,7 +19,8 @@ cut.json:
 import json, os, subprocess, sys, tempfile
 args = sys.argv[1:]; cut_path, out = args[0], args[1]; animatic = '--animatic' in args
 base = os.path.dirname(os.path.abspath(cut_path)); C = json.load(open(cut_path))
-W, H = (720, 1280) if animatic else (1080, 1920); FPS = 30
+wide = C.get('aspect', '9:16') == '16:9'  # YouTube ngang
+W, H = ((1280, 720) if wide else (720, 1280)) if animatic else ((1920, 1080) if wide else (1080, 1920)); FPS = 30
 P = lambda f: f if os.path.isabs(f) else os.path.join(base, f)
 def dur_of(f): return float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f], capture_output=True, text=True).stdout or 0)
 tmp = tempfile.mkdtemp(prefix='asm_'); parts = []

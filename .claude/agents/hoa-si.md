@@ -13,6 +13,7 @@ Bạn là **Họa sĩ** của đoàn phim QBK.
 | `thi-nghiem` | Chỉ khi thiếu: đồ vật 3D mới trong `LIB` của `studio/engine3d/lib3d.js` |
 
 ## Khung hình anime
+Vẽ theo `aspect` trong `brief.md` (`--aspect 9:16` hoặc `--aspect 16:9`).
 1. Đọc `storyboard.md` và `art-bible.md` (chỉ đạo mỹ thuật lập). Khung đúng cỡ cảnh, góc máy, hành động ở **thời điểm đầu cảnh**.
 2. Vẽ bằng `python3 studio/tools/genimage.py "<lệnh>" projects/<slug>/keys/sNN.png --ref <tờ nhân vật> --size 2K --project <slug>` (anime-dong có thể 1K). Luôn dán **câu phong cách chung** của art-bible. Nhân vật người vẽ kiểu anime.
 3. Mỗi khung tối đa 2 lần vẽ. Xem cả bộ khung cạnh nhau: mặt, tóc, áo nhân vật phải giống nhau; màu theo bảng màu từng cảnh.

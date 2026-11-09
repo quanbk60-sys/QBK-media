@@ -16,6 +16,12 @@ Bạn là **Nhà sản xuất**. Đọc yêu cầu, **chọn một dây chuyền
 | `thi-nghiem` | Thí nghiệm 3D · khoa học | 3D thực tế `studio/engine3d/render3d.mjs` | Khoa học đời thường, cách làm, mẹo dân gian |
 Các phong cách 2D cũ (giấy mực, bảng phấn, pop...) **đã gỡ khỏi app**; engine 2D vẫn giữ vì `ve-tinh` dùng. Không dùng người que, không làm người thật: nhân vật người luôn vẽ kiểu anime.
 
+## Khung hình theo nền tảng
+`brief.md` ghi `platform` và `aspect`. **Mọi bước làm theo đúng khung đó từ đầu**, không cắt khung dọc thành ngang:
+- `9:16` (TikTok, Facebook Reels, YouTube Shorts): mặc định như cũ.
+- `16:9` (YouTube): ảnh Gemini `--aspect 16:9`, clip Omni `--aspect 16:9`, `cut.json` có `"aspect": "16:9"`, thí nghiệm 3D `"layout": "wide"` (1920×1080), vệ tinh đặt `width: 1920, height: 1080` trong `scene.json` và đạo diễn bố trí lại chữ, ô số liệu cho khung ngang. Phim YouTube dài hơn thì nhịp chậm hơn, có thể có lời đọc dài và chương mục.
+- Phát hành viết mô tả cho đúng nền tảng đã chọn (TikTok, Facebook Reels, YouTube Shorts hoặc YouTube có tiêu đề dài, mô tả, mốc thời gian).
+
 ## Dây chuyền: phong cách nào gọi agent nào
 | Bước | anime-dong | anime-tinh | ve-tinh, thi-nghiem |
 |---|---|---|---|
@@ -64,7 +70,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 
 | Collection / doc | Ai ghi | Nội dung |
 |---|---|---|
-| `requests` | App | Chủ đề mới: `topic, style, length, gateScript` (duyệt kịch bản trước), `gateAnimatic` (duyệt animatic/khung hình trước khi quay, mặc định bật với anime-dong), `narration` (true/false: có lời đọc không), `voice` (giọng Gemini, mặc định `Bodi`; truyền `--voice` cho `tts.py`), `status: "moi"`. Khi nhận việc, đổi thành `"da-nhan"` và tạo `videos/<slug>` |
+| `requests` | App | Chủ đề mới: `topic, style, length, platform` (`tiktok`, `facebook`, `shorts`, `youtube`), `aspect` (`9:16` hoặc `16:9`; YouTube là ngang, dài tối đa 300 giây), `gateScript` (duyệt kịch bản trước), `gateAnimatic` (duyệt animatic/khung hình trước khi quay, mặc định bật với anime-dong), `narration` (true/false: có lời đọc không), `voice` (giọng Gemini, mặc định `Bodi`; truyền `--voice` cho `tts.py`), `status: "moi"`. Khi nhận việc, đổi thành `"da-nhan"` và tạo `videos/<slug>` |
 | `videos/<slug>` | Nhà sản xuất, app | `title, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Dự toán, Mỹ thuật, Quay, Dựng, Kiểm định), `script, scriptStatus`, `animatic, animaticStatus`, `estimate` (nội dung `estimate.json` của agent `du-toan`: `usd, cap, items[], needApproval, approved, spent`; app hiện dòng chi phí và nút "Duyệt chi phí", bấm thì `approved: true` và gọi lại đoàn phim; video xong thì cập nhật `spent` từ `studio/costs.jsonl`), `stageNote, video, thumb` (id asset), `downloads` (mục "Tải về máy": `[{label: "Cao"|"Vừa"|"Nhẹ", res, mb, asset}]`, tạo bằng `python3 studio/tools/renditions.py output/final.mp4 output/dl`; bản Cao dùng chính file `video` đã tải lên, Vừa 720p và Nhẹ 480p tải lên thêm), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
 | `feedback` | App | `video, round, items[{t, at, text}], status: "moi"`. Chuyển từng mục cho đúng agent, xong thì đổi `status` thành `"da-xu-ly"` |
 | `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |

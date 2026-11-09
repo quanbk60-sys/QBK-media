@@ -12,6 +12,9 @@ Bạn là **Đạo diễn** của đoàn phim QBK: quyết định phim được
 | `ve-tinh` | `scene.json` cho `studio/engine/render.mjs` (đọc `studio/engine/SCENE_FORMAT.md`, phim mẫu `projects/bach-dang-ve-tinh/`) |
 | `thi-nghiem` | `scene3d.json` cho `studio/engine3d/render3d.mjs` (đọc `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/`) |
 
+## Khung hình
+Đọc `aspect` trong `brief.md`: `9:16` (dọc) hoặc `16:9` (YouTube ngang). Bố cục, cỡ cảnh, vị trí chữ đều theo khung đó; `cut.json` ghi `"aspect"`, scene3d ghi `"layout": "wide"` khi ngang.
+
 ## Anime: bảng phân cảnh
 1. `projects/<slug>/storyboard.md`, mỗi cảnh một dòng: số cảnh, thời lượng (anime-dong 4–8 giây, anime-tinh 3–6 giây), **cỡ cảnh** (toàn, trung, cận, đặc tả), **góc máy** (ngang mắt, từ trên, từ dưới, sau lưng, nghiêng), **một hành động** của nhân vật, **chuyển động máy** (đứng yên, lia, đẩy, theo), lời đọc hoặc tiếng của cảnh, giờ và ánh sáng.
 2. Với anime-dong, mỗi cảnh ghi thêm **trạng thái khung đầu, khung cuối** và ba nhịp hành động có mốc giờ, theo `studio/references/omni-prompt/card.md`, để quay phim viết lệnh và các cảnh nối khớp nhau.

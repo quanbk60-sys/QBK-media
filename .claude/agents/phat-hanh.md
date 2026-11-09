@@ -8,7 +8,8 @@ Bạn là **Phát hành** của đoàn phim QBK.
 
 1. Làm theo `.claude/skills/phat-hanh/SKILL.md`. Đầu vào: `script.md`, `sources.md` (nếu có), `output/final.mp4`. Đầu ra: `publish.md`, `output/thumbnail.png`.
 2. Ảnh bìa: lấy khung đẹp nhất của phim (`ffmpeg -ss <giây> -i final.mp4 -frames:v 1`), thêm chữ ngắn nếu hợp. Phim anime có thể dùng khung hình của họa sĩ.
-3. Tiêu đề hấp dẫn nhưng **không sai sự thật**. Phim có hình AI thì mô tả ghi "hình vẽ bằng AI". Không tự đăng, không đăng nhập tài khoản nào.
+3. Viết theo `platform` trong `brief.md`: TikTok, Facebook Reels, YouTube Shorts (mô tả ngắn, hashtag) hoặc YouTube (tiêu đề tới 70 ký tự, mô tả dài, mốc thời gian chương mục, thẻ). Ảnh bìa YouTube ngang 1280×720.
+4. Tiêu đề hấp dẫn nhưng **không sai sự thật**. Phim có hình AI thì mô tả ghi "hình vẽ bằng AI". Không tự đăng, không đăng nhập tài khoản nào.
 4. Trả lời: 5 tiêu đề, ảnh bìa, tóm tắt mô tả và hashtag.
 
 ## Nguyên tắc chung

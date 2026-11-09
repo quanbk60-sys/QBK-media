@@ -137,9 +137,14 @@ a.link{color:var(--navy)}
   }
   const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
     sel: null, draftFb: [], form: null, voicesDoc: null, playing: null };
-  const newForm = () => ({ topic: "", style: "anime-dong", length: 45, gate: true, gateA: true, narration: true, voice: "" });
+  const newForm = () => ({ topic: "", style: "anime-dong", length: 45, gate: true, gateA: true, narration: true, voice: "", platform: "tiktok" });
+  // Nền tảng quyết định khung hình: dọc 9:16 (TikTok, Facebook Reels, YouTube Shorts) hoặc ngang 16:9 (YouTube)
+  const PLATFORMS = [["tiktok", "TikTok", "9:16"], ["facebook", "Facebook Reels", "9:16"], ["shorts", "YouTube Shorts", "9:16"], ["youtube", "YouTube", "16:9"]];
+  const platOf = id => PLATFORMS.find(p => p[0] === id) || PLATFORMS[0];
+  const maxLen = f => platOf(f.platform)[2] === "16:9" ? 300 : 90;
   S.form = newForm();
   const isAnime = id => /^anime/.test(id || "");
+  const fmtLen = n => n >= 60 ? Math.floor(n / 60) + " phút" + (n % 60 ? " " + (n % 60) + " giây" : "") : n + " giây";
 
   const $ = (s, r = document) => r.querySelector(s);
   const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -215,7 +220,7 @@ a.link{color:var(--navy)}
         <div class="col" style="flex:1">
           <span><span class="pill ${st[1]}">${st[0]}${v.round ? " · vòng " + esc(v.round) : ""}</span></span>
           <span style="font:400 23px/1.05 var(--display)">${esc(v.title)}</span>
-          <span class="small">${v.genre ? esc(v.genre) + " · " : ""}${esc(styleName(v.style))}${v.duration ? " · " + esc(v.duration) + " giây" : ""}</span>
+          <span class="small">${v.platform ? esc(platOf(v.platform)[1]) + " · " : ""}${esc(styleName(v.style))}${v.duration ? " · " + esc(v.duration) + " giây" : ""}</span>
           ${working ? `<span class="small">${esc(v.stageNote || "")}</span>` : ""}
           ${costLine(v)}
           ${needCost(v) ? `<button class="btn ok sm" data-approvecost="${esc(v.id)}">Duyệt chi phí ${esc(usd(v.estimate.usd))}</button>` : ""}
@@ -260,12 +265,15 @@ a.link{color:var(--navy)}
       <div class="col"><label class="f" for="topic">Chủ đề</label>
         <textarea id="topic" rows="2" required placeholder="Ví dụ: Vì sao có thủy triều?">${esc(f.topic)}</textarea>
         <span class="small">Một câu, một đường link hoặc dán cả kịch bản đều được.</span></div>
+      <div class="col"><span style="font-size:13px;font-weight:700">Nền tảng · khung hình</span>
+        <div class="chips">${PLATFORMS.map(([id, n, ar]) => `<button type="button" class="chip" data-plat="${id}" aria-pressed="${f.platform === id}">${n} <span class="small" style="color:inherit;opacity:.75">${ar === "16:9" ? "ngang 16:9" : "dọc 9:16"}</span></button>`).join("")}</div>
+        ${platOf(f.platform)[2] === "16:9" ? `<span class="small">Khung ngang 16:9, dài tối đa 5 phút. Phim dài hơn thì chi phí cao hơn, đoàn phim sẽ dự toán trước.</span>` : ""}</div>
       <div class="col"><div class="row between"><span style="font-size:13px;font-weight:700">Phong cách</span></div>
         <div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : eng === "omni" ? ' <span class="pill p-wait">Động</span>' : ""}</span></button>`).join("")}<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a></div>
         ${styleNote(f.style) ? `<span class="small">${esc(styleNote(f.style))}</span>` : ""}</div>
       <div class="card col">
-        <div class="row between"><label for="len" style="font-size:14px">Độ dài</label><b id="lenv" style="font-variant-numeric:tabular-nums">${f.length} giây</b></div>
-        <input id="len" type="range" min="45" max="90" step="5" value="${f.length}" style="width:100%;accent-color:var(--red)">
+        <div class="row between"><label for="len" style="font-size:14px">Độ dài</label><b id="lenv" style="font-variant-numeric:tabular-nums">${fmtLen(Math.min(f.length, maxLen(f)))}</b></div>
+        <input id="len" type="range" min="15" max="${maxLen(f)}" step="${maxLen(f) > 90 ? 15 : 5}" value="${Math.min(f.length, maxLen(f))}" style="width:100%;accent-color:var(--red)">
         <div class="row between"><label for="narr" style="font-size:14px">Có lời đọc</label><input id="narr" type="checkbox" ${f.narration ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
         ${f.narration ? `<div class="col" style="gap:6px"><div class="row between"><span style="font-size:14px">Giọng đọc</span><span class="pill p-mute">${esc(curVoice())} · ${esc(String(S.voicesDoc?.tempo ?? 1.2).replace(".", ","))}x</span></div>
           ${voiceList().length ? `<div class="voices" role="radiogroup" aria-label="Chọn giọng đọc">${voiceList().map(v => `<div class="vo" role="radio" tabindex="0" aria-checked="${curVoice() === v.id}" data-voice="${esc(v.id)}">
@@ -453,7 +461,8 @@ a.link{color:var(--navy)}
       const f = S.form, topic = $("#topic");
       topic.addEventListener("input", () => f.topic = topic.value);
       document.querySelectorAll("[data-style]").forEach(b => b.onclick = () => { f.style = b.dataset.style; f.gateA = f.style === "anime-dong"; render(); });
-      $("#len").oninput = e => { f.length = +e.target.value; $("#lenv").textContent = f.length + " giây"; };
+      $("#len").oninput = e => { f.length = +e.target.value; $("#lenv").textContent = fmtLen(f.length); };
+      document.querySelectorAll("[data-plat]").forEach(b => b.onclick = () => { f.platform = b.dataset.plat; f.length = Math.min(f.length, maxLen(f)); render(); });
       $("#gate").onchange = e => f.gate = e.target.checked;
       $("#narr").onchange = e => { f.narration = e.target.checked; render(); };
       const ga = $("#gateA"); if (ga) ga.onchange = e => f.gateA = e.target.checked;
@@ -461,7 +470,7 @@ a.link{color:var(--navy)}
       document.querySelectorAll("[data-voice]").forEach(r => { const pick = () => { f.voice = r.dataset.voice; render(); }; r.onclick = pick; r.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }; });
       $("#newf").onsubmit = async e => {
         e.preventDefault(); if (!f.topic.trim() || !S.db) return;
-        try { await S.db.collection("requests").add({ topic: f.topic.trim(), style: f.style, length: f.length, gateScript: f.gate, gateAnimatic: isAnime(f.style) ? !!f.gateA : false, narration: !!f.narration, voice: f.narration ? curVoice() : "", status: "moi", createdAt: nowISO() });
+        try { await S.db.collection("requests").add({ topic: f.topic.trim(), style: f.style, length: Math.min(f.length, maxLen(f)), platform: f.platform, aspect: platOf(f.platform)[2], gateScript: f.gate, gateAnimatic: isAnime(f.style) ? !!f.gateA : false, narration: !!f.narration, voice: f.narration ? curVoice() : "", status: "moi", createdAt: nowISO() });
           S.form = { ...newForm(), voice: f.voice };
           go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + f.topic.trim());
           toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
