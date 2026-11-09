@@ -1,1 +1,14 @@
-{"slug": "bach-dang-ve-tinh", "stage": "script-done", "style": "ve-tinh", "round": 0}
+{
+ "slug": "bach-dang-ve-tinh",
+ "stage": "script-done",
+ "style": "ve-tinh",
+ "round": 0,
+ "tts": {
+  "tempo": 1.2,
+  "duration_s": 62.27,
+  "tempo_note": "ffmpeg atempo on narration-orig.wav (pitch preserved)",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Bodi",
+  "duration_orig_s": 74.72
+ }
+}

@@ -11,7 +11,7 @@
 | # | Lời đọc | Hình (vệ tinh) | Chữ lớn TRẮNG / dòng phụ CAM | Ảnh thật gợi ý (Commons) |
 |---|---|---|---|---|
 | 1 | Nhìn từ vũ trụ, nó chỉ là một vệt nước nhỏ. | Địa cầu xoay, mây trôi. Zoom liên tục xuống Đông Nam Á, Bắc Bộ, rồi vịnh Bắc Bộ. Dừng ở vùng cửa sông Quảng Yên (≈ 20.90, 106.80). Một vệt sông mảnh sáng lên | (không chữ, để hình tự nói) | |
-| 2 | Nhưng đây là nơi quân xâm lược ba lần thất bại. | Camera dừng, dòng sông được tô viền cam phát sáng chạy dọc theo lòng sông | **3 LẦN** / quân xâm lược thất bại | |
+| 2 | Nhưng dòng sông này gắn với ba lần đánh bại quân xâm lược. | Camera dừng, dòng sông được tô viền cam phát sáng chạy dọc theo lòng sông | **3 LẦN** / quân xâm lược thất bại | |
 | 3 | Sông Bạch Đằng, giữa Quảng Ninh và Hải Phòng. | Ghim tên sông. Hai nhãn tỉnh hai bờ: QUẢNG NINH (bờ đông, phía Quảng Yên ≈ 20.94, 106.81), HẢI PHÒNG (bờ tây, phía Thủy Nguyên ≈ 20.95, 106.72) | **SÔNG BẠCH ĐẰNG** / Quảng Ninh · Hải Phòng | Ảnh sông Bạch Đằng ngày nay (tìm "Bach Dang River", "Sông Bạch Đằng") |
 | 4 | Lần thứ nhất, năm 938. | Ô số liệu lớn bật lên giữa màn, icon thuyền | **938** / Ngô Quyền và Nam Hán | Tượng Ngô Quyền (tìm "Ngô Quyền statue") |
 | 5 | Ngô Quyền đóng cọc gỗ bịt sắt xuống lòng sông. | Zoom sát mặt sông. Hàng chấm cọc nhỏ (vẽ tay, màu nâu) xuất hiện lần lượt cắt ngang lòng sông | CỌC GỖ / đầu bịt sắt | Cọc gỗ trận Bạch Đằng trưng bày ở bảo tàng (tìm "Bach Dang stakes museum", "cọc Bạch Đằng Bảo tàng Lịch sử quốc gia"). **Ghi chú:** cọc hiện vật thường thuộc trận 1288, nên chú thích thẻ ảnh phải ghi "cọc Bạch Đằng (hiện vật)", không ghi "cọc năm 938" |

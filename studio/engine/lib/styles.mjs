@@ -30,6 +30,9 @@ export const STYLES = {
   'ban-do-toi': {label: 'Bản đồ dữ liệu tối', genres: 'địa lý, chiến tranh–hiệp ước, kinh tế', bg: '#14202B', deco: 'vignette', ink: '#E8EEF2', body: '#1E2E3B', lineScale: 0.8,
                  palette: {red: '#C8553D', navy: '#4F86A8', gold: '#E2A72E', green: '#6FA37A', wood: '#B08A5A', steel: '#C9D3DA', water: '#1B3A52', waterDeep: '#2C5878', paper: '#14202B', skin: '#D9C2A6', sky: '#1B2A37'},
                  caption: {color: '#FFFFFF', stroke: 'rgba(8,14,20,.9)'}, titleFont: 'Sans'},
+  've-tinh':   {label: 'Vệ tinh ảnh thật', genres: 'địa lý, lịch sử chiến trận, công trình, dự án (ảnh vệ tinh + ảnh thật)', bg: '#05080C', deco: 'none', ink: '#FFFFFF', body: '#1A1F26', lineScale: 0.9,
+                 palette: {red: '#E5484D', navy: '#3FB6FF', gold: '#FF8A1F', green: '#46C46B', water: '#1B3A52', waterDeep: '#2C5878', paper: '#05080C', sky: '#0B1118'},
+                 caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.9)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 12, titleFont: 'Sans'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 

@@ -9,10 +9,14 @@ import {PROPS} from './props.mjs';
 import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
+import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/NotoSans.ttf'), 'Sans');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-Black.otf'), 'QBKBlack');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-ExtraBoldItalic.otf'), 'QBKItalic');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Inter-Bold.otf'), 'QBKBold');
 
 export function loadScene(file) {
   const base = path.dirname(path.resolve(file));
@@ -43,6 +47,7 @@ export function validate(s) {
       if (e.type === 'actor') { if (!s.cast[e.cast]) err(`${where}: unknown cast "${e.cast}"`); for (const k of e.acting || []) { if (k.pose && !POSES[k.pose]) err(`${where}: unknown pose "${k.pose}"`); if (k.expr && !EXPR[k.expr]) err(`${where}: unknown expr "${k.expr}"`); } }
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
+      else if (validateGeo(s, e, where, err)) {}
       else if (e.type === 'image') { if (!fs.existsSync(path.join(s.base, e.path))) err(`${where}: missing image ${e.path}`); }
       else err(`${where}: unknown type "${e.type}"`);
     }
@@ -65,7 +70,9 @@ function acting(e, t) {
 
 function transform(e, t) {
   const tr = sampleTrack(e.track, t, ['x', 'y', 'scale', 'rotate', 'alpha']);
-  let x = tr.x ?? e.x ?? 540, y = tr.y ?? e.y ?? 1500, sc = tr.scale ?? e.scale ?? 1, rot = tr.rotate ?? e.rotate ?? 0, a = tr.alpha ?? e.alpha ?? 1;
+  let x = tr.x ?? e.x ?? 540, y = tr.y ?? e.y ?? 1500;
+  if (e.geo && e._view) [x, y] = project(e._view, e._s, e.geo[0], e.geo[1]).map((v, i) => v + ((i ? e.dy : e.dx) || 0));
+  let sc = tr.scale ?? e.scale ?? 1, rot = tr.rotate ?? e.rotate ?? 0, a = tr.alpha ?? e.alpha ?? 1;
   const from = e.from ?? 0, k = (t - from) / (e.enterDur ?? 0.4);
   if (e.enter === 'pop') { sc *= 0.6 + 0.4 * backOut(k); a *= clamp(k * 2); }
   else if (e.enter === 'fade') a *= ease(k);
@@ -82,7 +89,7 @@ function transform(e, t) {
 const images = new Map();
 async function img(s, p) { const { loadImage } = await import('@napi-rs/canvas'); const f = path.join(s.base, p); if (!images.has(f)) images.set(f, await loadImage(f)); return images.get(f); }
 
-export async function preloadImages(s) { for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
+export async function preloadImages(s) { await preloadGeo(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
 
 function recordElement(s, e, t, sceneT) {
   const R = new Recorder(); const {x, y, sc, rot} = transform(e, t);
@@ -116,8 +123,11 @@ export function makeRenderer(s) {
     const z = cam.zoom ?? 1, cx = cam.x ?? s.width / 2, cy = cam.y ?? s.height / 2;
     ctx.setTransform(z, 0, 0, z, s.width / 2 - cx * z, s.height / 2 - cy * z);
     let pen = null, drawing = false;
+    const view = sampleView(sh.view, t);
     for (const [idx, e] of (sh.elements || []).entries()) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
+      if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
+      if (e.geo) { e._view = view; e._s = s; }
       if (e.type === 'image') {
         const im = images.get(path.join(s.base, e.path)); const {x, y, sc, rot, a} = transform(e, t); const w = (e.w || im.width) * sc, h = w * im.height / im.width;
         ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.rotate(rot); ctx.drawImage(im, -w / 2, -h / 2, w, h); ctx.restore(); continue;
@@ -140,10 +150,11 @@ export function makeRenderer(s) {
     if (pen) { const [px, py] = ctx.getTransform().transformPoint ? [ctx.getTransform().a * pen[0] + ctx.getTransform().e, ctx.getTransform().d * pen[1] + ctx.getTransform().f] : pen; drawHand(ctx, pen[0], pen[1], T, 1, py > s.captionStyle.y - 470); }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     paintOverlay(ctx, ST, s.width, s.height, fno);
+    const cr = sh.credit ?? s.credit ?? (s._sat && sh.elements?.some(e => e.type === 'satmap' || e.type === 'globe') ? s._sat.credit : null); if (cr) credit(ctx, s, cr);
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
-    if (cue) { const st = s.captionStyle; ctx.font = `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.lineWidth = 10; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = (s.captions?.color) || ST.caption?.color || st.color; ctx.fillText(cue.text, s.width / 2, cy); }
+    if (cue) { const st = s.captionStyle; ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', st.size) : `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = (s.captions?.color) || ST.caption?.color || st.color; ctx.fillText(cue.text, s.width / 2, cy); }
     return {drawing};
   }
   return {cv, ctx, frame, events};
@@ -151,7 +162,7 @@ export function makeRenderer(s) {
 
 // Split captions that would wrap into two timed halves at the space nearest the middle (proportional timing).
 export function fitCaptions(s) {
-  const cv = createCanvas(10, 10), ctx = cv.getContext('2d'); ctx.font = `600 ${s.captionStyle.size}px Sans`;
+  const cv = createCanvas(10, 10), ctx = cv.getContext('2d'); ctx.font = s.styleDef.captionFont ? s.styleDef.captionFont.replace('{size}', s.captionStyle.size) : `600 ${s.captionStyle.size}px Sans`;
   const out = [];
   const push = c => {
     if (ctx.measureText(c.text).width <= s.captionStyle.maxWidth || !c.text.includes(' ')) return out.push(c);
