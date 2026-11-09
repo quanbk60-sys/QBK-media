@@ -298,6 +298,7 @@ a.link{color:var(--navy)}
           ${costLine(v)}
           ${needCost(v) ? `<button class="btn ok sm" data-approvecost="${esc(v.id)}">Duyệt chi phí ${esc(usd(v.estimate.usd))}</button>` : ""}
           ${v.status === "cho-duyet" && v.video ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
+          ${v.video && v.status !== "cho-duyet" ? `<button class="btn dark sm" data-watch="${esc(v.id)}">▶ Xem video${v.round > 1 ? " · vòng " + esc(v.round) : ""}</button>` : ""}
           ${v.status === "da-duyet" ? `<a class="btn sm" href="#post" data-sel="${esc(v.id)}">Mở bộ đăng bài</a>` : ""}
           ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
         </div>
@@ -410,7 +411,7 @@ a.link{color:var(--navy)}
     const box = (id, label, text) => `<div class="card col"><div class="row between"><b style="font-size:13px">${label}</b><button class="btn sm" data-copy="${id}">Sao chép</button></div><div class="copybox" id="${id}">${esc(text)}</div></div>`;
     return `<div class="row"><a class="back" href="#home" aria-label="Quay lại">${svg("back")}</a><div><h1 style="font-size:28px">Bộ đăng bài</h1><p class="sub">${esc(v.title)} · <span class="pill ${(STATUS[v.status] || [])[1]}">${(STATUS[v.status] || [""])[0]}</span></p></div></div>
       <div class="row" style="align-items:flex-start">
-        ${v.thumb ? `<img class="thumb" style="width:96px" src="${blob(v.thumb)}" alt="Ảnh bìa">` : ""}
+        ${v.video ? `<video src="${blob(v.video)}" controls playsinline preload="metadata" ${v.thumb ? `poster="${blob(v.thumb)}"` : ""} style="width:140px"></video>` : v.thumb ? `<img class="thumb" style="width:96px" src="${blob(v.thumb)}" alt="Ảnh bìa">` : ""}
         <div class="col" style="flex:1">
           ${dlList(v).map((d, i) => `<button class="btn ${i ? "" : "dark"}" data-dlv="${esc(v.id)}" data-dli="${i}">Tải video ${esc(d.label.toLowerCase())}${d.res ? " · " + esc(d.res) : ""}</button>`).join("")}
           ${v.thumb ? `<button class="btn" data-save="thumb">Tải ảnh bìa</button>` : ""}
@@ -479,6 +480,18 @@ a.link{color:var(--navy)}
     audio.play().catch(() => { S.playing = null; render(); toast("Không phát được mẫu giọng trên thiết bị này"); });
   }
 
+  // Xem lại video đã duyệt, đã đăng hoặc tạm dừng: mở trình phát trong khung nổi
+  function watchVideo(v) {
+    const sh = $("#sheet");
+    sh.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-labelledby="wt" style="align-items:center"><div class="row between" style="width:100%"><b id="wt" style="font-size:17px">${esc(v.title)}</b><button class="btn sm" id="wclose">Đóng</button></div>
+      <video src="${blob(v.video)}" controls autoplay playsinline ${v.thumb ? `poster="${blob(v.thumb)}"` : ""} style="width:auto;max-width:100%;height:min(68vh,620px);aspect-ratio:${v.aspect === "16:9" ? "16/9" : "9/16"}"></video>
+      <span class="small">${esc(styleName(v.style))}${v.duration ? " · " + esc(v.duration) + " giây" : ""}${v.round ? " · vòng " + esc(v.round) : ""} · ${esc((STATUS[v.status] || [""])[0])}</span></div>`;
+    sh.hidden = false;
+    const close = () => { const vd = sh.querySelector("video"); if (vd) vd.pause(); sh.hidden = true; sh.innerHTML = ""; };
+    sh.onclick = e => { if (e.target === sh) close(); };
+    $("#wclose").onclick = close; $("#wclose").focus();
+  }
+
   function askDelete(v) {
     const sh = $("#sheet"), working = v.status === "dang-lam" || v.status === "dang-sua";
     sh.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-labelledby="dt"><b id="dt" style="font-size:17px">Xóa "${esc(v.title)}"?</b>
@@ -502,6 +515,7 @@ a.link{color:var(--navy)}
 
   function bind(r) {
     document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { const v = S.videos.find(x => x.id === b.dataset.del); if (v) askDelete(v); });
+    document.querySelectorAll("[data-watch]").forEach(b => b.onclick = () => { const v = S.videos.find(x => x.id === b.dataset.watch); if (v?.video) watchVideo(v); });
     document.querySelectorAll("[data-sel]").forEach(a => a.addEventListener("click", () => { S.sel = a.dataset.sel; S.draftFb = []; }));
     document.querySelectorAll("[data-scriptok]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.scriptok); if (!v || !S.db) return;
       b.disabled = true;
