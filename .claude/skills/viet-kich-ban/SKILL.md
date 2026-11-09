@@ -6,7 +6,12 @@ description: Viết kịch bản lời đọc tiếng Việt cho video ngắn 9:
 # Biên kịch và kiểm chứng
 
 ## Đầu vào
-`projects/<slug>/brief.md`
+`projects/<slug>/brief.md`. Nếu brief có mục **Hiểu yêu cầu** (phiếu từ app), đó là cam kết với người dùng:
+- Mọi ý **Bắt buộc có** phải có trong lời đọc hoặc ý hình. Ý nào sai sự thật hoặc không kiểm chứng được thì không đưa vào và báo lại Nhà sản xuất, không âm thầm bỏ.
+- Không viết gì thuộc **Không được có**.
+- Kiểm chứng theo **Nguồn nên dùng** và tệp trong `inputs/` trước.
+- Người dùng dán kịch bản có sẵn thì giữ lời của họ; chỉ sửa lỗi dữ kiện, độ dài, cách đọc số, và liệt kê từng chỗ sửa.
+- Có tệp "đưa vào video" thì viết ý hình dùng đúng tệp đó ở cảnh người dùng dặn.
 
 ## Đầu ra (trong `projects/<slug>/`)
 1. **`narration.txt`**: lời đọc chính xác từng chữ, dùng để thu giọng. Mỗi câu một dòng, không ghi chú.
@@ -35,6 +40,7 @@ Câu ngắn, động từ mạnh, dễ hình dung. Mỗi 2–3 giây phải có 
 - Với nội dung hư cấu (hoạt hình vui, ngụ ngôn): ghi "Hư cấu" và không gán cho người thật.
 
 ## Trước khi bàn giao
+- Có mục Hiểu yêu cầu thì thêm vào `script.md` mục `## Đối chiếu yêu cầu`: mỗi ý bắt buộc → câu số mấy; mỗi điều cần tránh → "không có".
 - Đếm âm tiết so với thời lượng mục tiêu.
 - Kiểm tra chính tả tiếng Việt và dấu.
 - Không còn chữ viết tắt mà giọng đọc dễ đọc sai. Ví dụ viết "Thế kỷ mười", không viết "TK X".

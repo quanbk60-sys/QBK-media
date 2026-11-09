@@ -18,6 +18,7 @@
   --red:#F06A52; --red-ink:#FF9C88; --red-bg:#4A2620; --navy:#9DB0F0; --navy-bg:#232A40;
   --green:#93C276; --green-ink:#B5DC9C; --green-bg:#25331F; --gold:#E9B654; --gold-bg:#3A2F17; --on-accent:#1D1A17; color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);margin:0}
 .app{max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
@@ -99,6 +100,18 @@ nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:re
 .vo .grow{flex:1;min-width:0;text-align:left}
 .play{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
 .play[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.att{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:8px}
+.att .pv{width:56px;aspect-ratio:9/16;object-fit:cover;border-radius:8px;border:1px solid var(--ink);background:var(--soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);text-align:center}
+.att .grow{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.att .nm{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.att input[type=text]{padding:8px 10px;font-size:14px;border-width:1.5px}
+.chips.sm .chip{min-height:32px;font-size:12px;padding:0 10px}
+.xbtn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font-size:18px;line-height:1;cursor:pointer;flex-shrink:0}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px;border:2px dashed var(--line);border-radius:14px;background:var(--card);cursor:pointer;text-align:center;font-size:14px;font-weight:600;color:var(--ink)}
+.drop:focus-within{outline:3px solid var(--navy);outline-offset:2px}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}
+details.card>summary{cursor:pointer;font-weight:700;font-size:14px;min-height:32px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ask{border:2px solid var(--gold);background:var(--gold-bg)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:12px;font-size:14px;max-width:min(92vw,480px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
 .back{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);border-radius:10px;text-decoration:none}
 .small{font-size:12px;color:var(--muted)}
@@ -136,13 +149,21 @@ a.link{color:var(--navy)}
     catch (e) { console.warn("fire_trigger", e?.code); return false; }
   }
   const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
-    sel: null, draftFb: [], form: null, voicesDoc: null, playing: null };
-  const newForm = () => ({ topic: "", style: "anime-dong", length: 45, gate: true, gateA: true, narration: true, voice: "", platform: "tiktok" });
+    sel: null, draftFb: [], form: null, voicesDoc: null, playing: null, answers: {} };
+  // Phiếu yêu cầu (thay ô "Chủ đề" một dòng): lời dặn tự do + tệp đính kèm + bắt buộc có / không được có / nguồn + cho phép hỏi lại
+  const newForm = () => ({ brief: "", must: "", avoid: "", links: "", files: [], clarify: true, style: "anime-dong", length: 45, gate: true, gateA: true, narration: true, voice: "", platform: "tiktok" });
+  const DRAFT_KEY = "qbk-draft-v2";
+  const loadDraft = () => { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); if (d) return { ...newForm(), ...d, files: (d.files || []).filter(x => x.id) }; } catch {} return newForm(); };
+  const saveDraft = () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...S.form, files: S.form.files.filter(x => x.id).map(({ url, ...x }) => x) })); } catch {} };
+  const ROLES = [["dung", "Đưa vào video"], ["mau", "Mẫu phong cách"], ["tu-lieu", "Tư liệu nội dung"]];
+  const kindOf = t => t.startsWith("image/") ? "image" : t.startsWith("video/") ? "video" : "doc";
+  const HINTS = ["Mở đầu gây tò mò", "Kết bằng một bài học", "Giọng hài hước", "Có số liệu cụ thể", "Có nhân vật đối thoại", "Kết bằng câu hỏi cho người xem"];
+  const MAX_MB = 20;
   // Nền tảng quyết định khung hình: dọc 9:16 (TikTok, Facebook Reels, YouTube Shorts) hoặc ngang 16:9 (YouTube)
   const PLATFORMS = [["tiktok", "TikTok", "9:16"], ["facebook", "Facebook Reels", "9:16"], ["shorts", "YouTube Shorts", "9:16"], ["youtube", "YouTube", "16:9"]];
   const platOf = id => PLATFORMS.find(p => p[0] === id) || PLATFORMS[0];
   const maxLen = f => platOf(f.platform)[2] === "16:9" ? 300 : 90;
-  S.form = newForm();
+  S.form = loadDraft();
   const isAnime = id => /^anime/.test(id || "");
   const fmtLen = n => n >= 60 ? Math.floor(n / 60) + " phút" + (n % 60 ? " " + (n % 60) + " giây" : "") : n + " giây";
 
@@ -188,6 +209,7 @@ a.link{color:var(--navy)}
   const scriptText = v => v.script || (v.report || [])[0] || "";
   const scriptBox = v => `<details class="card col" open style="padding:10px;gap:8px;border-color:var(--red)"><summary style="cursor:pointer;font-weight:700;min-height:32px">Kịch bản chờ bạn duyệt</summary>
       <div class="copybox" style="font-size:14px;max-height:320px;overflow:auto">${esc(scriptText(v)) || "Đoàn phim chưa gửi nội dung kịch bản."}</div>
+      ${v.scriptCheck ? `<span class="small" style="color:var(--green-ink)"><b>Đối chiếu yêu cầu:</b> ${esc(v.scriptCheck)}</span>` : ""}
       <label for="sfb-${esc(v.id)}" class="small">Muốn sửa gì thì ghi ở đây (không bắt buộc)</label>
       <textarea id="sfb-${esc(v.id)}" rows="2" placeholder="Ví dụ: thêm cảnh mẹ đón ở cửa, bớt câu cuối"></textarea>
       <div class="tiles two" style="margin-top:2px"><button class="btn" data-scriptfb="${esc(v.id)}">Gửi góp ý</button><button class="btn ok" data-scriptok="${esc(v.id)}">Duyệt kịch bản</button></div></details>`;
@@ -317,15 +339,17 @@ a.link{color:var(--navy)}
     const waiting = S.videos.filter(v => v.status === "cho-duyet");
     const working = S.videos.filter(v => v.status === "dang-lam" || v.status === "dang-sua");
     const ready = S.videos.filter(v => v.status === "da-duyet");
-    const pending = S.requests.filter(r => r.status === "moi");
+    const pending = S.requests.filter(r => r.status === "moi" || r.status === "tra-loi");
+    const asks = S.requests.filter(r => r.status === "can-hoi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
     return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng phim ngắn: anime, vệ tinh, thí nghiệm 3D</p></div></div>
       <a class="btn primary big" href="#new">Làm video mới</a>
       <div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
       <div class="card col" style="gap:4px" data-run>${runHtml()}</div>
+      ${asks.length ? `<h2>Đoàn phim cần bạn trả lời</h2>${asks.map(askCard).join("")}` : ""}
       ${waiting.length ? `<h2>Cần bạn duyệt</h2>${waiting.map(v => videoCard(v)).join("")}` : ""}
-      ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${r.genre ? esc(r.genre) + " · " : ""}${esc(styleName(r.style))} · chờ đoàn phim nhận · làm khoảng ${dur(etaTotal(r.style, r.length))}</div></div><span class="pill p-mute">Mới</span></div>`).join("")}</div>
+      ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${r.genre ? esc(r.genre) + " · " : ""}${esc(styleName(r.style))}${r.attachments?.length ? ` · ${r.attachments.length} tệp` : ""} · ${r.status === "tra-loi" ? "đã trả lời, chờ đoàn phim làm tiếp" : "chờ đoàn phim nhận"} · làm khoảng ${dur(etaTotal(r.style, r.length))}</div></div><span class="pill p-mute">${r.status === "tra-loi" ? "Đã trả lời" : "Mới"}</span></div>`).join("")}</div>
         <p class="small">Đoàn phim được gọi ngay khi bạn gửi. Nếu yêu cầu nằm ở đây quá 10 phút, nhắn "chạy đi" cho Claude.</p>` : ""}
       ${working.length ? `<h2>Đang làm</h2>${working.map(v => videoCard(v)).join("")}` : ""}
       ${ready.length ? `<h2>Chờ đăng</h2>${ready.map(v => videoCard(v)).join("")}` : ""}
@@ -334,13 +358,70 @@ a.link{color:var(--navy)}
 `;
   };
 
+  // Câu hỏi làm rõ: đoàn phim ghi requests/<id> {status: "can-hoi", understanding, questions: [{q, options?}]}
+  function askCard(r) {
+    const a = S.answers[r.id] || (S.answers[r.id] = {}), qs = r.questions || [];
+    return `<form class="card ask col" style="gap:12px" data-askf="${esc(r.id)}"><div class="row between"><b>${esc(r.topic)}</b><span class="pill p-wait">Cần trả lời</span></div>
+      ${r.understanding ? `<div class="col" style="gap:2px"><span class="small" style="font-weight:700">Đoàn phim hiểu yêu cầu là:</span><span style="font-size:13.5px">${esc(r.understanding)}</span></div>` : ""}
+      ${qs.map((q, i) => `<div class="col" style="gap:6px"><span style="font-size:14px;font-weight:600">${i + 1}. ${esc(q.q)}</span>
+        ${q.options?.length ? `<div class="chips sm">${q.options.map(o => `<button type="button" class="chip" data-ansopt="${esc(r.id)}|${i}" data-val="${esc(o)}" aria-pressed="${a[i] === o}">${esc(o)}</button>`).join("")}</div>` : ""}
+        <input type="text" data-ans="${esc(r.id)}|${i}" value="${esc(a[i] || "")}" placeholder="${q.options?.length ? "Hoặc gõ câu trả lời khác" : "Câu trả lời của bạn"}" aria-label="Trả lời câu ${i + 1}"></div>`).join("")}
+      <div class="col" style="gap:6px"><span style="font-size:14px;font-weight:600">Dặn thêm (không bắt buộc)</span><input type="text" data-ans="${esc(r.id)}|extra" value="${esc(a.extra || "")}" placeholder="Ví dụ: câu 2 các bạn tự chọn" aria-label="Dặn thêm"></div>
+      <button class="btn primary" type="submit">Gửi trả lời</button></form>`;
+  }
+  function fileList() {
+    return S.form.files.map((x, i) => `<div class="att">
+      ${x.kind === "image" && (x.url || x.id) ? `<img class="pv" src="${esc(x.url || blob(x.id))}" alt="">` : x.kind === "video" && (x.url || x.id) ? `<video class="pv" src="${esc(x.url || blob(x.id))}#t=0.5" muted playsinline preload="metadata"></video>` : `<span class="pv">${x.kind === "doc" ? "TÀI LIỆU" : "…"}</span>`}
+      <div class="grow"><div class="row between" style="gap:6px"><span class="nm">${esc(x.name)}</span>
+        <span class="pill ${x.status === "ok" ? "p-ok" : x.status === "err" ? "p-wait" : "p-work"}">${x.status === "ok" ? (x.size < 1048576 ? Math.max(1, Math.round(x.size / 1024)) + "KB" : (x.size / 1048576).toFixed(1).replace(".", ",") + "MB") : x.status === "err" ? "Lỗi" : "Đang tải…"}</span></div>
+        <div class="chips sm" aria-label="Dùng tệp này để">${ROLES.map(([k, l]) => `<button type="button" class="chip" data-role="${i}|${k}" aria-pressed="${x.role === k}">${l}</button>`).join("")}</div>
+        <input type="text" data-fnote="${i}" value="${esc(x.note || "")}" aria-label="Ghi chú cho tệp ${esc(x.name)}" placeholder="${x.role === "dung" ? "Ví dụ: nhân vật chính, đặt ở cảnh mở đầu" : x.role === "mau" ? "Ví dụ: học nhịp cắt và kiểu chữ" : "Ví dụ: số liệu ở trang 3"}"></div>
+      <button type="button" class="xbtn" data-frm="${i}" aria-label="Bỏ tệp ${esc(x.name)}">×</button></div>`).join("");
+  }
+  function refreshFiles() { const el = $("#flist"); if (el) { el.innerHTML = fileList(); bindFiles(); } saveDraft(); }
+  async function addFiles(list) {
+    for (const file of list) {
+      if (file.size > MAX_MB * 1048576) { toast(`"${file.name}" lớn hơn ${MAX_MB}MB. Cắt ngắn video hoặc dán link vào ô yêu cầu.`); continue; }
+      const kind = kindOf(file.type || "");
+      const x = { name: file.name, type: file.type, size: file.size, kind, role: kind === "video" ? "mau" : kind === "image" ? "dung" : "tu-lieu", note: "", status: "up" };
+      S.form.files.push(x); refreshFiles();
+      try { const res = await S.assets.upload(file); Object.assign(x, { id: res.id, url: res.url, status: "ok" }); }
+      catch (e) { x.status = "err"; toast(`Chưa tải được "${file.name}": ` + (e?.code === "unsupported_type" ? "loại tệp không hỗ trợ." : e?.code === "quota_exceeded" ? "kho tệp của app đã đầy." : "thử lại sau.")); }
+      refreshFiles();
+    }
+  }
+  function bindFiles() {
+    const f = S.form;
+    document.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { const [i, k] = b.dataset.role.split("|"); if (f.files[+i]) { f.files[+i].role = k; refreshFiles(); } });
+    document.querySelectorAll("[data-fnote]").forEach(inp => inp.oninput = () => { const x = f.files[+inp.dataset.fnote]; if (x) { x.note = inp.value; saveDraft(); } });
+    document.querySelectorAll("[data-frm]").forEach(b => b.onclick = async () => { const i = +b.dataset.frm, x = f.files[i]; if (!x) return;
+      f.files.splice(i, 1); refreshFiles();
+      if (x.id && S.assets) { try { await S.assets.delete(x.id); } catch {} } });
+  }
+
   V.new = () => {
     const f = S.form;
     return `<div class="row"><a class="back" href="#home" aria-label="Quay lại">${svg("back")}</a><h1>Làm video mới</h1></div>
     <form id="newf" class="col" style="gap:16px">
-      <div class="col"><label class="f" for="topic">Chủ đề</label>
-        <textarea id="topic" rows="2" required placeholder="Ví dụ: Vì sao có thủy triều?">${esc(f.topic)}</textarea>
-        <span class="small">Một câu, một đường link hoặc dán cả kịch bản đều được.</span></div>
+      <div class="col"><label class="f" for="brief">Bạn muốn video thế nào?</label>
+        <textarea id="brief" rows="6" placeholder="Viết thoải mái như nhắn cho đoàn phim. Ví dụ:&#10;Làm video giải thích vì sao có thủy triều cho học sinh lớp 6. Mở đầu bằng cảnh bãi biển sáng và chiều khác nhau. Có Mặt Trăng kéo nước, nhắc thêm triều cường. Kết bằng câu hỏi cho người xem.">${esc(f.brief)}</textarea>
+        <div class="chips sm" aria-label="Gợi ý thêm vào yêu cầu">${HINTS.map(h => `<button type="button" class="chip" data-hint="${esc(h)}">+ ${esc(h)}</button>`).join("")}</div>
+        <span class="small">Dán được link bài báo, link video mẫu, hoặc nguyên kịch bản có sẵn.</span></div>
+      <div class="col"><div class="row between"><span style="font-size:13px;font-weight:700">Ảnh, video, tài liệu</span><span class="small">Tối đa ${MAX_MB}MB mỗi tệp</span></div>
+        ${S.assets ? `<label class="drop"><input id="fpick" type="file" multiple accept="image/*,video/*,application/pdf,text/plain,text/markdown,.md,.txt">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+          Thêm ảnh hoặc video<span class="small" style="font-weight:400">Ảnh nhân vật, ảnh tư liệu, video mẫu, PDF…</span></label>`
+          : `<div class="empty">Chỉ tải tệp được khi mở app bằng tài khoản chủ app. Bạn vẫn có thể dán link vào ô yêu cầu.</div>`}
+        <div id="flist" class="col">${fileList()}</div></div>
+      <details class="card col" ${f.must || f.avoid || f.links ? "open" : ""}><summary>Giữ kịch bản đúng ý <span class="small" style="font-weight:400">không bắt buộc</span></summary>
+        <div class="col" style="gap:12px;margin-top:10px">
+          <div class="col" style="gap:4px"><label class="f" for="must">Bắt buộc có</label>
+            <textarea id="must" rows="2" placeholder="Mỗi dòng một ý: dữ kiện, câu thoại, nhân vật, cảnh phải có">${esc(f.must)}</textarea></div>
+          <div class="col" style="gap:4px"><label class="f" for="avoid">Không được có</label>
+            <textarea id="avoid" rows="2" placeholder="Ví dụ: không nhắc tên thật, không dùng từ lóng">${esc(f.avoid)}</textarea></div>
+          <div class="col" style="gap:4px"><label class="f" for="links">Nguồn nên dùng</label>
+            <textarea id="links" rows="2" placeholder="Link hoặc tên sách, bài báo. Đoàn phim kiểm chứng theo đây trước">${esc(f.links)}</textarea></div>
+        </div></details>
       <div class="col"><span style="font-size:13px;font-weight:700">Nền tảng · khung hình</span>
         <div class="chips">${PLATFORMS.map(([id, n, ar]) => `<button type="button" class="chip" data-plat="${id}" aria-pressed="${f.platform === id}">${n} <span class="small" style="color:inherit;opacity:.75">${ar === "16:9" ? "ngang 16:9" : "dọc 9:16"}</span></button>`).join("")}</div>
         ${platOf(f.platform)[2] === "16:9" ? `<span class="small">Khung ngang 16:9, dài tối đa 5 phút. Phim dài hơn thì chi phí cao hơn, đoàn phim sẽ dự toán trước.</span>` : ""}</div>
@@ -356,6 +437,7 @@ a.link{color:var(--navy)}
             <button type="button" class="play" data-play="${esc(v.id)}" aria-pressed="${S.playing === v.id}" aria-label="Nghe thử giọng ${esc(v.name)}">${S.playing === v.id ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>'}</button>
             <span class="grow"><b style="font-weight:600">${esc(v.name)}</b>${v.id === (S.voicesDoc?.default || "Bodi") ? ' <span class="pill p-mute">mặc định</span>' : ""}<br><span class="small">${esc(v.desc || "")}</span></span></div>`).join("")}</div>
           <span class="small">Bấm ▶ để nghe thử câu mẫu, bấm vào dòng để chọn giọng.</span>` : `<span class="small">Đang tải danh sách giọng…</span>`}</div>` : `<span class="small">Không lời: chỉ nhạc và tiếng động.</span>`}
+        <div class="row between"><label for="clarify" style="font-size:14px">Hỏi lại mình nếu yêu cầu chưa rõ<br><span class="small">Câu hỏi hiện ở Trang chủ</span></label><input id="clarify" type="checkbox" ${f.clarify ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red);flex-shrink:0"></div>
         <div class="row between"><label for="gate" style="font-size:14px">Cho mình duyệt kịch bản trước</label><input id="gate" type="checkbox" ${f.gate ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
         ${isAnime(f.style) ? `<div class="row between"><label for="gateA" style="font-size:14px">Duyệt ${f.style === "anime-dong" ? "animatic (bản dựng thô) trước khi quay" : "khung hình trước khi dựng"}</label><input id="gateA" type="checkbox" ${f.gateA ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>` : ""}
       </div>
@@ -463,7 +545,10 @@ a.link{color:var(--navy)}
     const r = route(); renderTabs(r);
     const fresh = render.last !== r; render.last = r;
     const keepScroll = fresh ? 0 : window.scrollY;
+    const ae = document.activeElement, keep = !fresh && ae && $("#view").contains(ae) ? (ae.id ? "#" + ae.id : ae.dataset.ans ? `[data-ans="${ae.dataset.ans}"]` : ae.dataset.fnote ? `[data-fnote="${ae.dataset.fnote}"]` : null) : null;
+    const sel = keep && "selectionStart" in ae ? [ae.selectionStart, ae.selectionEnd] : null;
     $("#view").innerHTML = V[r]();
+    if (keep) setTimeout(() => { const el = $(keep); if (el && document.activeElement !== el) { el.focus({ preventScroll: true }); if (sel) try { el.setSelectionRange(...sel); } catch {} } });
     window.scrollTo(0, keepScroll);
     bind(r);
   }
@@ -548,8 +633,12 @@ a.link{color:var(--navy)}
         const ok = await fireCrew("Đã duyệt chi phí video " + v.id + ", làm tiếp"); toast(ok ? "Đã duyệt chi phí. Đoàn phim làm tiếp." : "Đã duyệt. Nhắn \"chạy đi\" cho Claude để đoàn phim làm tiếp.");
       } catch { b.disabled = false; toast("Chưa lưu được, thử lại sau."); } });
     if (r === "new") {
-      const f = S.form, topic = $("#topic");
-      topic.addEventListener("input", () => f.topic = topic.value);
+      const f = S.form;
+      for (const k of ["brief", "must", "avoid", "links"]) { const el = $("#" + k); el.addEventListener("input", () => { f[k] = el.value; saveDraft(); }); }
+      document.querySelectorAll("[data-hint]").forEach(b => b.onclick = () => { const el = $("#brief"); f.brief = (f.brief.trim() ? f.brief.trimEnd() + "\n" : "") + b.dataset.hint + "."; el.value = f.brief; saveDraft(); el.focus(); });
+      const fp = $("#fpick"); if (fp) fp.onchange = () => { const list = [...fp.files]; fp.value = ""; addFiles(list); };
+      bindFiles();
+      $("#clarify").onchange = e => { f.clarify = e.target.checked; saveDraft(); };
       document.querySelectorAll("[data-style]").forEach(b => b.onclick = () => { f.style = b.dataset.style; f.gateA = f.style === "anime-dong"; render(); });
       $("#len").oninput = e => { f.length = +e.target.value; $("#lenv").textContent = fmtLen(f.length); $("#etav").textContent = "khoảng " + dur(etaTotal(f.style, f.length)); };
       document.querySelectorAll("[data-plat]").forEach(b => b.onclick = () => { f.platform = b.dataset.plat; f.length = Math.min(f.length, maxLen(f)); render(); });
@@ -559,13 +648,29 @@ a.link{color:var(--navy)}
       document.querySelectorAll("[data-play]").forEach(b => b.onclick = e => { e.stopPropagation(); playVoice(b.dataset.play); });
       document.querySelectorAll("[data-voice]").forEach(r => { const pick = () => { f.voice = r.dataset.voice; render(); }; r.onclick = pick; r.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }; });
       $("#newf").onsubmit = async e => {
-        e.preventDefault(); if (!f.topic.trim() || !S.db) return;
-        try { await S.db.collection("requests").add({ topic: f.topic.trim(), style: f.style, length: Math.min(f.length, maxLen(f)), platform: f.platform, aspect: platOf(f.platform)[2], gateScript: f.gate, gateAnimatic: isAnime(f.style) ? !!f.gateA : false, narration: !!f.narration, voice: f.narration ? curVoice() : "", status: "moi", createdAt: nowISO() });
-          S.form = { ...newForm(), voice: f.voice };
-          go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + f.topic.trim());
+        e.preventDefault(); if (!S.db) return;
+        if (!f.brief.trim() && !f.files.length) { toast("Viết yêu cầu hoặc thêm ít nhất một tệp"); $("#brief").focus(); return; }
+        if (f.files.some(x => x.status === "up")) { toast("Đợi tệp tải xong rồi gửi nhé"); return; }
+        const first = (f.brief.trim().split(/\n/)[0] || f.files[0]?.name || "Video mới").replace(/\s+/g, " ");
+        const topic = first.length > 80 ? first.slice(0, 77) + "…" : first;
+        const attachments = f.files.filter(x => x.status === "ok").map(x => ({ id: x.id, name: x.name, type: x.type, kind: x.kind, size: x.size, role: x.role, note: (x.note || "").trim() }));
+        try { await S.db.collection("requests").add({ v: 2, topic, brief: f.brief.trim(), must: f.must.trim(), avoid: f.avoid.trim(), links: f.links.trim(), attachments, clarify: !!f.clarify, style: f.style, length: Math.min(f.length, maxLen(f)), platform: f.platform, aspect: platOf(f.platform)[2], gateScript: f.gate, gateAnimatic: isAnime(f.style) ? !!f.gateA : false, narration: !!f.narration, voice: f.narration ? curVoice() : "", status: "moi", createdAt: nowISO() });
+          S.form = { ...newForm(), voice: f.voice }; saveDraft();
+          go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + topic + (attachments.length ? ` (${attachments.length} tệp đính kèm)` : ""));
           toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
         } catch (err) { toast("Chưa gửi được: " + (err?.code === "quota_exceeded" ? "cơ sở dữ liệu đã đầy." : "thử lại sau ít phút.")); }
       };
+    }
+    if (r === "home") {
+      document.querySelectorAll("[data-ans]").forEach(inp => inp.oninput = () => { const [id, i] = inp.dataset.ans.split("|"); (S.answers[id] ||= {})[i] = inp.value; });
+      document.querySelectorAll("[data-ansopt]").forEach(b => b.onclick = () => { const [id, i] = b.dataset.ansopt.split("|"); const a = (S.answers[id] ||= {}); a[i] = a[i] === b.dataset.val ? "" : b.dataset.val; render(); });
+      document.querySelectorAll("[data-askf]").forEach(fm => fm.onsubmit = async e => { e.preventDefault(); const id = fm.dataset.askf, q = S.requests.find(x => x.id === id); if (!q || !S.db) return;
+        const a = S.answers[id] || {}, answers = (q.questions || []).map((x, i) => ({ q: x.q, a: (a[i] || "").trim() }));
+        if (!answers.some(x => x.a) && !(a.extra || "").trim()) { toast("Trả lời ít nhất một câu, hoặc dặn \"các bạn tự chọn\""); return; }
+        const btn = fm.querySelector("[type=submit]"); btn.disabled = true;
+        try { await S.db.doc("requests/" + id).update({ answers, answerNote: (a.extra || "").trim(), status: "tra-loi", answeredAt: nowISO() }); delete S.answers[id];
+          const ok = await fireCrew("Trả lời câu hỏi cho yêu cầu: " + q.topic); toast(ok ? "Đã gửi. Đoàn phim làm tiếp ngay." : "Đã lưu. Nhắn \"chạy đi\" cho Claude để đoàn phim làm tiếp.");
+        } catch { btn.disabled = false; toast("Chưa gửi được, thử lại sau."); } });
     }
     if (r === "learn") {
       $("#learnf").onsubmit = async e => { e.preventDefault(); const url = $("#lurl").value.trim(), name = $("#lname").value.trim(), note = $("#lnote").value.trim();
