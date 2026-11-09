@@ -199,6 +199,41 @@ a.link{color:var(--navy)}
       <label for="afb-${esc(v.id)}" class="small">Cảnh nào cần sửa thì ghi ở đây (ví dụ: cảnh 3 cho bé quay mặt lại)</label>
       <textarea id="afb-${esc(v.id)}" rows="2"></textarea>
       <div class="tiles two"><button class="btn" data-animfb="${esc(v.id)}">Gửi góp ý</button><button class="btn ok" data-animok="${esc(v.id)}">Duyệt, bắt đầu quay</button></div></details>`;
+  // Dự toán thời gian: số phút của từng bước STEPS theo phong cách, ước lượng từ các video đã làm (mốc 45 giây).
+  // Đoàn phim có thể ghi đè bảng bằng app/stats.etaMinutes[style]; ghi videos/<id>.stageStartedAt (lúc bắt đầu bước hiện tại) và .eta (giờ dự kiến xong, ISO) thì app dùng số đó.
+  const ETA_MIN = { "anime-dong": [10, 5, 25, 35, 10, 5], "anime-tinh": [10, 3, 20, 0, 10, 5], "ve-tinh": [8, 2, 10, 12, 8, 5], "thi-nghiem": [8, 2, 12, 15, 8, 5], _: [8, 2, 12, 12, 8, 5] };
+  const ETA_SCALE = [0, 0, 1, 1, 0.5, 0]; // bước nào dài ra theo độ dài phim
+  const etaTable = (style, len) => { const base = S.stats?.etaMinutes?.[style] || ETA_MIN[style] || ETA_MIN._, k = (+len || 45) / 45;
+    return STEPS.map((_, i) => Math.round((base[i] || 0) * (1 + (k - 1) * ETA_SCALE[i]))); };
+  const etaTotal = (style, len) => etaTable(style, len).reduce((a, b) => a + b, 0);
+  const minsSince = iso => { const t = Date.parse(iso || ""); return isNaN(t) ? null : (Date.now() - t) / 6e4; };
+  const hhmm = d => d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+  const dur = m => { m = Math.max(1, Math.round(m)); return m < 60 ? m + " phút" : Math.floor(m / 60) + " giờ" + (m % 60 ? " " + (m % 60) + " phút" : ""); };
+  const waitingUser = v => scriptWaiting(v) || animWaiting(v) || needCost(v);
+  function etaInfo(v) {
+    if (!(v.status === "dang-lam" || v.status === "dang-sua")) return null;
+    if (waitingUser(v)) return { wait: true };
+    const tbl = etaTable(v.style, v.duration || v.length);
+    let idx = STEPS.indexOf(v.stage); if (idx < 0) idx = v.status === "dang-sua" ? 2 : 0;
+    const cur = tbl[idx] || 3, since = minsSince(v.stageStartedAt || v.updatedAt) ?? 0;
+    let left = Math.max(2, cur - since) + tbl.slice(idx + 1).reduce((a, b) => a + b, 0);
+    if (v.status === "dang-sua") left *= 0.6; // sửa theo góp ý: chỉ làm lại cảnh bị góp ý
+    const crewEta = Date.parse(v.eta || ""), fromCrew = !isNaN(crewEta);
+    if (fromCrew) left = (crewEta - Date.now()) / 6e4;
+    const quiet = minsSince(v.updatedAt) ?? 0, revived = minsSince(v.reviveAt);
+    const stale = (quiet > 30 && quiet > cur + 20) || (fromCrew && left < -20);
+    return { left, end: new Date(Date.now() + Math.max(0, left) * 6e4), quiet, stale, fromCrew, revivedRecently: revived != null && revived < 15 && revived < quiet };
+  }
+  function etaHtml(v) {
+    const e = etaInfo(v); if (!e) return "";
+    if (e.wait) return `<span class="small">Đang chờ bạn duyệt. Đồng hồ chạy lại khi bạn bấm duyệt.</span>`;
+    const upd = `cập nhật ${e.quiet < 1 ? "vừa xong" : dur(e.quiet) + " trước"}`;
+    if (e.revivedRecently) return `<span class="small" style="color:var(--gold)">Đã gọi lại đoàn phim lúc ${hhmm(new Date(Date.parse(v.reviveAt)))}, chờ họ nhận việc (1–3 phút).</span>`;
+    if (e.stale) return `<span class="small" style="color:var(--red-ink)"><b>Có thể đã dừng:</b> không thấy đoàn phim cập nhật ${dur(e.quiet)} (từ ${hhmm(new Date(Date.parse(v.updatedAt)))}).</span>
+      ${S.db ? `<button class="btn sm" data-revive="${esc(v.id)}" style="align-self:flex-start">Gọi đoàn phim làm tiếp</button>` : ""}`;
+    if (e.left <= 0) return `<span class="small">Sắp xong, đang hoàn tất · ${upd}</span>`;
+    return `<span class="small">Dự kiến xong khoảng <b style="color:var(--ink)">${hhmm(e.end)}</b> · còn ~${dur(e.left)}${e.fromCrew ? "" : " (ước tính)"} · ${upd}</span>`;
+  }
   // Tải về máy: videos/<id>.downloads = [{label, res, mb, asset}] (đoàn phim tạo bằng studio/tools/renditions.py); chưa có thì tải bản đang xem trên app
   const DONE = ["cho-duyet", "da-duyet", "da-dang"];
   const dlList = v => !DONE.includes(v.status) ? [] : (v.downloads?.length ? v.downloads : v.video ? [{ label: "Bản trên app", res: "", asset: v.video }] : []);
@@ -221,7 +256,7 @@ a.link{color:var(--navy)}
           <span><span class="pill ${st[1]}">${st[0]}${v.round ? " · vòng " + esc(v.round) : ""}</span></span>
           <span style="font:400 23px/1.05 var(--display)">${esc(v.title)}</span>
           <span class="small">${v.platform ? esc(platOf(v.platform)[1]) + " · " : ""}${esc(styleName(v.style))}${v.duration ? " · " + esc(v.duration) + " giây" : ""}</span>
-          ${working ? `<span class="small">${esc(v.stageNote || "")}</span>` : ""}
+          ${working ? `<span class="small">${esc(v.stageNote || "")}</span><span class="col" style="gap:6px" data-eta="${esc(v.id)}">${etaHtml(v)}</span>` : ""}
           ${costLine(v)}
           ${needCost(v) ? `<button class="btn ok sm" data-approvecost="${esc(v.id)}">Duyệt chi phí ${esc(usd(v.estimate.usd))}</button>` : ""}
           ${v.status === "cho-duyet" && v.video ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
@@ -249,7 +284,7 @@ a.link{color:var(--navy)}
       <div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
       ${waiting.length ? `<h2>Cần bạn duyệt</h2>${waiting.map(v => videoCard(v)).join("")}` : ""}
-      ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${esc(r.genre)} · ${esc(styleName(r.style))} · chờ đoàn phim nhận</div></div><span class="pill p-mute">Mới</span></div>`).join("")}</div>
+      ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${r.genre ? esc(r.genre) + " · " : ""}${esc(styleName(r.style))} · chờ đoàn phim nhận · làm khoảng ${dur(etaTotal(r.style, r.length))}</div></div><span class="pill p-mute">Mới</span></div>`).join("")}</div>
         <p class="small">Đoàn phim được gọi ngay khi bạn gửi. Nếu yêu cầu nằm ở đây quá 10 phút, nhắn "chạy đi" cho Claude.</p>` : ""}
       ${working.length ? `<h2>Đang làm</h2>${working.map(v => videoCard(v)).join("")}` : ""}
       ${ready.length ? `<h2>Chờ đăng</h2>${ready.map(v => videoCard(v)).join("")}` : ""}
@@ -284,6 +319,7 @@ a.link{color:var(--navy)}
         ${isAnime(f.style) ? `<div class="row between"><label for="gateA" style="font-size:14px">Duyệt ${f.style === "anime-dong" ? "animatic (bản dựng thô) trước khi quay" : "khung hình trước khi dựng"}</label><input id="gateA" type="checkbox" ${f.gateA ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>` : ""}
       </div>
       <p class="small" style="text-align:center;margin:0">Có kịch bản xong, đoàn phim <b>dự toán chi phí</b> cho cả video. Vượt trần thì dừng chờ bạn duyệt. Làm xong sẽ gửi video về mục "Cần bạn duyệt".</p>
+      <p class="small" style="text-align:center;margin:0">Thời gian làm ước tính: <b id="etav">khoảng ${dur(etaTotal(f.style, Math.min(f.length, maxLen(f))))}</b>, chưa tính lúc chờ bạn duyệt.</p>
       <button class="btn primary big" type="submit" ${S.db ? "" : "disabled"}>Giao cho đoàn phim</button>
       ${S.db ? "" : `<p class="small">Không kết nối được cơ sở dữ liệu của app, nên chưa gửi được yêu cầu.</p>`}
     </form>`;
@@ -461,7 +497,7 @@ a.link{color:var(--navy)}
       const f = S.form, topic = $("#topic");
       topic.addEventListener("input", () => f.topic = topic.value);
       document.querySelectorAll("[data-style]").forEach(b => b.onclick = () => { f.style = b.dataset.style; f.gateA = f.style === "anime-dong"; render(); });
-      $("#len").oninput = e => { f.length = +e.target.value; $("#lenv").textContent = fmtLen(f.length); };
+      $("#len").oninput = e => { f.length = +e.target.value; $("#lenv").textContent = fmtLen(f.length); $("#etav").textContent = "khoảng " + dur(etaTotal(f.style, f.length)); };
       document.querySelectorAll("[data-plat]").forEach(b => b.onclick = () => { f.platform = b.dataset.plat; f.length = Math.min(f.length, maxLen(f)); render(); });
       $("#gate").onchange = e => f.gate = e.target.checked;
       $("#narr").onchange = e => { f.narration = e.target.checked; render(); };
@@ -516,6 +552,14 @@ a.link{color:var(--navy)}
     }
 
   }
+
+  // Gọi lại đoàn phim khi video đứng quá lâu (nút nằm trong vùng dự kiến, vùng này tự làm mới mỗi 30 giây)
+  document.addEventListener("click", async e => { const b = e.target.closest("[data-revive]"); if (!b || !S.db) return;
+    const v = S.videos.find(x => x.id === b.dataset.revive); if (!v) return; b.disabled = true;
+    try { await S.db.doc("videos/" + v.id).update({ reviveAt: nowISO() }); } catch {}
+    const ok = await fireCrew(`Video ${v.id} đứng ở bước ${v.stage || "?"} từ ${v.updatedAt || "?"} (không thấy cập nhật). Kiểm tra và làm tiếp từ bước này.`);
+    toast(ok ? "Đã gọi đoàn phim làm tiếp." : "Chưa gọi được, nhắn \"chạy đi\" cho Claude."); if (!ok) b.disabled = false; });
+  setInterval(() => document.querySelectorAll("[data-eta]").forEach(el => { const v = S.videos.find(x => x.id === el.dataset.eta); if (v) el.innerHTML = etaHtml(v); }), 30000);
 
   render();
   (async () => {
