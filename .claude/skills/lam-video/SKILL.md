@@ -90,6 +90,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 2. Cập nhật `app/crew` (agent nào đang làm) và `videos/<slug>.stage` ở mỗi mốc.
 3. Video xong: tải `final.mp4` và `thumbnail.png` lên app (`Artifact` với `asset: true`, file video ≤ 15MB), ghi `video`, `thumb`, `publish`, `report`, `status: "cho-duyet"`, `round + 1`.
 4. Mọi lần ghi phải truyền `if_version` của bản đã đọc.
+5. Người dùng có thể **xóa video** trong app (doc `videos/<slug>` biến mất, video và ảnh bìa bị xóa). Đang làm mà thấy doc đã mất thì dừng video đó, không tạo lại doc. Giữ thư mục `projects/<slug>` trong repo.
 
 ### Học phong cách từ app (`styleRequests`)
 1. Đổi `status` thành `"dang-hoc"`, ghi `result` ngắn ở mỗi bước (app hiện dòng này).

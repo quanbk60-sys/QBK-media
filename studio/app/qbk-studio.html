@@ -86,6 +86,10 @@ nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:re
 .tab{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:600;min-height:48px;justify-content:center;border-radius:10px;position:relative}
 .tab[aria-current="page"]{color:var(--red);font-weight:700}
 .tab .badge{position:absolute;top:2px;right:calc(50% - 20px);min-width:16px;height:16px;border-radius:8px;background:var(--red);color:var(--on-accent);font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+.sheet .box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;max-width:520px;width:100%;display:flex;flex-direction:column;gap:12px;margin-bottom:env(safe-area-inset-bottom,0px)}
+.btn.danger{background:var(--red-bg);border-color:var(--red);color:var(--red-ink)}
+.del{background:none;border:0;color:var(--muted);font:600 12.5px var(--body);text-decoration:underline;cursor:pointer;padding:6px 0;min-height:32px;align-self:flex-start}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:12px;font-size:14px;max-width:min(92vw,480px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
 .back{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);border-radius:10px;text-decoration:none}
 .small{font-size:12px;color:var(--muted)}
@@ -97,6 +101,7 @@ a.link{color:var(--navy)}
   <main id="view" aria-live="polite"></main>
   <nav class="tabs" aria-label="Điều hướng chính"><div class="in" id="tabs"></div></nav>
   <div class="toast" id="toast" role="status" hidden></div>
+  <div class="sheet" id="sheet" hidden></div>
 </div>
 
 <script>
@@ -121,7 +126,7 @@ a.link{color:var(--navy)}
     try { await S.mcp.callTool("Claude Code Remote", "fire_trigger", { trigger_id: TRIGGER, text: why }); return true; }
     catch (e) { console.warn("fire_trigger", e?.code); return false; }
   }
-  const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, ready: false,
+  const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
     sel: null, draftFb: [], form: { topic: "", genre: "Khoa học", style: "bang-phan", length: 60, gate: false } };
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -169,6 +174,7 @@ a.link{color:var(--navy)}
           ${working ? `<span class="small">${esc(v.stageNote || "")}</span>` : ""}
           ${v.status === "cho-duyet" ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
           ${v.status === "da-duyet" ? `<a class="btn sm" href="#post" data-sel="${esc(v.id)}">Mở bộ đăng bài</a>` : ""}
+          ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
         </div>
       </div>
       ${working ? `<div class="col" style="margin-top:10px;gap:4px"><div class="steps">${STEPS.map((_, i) => `<i class="${i < stepIdx ? "done" : i === stepIdx ? "now" : ""}"></i>`).join("")}</div>
@@ -192,6 +198,7 @@ a.link{color:var(--navy)}
         <p class="small">Đoàn phim được gọi ngay khi bạn gửi. Nếu yêu cầu nằm ở đây quá 10 phút, nhắn "chạy đi" cho Claude.</p>` : ""}
       ${working.length ? `<h2>Đang làm</h2>${working.map(v => videoCard(v)).join("")}` : ""}
       ${ready.length ? `<h2>Chờ đăng</h2>${ready.map(v => videoCard(v)).join("")}` : ""}
+      ${S.videos.some(v => v.status === "da-dang" || v.status === "tam-dung") ? `<details class="card"><summary style="cursor:pointer;font-weight:600;min-height:32px">Đã đăng và tạm dừng (${S.videos.filter(v => v.status === "da-dang" || v.status === "tam-dung").length})</summary><div class="col" style="margin-top:10px">${S.videos.filter(v => v.status === "da-dang" || v.status === "tam-dung").map(v => videoCard(v)).join("")}</div></details>` : ""}
       ${S.ready && !waiting.length && !working.length && !ready.length && !pending.length ? `<div class="empty">Chưa có video nào đang làm. Bấm "Làm video mới" hoặc chọn một trend.</div>` : ""}
       <div class="card info col"><b style="color:var(--navy)">Dùng như app trên điện thoại</b><span style="font-size:13.5px">Mở trang này bằng trình duyệt, chọn "Thêm vào màn hình chính" (Safari: nút Chia sẻ; Chrome: menu ⋮).</span></div>`;
   };
@@ -253,7 +260,8 @@ a.link{color:var(--navy)}
       <div class="tiles two">
         <button class="btn" id="sendfb" ${S.draftFb.length && S.db ? "" : "disabled"}>Gửi góp ý (${S.draftFb.length})</button>
         <button class="btn ok" id="approve" ${S.db ? "" : "disabled"}>Duyệt video</button>
-      </div>`;
+      </div>
+      ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video này</button>` : ""}`;
   };
 
   V.post = () => {
@@ -339,7 +347,29 @@ a.link{color:var(--navy)}
     bind(r);
   }
 
+  function askDelete(v) {
+    const sh = $("#sheet"), working = v.status === "dang-lam" || v.status === "dang-sua";
+    sh.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-labelledby="dt"><b id="dt" style="font-size:17px">Xóa "${esc(v.title)}"?</b>
+      <span style="font-size:14px">Video, ảnh bìa và bộ đăng bài sẽ bị xóa khỏi app. Không khôi phục được.${working ? " <b>Video này đang làm dở</b>; đoàn phim sẽ không cập nhật nó nữa." : ""} Bản lưu trong repo GitHub (nếu có) vẫn còn.</span>
+      <div class="tiles two"><button class="btn" id="dcancel">Hủy</button><button class="btn danger" id="dok">Xóa</button></div></div>`;
+    sh.hidden = false; $("#dcancel").focus();
+    const close = () => { sh.hidden = true; sh.innerHTML = ""; };
+    sh.onclick = e => { if (e.target === sh) close(); };
+    $("#dcancel").onclick = close;
+    $("#dok").onclick = async () => {
+      $("#dok").disabled = true;
+      try {
+        await S.db.doc("videos/" + v.id).delete();
+        const others = S.videos.filter(x => x.id !== v.id);
+        if (S.assets) for (const id of [v.video, v.thumb]) if (id && !others.some(x => x.video === id || x.thumb === id)) { try { await S.assets.delete(id); } catch {} }
+        if (S.sel === v.id) S.sel = null;
+        close(); toast("Đã xóa video"); if (route() !== "home") go("home");
+      } catch (e) { close(); toast("Chưa xóa được: " + (e?.code === "permission_denied" || e?.code === "not_granted" ? "bạn không có quyền xóa." : "thử lại sau.")); }
+    };
+  }
+
   function bind(r) {
+    document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { const v = S.videos.find(x => x.id === b.dataset.del); if (v) askDelete(v); });
     document.querySelectorAll("[data-sel]").forEach(a => a.addEventListener("click", () => { S.sel = a.dataset.sel; S.draftFb = []; }));
     if (r === "new") {
       const f = S.form, topic = $("#topic");
@@ -409,6 +439,7 @@ a.link{color:var(--navy)}
   (async () => {
     const db = await window.claude?.use?.("db").catch(() => null);
     S.dl = await window.claude?.use?.("downloads").catch(() => null);
+    S.assets = await window.claude?.use?.("assets").catch(() => null);
     S.mcp = await window.claude?.use?.("mcp").catch(() => null);
     if (!db) { S.ready = true; render(); return; }
     S.db = db;
