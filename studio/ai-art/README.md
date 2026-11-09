@@ -20,10 +20,3 @@ Câu phong cách chung: "Hand-painted anime background art style of classic Japa
 
 Chi phí lập bộ này: 0,87 USD (12 ảnh, kể cả 2 ảnh làm lại).
 
-## `phong-thu/` (phong cách `phong-thu`, người thật nói chuyện)
-| File | Nội dung | Ghi chú |
-|---|---|---|
-| `presenter-base.png` | Người dẫn "Lan" (nhân vật của kênh) ngồi trước micro, phòng thu tối, 2K | miệng 0.533,0.47; mắt 0.523,0.411; logo micro cần `--blur 0.87,0.49,0.995,0.53` |
-| `mouth-half.png`, `mouth-open.png`, `blink.png` | Biến thể cùng khung: miệng hé, miệng mở, nhắm mắt | tạo bằng `--ref presenter-base.png`; `talking.py` tự căn khớp |
-
-Chi phí: 0,40 USD (4 ảnh 2K).

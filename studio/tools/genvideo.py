@@ -7,7 +7,7 @@ genvideo.py "PROMPT" OUT.mp4 [--image ảnh.png ...] [--video mẫu.mp4] [--aspe
 - --image: ảnh nhân vật / khung đầu (giữ mặt, trang phục). --video: video mẫu chuyển động (ví dụ điệu nhảy).
 - Trước khi gọi: ước tính giá = seconds x giá/giây, so với trần "video_month_usd" và "video_per_job_usd" trong studio/budget.json.
 - Sau khi gọi: đo độ dài video thật, ghi studio/costs.jsonl (kind "video").
-- Chỉ dùng ảnh của chính người dùng, người đã đồng ý, hoặc nhân vật do AI tạo. Không làm với trẻ em, người nổi tiếng,
+- KHÔNG làm người thật: chỉ nhân vật anime hoặc cảnh vật. Trần mặc định 0 (tắt). Không làm với trẻ em, người nổi tiếng,
   không tạo nội dung khiêu dâm. Đăng mạng xã hội phải gắn nhãn nội dung AI.
 """
 import base64, datetime, json, mimetypes, os, subprocess, sys, urllib.request

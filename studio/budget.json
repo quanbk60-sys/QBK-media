@@ -5,7 +5,7 @@
  "projects": {
   "_style-phong-canh": 3
  },
- "video_month_usd": 1.0,
- "video_per_job_usd": 1.0,
- "note_video": "Video Gemini Omni (~0,07 USD/giây). 09/11/2026 người dùng duyệt thử 1 clip nhảy khoảng 8 giây (~0,6 USD). Chưa có trần chính thức: chỉ người dùng được nâng."
+ "video_month_usd": 0,
+ "video_per_job_usd": 0,
+ "note_video": "Video Gemini Omni (~0,07 USD/giây): đang tắt (trần 0). Thử nhảy người thật 09/11 đã dừng vì kênh không làm người thật. Chỉ người dùng được mở lại."
 }
