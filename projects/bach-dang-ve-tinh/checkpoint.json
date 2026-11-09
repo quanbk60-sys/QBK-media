@@ -1,6 +1,6 @@
 {
  "slug": "bach-dang-ve-tinh",
- "stage": "qa-done",
+ "stage": "cho-duyet",
  "style": "ve-tinh",
  "round": 0,
  "tts": {
@@ -12,5 +12,7 @@
   "duration_orig_s": 74.72
  },
  "video": "output/bach-dang-ve-tinh.mp4",
- "duration_s": 63.3
+ "duration_s": 63.3,
+ "thumbnail": "output/thumbnail.png",
+ "publish": "publish.md"
 }
