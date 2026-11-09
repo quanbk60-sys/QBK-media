@@ -90,6 +90,8 @@ nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:re
 .sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px}
 .sheet .box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;max-width:520px;width:100%;display:flex;flex-direction:column;gap:12px;margin-bottom:env(safe-area-inset-bottom,0px)}
 .btn.danger{background:var(--red-bg);border-color:var(--red);color:var(--red-ink)}
+.dl summary{cursor:pointer;font-weight:600;font-size:13.5px;min-height:36px;line-height:36px}
+.dlrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .del{background:none;border:0;color:var(--muted);font:600 12.5px var(--body);text-decoration:underline;cursor:pointer;padding:6px 0;min-height:32px;align-self:flex-start}
 .voices{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto;padding-right:2px}
 .vo{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;min-height:52px}
@@ -192,6 +194,17 @@ a.link{color:var(--navy)}
       <label for="afb-${esc(v.id)}" class="small">Cảnh nào cần sửa thì ghi ở đây (ví dụ: cảnh 3 cho bé quay mặt lại)</label>
       <textarea id="afb-${esc(v.id)}" rows="2"></textarea>
       <div class="tiles two"><button class="btn" data-animfb="${esc(v.id)}">Gửi góp ý</button><button class="btn ok" data-animok="${esc(v.id)}">Duyệt, bắt đầu quay</button></div></details>`;
+  // Tải về máy: videos/<id>.downloads = [{label, res, mb, asset}] (đoàn phim tạo bằng studio/tools/renditions.py); chưa có thì tải bản đang xem trên app
+  const DONE = ["cho-duyet", "da-duyet", "da-dang"];
+  const dlList = v => !DONE.includes(v.status) ? [] : (v.downloads?.length ? v.downloads : v.video ? [{ label: "Bản trên app", res: "", asset: v.video }] : []);
+  async function saveVideo(v, d, btn) {
+    if (!S.dl) { toast("Thiết bị này không cho tải file từ app."); return; }
+    const old = btn.innerHTML; btn.disabled = true; btn.textContent = "Đang chuẩn bị…";
+    try { const res = await fetch(blob(d.asset)); const data = await res.blob();
+      await S.dl.save({ filename: `${v.id}-${(d.res || "app").replace(/\W/g, "")}.mp4`, data }); toast("Đã lưu video " + (d.res || ""));
+    } catch (e) { toast(e?.code === "declined" ? "Đã hủy tải" : "Chưa tải được file"); }
+    btn.disabled = false; btn.innerHTML = old;
+  }
   function videoCard(v, big) {
     const st = STATUS[v.status] || ["", "p-mute"];
     const stepIdx = Math.max(0, STEPS.indexOf(v.stage));
@@ -213,6 +226,7 @@ a.link{color:var(--navy)}
       </div>
       ${scriptWaiting(v) ? `<div style="margin-top:10px">${scriptBox(v)}</div>` : ""}
       ${animWaiting(v) ? `<div style="margin-top:10px">${animBox(v)}</div>` : ""}
+      ${dlList(v).length ? `<details class="dl" style="margin-top:10px"><summary>Tải về máy</summary><div class="dlrow">${dlList(v).map((d, i) => `<button class="btn sm" data-dlv="${esc(v.id)}" data-dli="${i}"><b>${esc(d.label)}</b>&nbsp;<span class="small">${esc(d.res || "")}${d.mb ? " · " + esc(String(d.mb).replace(".", ",")) + " MB" : ""}</span></button>`).join("")}</div></details>` : ""}
       ${working ? `<div class="col" style="margin-top:10px;gap:4px"><div class="steps">${STEPS.map((_, i) => `<i class="${i < stepIdx ? "done" : i === stepIdx ? "now" : ""}"></i>`).join("")}</div>
       <div class="steplab">${STEPS.map((s, i) => `<span class="${i === stepIdx ? "now" : ""}">${s}</span>`).join("")}</div></div>` : ""}
     </div>`;
@@ -314,7 +328,7 @@ a.link{color:var(--navy)}
       <div class="row" style="align-items:flex-start">
         ${v.thumb ? `<img class="thumb" style="width:96px" src="${blob(v.thumb)}" alt="Ảnh bìa">` : ""}
         <div class="col" style="flex:1">
-          ${v.video ? `<button class="btn dark" data-save="video">Tải video</button>` : ""}
+          ${dlList(v).map((d, i) => `<button class="btn ${i ? "" : "dark"}" data-dlv="${esc(v.id)}" data-dli="${i}">Tải video ${esc(d.label.toLowerCase())}${d.res ? " · " + esc(d.res) : ""}</button>`).join("")}
           ${v.thumb ? `<button class="btn" data-save="thumb">Tải ảnh bìa</button>` : ""}
           <span class="small">${esc(p.when || "")}</span>
         </div>
@@ -417,6 +431,7 @@ a.link{color:var(--navy)}
         await S.db.doc("videos/" + v.id).update({ scriptStatus: "dang-sua", stageNote: "Biên kịch đang sửa kịch bản theo góp ý của bạn", updatedAt: nowISO() });
         const ok = await fireCrew("Góp ý kịch bản video " + v.id); toast(ok ? "Đã gửi góp ý. Biên kịch sửa ngay." : "Đã lưu góp ý. Nhắn \"chạy đi\" cho Claude.");
       } catch { b.disabled = false; toast("Chưa gửi được, thử lại sau."); } });
+    document.querySelectorAll("[data-dlv]").forEach(b => b.onclick = () => { const v = S.videos.find(x => x.id === b.dataset.dlv); const d = v && dlList(v)[+b.dataset.dli]; if (d) saveVideo(v, d, b); });
     document.querySelectorAll("[data-animok]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.animok); if (!v || !S.db) return;
       b.disabled = true;
       try { await S.db.doc("videos/" + v.id).update({ animaticStatus: "da-duyet", animaticApprovedAt: nowISO(), stage: "Quay", stageNote: "Bạn đã duyệt bản dựng thô, đoàn phim bắt đầu quay", updatedAt: nowISO() });

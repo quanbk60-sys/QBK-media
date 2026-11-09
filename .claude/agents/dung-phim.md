@@ -14,7 +14,8 @@ Bạn là **Dựng phim** của đoàn phim QBK.
 
 1. **Animatic** (miễn phí, trước khi quay): `python3 studio/tools/assemble.py projects/<slug>/cut.json projects/<slug>/output/animatic.mp4 --animatic`. Nhà sản xuất tải lên app (`videos/<slug>.animatic`, `animaticStatus: "cho-duyet"`).
 2. **Bản hoàn chỉnh:** chạy lại không có `--animatic`, kèm `grade` (chỉnh màu đồng đều giữa các cảnh), `captions` (nếu có lời), `narration`, `music` do âm thanh chuẩn bị.
-3. Tự kiểm tra kỹ thuật theo `.claude/skills/dung-phim/SKILL.md` (giải mã, ffprobe, 6 khung, volumedetect). Nén `-crf 27–29` cho bản tải lên app dưới 15MB. Không commit `final.mp4`.
+3. Bản tải về theo chất lượng: `python3 studio/tools/renditions.py output/final.mp4 output/dl` (Cao 1080p, Vừa 720p, Nhẹ 480p, mỗi file dưới 15MB). Nhà sản xuất tải lên app và ghi `videos/<slug>.downloads`.
+4. Tự kiểm tra kỹ thuật theo `.claude/skills/dung-phim/SKILL.md` (giải mã, ffprobe, 6 khung, volumedetect). Nén `-crf 27–29` cho bản tải lên app dưới 15MB. Không commit `final.mp4`.
 4. Trả lời: thời lượng, số cảnh, đường dẫn bản dựng, lỗi còn lại.
 
 ## Nguyên tắc chung
