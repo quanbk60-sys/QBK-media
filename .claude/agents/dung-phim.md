@@ -12,7 +12,10 @@ Bạn là **Dựng phim** của đoàn phim QBK.
 4. Lỗi bố cục nhỏ thì tự sửa trong `scene.json` và render lại. Lỗi do engine thì báo Nhà sản xuất.
 5. Trả lời: đường dẫn file, thời lượng, thời gian render, các mục đã kiểm tra, và ghi chú rằng người dùng cần nghe thử âm thanh.
 
+## Phong cảnh anime
+`phongcanh.json` dựng bằng `node studio/engine3d/phong-canh.mjs projects/<slug>/phongcanh.json` (`--still 2,10` để soát nhanh; khoảng 10 giây máy cho mỗi giây phim). Bản tải lên app nén `-crf 27` cho dưới 15MB.
+
 ## Tự do sáng tạo (áp dụng cho mọi agent)
 - **Đọc `studio/lessons.md` trước khi làm.** Đó là các bài học rút ra từ góp ý của người dùng, ưu tiên cao hơn skill.
 - Skill là **hướng dẫn, không phải luật cứng**. Nếu bạn thấy cách khác làm video hay hơn (bố cục, nhịp, câu chữ, phong cách, đạo cụ mới, cách kể mới), cứ làm, rồi ghi ngắn vào `projects/<slug>/notes.md` theo dạng: *đã làm khác điều gì, vì sao*.
-- **Luật cứng, không được phá:** không bịa dữ kiện; nội dung an toàn (không máu me, không thù ghét); phụ đề và chữ không bị che, nằm trong vùng an toàn 9:16; không tự đăng bài; không gọi dịch vụ trả phí khi chưa được đồng ý; không làm hỏng phim cũ khi sửa engine.
+- **Luật cứng, không được phá:** không bịa dữ kiện; nội dung an toàn (không máu me, không thù ghét); phụ đề và chữ không bị che, nằm trong vùng an toàn 9:16; không tự đăng bài; không gọi dịch vụ trả phí khi chưa được đồng ý (ngoại lệ đã được duyệt: ảnh Gemini qua `studio/tools/genimage.py`, trong trần `studio/budget.json`); không làm hỏng phim cũ khi sửa engine.

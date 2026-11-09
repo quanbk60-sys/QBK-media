@@ -13,7 +13,7 @@ import {spawn, spawnSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {SR, writeWav} from '../engine/lib/audio.mjs';
 const require = createRequire(new URL('../engine/package.json', import.meta.url));
-const {createCanvas, GlobalFonts} = require('@napi-rs/canvas');
+const {createCanvas, GlobalFonts, loadImage} = require('@napi-rs/canvas');
 const FONTS = new URL('../engine/fonts/', import.meta.url).pathname;
 try { GlobalFonts.registerFromPath(path.join(FONTS, 'InterDisplay-Black.otf'), 'Blk'); } catch {}
 
@@ -215,6 +215,15 @@ function bgValley(th, r) {
   layers.sky = sky; layers.ground = c; return layers;
 }
 
+function bgImage(img, horizon, th) { // ảnh phủ ngang khung, đường chân trời của ảnh trùng th.yH
+  const k = W / img.width * 1.04, dy = th.yH - horizon * img.height * k;
+  const [sky, sx] = mk(W, H), [c, g] = mk(W, H);
+  const [p, px] = mk(1, 1); px.drawImage(img, img.width / 2, 2, 1, 1, 0, 0, 1, 1); const d = px.getImageData(0, 0, 1, 1).data;
+  sx.fillStyle = `rgb(${d[0]},${d[1]},${d[2]})`; sx.fillRect(0, 0, W, H);
+  g.drawImage(img, (W - img.width * k) / 2, dy, img.width * k, img.height * k);
+  return {sky, ground: c, clouds: []};
+}
+
 // ===================== NHÂN VẬT ĐẠP XE (nhìn từ sau, trên cao) =====================
 function cyclist(g, x, yF, t, k = 1) {
   const ph = t * 2 * Math.PI * 0.9, bob = Math.sin(ph * 2) * 2.5 * k;
@@ -271,7 +280,7 @@ function cyclist(g, x, yF, t, k = 1) {
 }
 
 // ===================== THẾ GIỚI (đường đá, cỏ hoa, cây, nhà) =====================
-function makeWorld(th, seed) {
+function makeWorld(th, seed, art = {}) {
   const r = R(seed * 31 + 7), hue0 = th.grass[0], hue1 = th.grass[1];
   const spr = {tuft: [], flower: [], bush: [], tree: [], house: houseSprite(r)};
   for (let i = 0; i < 8; i++) spr.tuft.push(tuftSprite(r, lerp(hue0, hue1, r())));
@@ -282,7 +291,12 @@ function makeWorld(th, seed) {
   }
   for (let i = 0; i < 6; i++) spr.bush.push(bushSprite(r, lerp(hue0, hue1, r())));
   for (let i = 0; i < 3; i++) spr.tree.push(treeSprite(r, lerp(hue0 - 5, hue1, r())));
-  const pickFlower = q => { let a = q * th.flowers.reduce((s, f) => s + f[2], 0) * 4; for (const f of spr.flower) { a -= f.w; if (a <= 0) return f.c; } return spr.flower[0].c; };
+  // bộ hình vẽ sẵn (ảnh Gemini đã xóa nền) thay cho hình vẽ code khi có
+  if (art.tree?.length) spr.tree = art.tree;
+  if (art.house) spr.house = art.house;
+  if (art.bush?.length) spr.bush = Array.from({length: 6}, (_, i) => art.bush[i % art.bush.length]);
+  const pickFlower0 = q => { let a = q * th.flowers.reduce((s, f) => s + f[2], 0) * 4; for (const f of spr.flower) { a -= f.w; if (a <= 0) return f.c; } return spr.flower[0].c; };
+  const AF = 0.3, pickFlower = q => art.flower?.length && q < AF ? art.flower[Math.floor(q / AF * art.flower.length) % art.flower.length] : pickFlower0(art.flower?.length ? (q - AF) / (1 - AF) : q);
   // vật thể theo ô: deterministic theo chỉ số ô
   const cache = new Map();
   const cell = i => {
@@ -297,8 +311,8 @@ function makeWorld(th, seed) {
       if (q() < 0.07) out.push({X: s * (5 + q() * 6), zw: zw + q() * CELL, img: spr.bush[q() * 6 | 0], hw: 2 + q() * 2, flip: q() < 0.5});
     }
     // cây lớn bên phải, nhà gỗ bên trái theo nhịp
-    if (i % 40 === 23 && q() < th.tree + 0.3) out.push({X: 2.7 + q() * 1.4, zw, img: spr.tree[q() * 3 | 0], hw: 7 + q() * 2.5, flip: q() < 0.5, big: true});
-    if (i % 40 === 5 && q() < th.tree) out.push({X: -(3 + q() * 1.6), zw, img: spr.tree[q() * 3 | 0], hw: 6 + q() * 2, flip: true, big: true});
+    if (i % 40 === 23 && q() < th.tree + 0.3) out.push({X: 2.7 + q() * 1.4, zw, img: spr.tree[q() * spr.tree.length | 0], hw: 7 + q() * 2.5, flip: q() < 0.5, big: true});
+    if (i % 40 === 5 && q() < th.tree) out.push({X: -(3 + q() * 1.6), zw, img: spr.tree[q() * spr.tree.length | 0], hw: 6 + q() * 2, flip: true, big: true});
     if (th.house && i % 120 === 30) out.push({X: -3.4, zw, img: spr.house, hw: 7, flip: false, big: true});
     cache.set(i, out); if (cache.size > 2000) cache.delete(cache.keys().next().value);
     return out;
@@ -308,10 +322,12 @@ function makeWorld(th, seed) {
 
 // ===================== KHUNG HÌNH =====================
 function makeShotRenderer(sh) {
-  const th = THEMES[sh.theme || 'bien']; if (!th) throw new Error('theme? ' + sh.theme);
+  const th0 = THEMES[sh.theme || 'bien']; if (!th0) throw new Error('theme? ' + sh.theme);
+  // ảnh nền vẽ sẵn (ảnh Gemini): đặt đường chân trời của ảnh vào yH, điểm tụ của đường dịch theo
+  const yH = sh.bg ? (sh.yH ?? 430) : th0.yH, th = {...th0, yH, yV: sh.yV ?? th0.yV + (yH - th0.yH) * 0.35};
   const seed = sh.seed ?? 3, r = R(seed);
-  const bg = th.bg === 'sea' ? bgSea(th, r) : bgValley(th, r);
-  const world = makeWorld(th, seed);
+  const bg = sh._img ? bgImage(sh._img, sh.horizon ?? 0.3, th) : th.bg === 'sea' ? bgSea(th, r) : bgValley(th, r);
+  const world = makeWorld(th, seed, sh._art || {});
   const [fg, fgx] = mk(W, H), [tmp, tmpx] = mk(W, H), [mask, maskx] = mk(W, H), [out, o] = mk(W, H), [fin, fx] = mk(W, H);
   // mặt nạ mờ chuyển động: trong suốt ở giữa (quanh xe và điểm tụ), đậm dần ra mép và đáy
   { const gr = maskx.createRadialGradient(CX, th.yV + 240, 120, CX, th.yV + 300, 900); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(0.45, 'rgba(0,0,0,0.25)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); maskx.fillStyle = gr; maskx.fillRect(0, 0, W, H); }
@@ -331,7 +347,7 @@ function makeShotRenderer(sh) {
     const s = 3 + tl * speed, ctx = fgx;
     const cam = curve(s), dcam = (curve(s + 0.5) - curve(s)) / 0.5;
     const bendAt = z => curve(s + z) - cam - z * dcam;
-    const sway = Math.sin(tl * 0.6) * 8 + dcam * 40;
+    const sway = Math.sin(tl * 0.6) * 8 + dcam * 40, roll0 = -dcam * 0.03;
     const yOf = z => th.yV + CAMH * F / z, xOf = (X, z) => CX + sway + (X + bendAt(z)) * F / z;
     o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1;
     // nền: trời + mây trôi + đất xa, phóng chậm (camera tiến tới)
@@ -371,6 +387,12 @@ function makeShotRenderer(sh) {
         ctx.globalAlpha = fade;
         roundPoly(ctx, P.map(([x, y]) => [x, y + th3]), 0.3); ctx.fillStyle = hsl(hh, sat, l * 0.62); ctx.fill();
         roundPoly(ctx, P, 0.3); ctx.fillStyle = hsl(hh, sat, l); ctx.fill();
+        if (sh._art?.stone && za < 30) { // vân đá vẽ sẵn: mỗi viên lấy một mảng khác nhau
+          const st = sh._art.stone, xs = P.map(p => p[0]), ys = P.map(p => p[1]), bx = Math.min(...xs), by = Math.min(...ys), bw = Math.max(...xs) - bx, bh2 = Math.max(...ys) - by;
+          const sw = st.width * (0.3 + q() * 0.25), sh2 = sw * clamp(bh2 / Math.max(1, bw), 0.25, 1);
+          ctx.save(); roundPoly(ctx, P, 0.3); ctx.clip(); ctx.globalAlpha = fade * 0.82; ctx.drawImage(st, q() * (st.width - sw), q() * (st.height - sh2), sw, sh2, bx, by, bw, bh2); ctx.restore();
+          ctx.globalAlpha = fade * 0.18; roundPoly(ctx, P, 0.3); ctx.fillStyle = hsl(hh, sat, l); ctx.fill(); ctx.globalAlpha = fade;
+        }
         if (za < 14) { // ánh sáng mép xa, vệt nứt
           ctx.strokeStyle = hsl(hh, sat, Math.min(94, l + 14), 0.8); ctx.lineWidth = Math.max(1, 5 / za * 2); ctx.beginPath(); ctx.moveTo(lerp(P[0][0], P[1][0], 0.15), lerp(P[0][1], P[1][1], 0.15) + 2); ctx.lineTo(lerp(P[0][0], P[1][0], 0.85), lerp(P[0][1], P[1][1], 0.85) + 2); ctx.stroke();
           if (q() < 0.4) { ctx.strokeStyle = hsl(hh, sat, l * 0.6, 0.6); ctx.lineWidth = Math.max(1, 3 / za * 2); ctx.beginPath(); const u = 0.3 + q() * 0.4; ctx.moveTo(lerp(P[0][0], P[1][0], u), lerp(P[0][1], P[1][1], u) + 3); ctx.lineTo(lerp(P[3][0], P[2][0], u + (q() - 0.5) * 0.3), lerp(P[3][1], P[2][1], 0.5)); ctx.stroke(); }
@@ -384,7 +406,7 @@ function makeShotRenderer(sh) {
     const objs = []; for (let i = iFar; i >= iNear; i--) for (const ob of world.cell(i)) { const z = ob.zw - s; if (z > ZMIN * (ob.big ? 1.2 : 0.75) && z < ZMAX) objs.push([z, ob]); }
     objs.sort((a, b) => b[0] - a[0]);
     for (const [z, ob] of objs) {
-      const h = ob.hw * F / z * 0.55, w = h * ob.img.width / ob.img.height; if (h < 3) continue;
+      const asp = ob.img.width / ob.img.height, h = ob.hw * F / z * 0.55 / (!ob.big && asp > 1.3 ? asp * 0.7 : 1), w = h * asp; if (h < 3) continue;
       const x = xOf(ob.X, z), y = yOf(z) + h * 0.04;
       const a = clamp((ZMAX - z) / 6);
       ctx.globalAlpha = a;
@@ -404,7 +426,12 @@ function makeShotRenderer(sh) {
     tmpx.globalAlpha = 1; tmpx.globalCompositeOperation = 'destination-in'; tmpx.drawImage(mask, 0, 0); tmpx.globalCompositeOperation = 'source-over';
     o.drawImage(fg, 0, 0); o.drawImage(tmp, 0, 0);
     // xe vẽ sau cùng (không mờ)
-    cyclist(o, CX + sway * 0.6 + Math.sin(tl * 0.9) * 6, yOf(ZCYC), t, 0.98);
+    const cxp = CX + sway * 0.6 + Math.sin(tl * 0.9) * 6, cyp = yOf(ZCYC);
+    if (sh._art?.cyclist) { // người đạp xe vẽ sẵn: bóng đổ + nhún theo nhịp đạp + lắc nhẹ
+      const img = sh._art.cyclist, hh = 560, ww = hh * img.width / img.height, ph = t * 2 * Math.PI * 0.9;
+      o.fillStyle = 'rgba(20,30,40,0.36)'; o.beginPath(); o.moveTo(cxp - 6, cyp); o.quadraticCurveTo(cxp - 70, cyp + 60, cxp - 170, cyp + 115); o.quadraticCurveTo(cxp - 215, cyp + 140, cxp - 235, cyp + 112); o.quadraticCurveTo(cxp - 150, cyp + 70, cxp + 6, cyp); o.fill();
+      o.save(); o.translate(cxp, cyp + Math.sin(ph * 2) * 2.5); o.rotate(Math.sin(ph) * 0.018 + roll0); o.drawImage(img, -ww / 2, -hh, ww, hh); o.restore();
+    } else cyclist(o, cxp, cyp, t, 0.98);
     // ánh nắng + họa tiết màu
     const sun = o.createRadialGradient(W * 0.85, th.yH * 0.4, 20, W * 0.85, th.yH * 0.4, 900); sun.addColorStop(0, 'rgba(255,250,225,0.35)'); sun.addColorStop(1, 'rgba(255,250,225,0)'); o.fillStyle = sun; o.fillRect(0, 0, W, H);
     const vg = o.createRadialGradient(CX, H * 0.48, H * 0.35, CX, H * 0.5, H * 0.75); vg.addColorStop(0, 'rgba(0,10,30,0)'); vg.addColorStop(1, 'rgba(0,10,30,0.28)'); o.fillStyle = vg; o.fillRect(0, 0, W, H);
@@ -435,6 +462,13 @@ const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(k);
 const file = args.find(a => a.endsWith('.json')); if (!file) { console.error('usage: node phong-canh.mjs phongcanh.json [--from S] [--to S] [--still T]'); process.exit(2); }
 const base = path.dirname(path.resolve(file)), S = JSON.parse(fs.readFileSync(file, 'utf8'));
 const fps = Number(opt('--fps', S.fps || 30)), dur = S.duration || S.shots.at(-1).end;
+const artCache = {}, img = async f => artCache[f] ??= await loadImage(f);
+for (const sh of S.shots) {
+  if (sh.bg) sh._img = await img(path.join(base, sh.bg));
+  const a = sh.art ?? S.art; if (!a) continue; // {"dir": "...", "tree": [...], "house": "...", "flower": [...], "bush": [...], "cyclist": "..."}
+  const d = path.join(base, a.dir || '.'), load = async x => x ? img(path.join(d, x.endsWith('.png') ? x : x + '.png')) : undefined;
+  sh._art = {tree: await Promise.all((a.tree || []).map(load)), house: await load(a.house), stone: await load(a.stone), flower: await Promise.all((sh.flowersArt || a.flower || []).map(load)), bush: await Promise.all((a.bush || []).map(load)), cyclist: await load(a.cyclist)};
+}
 const renderers = S.shots.map(sh => ({sh, f: makeShotRenderer(sh)}));
 const XF = S.crossfade ?? 0.6;
 function frameAt(t) {

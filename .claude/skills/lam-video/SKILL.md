@@ -66,7 +66,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
-| Thư giãn, chill, trích dẫn, tâm sự | `phong-canh-3d`: **dựng bằng `studio/engine3d/phong-canh.mjs`** (tranh phong cảnh anime, người đạp xe đổ dốc, cảnh `bien`/`nui`, nhạc êm tự tổng hợp). Xem `studio/engine3d/README.md`, mẫu `projects/_mau/phong-canh-3d/` |
+| Thư giãn, chill, trích dẫn, tâm sự | `phong-canh-3d`: **dựng bằng `studio/engine3d/phong-canh.mjs`** với tranh nền và vật thể AI có sẵn trong `studio/ai-art/phong-canh/` (người đạp xe đổ dốc, cảnh biển và núi, nhạc êm tự tổng hợp). Xem `studio/engine3d/README.md`, mẫu `projects/_mau/phong-canh-ai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
@@ -107,6 +107,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 ## Nguyên tắc
 - **Agent được sáng tạo.** Skill là hướng dẫn, không phải luật cứng. Luật cứng xem trong file của từng agent: không bịa, nội dung an toàn, không che phụ đề, không tự đăng, không trả phí khi chưa được đồng ý.
 - **Miễn phí trước.** Mọi agent đọc `studio/lessons.md` trước khi làm.
+- **Ảnh AI (Gemini, có phí, người dùng đã duyệt 09/11/2026).** Chỉ qua `studio/tools/genimage.py` (tự chặn khi vượt trần `studio/budget.json`, tự ghi `studio/costs.jsonl`). Dùng lại hình trong `studio/ai-art/` trước khi tạo mới. Mặc định mỗi video ≤ 0,6 USD, mỗi tháng ≤ 5 USD; chỉ người dùng được nâng trần. Video có dùng ảnh AI thì ghi số tiền vào `report[]` của `videos/<slug>` (ví dụ "Ảnh AI: 3 tranh nền, 0,30 USD").
 - Bị ngắt giữa chừng thì đọc `checkpoint.json` và làm tiếp, không làm lại từ đầu.
 
 ## Công cụ của studio

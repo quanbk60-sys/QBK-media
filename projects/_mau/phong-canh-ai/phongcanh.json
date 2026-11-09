@@ -1,0 +1,5 @@
+{"fps": 30, "music": true,
+ "art": {"dir": "../../../studio/ai-art/phong-canh", "tree": ["tree-1", "tree-2"], "house": "house", "bush": ["bush"], "cyclist": "cyclist", "stone": "stone"},
+ "shots": [
+  {"start": 0, "end": 8, "theme": "bien", "seed": 3, "speed": 4.2, "bg": "../../../studio/ai-art/phong-canh/bien-1.png", "horizon": 0.322, "yH": 420, "flowersArt": ["flowers-white"]},
+  {"start": 8, "end": 15, "theme": "nui", "seed": 5, "speed": 3.6, "bg": "../../../studio/ai-art/phong-canh/nui-1.png", "horizon": 0.29, "yH": 400, "yV": 830, "flowersArt": ["flowers-orange"]}]}

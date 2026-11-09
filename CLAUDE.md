@@ -13,7 +13,8 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 
 ## Cấu trúc
 - `studio/engine/`: engine hoạt hình (Node + @napi-rs/canvas + ffmpeg). `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Lần đầu chạy `npm ci` trong thư mục này.
-- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài), `satmap.py` + `satgrid.py` (ảnh vệ tinh Esri), `commons.py` (ảnh Wikimedia), `tiktok.py` (đọc link TikTok).
+- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài), `satmap.py` + `satgrid.py` (ảnh vệ tinh Esri), `commons.py` (ảnh Wikimedia), `tiktok.py` (đọc link TikTok), `genimage.py` (ảnh Gemini có phí, trần trong `studio/budget.json`, sổ chi `studio/costs.jsonl`), `keyout.py` (xóa nền magenta).
+- `studio/ai-art/`: thư viện hình AI dùng lại cho nhiều video (tranh nền, vật thể đã xóa nền).
 - `studio/references/`: thư viện mẫu tham khảo (thẻ kiến thức về phong cách). Người dùng gửi mẫu thì agent `nghien-cuu-mau` học theo skill `hoc-mau`.
 - `studio/trends/`: báo cáo săn trend (agent `san-trend`).
 - `studio/topics.md`: danh sách chủ đề. `studio/lessons.md`: bài học từ góp ý (mọi agent đọc trước khi làm).
@@ -22,7 +23,7 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 
 ## Quy tắc
 - Không bịa dữ kiện. Mọi khẳng định phải có trong `sources.md`.
-- Miễn phí trước. Gọi dịch vụ trả phí chỉ khi người dùng đồng ý và đã báo chi phí.
+- Miễn phí trước. Gọi dịch vụ trả phí chỉ khi người dùng đồng ý và đã báo chi phí. Đã duyệt: ảnh Gemini qua `genimage.py` trong trần `studio/budget.json`.
 - API key do proxy của môi trường tự gắn (Network secrets). Không hỏi, không dán key.
 - Không tự đăng lên mạng xã hội.
 - Commit và push lên nhánh làm việc sau mỗi mốc. Không commit `node_modules`.

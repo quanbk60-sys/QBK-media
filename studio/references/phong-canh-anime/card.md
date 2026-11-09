@@ -21,6 +21,10 @@
 - Mọi chi tiết trên mặt đất phải chạy theo phối cảnh. Lớp cỏ vẽ sẵn đứng yên làm hoa trông như trượt trên nền: nay thảm cỏ là từng hàng gắn với độ sâu z, hoa có bóng dưới gốc.
 - Cây tán xòe (cụm lá ở đầu cành) đặt sát đường, lướt qua to; camera nghiêng theo khúc cua; vật sát ống kính nhòe theo độ sâu.
 
+## Bản 4: tranh AI + chuyển động bằng code (người dùng duyệt 09/11/2026)
+- Tranh nền và vật thể tạo bằng Gemini (`studio/ai-art/phong-canh/`), code giữ phần chuyển động. Gần mẫu nhất. Lập bộ hình: 0,87 USD.
+- Video mẫu: `projects/_mau/phong-canh-ai/`.
+
 ## Thay thế / còn thiếu
 - Nét vẽ phẳng hơn tranh AI của mẫu (mẫu có độ chi tiết vẽ tay rất cao). Cây là cụm lá tròn, chưa có tán xòe tự nhiên.
 - Chưa có dây điện, cột điện, chậu cây, bậc thềm nhà.

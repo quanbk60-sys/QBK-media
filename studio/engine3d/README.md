@@ -59,3 +59,13 @@ node phong-canh.mjs ../../projects/<slug>/phongcanh.json                # ~7 s m
 - `theme`: `bien` (biển, bãi cát, thị trấn ven biển, hoa trắng hồng) | `nui` (thung lũng, núi xanh, hoa cúc cam).
 - `seed` đổi bố cục mây, cây, hoa; `speed` là m/s xe chạy. `music: true` là nhạc êm tự tổng hợp; hoặc `{"path", "gain"}` cho nhạc có giấy phép.
 - Thêm cảnh mới: thêm mục vào `THEMES` (màu trời, hoa, cỏ, kiểu nền `sea`/`valley`).
+
+### Dùng tranh vẽ AI (khuyên dùng)
+Mỗi cảnh có thể lấy tranh nền và bộ vật thể vẽ sẵn trong `studio/ai-art/phong-canh/` (xem `studio/ai-art/README.md`):
+```json
+{"art": {"dir": "../../studio/ai-art/phong-canh", "tree": ["tree-1", "tree-2"], "house": "house", "bush": ["bush"], "cyclist": "cyclist", "stone": "stone"},
+ "shots": [{"start": 0, "end": 8, "theme": "bien", "bg": "../../studio/ai-art/phong-canh/bien-1.png", "horizon": 0.322, "yH": 420, "flowersArt": ["flowers-white"]}]}
+```
+- `bg`: tranh nền (đường dẫn tính từ file json), `horizon`: vị trí đường chân trời trong ảnh (tỉ lệ chiều cao), `yH`: đặt chân trời ở pixel nào của khung 1920. `yV` chỉnh điểm tụ của đường nếu cần.
+- `art`: cây, nhà, bụi, người đạp xe (có nhún theo nhịp đạp), vân đá; `flowersArt` theo từng cảnh (khoảng 30% số bụi hoa dùng ảnh AI, còn lại vẽ code để đỡ lặp).
+- Mẫu: `projects/_mau/phong-canh-ai/phongcanh.json`.
