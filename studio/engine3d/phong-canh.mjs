@@ -449,22 +449,39 @@ function makeShotRenderer(sh) {
 }
 // Chân đạp xe nhìn từ sau, toạ độ theo ảnh cyclist.png (301x900): hông y≈445, trục giữa x≈152, đùi giò cùng màu quần kaki của ảnh.
 function drawLegs(g, ph) {
-  const PANT = '#c4a674', PANT_D = '#8f7650', PANT_L = '#dcc394', SHOE = '#874529', SHOE_D = '#4f2a1a';
-  g.lineCap = 'round'; g.lineJoin = 'round';
-  for (const side of [-1, 1]) {
-    const a = ph + (side > 0 ? Math.PI : 0), fy = 692 + 55 * Math.sin(a), fx = 152 + side * 70 + 5 * Math.cos(a);
-    const u = clamp((747 - fy) / 110), hip = [152 + side * 72, 445], ankle = [fx, fy - 26];
-    const knee = [hip[0] + side * (6 + 20 * u), hip[1] + (ankle[1] - hip[1]) * 0.5 - 14 * u];
-    const seg = (p, q, w, col) => { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.moveTo(...p); g.lineTo(...q); g.stroke(); };
-    seg(hip, knee, 70, PANT_D); seg(knee, ankle, 54, PANT_D);           // viền tối
-    seg([hip[0] + side * 4, hip[1]], [knee[0] + side * 3, knee[1]], 58, PANT); seg([knee[0] + side * 2, knee[1]], [ankle[0] + side * 2, ankle[1]], 44, PANT);
-    seg([hip[0] + side * 14, hip[1] + 6], [knee[0] + side * 12, knee[1]], 14, PANT_L); // mép sáng phía ngoài (nắng trước-phải)
-    g.strokeStyle = PANT_D; g.lineWidth = 3; g.beginPath(); g.moveTo(knee[0] - 18, knee[1] - 4); g.quadraticCurveTo(knee[0], knee[1] + 8, knee[0] + 18, knee[1] - 4); g.stroke(); // nếp gối
-    g.fillStyle = PANT_D; g.beginPath(); g.ellipse(ankle[0], ankle[1] + 4, 25, 9, 0, 0, 7); g.fill(); // gấu quần
-    g.fillStyle = SHOE_D; g.beginPath(); g.ellipse(fx, fy + 6, 26, 21, 0, 0, 7); g.fill();
-    g.fillStyle = SHOE; g.beginPath(); g.ellipse(fx - 2, fy + 2, 23, 18, 0, 0, 7); g.fill();
-    g.fillStyle = 'rgba(255,220,180,0.35)'; g.beginPath(); g.ellipse(fx + 6, fy - 4, 8, 5, 0, 0, 7); g.fill();
-    g.fillStyle = '#2a2a2e'; g.fillRect(fx - 22, fy + 18, 44, 8); // bàn đạp
+  // Nhìn từ sau, hơi cao: bàn đạp quay quanh trục giữa (x 152, y 690) nên bàn chân chủ yếu lên xuống sát hai bên bánh xe.
+  // Chân lên: gối nhấc cao, bắp chân ngắn lại (gập gối, bị phối cảnh rút ngắn). Chân xuống: gần như duỗi thẳng.
+  const PANT_L = '#dcc497', SHOE = '#8a472a', SHOE_D = '#4d2918';
+  const limb = (p, q, w1, w2, col) => { // khối thon: thân là tứ giác hai mép hơi phồng, hai đầu tròn
+    const dx = q[0] - p[0], dy = q[1] - p[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2, wm = (w1 + w2) / 2 * 1.1;
+    g.fillStyle = col; g.beginPath();
+    g.moveTo(p[0] + nx * w1 / 2, p[1] + ny * w1 / 2); g.quadraticCurveTo(mx + nx * wm / 2, my + ny * wm / 2, q[0] + nx * w2 / 2, q[1] + ny * w2 / 2);
+    g.lineTo(q[0] - nx * w2 / 2, q[1] - ny * w2 / 2); g.quadraticCurveTo(mx - nx * wm / 2, my - ny * wm / 2, p[0] - nx * w1 / 2, p[1] - ny * w1 / 2); g.closePath(); g.fill();
+    g.beginPath(); g.arc(p[0], p[1], w1 / 2, 0, 7); g.fill(); g.beginPath(); g.arc(q[0], q[1], w2 / 2, 0, 7); g.fill();
+  };
+  const legs = [-1, 1].map(side => {
+    const a = ph + (side > 0 ? Math.PI : 0), up = (1 - Math.cos(a)) / 2; // up: 0 = bàn đạp dưới cùng, 1 = trên cùng
+    const foot = [152 + side * (46 + 4 * Math.sin(a)), 748 - 112 * up];
+    const hip = [152 + side * 76, 445];
+    const knee = [152 + side * (58 + 14 * up), lerp(612, 522, up)];
+    const ankle = [foot[0] + side * 2, foot[1] - 22];
+    return {side, up, foot, hip, knee, ankle};
+  });
+  legs.sort((p, q) => q.up - p.up); // chân đang nhấc cao vẽ trước (xa camera hơn một chút)
+  for (const L of legs) {
+    const {side, foot, hip, knee, ankle} = L, sh = side * 3;
+    const PANT = side < 0 ? '#ad9061' : '#c8a974', PANT_D = side < 0 ? '#7a6140' : '#927650'; // khớp màu quần trong ảnh: chân trái khuất nắng
+    limb(hip, knee, 80, 54, PANT_D); limb(knee, ankle, 52, 38, PANT_D);
+    limb([hip[0] + sh, hip[1]], [knee[0] + sh, knee[1]], 70, 46, PANT); limb([knee[0] + sh, knee[1]], [ankle[0] + sh, ankle[1]], 44, 31, PANT);
+    limb([hip[0] + side * 18, hip[1] + 8], [knee[0] + side * 13, knee[1] - 4], 12, 8, PANT_L);
+    g.strokeStyle = PANT_D; g.lineWidth = 3; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(knee[0] - 17, knee[1] - 6); g.quadraticCurveTo(knee[0], knee[1] + 7, knee[0] + 17, knee[1] - 6); g.stroke();
+    g.beginPath(); g.moveTo(knee[0] - 10, knee[1] + 14); g.quadraticCurveTo(knee[0] + side * 4, knee[1] + 24, knee[0] + 12, knee[1] + 16); g.stroke();
+    g.fillStyle = PANT_D; g.beginPath(); g.ellipse(ankle[0], ankle[1] + 3, 19, 7, 0, 0, 7); g.fill();
+    g.fillStyle = '#2a2a2e'; g.fillRect(foot[0] - 20, foot[1] + 14, 40, 7); // bàn đạp
+    g.fillStyle = SHOE_D; g.beginPath(); g.ellipse(foot[0], foot[1] + 5, 21, 17, 0, 0, 7); g.fill();
+    g.fillStyle = SHOE; g.beginPath(); g.ellipse(foot[0] - 1, foot[1] + 1, 18, 14, 0, 0, 7); g.fill();
+    g.fillStyle = 'rgba(255,220,180,0.35)'; g.beginPath(); g.ellipse(foot[0] + 5, foot[1] - 4, 7, 4, 0, 0, 7); g.fill();
   }
 }
 function roundPoly(g, P, k) { g.beginPath(); const n = P.length; for (let i = 0; i < n; i++) { const a = P[i], b = P[(i + 1) % n], p = P[(i + n - 1) % n]; const s = [lerp(a[0], p[0], k * 0.5), lerp(a[1], p[1], k * 0.5)], e = [lerp(a[0], b[0], k * 0.5), lerp(a[1], b[1], k * 0.5)]; i ? g.lineTo(...s) : g.moveTo(...s); g.quadraticCurveTo(a[0], a[1], ...e); } g.closePath(); }
