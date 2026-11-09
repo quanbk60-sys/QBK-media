@@ -62,6 +62,7 @@ textarea{resize:vertical}
 .styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .sty{display:flex;flex-direction:column;gap:6px;padding:6px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:11.5px var(--body);cursor:pointer;text-align:left}
 .sty i{height:46px;border-radius:8px;border:1px solid var(--ink);display:block}
+.sty img.prev{width:100%;aspect-ratio:9/12;object-fit:cover;object-position:center 40%;border-radius:8px;border:1px solid var(--ink);display:block}
 .sty[aria-pressed="true"]{border:3px solid var(--red);font-weight:700}
 .vidbox{display:flex;gap:12px;align-items:flex-start}
 video{width:160px;aspect-ratio:9/16;border-radius:14px;border:2px solid var(--ink);background:#000;flex-shrink:0}
@@ -117,11 +118,14 @@ a.link{color:var(--navy)}
     ["so-tay","Sổ tay","#FFFDF6"],["pop","Pop sặc sỡ","#FFD23F"],["dan-gian","Tranh dân gian","#EFE2C4"],
     ["phim-cam","Phim câm","#1A1A1A"],["phac-thao","Phác thảo điện ảnh","#BFB9AD"],["ban-do-toi","Bản đồ dữ liệu tối","#14202B"],["ve-tinh","Vệ tinh · ảnh thật","linear-gradient(135deg,#1d3b2a,#0b1118 55%,#FF8A1F)"]];
   // Phong cách đoàn phim học thêm được ghi vào db (app/styles.list) và tự hiện ở đây, không cần đăng lại app.
-  const styles = () => [...BASE_STYLES, ...((S.stylesDoc?.list) || []).filter(x => x?.id && !BASE_STYLES.some(b => b[0] === x.id)).map(x => [x.id, x.name || x.id, x.color || "#8A8A8A"])];
-  const styleNote = id => STYLE_NOTE[id] || ((S.stylesDoc?.list) || []).find(x => x.id === id)?.note || "";
+  // app/styles.full = true: the db list is the whole catalogue (order, name, preview image, note); otherwise built-ins + learned ones
+  const dbStyles = () => ((S.stylesDoc?.list) || []).filter(x => x?.id);
+  const styles = () => S.stylesDoc?.full ? dbStyles().map(x => [x.id, x.name || x.id, x.color || "#8A8A8A", x.thumb, x.engine])
+    : [...BASE_STYLES, ...dbStyles().filter(x => !BASE_STYLES.some(b => b[0] === x.id)).map(x => [x.id, x.name || x.id, x.color || "#8A8A8A", x.thumb, x.engine])];
+  const styleNote = id => dbStyles().find(x => x.id === id)?.note || STYLE_NOTE[id] || "";
   const STYLE_NOTE = {"ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
   const GENRES = ["Lịch sử","Khoa học","Ngụ ngôn","Hoạt hình vui","Tâm lý","Địa lý"];
-  const GENRE_STYLE = {"Lịch sử":"giay-muc","Khoa học":"bang-phan","Ngụ ngôn":"giay-muc","Hoạt hình vui":"pop","Tâm lý":"so-tay","Địa lý":"ve-tinh"};
+  const GENRE_STYLE = {"Lịch sử":"giay-muc","Khoa học":"thi-nghiem","Ngụ ngôn":"giay-muc","Hoạt hình vui":"pop","Tâm lý":"so-tay","Địa lý":"ve-tinh"};
   const STEPS = ["Kịch bản","Giọng","Phân cảnh","Dựng","Kiểm định"];
   const STATUS = {
     "dang-lam": ["Đang làm","p-work"], "cho-duyet": ["Chờ duyệt","p-wait"], "dang-sua": ["Đang sửa","p-work"],
@@ -133,7 +137,7 @@ a.link{color:var(--navy)}
     catch (e) { console.warn("fire_trigger", e?.code); return false; }
   }
   const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
-    sel: null, draftFb: [], form: { topic: "", genre: "Khoa học", style: "bang-phan", length: 60, gate: false, voice: "" }, voicesDoc: null, playing: null };
+    sel: null, draftFb: [], form: { topic: "", genre: "Khoa học", style: "thi-nghiem", length: 60, gate: false, voice: "" }, voicesDoc: null, playing: null };
 
   const $ = (s, r = document) => r.querySelector(s);
   const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -219,7 +223,7 @@ a.link{color:var(--navy)}
       <div class="col"><span class="f" style="font-size:13px;font-weight:700">Thể loại</span>
         <div class="chips">${GENRES.map(g => `<button type="button" class="chip" data-genre="${g}" aria-pressed="${f.genre === g}">${g}</button>`).join("")}</div></div>
       <div class="col"><div class="row between"><span style="font-size:13px;font-weight:700">Phong cách</span><span class="small">Gợi ý theo thể loại</span></div>
-        <div class="styles">${styles().map(([id, n, c]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}"><i style="background:${esc(c)}"></i>${esc(n)}</button>`).join("")}<a class="sty" href="#learn" style="text-decoration:none"><i style="background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a></div>
+        <div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : ""}</span></button>`).join("")}<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a></div>
         ${styleNote(f.style) ? `<span class="small">${esc(styleNote(f.style))}</span>` : ""}</div>
       <div class="card col">
         <div class="row between"><label for="len" style="font-size:14px">Độ dài</label><b id="lenv" style="font-variant-numeric:tabular-nums">${f.length} giây</b></div>
@@ -406,7 +410,7 @@ a.link{color:var(--navy)}
       $("#newf").onsubmit = async e => {
         e.preventDefault(); if (!f.topic.trim() || !S.db) return;
         try { await S.db.collection("requests").add({ topic: f.topic.trim(), genre: f.genre, style: f.style, length: f.length, gateScript: f.gate, voice: curVoice(), status: "moi", createdAt: nowISO() });
-          S.form = { topic: "", genre: "Khoa học", style: "bang-phan", length: 60, gate: false, voice: f.voice };
+          S.form = { topic: "", genre: "Khoa học", style: "thi-nghiem", length: 60, gate: false, voice: f.voice };
           go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + f.topic.trim());
           toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
         } catch (err) { toast("Chưa gửi được: " + (err?.code === "quota_exceeded" ? "cơ sở dữ liệu đã đầy." : "thử lại sau ít phút.")); }

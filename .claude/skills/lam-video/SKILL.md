@@ -65,7 +65,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Tâm lý, kỹ năng, năng suất | `so-tay`, `phac-thao` |
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
-| Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
+| Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
@@ -81,7 +81,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 | `tiktokLinks` | App | Link TikTok người dùng lưu (`status: "moi"`). Đọc bằng `python3 studio/tools/tiktok.py <url>` (hỗ trợ link rút gọn vt.tiktok.com), ghi `title, author` (tên kênh · độ dài · lượt xem), `fullUrl`, `status: "da-doc"` |
 | `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |
 | `app/voices` | Nhà sản xuất | Danh sách giọng nghe thử: `default, tempo, list: [{id, name, desc, sample}]` (`sample` là id asset, video nhỏ có tiếng). Thêm giọng mới: tạo mẫu bằng `tts.py` với `sampleText`, tăng tốc 1,2x, gói thành mp4 có hình tĩnh (kho asset không nhận file chỉ có tiếng), tải lên rồi thêm vào `list` |
-| `app/styles` | Nhà sản xuất | `list: [{id, name, color, note, genres}]`: phong cách đoàn phim học thêm. App tự hiện chúng trong mục Làm video, không cần đăng lại app |
+| `app/styles` | Nhà sản xuất | `full: true`, `list: [{id, name, thumb, color, note, genres, engine}]`: **toàn bộ** phong cách app hiển thị (ảnh xem trước, mô tả, thứ tự). Thêm, sửa hoặc ẩn phong cách ở đây, không cần đăng lại app |
 | `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu |
 
 **Kích hoạt:** app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB` ("Đoàn phim QBK: nhận việc từ app") ngay khi người dùng gửi yêu cầu, góp ý hoặc duyệt. Mỗi lần kích hoạt mở một session cloud mới chạy prompt của tác vụ. Người dùng cũng có thể nhắn "chạy đi" trong chat.
@@ -100,7 +100,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 4. Render một đoạn thử khoảng 8 giây bằng phong cách mới để kiểm tra.
    - Mẫu dùng thứ engine không làm được (3D thực tế, quay thật, ảnh AI): **không bỏ cuộc**. Giữ những gì dựng được: bố cục khung, kiểu chữ, màu, nhịp cắt, chuyển động camera. Thay phần hình bằng ảnh thật (Wikimedia) hoặc hình vẽ code. Ghi rõ phần "thay thế" trong thẻ và trong `result`. Ví dụ: `thi-nghiem` học từ một mẫu 3D.
    - Thật sự không làm được gì thì đặt `status: "loi"` (app hiện "Cần bạn xem"), **không bao giờ** đặt `"xong"` khi chưa thêm phong cách vào `app/styles`.
-5. Thêm vào `app/styles.list` mục `{id, name, color, note, genres}`: `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
+5. Thêm vào `app/styles.list` (doc có `full: true`, tức danh sách này là toàn bộ phong cách app hiển thị) mục `{id, name, thumb, color, note, genres, engine}`. `thumb` là id asset của một ảnh xem trước 270×480 cắt từ đoạn render thử, tải lên bằng Artifact `asset: true`. `engine` nhận `2d`, `3d` hoặc `ve-tinh`: `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
 6. Đặt `status: "xong"`, `result` là tóm tắt ngắn (đã có gì, còn thiếu gì). Commit và push.
 
 ## Nguyên tắc
