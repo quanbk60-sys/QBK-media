@@ -134,6 +134,18 @@ Một số âm được tạo **tự động**: tiếng bút khi bàn tay vẽ, 
 `"camera": [{"t": 0, "zoom": 1}, {"t": 3, "zoom": 1.15, "x": 540, "y": 1000}]`: thiếu `x`, `y`, `zoom` ở keyframe đầu thì mặc định là tâm khung (540, 960) và zoom 1, camera lia dần từ đó: phóng to hoặc lia về một điểm.
 - `"textFollowsCamera": true` (cấp scene, nên bật cho phim mới): chữ bên trong đạo cụ và phần tử `text` đi theo camera như mọi nét vẽ khác. Mặc định `false` để giữ nguyên các phim cũ (trước đây chữ bỏ qua camera nên lệch khỏi khung `infoPanel` khi phóng to/lia).
 
+## Ngữ pháp phong cách (styles.mjs)
+Mỗi phong cách không chỉ đổi màu. Nó còn đổi cách vẽ, và engine tự áp dụng cho mọi nhân vật và đạo cụ:
+| Thuộc tính | Giá trị |
+|---|---|
+| `stroke` | `wobble` (nét run tay) · `chalk` (phấn, đứt quãng nhiều lớp) · `pencil` (chì nhiều nét mảnh) · `marker` (bút dạ) · `woodcut` (khắc gỗ đậm) · `plotter` (nét kỹ thuật mảnh, đều) · `clean` (vector dày) · `neon` (phát sáng) |
+| `fill` | phẳng (mặc định) · `offset` (màu in lệch) · `drop` (bóng đổ đen) · `ghost` (tô mờ) · `chalk` · `hatch` (gạch chì) · `grain` (vân giấy dó) |
+| `boil`, `boilEvery` | nét rung nhẹ theo khung (cảm giác vẽ tay sống động) |
+| `drawMode` | mặc định là bàn tay vẽ · `pop` (bật ra) · `fade` (hiện dần). `hand: false` thì vẽ nét mà không hiện bàn tay |
+| `transition` | chuyển cảnh đầu mỗi shot: `fade` · `flash` · `wipe` · `scan` · `iris` · `page` · `smudge` · `cut` (`transitionDur`). Shot có thể ghi đè bằng `transition` |
+| `captionBox` | `note` (giấy nhớ vàng) · `sticker` · `intertitle` (khung phim câm) · `tag` (nhãn bản vẽ), kèm `captionTypewriter` |
+Đạo diễn nên dựng cảnh khác nhau theo phong cách (bố cục, nhịp, kiểu chữ), không chỉ đổi `style`. Video cần đồ vật như thật thì dùng `studio/engine3d/`.
+
 ## Phong cách vệ tinh (`ve-tinh`, `lib/geo.mjs`)
 Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/references/ve-tinh-anh-that/card.md`. Phim mẫu: `projects/bach-dang-ve-tinh/` (`build_scene.py`).
 

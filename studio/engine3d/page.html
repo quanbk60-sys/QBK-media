@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Blk;src:url(/fonts/InterDisplay-Black.otf)}
+@font-face{font-family:Bld;src:url(/fonts/Inter-Bold.otf)}
+@font-face{font-family:Itl;src:url(/fonts/InterDisplay-ExtraBoldItalic.otf)}
+html,body{margin:0;background:#000;overflow:hidden}
+#stage,#overlay{position:absolute;left:0;top:0;width:var(--w);height:var(--h)}
+#overlay{pointer-events:none;font-family:Blk;color:#fff}
+.cap{position:absolute;left:0;right:0;bottom:calc(var(--h)*0.07);text-align:center;font-size:calc(var(--h)*0.072);letter-spacing:.5px;
+  -webkit-text-stroke:calc(var(--h)*0.012) #000;paint-order:stroke fill;text-shadow:0 3px 10px rgba(0,0,0,.45)}
+.cap .k{color:#FFE14D}
+.lbl{position:absolute;transform:translate(-50%,-120%);background:#fff;color:#111;font-family:Blk;font-size:calc(var(--h)*0.034);padding:.25em .55em;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.35);white-space:nowrap}
+.lbl:after{content:"";position:absolute;left:50%;bottom:-8px;margin-left:-6px;border:6px solid transparent;border-top-color:#fff}
+.ttl{position:absolute;left:0;right:0;text-align:center;-webkit-text-stroke:calc(var(--h)*0.01) #000;paint-order:stroke fill}
+.ttl i{display:block;text-transform:uppercase;font-family:Itl;font-style:normal;color:#FFE14D;font-size:calc(var(--h)*0.045)}
+.ttl b{display:block;font-size:calc(var(--h)*0.1);font-weight:400;text-transform:uppercase}
+.note{position:absolute;left:2%;bottom:1.5%;font-family:Bld;font-size:calc(var(--h)*0.026);color:#fff;text-shadow:0 1px 3px #000}
+.credit{position:absolute;left:2%;top:2%;font-family:Bld;font-size:calc(var(--h)*0.024);color:rgba(255,255,255,.85);text-shadow:0 1px 3px #000}
+.wm{position:absolute;right:3%;bottom:20%;font-family:Itl;font-size:calc(var(--h)*0.04);color:rgba(255,255,255,.35)}
+</style>
+<script type="importmap">{"imports":{"three":"/three/build/three.module.js","three/addons/":"/three/examples/jsm/"}}</script>
+</head><body><div id="stage"></div><div id="overlay"></div>
+<script>const q=new URLSearchParams(location.search);window.__W=+q.get('w');window.__H=+q.get('h');document.documentElement.style.setProperty('--w',__W+'px');document.documentElement.style.setProperty('--h',__H+'px');</script>
+<script type="module" src="/lib3d.js"></script></body></html>

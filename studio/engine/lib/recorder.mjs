@@ -40,22 +40,61 @@ export class Recorder {
 const plen = p => { let s = 0; for (let i = 1; i < p.length; i++) s += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); return s; };
 export function strokeLength(ops) { return ops.filter(o => o.k === 's').reduce((s, o) => s + o.paths.reduce((a, p) => a + plen(p), 0), 0); }
 
+// ---- style grammar: how a stroke / fill is rendered (see styles.mjs `stroke`, `fill`) ----
+const hash = n => { n = (n ^ 61) ^ (n >>> 16); n = n + (n << 3); n = n ^ (n >>> 4); n = Math.imul(n, 0x27d4eb2d); return ((n ^ (n >>> 15)) >>> 0) / 4294967296; };
+const jit = (p, amt, seed) => amt ? p.map(([x, y], i) => [x + (hash(seed * 131 + i * 7) - 0.5) * 2 * amt, y + (hash(seed * 137 + i * 11 + 3) - 0.5) * 2 * amt]) : p;
+function line(ctx, pts) { ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); }
+function strokePaths(ctx, paths, mode, w, color, seed) {
+  const pass = (width, alpha, amt, s2, dash) => { ctx.save(); ctx.globalAlpha *= alpha; ctx.lineWidth = width; ctx.strokeStyle = color; if (dash) ctx.setLineDash(dash); ctx.beginPath(); for (const [j, p] of paths.entries()) line(ctx, jit(p, amt, seed + s2 + j)); ctx.stroke(); ctx.restore(); };
+  switch (mode) {
+    case 'wobble': pass(w, 1, 0.9, 0); pass(w * 0.55, 0.35, 1.8, 17); break;
+    case 'chalk': pass(w * 0.75, 0.55, 1.4, 0, [w * 2.6, w * 0.5]); pass(w * 0.5, 0.45, 2.2, 9, [w * 1.7, w * 0.8]); pass(w * 0.35, 0.5, 1.0, 23); break;
+    case 'pencil': pass(w * 0.45, 0.6, 0.7, 0); pass(w * 0.35, 0.45, 1.5, 5); pass(w * 0.3, 0.3, 2.4, 11); break;
+    case 'marker': pass(w * 1.35, 0.88, 0.5, 0); break;
+    case 'woodcut': pass(w * 1.55, 1, 0.6, 0); break;
+    case 'plotter': pass(Math.max(1.5, w * 0.55), 1, 0, 0); break;
+    case 'clean': pass(w * 1.35, 1, 0, 0); break;
+    case 'neon': ctx.save(); ctx.shadowColor = color; ctx.shadowBlur = w * 3; pass(w * 1.1, 0.9, 0, 0); ctx.restore(); pass(Math.max(1, w * 0.35), 0.9, 0, 0); break;
+    default: pass(w, 1, 0, 0);
+  }
+}
+function fillPaths(ctx, paths, mode, color, seed, w) {
+  const path = (dx = 0, dy = 0) => { ctx.beginPath(); for (const p of paths) p.forEach(([x, y], i) => i ? ctx.lineTo(x + dx, y + dy) : ctx.moveTo(x + dx, y + dy)); };
+  switch (mode) {
+    case 'offset': ctx.save(); ctx.globalAlpha *= 0.92; ctx.fillStyle = color; path(5, 4); ctx.fill(); ctx.restore(); break; // misregistered colour (marker, print)
+    case 'drop': ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.9)'; path(7, 7); ctx.fill(); ctx.restore(); ctx.fillStyle = color; path(); ctx.fill(); break;
+    case 'ghost': ctx.save(); ctx.globalAlpha *= 0.16; ctx.fillStyle = color; path(); ctx.fill(); ctx.restore(); break;
+    case 'chalk': ctx.save(); ctx.globalAlpha *= 0.42; ctx.fillStyle = color; path(); ctx.fill(); ctx.restore(); break;
+    case 'hatch': { ctx.save(); ctx.globalAlpha *= 0.22; ctx.fillStyle = color; path(); ctx.fill(); ctx.globalAlpha /= 0.22; ctx.clip();
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const p of paths) for (const [x, y] of p) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.6; ctx.globalAlpha *= 0.75; ctx.beginPath(); const sp = 7; for (let k = x0 - (y1 - y0); k < x1; k += sp) { ctx.moveTo(k, y1); ctx.lineTo(k + (y1 - y0), y0); } ctx.stroke(); ctx.restore(); break; }
+    case 'grain': { ctx.fillStyle = color; path(); ctx.fill();
+      ctx.save(); ctx.clip(); ctx.globalAlpha *= 0.18; ctx.fillStyle = '#000'; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const p of paths) for (const [x, y] of p) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+      const n = Math.min(400, Math.round((x1 - x0) * (y1 - y0) / 180)); for (let i = 0; i < n; i++) ctx.fillRect(x0 + hash(seed * 7 + i) * (x1 - x0), y0 + hash(seed * 13 + i * 3) * (y1 - y0), 2, 2 + hash(i) * 6); ctx.restore(); break; }
+    default: ctx.fillStyle = color; path(); ctx.fill();
+  }
+}
+
 // Play ops onto a real ctx. reveal: undefined = all; else {ink: 0..1 of total stroke length drawn, fill: 0..1 alpha of fills}
 // Returns the pen tip (device coords) while drawing.
 export function play(ctx, ops, reveal, style, textFollowsCamera = false) {
   const B = textFollowsCamera ? ctx.getTransform() : null; // compose text matrices with the camera (opt-in, scene.textFollowsCamera)
   const map = style?.map || (c => c), ls = style?.lineScale ?? 1;
   let budget = reveal ? reveal.ink * strokeLength(ops) : Infinity, tip = null;
+  const SM = style?.stroke, FM = style?.fill, boil = style?.boil ? Math.floor((style._fno || 0) / (style.boilEvery || 4)) * 977 : 0; let oi = 0;
   ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  for (const o of ops) {
+  for (const o of ops) { oi++;
     ctx.globalAlpha = o.a ?? 1;
     if (o.k === 'f') {
       const fa = reveal ? reveal.fill : 1; if (fa <= 0) continue;
-      ctx.globalAlpha *= fa; ctx.fillStyle = map(o.c); ctx.beginPath();
-      for (const p of o.paths) p.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-      ctx.fill();
+      ctx.globalAlpha *= fa;
+      if (FM) fillPaths(ctx, o.paths, FM, map(o.c), oi + boil, o.w); else { ctx.fillStyle = map(o.c); ctx.beginPath(); for (const p of o.paths) p.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.fill(); }
     } else if (o.k === 's') {
       if (budget <= 0) continue;
+      if (SM && budget === Infinity) { strokePaths(ctx, o.paths, SM, o.w * ls, map(o.c), oi + boil); continue; }
+      if (SM) { const part = []; for (const p of o.paths) { if (budget <= 0) break; const q = [p[0]]; for (let i = 1; i < p.length; i++) { const d = Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]);
+          if (d >= budget) { const f = budget / d, x = p[i - 1][0] + (p[i][0] - p[i - 1][0]) * f, y = p[i - 1][1] + (p[i][1] - p[i - 1][1]) * f; q.push([x, y]); tip = [x, y]; budget = 0; break; } budget -= d; q.push(p[i]); } part.push(q); }
+        strokePaths(ctx, part, SM, o.w * ls, map(o.c), oi + boil); continue; }
       ctx.strokeStyle = map(o.c); ctx.lineWidth = o.w * ls; ctx.beginPath();
       for (const p of o.paths) {
         if (budget <= 0) break;

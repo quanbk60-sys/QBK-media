@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {createCanvas, GlobalFonts} from '@napi-rs/canvas';
-import {clamp, ease, backOut, sampleTrack, color, lerp} from './math.mjs';
+import {clamp, ease, backOut, sampleTrack, color, lerp, rng} from './math.mjs';
 import {Recorder, play} from './recorder.mjs';
 import {drawCharacter, blendPose, applyCycle, POSES, EXPR} from './character.mjs';
 import {PROPS} from './props.mjs';
@@ -118,7 +118,7 @@ export function makeRenderer(s) {
     const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1);
     const t = T - sh.start;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const ST = s.styleDef, fno = Math.round(T * s.fps);
+    const ST = s.styleDef, fno = Math.round(T * s.fps); ST._fno = fno;
     if (sh.background || s.background) { ctx.fillStyle = ST.map(color(sh.background || s.background)); ctx.fillRect(0, 0, s.width, s.height); } else paintBackground(ctx, ST, s.width, s.height, fno);
     const camKeys = sh.camera?.length ? [{zoom: 1, x: s.width / 2, y: s.height / 2, ...sh.camera[0]}, ...sh.camera.slice(1)] : null; // missing fields on the first key default to the frame centre
     const cam = sampleTrack(camKeys, t, ['zoom', 'x', 'y']);
@@ -130,6 +130,7 @@ export function makeRenderer(s) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
       if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
       if (e.geo) { e._view = view; e._s = s; }
+      if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
       if (e.type === 'image') {
         const im = images.get(path.join(s.base, e.path)); const {x, y, sc, rot, a} = transform(e, t); const w = (e.w || im.width) * sc, h = w * im.height / im.width;
         ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.rotate(rot); ctx.drawImage(im, -w / 2, -h / 2, w, h); ctx.restore(); continue;
@@ -141,7 +142,7 @@ export function makeRenderer(s) {
         const at = e.draw.at ?? e.from ?? 0, dur = e.draw.dur ?? 1.5;
         const ink = clamp((t - at) / (dur * 0.78)), fill = clamp((t - at - dur * 0.72) / (dur * 0.28));
         const tip = play(ctx, R.ops, {ink, fill}, s.styleDef, s.textFollowsCamera);
-        if (ink > 0 && ink < 1 && e.draw.hand !== false) { pen = tip; drawing = true; }
+        if (ink > 0 && ink < 1 && e.draw.hand !== false && ST.hand !== false) { pen = tip; drawing = true; }
       } else play(ctx, R.ops, undefined, s.styleDef, s.textFollowsCamera);
       ctx.restore();
       // auto footsteps / hammer hits
@@ -153,8 +154,31 @@ export function makeRenderer(s) {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     paintOverlay(ctx, ST, s.width, s.height, fno);
     const cr = sh.credit ?? s.credit ?? (s._sat && sh.elements?.some(e => e.type === 'satmap' || e.type === 'globe') ? s._sat.credit : null); if (cr) credit(ctx, s, cr);
+    // shot transition (style grammar): drawn over the first `td` seconds of every shot except the first
+    const tr = sh.transition ?? ST.transition, td = sh.transitionDur ?? ST.transitionDur ?? 0.45;
+    if (tr && tr !== 'cut' && sh.start > 0 && t < td) {
+      const k = clamp(t / td), W = s.width, H = s.height, bgc = ST.bg; ctx.save();
+      if (tr === 'fade') { ctx.globalAlpha = 1 - ease(k); ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); }
+      else if (tr === 'flash') { ctx.globalAlpha = (1 - k) * 0.9; ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H); }
+      else if (tr === 'wipe') { ctx.fillStyle = bgc; ctx.fillRect(W * ease(k), 0, W, H); ctx.fillStyle = ST.ink; ctx.globalAlpha = 0.5; ctx.fillRect(W * ease(k) - 3, 0, 6, H); }
+      else if (tr === 'scan') { const y = H * ease(k); ctx.fillStyle = bgc; ctx.fillRect(0, y, W, H - y); ctx.strokeStyle = ST.ink; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      else if (tr === 'iris') { ctx.fillStyle = '#000'; ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(W / 2, H * 0.45, Math.hypot(W, H) * 0.6 * ease(k), 0, Math.PI * 2, true); ctx.fill('evenodd'); }
+      else if (tr === 'page') { const x = W * (1 - ease(k)) * 1.3; ctx.fillStyle = bgc; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(x - 260, H); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 0.25; ctx.strokeStyle = '#000'; ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 260, H); ctx.stroke(); }
+      else if (tr === 'smudge') { const r = rng(fno); ctx.globalAlpha = 1 - k; ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = (1 - k) * 0.5; ctx.fillStyle = ST.ink; for (let i = 0; i < 40; i++) ctx.fillRect(r() * W, r() * H, 80 + r() * 200, 3); }
+      ctx.restore();
+    }
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
+    if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
+      ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', fs) : `600 ${fs}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      const tw = ctx.measureText(cue.text).width, bw = tw + fs * 1.1, bh = fs * 1.7; ctx.save(); ctx.translate(s.width / 2, cy);
+      if (ST.captionBox === 'note') { ctx.rotate(((cue.start * 7) % 3 - 1) * 0.015); ctx.fillStyle = '#FFF2A8'; ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4; ctx.fillRect(-bw / 2, -bh / 2, bw, bh); ctx.shadowBlur = 0; ctx.fillStyle = '#1F2A44'; }
+      else if (ST.captionBox === 'sticker') { ctx.rotate(((cue.start * 13) % 3 - 1) * 0.03); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(-bw / 2 + 6, -bh / 2 + 6, bw, bh, 14); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 14); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#111'; ctx.stroke(); ctx.fillStyle = '#111'; }
+      else if (ST.captionBox === 'intertitle') { ctx.fillStyle = '#0c0c0c'; ctx.fillRect(-s.width * 0.42, -bh * 0.75, s.width * 0.84, bh * 1.5); ctx.strokeStyle = '#d9d9d9'; ctx.lineWidth = 3; ctx.strokeRect(-s.width * 0.42 + 12, -bh * 0.75 + 12, s.width * 0.84 - 24, bh * 1.5 - 24); ctx.fillStyle = '#efefef'; }
+      else if (ST.captionBox === 'tag') { ctx.fillStyle = 'rgba(15,40,80,.9)'; ctx.fillRect(-bw / 2, -bh / 2, bw, bh); ctx.strokeStyle = ST.ink; ctx.lineWidth = 2; ctx.strokeRect(-bw / 2 + 6, -bh / 2 + 6, bw - 12, bh - 12); ctx.fillStyle = '#ffffff'; }
+      const shown = ST.captionTypewriter ? cue.text.slice(0, Math.ceil(clamp((T - cue.start) / Math.min(0.6, (cue.end - cue.start) * 0.6)) * cue.text.length)) : cue.text;
+      ctx.fillText(shown, ST.captionTypewriter ? -tw / 2 + ctx.measureText(shown).width / 2 : 0, 2); ctx.restore(); }
+    else
     if (cue) { const st = s.captionStyle; ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', st.size) : `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; const fill = (s.captions?.color) || ST.caption?.color || st.color;
       if (ST.captionHighlight) { // word by word, the longest word (the keyword) in highlight colour
