@@ -67,7 +67,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
-| Thư giãn, chill, trích dẫn, tâm sự | `phong-canh-3d`: **dựng bằng `studio/engine3d/phong-canh.mjs`** với tranh nền và vật thể AI có sẵn trong `studio/ai-art/phong-canh/` (người đạp xe đổ dốc, cảnh biển và núi, nhạc êm tự tổng hợp). Xem `studio/engine3d/README.md`, mẫu `projects/_mau/phong-canh-ai/` |
+| Thư giãn, chill, trích dẫn, tâm sự | `phong-canh-3d`: **dựng bằng `studio/engine3d/phong-canh.mjs`** với tranh nền và vật thể AI có sẵn trong `studio/ai-art/phong-canh/` (người đạp xe đổ dốc, cảnh biển và núi, nhạc êm tự tổng hợp). Xem `studio/engine3d/README.md`, mẫu `projects/_mau/phong-canh-ai/`. **Bắt buộc có chuyển động thật**: nhân vật đi bộ hoặc đạp xe trong thế giới trôi theo phối cảnh, chân bước bằng code (`drawLegs`), cỏ hoa lướt qua. **Không được làm slideshow ảnh tĩnh + zoom/lia** |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
