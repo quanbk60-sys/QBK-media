@@ -6,6 +6,7 @@ Repo này là **đoàn phim thu nhỏ**, tổ chức như một xưởng phim th
 - Làm video: `/lam-video <chủ đề>`. Skill `.claude/skills/lam-video` (quy trình v3): **4 phong cách**, mỗi phong cách một **dây chuyền** chỉ gọi đúng các agent cần, có **cổng duyệt** (kịch bản, dự toán, animatic) trước các bước tốn tiền.
 - Phong cách: `anime-dong` (Anime · hoạt hình động, clip Gemini Omni), `anime-tinh` (Anime · ảnh tĩnh, khung Gemini + chuyển động code), `ve-tinh` (Vệ tinh · địa lý), `thi-nghiem` (Thí nghiệm 3D · khoa học). Phong cách khác học sau qua `nghien-cuu-mau`.
 - 12 agent trong `.claude/agents/`: bien-kich, du-toan, dao-dien, chi-dao-my-thuat, hoa-si, quay-phim, long-tieng, am-thanh, dung-phim, kiem-dinh, phat-hanh, nghien-cuu-mau.
+- **Tiết kiệm token:** Nhà sản xuất chỉ điều phối; mỗi bước, mỗi nhóm cảnh, mỗi video giao một session con (agent hoặc session mới); agent báo cáo tối đa 8 dòng; trạng thái nằm trong file và app, không nằm trong chat.
 - Đoàn phim làm **trọn video** rồi gửi người dùng duyệt; góp ý chuyển về đúng agent; bài học chung ghi `studio/lessons.md`.
 - Agent được tự sáng tạo ngoài skill, ghi lý do vào `notes.md`. Luật cứng giữ nguyên.
 

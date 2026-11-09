@@ -56,6 +56,16 @@ Biên kịch Sonnet (lịch sử, nhạy cảm thì truyền `model: "opus"`). �
 6. **Bài học:** góp ý dùng được cho mọi phim sau thì ghi `studio/lessons.md`; sửa được ở gốc (công cụ, skill) thì sửa luôn.
 7. **Lưu công việc:** commit và push sau mỗi mốc. Không commit `node_modules`, `final.mp4`.
 
+## Tiết kiệm token: Nhà sản xuất chỉ điều phối, việc giao cho session con (10/11/2026)
+Mỗi tin nhắn, Claude đọc lại cả ngữ cảnh từ đầu, nên ngữ cảnh dài là tốn tiền. Quy tắc:
+1. **Nhà sản xuất không tự làm việc nặng.** Không tự đọc ảnh, video, file lớn; không tự viết kịch bản hay lệnh vẽ. Mỗi bước giao một agent (Agent tool = session con, bắt đầu với ngữ cảnh trống), chỉ đưa **đường dẫn file** và yêu cầu, không dán nội dung.
+2. **Agent báo cáo ngắn** (tối đa 8 dòng: đã làm gì, file ra ở đâu, chi phí, lỗi còn lại). Chi tiết ghi vào file trong `projects/<slug>/`, không đưa về chat chính.
+3. **Chia nhỏ theo cảnh, chạy song song:** họa sĩ vẽ khung và quay phim quay clip theo từng nhóm cảnh (mỗi agent 2–3 cảnh), chạy cùng lúc. Kiểm định soát từng cảnh.
+4. **Lệch ở đâu sửa đúng chỗ đó:** góp ý cảnh nào thì chỉ giao lại agent của cảnh đó, không chạy lại cả phim.
+5. **Mỗi video một session riêng:** một lượt chạy có nhiều video thì mở **session con cho từng video** (`mcp__claude-code-remote__create_session`, `source_url` = repo, `source_revision` = nhánh làm việc, prompt: slug + bước cần làm + "đọc CLAUDE.md, skill lam-video, checkpoint.json"), lượt chính chỉ theo dõi. Không có công cụ đó thì làm lần lượt từng video, nhưng mỗi bước vẫn giao agent. Không để dữ liệu (nhân vật, màu, logo) của phim này lẫn sang phim khác.
+6. **Trạng thái nằm ở file, không nằm ở chat:** `checkpoint.json`, `brief.md`, `storyboard.md`, `estimate.json` và doc `videos/<slug>` trong app. Phiên nào cũng làm tiếp được chỉ bằng cách đọc các file đó.
+7. **Hỏi tiến độ không cần chat:** người dùng xem bước và ghi chú trên thẻ video trong app. Khi đang chat với Claude Code thì hỏi bằng `/btw` để không làm dài chat chính.
+
 ## Chế độ tiết kiệm
 - Chỉ gọi agent có trong dây chuyền. Đạo diễn kiêm dựng ở `ve-tinh`, `thi-nghiem`.
 - Dùng lại thư viện `studio/ai-art/` (nhân vật, bối cảnh) trước khi vẽ mới.
