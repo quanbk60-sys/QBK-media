@@ -430,7 +430,13 @@ function makeShotRenderer(sh) {
     if (sh._art?.cyclist) { // người đạp xe vẽ sẵn: bóng đổ + nhún theo nhịp đạp + lắc nhẹ
       const img = sh._art.cyclist, hh = 560, ww = hh * img.width / img.height, ph = t * 2 * Math.PI * 0.9;
       o.fillStyle = 'rgba(20,30,40,0.36)'; o.beginPath(); o.moveTo(cxp - 6, cyp); o.quadraticCurveTo(cxp - 70, cyp + 60, cxp - 170, cyp + 115); o.quadraticCurveTo(cxp - 215, cyp + 140, cxp - 235, cyp + 112); o.quadraticCurveTo(cxp - 150, cyp + 70, cxp + 6, cyp); o.fill();
-      o.save(); o.translate(cxp, cyp + Math.sin(ph * 2) * 2.5); o.rotate(Math.sin(ph) * 0.018 + roll0); o.drawImage(img, -ww / 2, -hh, ww, hh); o.restore();
+      o.save(); o.translate(cxp, cyp + Math.sin(ph * 2) * 2.5); o.rotate(Math.sin(ph) * 0.018 + roll0);
+      const A = sh._art;
+      if (A.cyclistTop && A.cyclistBike) { // thân trên + xe vẽ sẵn, chân đạp vẽ bằng code ở giữa hai lớp
+        const k = hh / img.height; o.scale(k, k); o.translate(-img.width / 2, -img.height);
+        drawLegs(o, ph); o.drawImage(A.cyclistTop, 0, 0); o.drawImage(A.cyclistBike, 0, 0);
+      } else o.drawImage(img, -ww / 2, -hh, ww, hh);
+      o.restore();
     } else cyclist(o, cxp, cyp, t, 0.98);
     // ánh nắng + họa tiết màu
     const sun = o.createRadialGradient(W * 0.85, th.yH * 0.4, 20, W * 0.85, th.yH * 0.4, 900); sun.addColorStop(0, 'rgba(255,250,225,0.35)'); sun.addColorStop(1, 'rgba(255,250,225,0)'); o.fillStyle = sun; o.fillRect(0, 0, W, H);
@@ -440,6 +446,26 @@ function makeShotRenderer(sh) {
     fx.setTransform(1, 0, 0, 1, 0, 0); fx.translate(CX, H * 0.55); fx.rotate(roll); fx.scale(1.065, 1.065); fx.translate(-CX, -H * 0.55); fx.drawImage(out, 0, 0); fx.setTransform(1, 0, 0, 1, 0, 0);
     return fin;
   };
+}
+// Chân đạp xe nhìn từ sau, toạ độ theo ảnh cyclist.png (301x900): hông y≈445, trục giữa x≈152, đùi giò cùng màu quần kaki của ảnh.
+function drawLegs(g, ph) {
+  const PANT = '#c4a674', PANT_D = '#8f7650', PANT_L = '#dcc394', SHOE = '#874529', SHOE_D = '#4f2a1a';
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  for (const side of [-1, 1]) {
+    const a = ph + (side > 0 ? Math.PI : 0), fy = 692 + 55 * Math.sin(a), fx = 152 + side * 70 + 5 * Math.cos(a);
+    const u = clamp((747 - fy) / 110), hip = [152 + side * 72, 445], ankle = [fx, fy - 26];
+    const knee = [hip[0] + side * (6 + 20 * u), hip[1] + (ankle[1] - hip[1]) * 0.5 - 14 * u];
+    const seg = (p, q, w, col) => { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.moveTo(...p); g.lineTo(...q); g.stroke(); };
+    seg(hip, knee, 70, PANT_D); seg(knee, ankle, 54, PANT_D);           // viền tối
+    seg([hip[0] + side * 4, hip[1]], [knee[0] + side * 3, knee[1]], 58, PANT); seg([knee[0] + side * 2, knee[1]], [ankle[0] + side * 2, ankle[1]], 44, PANT);
+    seg([hip[0] + side * 14, hip[1] + 6], [knee[0] + side * 12, knee[1]], 14, PANT_L); // mép sáng phía ngoài (nắng trước-phải)
+    g.strokeStyle = PANT_D; g.lineWidth = 3; g.beginPath(); g.moveTo(knee[0] - 18, knee[1] - 4); g.quadraticCurveTo(knee[0], knee[1] + 8, knee[0] + 18, knee[1] - 4); g.stroke(); // nếp gối
+    g.fillStyle = PANT_D; g.beginPath(); g.ellipse(ankle[0], ankle[1] + 4, 25, 9, 0, 0, 7); g.fill(); // gấu quần
+    g.fillStyle = SHOE_D; g.beginPath(); g.ellipse(fx, fy + 6, 26, 21, 0, 0, 7); g.fill();
+    g.fillStyle = SHOE; g.beginPath(); g.ellipse(fx - 2, fy + 2, 23, 18, 0, 0, 7); g.fill();
+    g.fillStyle = 'rgba(255,220,180,0.35)'; g.beginPath(); g.ellipse(fx + 6, fy - 4, 8, 5, 0, 0, 7); g.fill();
+    g.fillStyle = '#2a2a2e'; g.fillRect(fx - 22, fy + 18, 44, 8); // bàn đạp
+  }
 }
 function roundPoly(g, P, k) { g.beginPath(); const n = P.length; for (let i = 0; i < n; i++) { const a = P[i], b = P[(i + 1) % n], p = P[(i + n - 1) % n]; const s = [lerp(a[0], p[0], k * 0.5), lerp(a[1], p[1], k * 0.5)], e = [lerp(a[0], b[0], k * 0.5), lerp(a[1], b[1], k * 0.5)]; i ? g.lineTo(...s) : g.moveTo(...s); g.quadraticCurveTo(a[0], a[1], ...e); } g.closePath(); }
 
@@ -467,7 +493,7 @@ for (const sh of S.shots) {
   if (sh.bg) sh._img = await img(path.join(base, sh.bg));
   const a = sh.art ?? S.art; if (!a) continue; // {"dir": "...", "tree": [...], "house": "...", "flower": [...], "bush": [...], "cyclist": "..."}
   const d = path.join(base, a.dir || '.'), load = async x => x ? img(path.join(d, x.endsWith('.png') ? x : x + '.png')) : undefined;
-  sh._art = {tree: await Promise.all((a.tree || []).map(load)), house: await load(a.house), stone: await load(a.stone), flower: await Promise.all((sh.flowersArt || a.flower || []).map(load)), bush: await Promise.all((a.bush || []).map(load)), cyclist: await load(a.cyclist)};
+  sh._art = {tree: await Promise.all((a.tree || []).map(load)), house: await load(a.house), stone: await load(a.stone), cyclistTop: a.cyclist ? await load(a.cyclist + '-top').catch(() => undefined) : undefined, cyclistBike: a.cyclist ? await load(a.cyclist + '-bike').catch(() => undefined) : undefined, flower: await Promise.all((sh.flowersArt || a.flower || []).map(load)), bush: await Promise.all((a.bush || []).map(load)), cyclist: await load(a.cyclist)};
 }
 const renderers = S.shots.map(sh => ({sh, f: makeShotRenderer(sh)}));
 const XF = S.crossfade ?? 0.6;

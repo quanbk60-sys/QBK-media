@@ -15,6 +15,7 @@ Câu phong cách chung: "Hand-painted anime background art style of classic Japa
 | `flowers-white.png` | Bụi hoa cúc trắng, cánh bướm hồng, hoa tím | |
 | `flowers-orange.png` | Bụi cúc vạn thọ cam vàng | |
 | `cyclist.png` | Người đạp xe nhìn từ sau: nón cói, áo xanh, ba lô nâu, túi đỏ | nhân vật chính |
+| `cyclist-top.png`, `cyclist-bike.png` | Tách từ `cyclist.png`: thân trên (mờ dần ở hông) và xe (bỏ chân) | engine vẽ chân đạp bằng code giữa hai lớp |
 | `stone.png` | Vân đá sa thạch (vuông) | phủ lên từng viên đá đường |
 
 Chi phí lập bộ này: 0,87 USD (12 ảnh, kể cả 2 ảnh làm lại).
