@@ -17,7 +17,7 @@ const {createCanvas, GlobalFonts, loadImage} = require('@napi-rs/canvas');
 const FONTS = new URL('../engine/fonts/', import.meta.url).pathname;
 try { GlobalFonts.registerFromPath(path.join(FONTS, 'InterDisplay-Black.otf'), 'Blk'); } catch {}
 
-const W = 1080, H = 1920, CX = W / 2;
+const W = 1080, H = 1920, CX = W / 2, ZCYC = 6.4; // ZCYC: độ sâu nhân vật chính trước camera (m)
 // ----- phối cảnh: camera cao 4,2 m bám sau xe, mặt dốc làm điểm tụ của đường thấp hơn đường chân trời -----
 const F = 1091, CAMH = 4.2, ZMIN = 1.6, ZMAX = 58, CELL = 0.3;
 const R = seed => { let s = (seed >>> 0) || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; };
@@ -33,6 +33,16 @@ const THEMES = {
     sky: ['#0636a8', '#1f63cf', '#5fa6ea', '#cfe7f8'],
     flowers: [['#ffffff', '#f4d24a', 0.45], ['#ffb3c7', '#ffffff', 0.18], ['#ff6f91', '#ffe08a', 0.12], ['#b98cff', '#ffffff', 0.08], ['#fff3a8', '#e8a020', 0.17]],
     grass: [100, 118], house: true, tree: 0.5, bg: 'sea'},
+  rung: { // lối mòn trong rừng xanh, cây dày hai bên, hoa nhỏ trắng vàng xanh
+    yH: 520, yV: 860, bend: [1.2, 0.05, 0.4, 0.1],
+    sky: ['#0636a8', '#1f63cf', '#5fa6ea', '#cfe7f8'],
+    flowers: [['#ffffff', '#f4d24a', 0.4], ['#fff3a8', '#e8a020', 0.3], ['#8fb8ff', '#ffffff', 0.2], ['#ff6f91', '#ffe08a', 0.1]],
+    grass: [98, 125], house: false, tree: 0.95, treeEvery: 9, bg: 'valley'},
+  chieu: { // đường mòn bìa rừng lúc hoàng hôn
+    yH: 420, yV: 820, bend: [1.0, 0.05, 0.4, 0.1],
+    sky: ['#0636a8', '#1f63cf', '#5fa6ea', '#cfe7f8'],
+    flowers: [['#ffb733', '#ff7a00', 0.4], ['#ffffff', '#f4d24a', 0.3], ['#ff6f91', '#ffe08a', 0.3]],
+    grass: [72, 98], house: false, tree: 0.8, treeEvery: 16, bg: 'valley'},
   nui: { // đường đá men sườn núi, hoa cúc cam, thung lũng và núi xanh
     yH: 560, yV: 880, bend: [2.2, 0.055, 0.6, 0.09],
     sky: ['#0a3aa6', '#1e66d0', '#6aaeea', '#d7ecf8'],
@@ -311,8 +321,8 @@ function makeWorld(th, seed, art = {}) {
       if (q() < 0.07) out.push({X: s * (5 + q() * 6), zw: zw + q() * CELL, img: spr.bush[q() * 6 | 0], hw: 2 + q() * 2, flip: q() < 0.5});
     }
     // cây lớn bên phải, nhà gỗ bên trái theo nhịp
-    if (i % 40 === 23 && q() < th.tree + 0.3) out.push({X: 2.7 + q() * 1.4, zw, img: spr.tree[q() * spr.tree.length | 0], hw: 7 + q() * 2.5, flip: q() < 0.5, big: true});
-    if (i % 40 === 5 && q() < th.tree) out.push({X: -(3 + q() * 1.6), zw, img: spr.tree[q() * spr.tree.length | 0], hw: 6 + q() * 2, flip: true, big: true});
+    if (i % (th.treeEvery || 40) === Math.floor((th.treeEvery || 40) * 0.57) && q() < th.tree + 0.3) out.push({X: 2.7 + q() * 1.4, zw, img: spr.tree[q() * spr.tree.length | 0], hw: 7 + q() * 2.5, flip: q() < 0.5, big: true});
+    if (i % (th.treeEvery || 40) === Math.floor((th.treeEvery || 40) * 0.12) && q() < th.tree) out.push({X: -(3 + q() * 1.6), zw, img: spr.tree[q() * spr.tree.length | 0], hw: 6 + q() * 2, flip: true, big: true});
     if (th.house && i % 120 === 30) out.push({X: -3.4, zw, img: spr.house, hw: 7, flip: false, big: true});
     cache.set(i, out); if (cache.size > 2000) cache.delete(cache.keys().next().value);
     return out;
@@ -321,7 +331,20 @@ function makeWorld(th, seed, art = {}) {
 }
 
 // ===================== KHUNG HÌNH =====================
+function makeStillRenderer(sh) { // cảnh tĩnh có chuyển động nhẹ: đẩy máy chậm, hạt sáng bay, ánh đèn thở
+  const img = sh._img, [out, o] = mk(W, H), r = R(sh.seed ?? 9), dots = Array.from({length: sh.particles ?? 40}, () => ({x: r() * W, y: r() * H, s: 2 + r() * 5, v: 6 + r() * 14, p: r() * 6.28}));
+  return (t, tl) => {
+    const k = Math.max(W / img.width, H / img.height) * (1.02 + 0.05 * tl / Math.max(1, sh.end - sh.start));
+    o.globalAlpha = 1; o.drawImage(img, (W - img.width * k) / 2, (H - img.height * k) * 0.45, img.width * k, img.height * k);
+    for (const d of dots) { const y = (d.y - tl * d.v + H) % H, x = d.x + Math.sin(tl * 0.6 + d.p) * 14, a = 0.25 + 0.35 * Math.sin(tl * 1.7 + d.p) ** 2;
+      const g = o.createRadialGradient(x, y, 0, x, y, d.s * 3); g.addColorStop(0, `rgba(255,240,200,${a})`); g.addColorStop(1, 'rgba(255,240,200,0)'); o.fillStyle = g; o.fillRect(x - d.s * 3, y - d.s * 3, d.s * 6, d.s * 6); }
+    const glow = o.createRadialGradient(W * (sh.glowX ?? 0.3), H * (sh.glowY ?? 0.6), 10, W * (sh.glowX ?? 0.3), H * (sh.glowY ?? 0.6), 500); glow.addColorStop(0, `rgba(255,190,110,${0.12 + 0.05 * Math.sin(tl * 2.3)})`); glow.addColorStop(1, 'rgba(255,190,110,0)'); o.fillStyle = glow; o.fillRect(0, 0, W, H);
+    const vg = o.createRadialGradient(W / 2, H * 0.5, H * 0.3, W / 2, H * 0.5, H * 0.75); vg.addColorStop(0, 'rgba(0,5,20,0)'); vg.addColorStop(1, 'rgba(0,5,20,0.35)'); o.fillStyle = vg; o.fillRect(0, 0, W, H);
+    return out;
+  };
+}
 function makeShotRenderer(sh) {
+  if (sh.type === 'still') return makeStillRenderer(sh);
   const th0 = THEMES[sh.theme || 'bien']; if (!th0) throw new Error('theme? ' + sh.theme);
   // ảnh nền vẽ sẵn (ảnh Gemini): đặt đường chân trời của ảnh vào yH, điểm tụ của đường dịch theo
   const yH = sh.bg ? (sh.yH ?? 430) : th0.yH, th = {...th0, yH, yV: sh.yV ?? th0.yV + (yH - th0.yH) * 0.35};
@@ -332,7 +355,12 @@ function makeShotRenderer(sh) {
   // mặt nạ mờ chuyển động: trong suốt ở giữa (quanh xe và điểm tụ), đậm dần ra mép và đáy
   { const gr = maskx.createRadialGradient(CX, th.yV + 240, 120, CX, th.yV + 300, 900); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(0.45, 'rgba(0,0,0,0.25)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); maskx.fillStyle = gr; maskx.fillRect(0, 0, W, H); }
   const [A, w1, B, w2] = th.bend, curve = zw => A * Math.sin(zw * w1 + seed) + B * Math.sin(zw * w2 + seed * 2);
-  const speed = sh.speed ?? 4.2;
+  const speed = sh.speed ?? 4.2, keys = sh.speedKeys, s0 = sh.s0 ?? 3;
+  // tốc độ đổi theo thời gian: speedKeys = [[giây trong cảnh, m/s], ...] (ví dụ đi chậm lại rồi dừng); s0 = vị trí đầu cảnh (nối liền cảnh trước)
+  const vAt = tl => { if (!keys) return speed; if (tl <= keys[0][0]) return keys[0][1]; for (let i = 1; i < keys.length; i++) if (tl <= keys[i][0]) { const [a0, v0] = keys[i - 1], [a1, v1] = keys[i]; return v0 + (v1 - v0) * (tl - a0) / Math.max(1e-6, a1 - a0); } return keys.at(-1)[1]; };
+  const sAt = tl => { if (!keys) return s0 + tl * speed; const n = Math.max(1, Math.ceil(tl / 0.02)), dt = tl / n; let v = s0; for (let i = 0; i < n; i++) v += vAt((i + 0.5) * dt) * dt; return v; };
+  sh._sAt = sAt; sh._vAt = vAt;
+  const props = (sh.props || []).map(pr => ({X: pr.X, zw: sAt(pr.at === 'start' ? 0 : sh.end - sh.start) + ZCYC + (pr.zAhead ?? 0.3), img: sh._art?.props?.[pr.img], hw: pr.hw ?? 0.6, flip: !!pr.flip, big: true})).filter(pr => pr.img);
   const bands = []; for (let v = 0; v < 6; v++) { const [b, bx] = mk(2400, 140), hue = lerp(th.grass[0], th.grass[1], v / 5);
     for (let i = 0; i < 2600; i++) { const x = r() * 2400, bh = 50 + r() * 88, lean = (r() - 0.5) * 30, bw = 2.5 + r() * 4.5, back = i < 900;
       bx.fillStyle = hsl(hue + (r() - 0.5) * 26, 42 + r() * 25, back ? 14 + r() * 12 : 22 + r() * 30 + (v % 3) * 3);
@@ -344,7 +372,7 @@ function makeShotRenderer(sh) {
   }
 
   return (t, tl) => { // t: thời gian tuyệt đối, tl: thời gian trong shot
-    const s = 3 + tl * speed, ctx = fgx;
+    const s = sAt(tl), ctx = fgx;
     const cam = curve(s), dcam = (curve(s + 0.5) - curve(s)) / 0.5;
     const bendAt = z => curve(s + z) - cam - z * dcam;
     const sway = Math.sin(tl * 0.6) * 8 + dcam * 40, roll0 = -dcam * 0.03;
@@ -402,7 +430,6 @@ function makeShotRenderer(sh) {
       }
     }
     // vật thể hai bên, xa -> gần; xe chen vào đúng độ sâu
-    const ZCYC = 6.4;
     const objs = []; for (let i = iFar; i >= iNear; i--) for (const ob of world.cell(i)) { const z = ob.zw - s; if (z > ZMIN * (ob.big ? 1.2 : 0.75) && z < ZMAX) objs.push([z, ob]); }
     objs.sort((a, b) => b[0] - a[0]);
     for (const [z, ob] of objs) {
@@ -425,9 +452,21 @@ function makeShotRenderer(sh) {
     for (let k = 1; k <= 3; k++) { const m = 1 + k * 0.022; tmpx.globalAlpha = 0.3; tmpx.drawImage(fg, CX - CX * m, th.yV - th.yV * m, W * m, H * m); }
     tmpx.globalAlpha = 1; tmpx.globalCompositeOperation = 'destination-in'; tmpx.drawImage(mask, 0, 0); tmpx.globalCompositeOperation = 'source-over';
     o.drawImage(fg, 0, 0); o.drawImage(tmp, 0, 0);
+    // đạo cụ của cảnh (ví dụ chú thỏ) vẽ sau lớp mờ cho nét, có bóng dưới chân
+    for (const ob of props) { const z = ob.zw - s; if (z <= 1.5 || z >= ZMAX) continue;
+      const h = ob.hw * F / z * 0.55, w = h * ob.img.width / ob.img.height, x = xOf(ob.X, z), y = yOf(z);
+      o.fillStyle = 'rgba(10,30,10,0.35)'; o.beginPath(); o.ellipse(x - w * 0.06, y - h * 0.02, w * 0.42, Math.max(2, w * 0.1), 0, 0, 7); o.fill();
+      o.save(); o.translate(x, y); if (ob.flip) o.scale(-1, 1); o.drawImage(ob.img, -w / 2, -h, w, h); o.restore(); }
     // xe vẽ sau cùng (không mờ)
     const cxp = CX + sway * 0.6 + Math.sin(tl * 0.9) * 6, cyp = yOf(ZCYC);
-    if (sh._art?.cyclist) { // người đạp xe vẽ sẵn: bóng đổ + nhún theo nhịp đạp + lắc nhẹ
+    const WK = sh.char && sh._art?.[sh.char];
+    if (WK) { // nhân vật đi bộ vẽ sẵn (thân trên), chân bước bằng code; dáng 'walk' hoặc 'carry'
+      const M = WK.meta, v = vAt(tl), amp = clamp(v / 1.1), ph = s / 1.1 * 2 * Math.PI, hh = sh.charH ?? 500, k = hh / WK.top.height;
+      const bob = -Math.abs(Math.cos(ph)) * 5 * amp;
+      o.fillStyle = 'rgba(20,30,40,0.32)'; o.beginPath(); o.ellipse(cxp - 40, cyp + 8, 85, 22, -0.25, 0, 7); o.fill();
+      o.save(); o.translate(cxp, cyp + bob); o.rotate(Math.sin(ph) * 0.014 * amp + roll0 * 0.5); o.scale(k, k); o.translate(-M.cx, -M.footY - 6);
+      drawWalkLegs(o, ph, amp, M); o.drawImage(WK.top, 0, 0); o.restore();
+    } else if (sh._art?.cyclist) { // người đạp xe vẽ sẵn: bóng đổ + nhún theo nhịp đạp + lắc nhẹ
       const img = sh._art.cyclist, hh = 560, ww = hh * img.width / img.height, ph = t * 2 * Math.PI * 0.9;
       o.fillStyle = 'rgba(20,30,40,0.36)'; o.beginPath(); o.moveTo(cxp - 6, cyp); o.quadraticCurveTo(cxp - 70, cyp + 60, cxp - 170, cyp + 115); o.quadraticCurveTo(cxp - 215, cyp + 140, cxp - 235, cyp + 112); o.quadraticCurveTo(cxp - 150, cyp + 70, cxp + 6, cyp); o.fill();
       o.save(); o.translate(cxp, cyp + Math.sin(ph * 2) * 2.5); o.rotate(Math.sin(ph) * 0.018 + roll0);
@@ -446,6 +485,29 @@ function makeShotRenderer(sh) {
     fx.setTransform(1, 0, 0, 1, 0, 0); fx.translate(CX, H * 0.55); fx.rotate(roll); fx.scale(1.065, 1.065); fx.translate(-CX, -H * 0.55); fx.drawImage(out, 0, 0); fx.setTransform(1, 0, 0, 1, 0, 0);
     return fin;
   };
+}
+function limbShape(g, p, q, w1, w2, col) { // khối thon có hai đầu tròn
+  const dx = q[0] - p[0], dy = q[1] - p[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2, wm = (w1 + w2) / 2 * 1.08;
+  g.fillStyle = col; g.beginPath(); g.moveTo(p[0] + nx * w1 / 2, p[1] + ny * w1 / 2); g.quadraticCurveTo(mx + nx * wm / 2, my + ny * wm / 2, q[0] + nx * w2 / 2, q[1] + ny * w2 / 2);
+  g.lineTo(q[0] - nx * w2 / 2, q[1] - ny * w2 / 2); g.quadraticCurveTo(mx - nx * wm / 2, my - ny * wm / 2, p[0] - nx * w1 / 2, p[1] - ny * w1 / 2); g.closePath(); g.fill();
+  g.beginPath(); g.arc(p[0], p[1], w1 / 2, 0, 7); g.fill(); g.beginPath(); g.arc(q[0], q[1], w2 / 2, 0, 7); g.fill();
+}
+// Chân bước nhìn từ sau (toạ độ theo ảnh nhân vật, số đo trong <tên>.json): chân đang bước lên phía trước nhấc lên, ngắn lại do xa camera; chân trụ chạm đất.
+function drawWalkLegs(g, ph, amp, M) {
+  const legs = [-1, 1].map(side => { const a = ph + (side > 0 ? Math.PI : 0), lift = Math.max(0, Math.sin(a)) * amp, push = Math.cos(a) * amp;
+    const hip = [M.cx + side * M.legDX, M.hipY - 4], footY = M.footY - 46 * lift + 6 * Math.max(0, -push);
+    const ankle = [M.cx + side * M.legDX * 0.96, footY - M.bootH * 0.72], knee = [M.cx + side * (M.legDX + 3 + 6 * lift), lerp(hip[1], ankle[1], 0.5) - 10 * lift];
+    return {side, lift, hip, knee, ankle, footY}; }).sort((a, b) => b.lift - a.lift);
+  for (const L of legs) {
+    const sk = L.side < 0 ? M.skinShade : M.skin, sk2 = L.side < 0 ? M.skin : M.skinShade;
+    limbShape(g, L.hip, L.knee, M.legW * 1.08, M.legW * 0.92, sk2); limbShape(g, L.knee, L.ankle, M.legW * 0.92, M.legW * 0.78, sk2);
+    limbShape(g, [L.hip[0] - L.side * 3, L.hip[1]], [L.knee[0] - L.side * 3, L.knee[1]], M.legW * 0.9, M.legW * 0.76, sk); limbShape(g, [L.knee[0] - L.side * 3, L.knee[1]], [L.ankle[0] - L.side * 2, L.ankle[1]], M.legW * 0.76, M.legW * 0.64, sk);
+    const bh = M.bootH * (1 - 0.18 * L.lift), bw = M.bootW, bx = L.ankle[0] - bw / 2, by = L.footY - bh;
+    g.fillStyle = M.boot; g.beginPath(); g.roundRect(bx, by, bw, bh, [14, 14, 12, 12]); g.fill();
+    g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(bx + 2, L.footY - 10, bw - 4, 10);
+    g.fillStyle = 'rgba(255,220,180,0.22)'; g.beginPath(); g.roundRect(bx + 4, by + 2, bw - 8, 16, 8); g.fill();
+    g.strokeStyle = 'rgba(30,15,5,0.6)'; g.lineWidth = 3; g.beginPath(); g.roundRect(bx, by, bw, bh, [14, 14, 12, 12]); g.stroke();
+  }
 }
 // Chân đạp xe nhìn từ sau, toạ độ theo ảnh cyclist.png (301x900): hông y≈445, trục giữa x≈152, đùi giò cùng màu quần kaki của ảnh.
 function drawLegs(g, ph) {
@@ -487,11 +549,12 @@ function drawLegs(g, ph) {
 function roundPoly(g, P, k) { g.beginPath(); const n = P.length; for (let i = 0; i < n; i++) { const a = P[i], b = P[(i + 1) % n], p = P[(i + n - 1) % n]; const s = [lerp(a[0], p[0], k * 0.5), lerp(a[1], p[1], k * 0.5)], e = [lerp(a[0], b[0], k * 0.5), lerp(a[1], b[1], k * 0.5)]; i ? g.lineTo(...s) : g.moveTo(...s); g.quadraticCurveTo(a[0], a[1], ...e); } g.closePath(); }
 
 // ===================== ÂM THANH: gió, chim, nhạc nền êm tự tổng hợp =====================
-function ambience(dur, music) {
+function ambience(dur, music, steps = []) {
   const N = Math.ceil(dur * SR), buf = new Float32Array(N), r = R(99);
   let lp = 0, lp2 = 0;
   for (let i = 0; i < N; i++) { const t = i / SR; lp += 0.015 * ((r() * 2 - 1) - lp); lp2 += 0.04 * (lp - lp2); buf[i] = lp2 * 3.2 * (0.6 + 0.4 * Math.sin(t * 0.7) * Math.sin(t * 0.23 + 1)) * Math.min(1, t / 1.5, (dur - t) / 1.5); }
   for (let b = 0; b < dur / 2.2; b++) { const t0 = 0.8 + b * 2.2 + r() * 1.5, f0 = 2800 + r() * 1800, nn = 2 + (r() * 3 | 0); for (let c = 0; c < nn; c++) { const st = t0 + c * 0.13, L = 0.09; for (let j = 0; j < L * SR; j++) { const i = Math.round(st * SR) + j; if (i >= N) break; const u = j / (L * SR); buf[i] += Math.sin(2 * Math.PI * (f0 + 900 * Math.sin(u * 3.14)) * j / SR) * Math.sin(Math.PI * u) * 0.05; } } }
+  for (const [t0, g0] of steps) { let lp = 0; const st = Math.round(t0 * SR), L = Math.round(0.08 * SR); for (let j = 0; j < L && st + j < N; j++) { lp += 0.12 * ((r() * 2 - 1) - lp); buf[st + j] += lp * 1.6 * g0 * Math.exp(-j / (0.018 * SR)); } }
   if (music) { // vòng hợp âm I–vi–IV–V (Fa trưởng), pad mềm + nốt gảy
     const chords = [[53, 57, 60, 64], [50, 53, 57, 60], [46, 50, 53, 57], [48, 52, 55, 58]], hz = m => 440 * 2 ** ((m - 69) / 12), bar = 2.4;
     for (let i = 0; i < N; i++) { const t = i / SR, c = chords[Math.floor(t / bar) % 4], u = (t % bar) / bar; let v = 0; for (const m of c) v += Math.sin(2 * Math.PI * hz(m) * t) * 0.5 + Math.sin(2 * Math.PI * hz(m) * 2 * t) * 0.12; buf[i] += v * 0.028 * Math.min(1, u * 6, (1 - u) * 6 + 0.5) * Math.min(1, t / 2, (dur - t) / 2); }
@@ -510,8 +573,12 @@ for (const sh of S.shots) {
   if (sh.bg) sh._img = await img(path.join(base, sh.bg));
   const a = sh.art ?? S.art; if (!a) continue; // {"dir": "...", "tree": [...], "house": "...", "flower": [...], "bush": [...], "cyclist": "..."}
   const d = path.join(base, a.dir || '.'), load = async x => x ? img(path.join(d, x.endsWith('.png') ? x : x + '.png')) : undefined;
+  const loadChar = async x => x ? {top: await load(x + '-top'), meta: JSON.parse(fs.readFileSync(path.join(d, x + '.json'), 'utf8'))} : undefined;
+  const pr = {}; for (const q of sh.props || []) pr[q.img] = await load(q.img);
+  sh._artExtra = {walk: await loadChar(a.walk), carry: await loadChar(a.carry), props: pr};
   sh._art = {tree: await Promise.all((a.tree || []).map(load)), house: await load(a.house), stone: await load(a.stone), cyclistTop: a.cyclist ? await load(a.cyclist + '-top').catch(() => undefined) : undefined, cyclistBike: a.cyclist ? await load(a.cyclist + '-bike').catch(() => undefined) : undefined, flower: await Promise.all((sh.flowersArt || a.flower || []).map(load)), bush: await Promise.all((a.bush || []).map(load)), cyclist: await load(a.cyclist)};
 }
+for (const sh of S.shots) if (sh._art) Object.assign(sh._art, sh._artExtra);
 const renderers = S.shots.map(sh => ({sh, f: makeShotRenderer(sh)}));
 const XF = S.crossfade ?? 0.6;
 function frameAt(t) {
@@ -532,7 +599,9 @@ for (let i = 0; i < frames; i++) {
   if (i % 60 === 0) process.stderr.write(`  ${i}/${frames} khung, ${((Date.now() - t0) / 1000).toFixed(0)}s\n`);
 }
 ff.stdin.end(); await new Promise(r => ff.on('close', r));
-writeWav(tmpA, ambience(to - from, S.music === true));
+const steps = []; // tiếng bước chân khớp với nhịp chân của nhân vật đi bộ
+for (const sh of S.shots) if (sh.char && sh._sAt) { let last = null; for (let tl = 0; tl < sh.end - sh.start; tl += 1 / fps) { const n = Math.floor(sh._sAt(tl) / 0.55); if (last !== null && n !== last) { const t = sh.start + tl - from; if (t >= 0 && t < to - from) steps.push([t, clamp(sh._vAt(tl) / 1.1)]); } last = n; } }
+writeWav(tmpA, ambience(to - from, S.music === true, steps));
 const inputs = ['-i', tmpV, '-i', tmpA], filters = []; let mixIn = '[1:a]';
 if (S.narration?.path) { const l = S.narration.lead ?? 0.3; inputs.push('-ss', `${Math.max(0, from - l)}`, '-i', path.join(base, S.narration.path)); filters.push(`[1:a]volume=0.5[amb]`, `[2:a]aresample=${SR},adelay=${Math.round(Math.max(0, l - from) * 1000)}:all=1[nar]`, `[amb][nar]amix=inputs=2:duration=first:normalize=0[mix]`); mixIn = '[mix]'; }
 if (S.music?.path) { const idx = inputs.filter(x => x === '-i').length; inputs.push('-stream_loop', '-1', '-i', path.join(base, S.music.path)); filters.push(`[${idx}:a]aresample=${SR},volume=${S.music.gain ?? 0.3}[mus]`, `${mixIn}[mus]amix=inputs=2:duration=first:normalize=0[mx2]`); mixIn = '[mx2]'; }
