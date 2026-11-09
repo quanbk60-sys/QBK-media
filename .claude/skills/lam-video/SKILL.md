@@ -38,7 +38,7 @@ Các phong cách 2D cũ (giấy mực, bảng phấn, pop...) **đã gỡ khỏi
 Agent không có trong cột của phong cách thì **không gọi**. Bước độc lập chạy song song (giọng ∥ khung hình; kiểm định ∥ phát hành). Ngoài dây chuyền: `nghien-cuu-mau` khi người dùng gửi mẫu học phong cách.
 
 ## Model
-Biên kịch Sonnet (lịch sử, nhạy cảm thì Opus). Đạo diễn, chỉ đạo mỹ thuật, họa sĩ Opus. Dự toán, quay phim, âm thanh, dựng, kiểm định, phát hành, nghiên cứu mẫu Sonnet. Lồng tiếng Haiku.
+Biên kịch Sonnet (lịch sử, nhạy cảm thì truyền `model: "opus"`). Đạo diễn, chỉ đạo mỹ thuật, họa sĩ Opus. Dự toán, quay phim, âm thanh, dựng, kiểm định, phát hành, nghiên cứu mẫu Sonnet. Lồng tiếng Haiku.
 
 ## Quy trình
 1. **Nhận yêu cầu** từ app (`requests`: `topic, style, length, gateScript, gateAnimatic, narration, voice`) hoặc chat. Chưa rõ phong cách thì chọn theo bảng trên và ghi lý do.
@@ -90,7 +90,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 2. Lấy mẫu: `python3 studio/tools/tiktok.py <url> --download projects/_mau/<id>.mp4`. Nếu báo `download_error` vì mạng (máy chủ video của TikTok chưa mở), ghi `status: "loi"`, `result: "Chưa tải được video mẫu: cần mở mạng tới v16-webapp-prime.us.tiktok.com, hoặc gửi file video cho Claude trong chat"`, rồi dừng yêu cầu này.
 3. Giao `nghien-cuu-mau` theo skill `hoc-mau` (kèm `name`, `note` của người dùng): viết thẻ trong `studio/references/<slug>/`, thêm gói phong cách vào `studio/engine/lib/styles.mjs` (hoặc module mới như `lib/geo.mjs` của `ve-tinh`), cập nhật `SCENE_FORMAT.md` và bảng chọn phong cách ở trên.
 4. Render một đoạn thử khoảng 8 giây bằng phong cách mới để kiểm tra.
-   - **Trung thành với mẫu.** Làm đúng phong cách người dùng gửi. **Không dùng người que** trừ khi người dùng chọn đúng phong cách người que. **Không làm người thật** (ảnh, video người như thật, người dẫn như thật). Nhân vật người luôn **vẽ kiểu anime** (người dùng chốt 09/11/2026). Mẫu có người thật thì làm bản anime cùng bố cục, nhịp, không khí; mẫu là tranh AI thì dựng bằng ảnh AI Gemini (`studio/tools/genimage.py`, trong trần `studio/budget.json`) với nhân vật **do studio tự tạo**, code lo chuyển động. Phần nào công cụ hiện có không làm được (ví dụ khẩu hình mượt như video AI) thì làm bản gần nhất có thể và ghi rõ, hoặc đặt `status: "loi"` kèm phương án; **không bao giờ lặng lẽ đổi sang phong cách khác**. Ví dụ đúng: `phong-canh-3d` (tranh AI anime + chuyển động code). Ví dụ **sai, không được lặp lại**: đổi mẫu sang người que khi người dùng không chọn.
+   - **Trung thành với mẫu.** Làm đúng phong cách người dùng gửi. **Không dùng người que.** **Không làm người thật** (ảnh, video người như thật, người dẫn như thật). Nhân vật người luôn **vẽ kiểu anime** (người dùng chốt 09/11/2026). Mẫu có người thật thì làm bản anime cùng bố cục, nhịp, không khí; mẫu là tranh AI thì dựng bằng ảnh AI Gemini (`studio/tools/genimage.py`, trong trần `studio/budget.json`) với nhân vật **do studio tự tạo**, code lo chuyển động. Phần nào công cụ hiện có không làm được (ví dụ khẩu hình mượt như video AI) thì làm bản gần nhất có thể và ghi rõ, hoặc đặt `status: "loi"` kèm phương án; **không bao giờ lặng lẽ đổi sang phong cách khác**. Ví dụ đúng: `phong-canh-3d` (tranh AI anime + chuyển động code). Ví dụ **sai, không được lặp lại**: đổi mẫu sang người que khi người dùng không chọn.
    - Mẫu dùng thứ engine 2D không làm được (3D thực tế, quay thật, ảnh AI): dùng engine3d, ảnh thật Wikimedia hoặc ảnh AI Gemini cho phần hình; giữ bố cục khung, kiểu chữ, màu, nhịp cắt, chuyển động camera. Ghi rõ phần nào còn khác mẫu trong thẻ và trong `result`.
    - Thật sự không làm được gì thì đặt `status: "loi"` (app hiện "Cần bạn xem"), **không bao giờ** đặt `"xong"` khi chưa thêm phong cách vào `app/styles`.
 5. Thêm vào `app/styles.list` (doc có `full: true`, tức danh sách này là toàn bộ phong cách app hiển thị) mục `{id, name, thumb, color, note, genres, engine}`. `thumb` là id asset của một ảnh xem trước 270×480 cắt từ đoạn render thử, tải lên bằng Artifact `asset: true`. `engine` nhận `2d`, `3d` hoặc `ve-tinh`: `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
@@ -103,7 +103,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 - Bị ngắt giữa chừng thì đọc `checkpoint.json` và làm tiếp, không làm lại từ đầu.
 
 ## Công cụ của studio
-- Engine `studio/engine/`: `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Video mẫu 9 phong cách: `studio/engine/examples/styles/`.
-- `studio/tools/`: `tts.py`, `align.py`, `retime.py` (đổi tốc độ giọng và co giãn cả scene theo), `cutout.py`.
-- `studio/topics.md` (chủ đề), `studio/lessons.md` (bài học).
-- Phim mẫu: `projects/rua-va-tho/` (đầy đủ quy trình), `projects/bach-dang-938/`.
+- Anime: `studio/tools/genimage.py` (khung hình, tờ nhân vật), `keyout.py` (tách nền), `genvideo.py` (clip Omni), `assemble.py` (animatic, ghép phim), `studio/engine3d/phong-canh.mjs` (cảnh nhân vật đi trong cảnh, nhạc `--audio-only`). Thư viện `studio/ai-art/`.
+- Vệ tinh: engine 2D `studio/engine/render.mjs` + `lib/geo.mjs`, `studio/tools/satmap.py`, `satgrid.py`, `commons.py`. Phim mẫu `projects/bach-dang-ve-tinh/`.
+- Thí nghiệm 3D: `studio/engine3d/render3d.mjs`. Phim mẫu `projects/lam-da-co-dai/`.
+- Chung: `tts.py`, `align.py`, `retime.py`, `estimate.py`, `tiktok.py` (tải mẫu khi học phong cách). `studio/lessons.md` (bài học).
