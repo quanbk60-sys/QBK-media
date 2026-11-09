@@ -43,3 +43,19 @@ node render3d.mjs ../../projects/<slug>/scene3d.json                         # b
 
 Thêm đồ vật mới: viết hàm vào `LIB` trong `lib3d.js`. Hàm trả về `THREE.Group`, và có thể gắn `userData.update(q, t)` để tham số chuyển động được.
 Phim mẫu: `projects/lam-da-co-dai/build_scene3d.py`.
+
+## Phong cảnh anime (`phong-canh-3d`): `phong-canh.mjs`
+Tranh phong cảnh kiểu anime, người đạp xe đổ dốc (học từ mẫu `studio/references/phong-canh-anime`). Vẽ bằng canvas (`../engine/node_modules`), không cần Chromium.
+```bash
+node phong-canh.mjs ../../projects/<slug>/phongcanh.json --still 2,10   # ảnh tĩnh để soát
+node phong-canh.mjs ../../projects/<slug>/phongcanh.json                # ~7 s máy / 1 s phim
+```
+```json
+{"fps": 30, "music": true, "crossfade": 0.6,
+ "shots": [{"start": 0, "end": 8, "theme": "bien", "seed": 3, "speed": 4.2},
+           {"start": 8, "end": 15, "theme": "nui", "seed": 5, "speed": 3.6}],
+ "narration": {"path": "audio/narration.wav", "lead": 0.3}}
+```
+- `theme`: `bien` (biển, bãi cát, thị trấn ven biển, hoa trắng hồng) | `nui` (thung lũng, núi xanh, hoa cúc cam).
+- `seed` đổi bố cục mây, cây, hoa; `speed` là m/s xe chạy. `music: true` là nhạc êm tự tổng hợp; hoặc `{"path", "gain"}` cho nhạc có giấy phép.
+- Thêm cảnh mới: thêm mục vào `THEMES` (màu trời, hoa, cỏ, kiểu nền `sea`/`valley`).
