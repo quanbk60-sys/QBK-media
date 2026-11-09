@@ -77,16 +77,26 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 | `requests` | App | Chủ đề mới: `topic, genre, style, length, gateScript, status: "moi"`. Khi nhận việc, Nhà sản xuất đổi thành `"da-nhan"` và tạo `videos/<slug>` |
 | `videos/<slug>` | Nhà sản xuất, app | `title, genre, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Giọng, Phân cảnh, Dựng, Kiểm định), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
 | `feedback` | App | `video, round, items[{t, at, text}], status: "moi"`. Chuyển từng mục cho đúng agent, xong thì đổi `status` thành `"da-xu-ly"` |
-| `tiktokLinks` | App | Link TikTok người dùng lưu. Đọc tiêu đề qua `https://www.tiktok.com/oembed?url=…`, ghi `title, author` |
+| `tiktokLinks` | App | Link TikTok người dùng lưu (`status: "moi"`). Đọc bằng `python3 studio/tools/tiktok.py <url>` (hỗ trợ link rút gọn vt.tiktok.com), ghi `title, author` (tên kênh · độ dài · lượt xem), `fullUrl`, `status: "da-doc"` |
+| `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |
+| `app/styles` | Nhà sản xuất | `list: [{id, name, color, note, genres}]`: phong cách đoàn phim học thêm. App tự hiện chúng trong mục Làm video, không cần đăng lại app |
 | `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu |
 
 **Kích hoạt:** app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB` ("Đoàn phim QBK: nhận việc từ app") ngay khi người dùng gửi yêu cầu, góp ý hoặc duyệt. Mỗi lần kích hoạt mở một session cloud mới chạy prompt của tác vụ. Người dùng cũng có thể nhắn "chạy đi" trong chat.
 
 **Mỗi lần chạy:**
-1. Đọc `requests` có `status == "moi"` và `feedback` có `status == "moi"`.
+1. Đọc `requests`, `feedback`, `tiktokLinks` và `styleRequests` có `status == "moi"`. Link TikTok thì đọc ngay (nhanh, làm trước).
 2. Cập nhật `app/crew` (agent nào đang làm) và `videos/<slug>.stage` ở mỗi mốc.
 3. Video xong: tải `final.mp4` và `thumbnail.png` lên app (`Artifact` với `asset: true`, file video ≤ 15MB), ghi `video`, `thumb`, `publish`, `report`, `status: "cho-duyet"`, `round + 1`.
 4. Mọi lần ghi phải truyền `if_version` của bản đã đọc.
+
+### Học phong cách từ app (`styleRequests`)
+1. Đổi `status` thành `"dang-hoc"`, ghi `result` ngắn ở mỗi bước (app hiện dòng này).
+2. Lấy mẫu: `python3 studio/tools/tiktok.py <url> --download projects/_mau/<id>.mp4`. Nếu báo `download_error` vì mạng (máy chủ video của TikTok chưa mở), ghi `status: "loi"`, `result: "Chưa tải được video mẫu: cần mở mạng tới v16-webapp-prime.us.tiktok.com, hoặc gửi file video cho Claude trong chat"`, rồi dừng yêu cầu này.
+3. Giao `nghien-cuu-mau` theo skill `hoc-mau` (kèm `name`, `note` của người dùng): viết thẻ trong `studio/references/<slug>/`, thêm gói phong cách vào `studio/engine/lib/styles.mjs` (hoặc module mới như `lib/geo.mjs` của `ve-tinh`), cập nhật `SCENE_FORMAT.md` và bảng chọn phong cách ở trên.
+4. Render một đoạn thử khoảng 8 giây bằng phong cách mới để kiểm tra.
+5. Thêm vào `app/styles.list` mục `{id, name, color, note, genres}`: `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
+6. Đặt `status: "xong"`, `result` là tóm tắt ngắn (đã có gì, còn thiếu gì). Commit và push.
 
 ## Nguyên tắc
 - **Agent được sáng tạo.** Skill là hướng dẫn, không phải luật cứng. Luật cứng xem trong file của từng agent: không bịa, nội dung an toàn, không che phụ đề, không tự đăng, không trả phí khi chưa được đồng ý.
