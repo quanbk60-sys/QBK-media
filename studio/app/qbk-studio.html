@@ -192,7 +192,7 @@ a.link{color:var(--navy)}
       <textarea id="sfb-${esc(v.id)}" rows="2" placeholder="Ví dụ: thêm cảnh mẹ đón ở cửa, bớt câu cuối"></textarea>
       <div class="tiles two" style="margin-top:2px"><button class="btn" data-scriptfb="${esc(v.id)}">Gửi góp ý</button><button class="btn ok" data-scriptok="${esc(v.id)}">Duyệt kịch bản</button></div></details>`;
   // Cổng 3: animatic (bản dựng thô bằng khung hình) trước khi quay bằng Omni
-  const animWaiting = v => (v.status === "dang-lam" || v.status === "dang-sua") && v.animaticStatus === "cho-duyet";
+  const animWaiting = v => v.animaticStatus === "cho-duyet" && !!v.animatic && v.status !== "da-duyet" && v.status !== "da-dang";
   const animBox = v => `<details class="card col" open style="padding:10px;gap:8px;border-color:var(--red)"><summary style="cursor:pointer;font-weight:700;min-height:32px">Bản dựng thô chờ bạn duyệt</summary>
       <span class="small">Xem nhịp phim và hình từng cảnh trước khi đoàn phim quay (bước tốn tiền). ${v.estimate ? "Chi phí quay theo dự toán: " + esc(usd(v.estimate.usd)) + "." : ""}</span>
       ${v.animatic ? `<video src="${blob(v.animatic)}" controls playsinline preload="metadata" style="width:100%;max-width:240px;align-self:center"></video>` : `<span class="small">Chưa có file.</span>`}
@@ -224,7 +224,7 @@ a.link{color:var(--navy)}
           ${working ? `<span class="small">${esc(v.stageNote || "")}</span>` : ""}
           ${costLine(v)}
           ${needCost(v) ? `<button class="btn ok sm" data-approvecost="${esc(v.id)}">Duyệt chi phí ${esc(usd(v.estimate.usd))}</button>` : ""}
-          ${v.status === "cho-duyet" ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
+          ${v.status === "cho-duyet" && v.video ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
           ${v.status === "da-duyet" ? `<a class="btn sm" href="#post" data-sel="${esc(v.id)}">Mở bộ đăng bài</a>` : ""}
           ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
         </div>
