@@ -93,7 +93,11 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 2. Cập nhật `app/crew` (agent nào đang làm) và `videos/<slug>.stage` ở mỗi mốc.
 3. Video xong: tải `final.mp4` và `thumbnail.png` lên app (`Artifact` với `asset: true`, file video ≤ 15MB), ghi `video`, `thumb`, `publish`, `report`, `status: "cho-duyet"`, `round + 1`.
 4. Mọi lần ghi phải truyền `if_version` của bản đã đọc.
-5. Người dùng có thể **xóa video** trong app (doc `videos/<slug>` biến mất, video và ảnh bìa bị xóa). Đang làm mà thấy doc đã mất thì dừng video đó, không tạo lại doc. Giữ thư mục `projects/<slug>` trong repo.
+5. **Duyệt kịch bản trong app** (request có `gateScript: true`): sau bước 1, ghi `videos/<slug>.script` (toàn văn lời đọc), `scriptStatus: "cho-duyet"`, `stage: "Kịch bản"`, rồi dừng video đó. App hiện kịch bản ngay trên thẻ video với nút "Duyệt kịch bản" và "Gửi góp ý".
+   - Bấm duyệt: app đặt `scriptStatus: "da-duyet"`, `stage: "Dự toán"` và gọi lại đoàn phim. Lần chạy đó **làm tiếp** từ bước 1b (dự toán) đến hết.
+   - Gửi góp ý: app thêm `feedback` có `kind: "script"` và đặt `scriptStatus: "dang-sua"`. Giao `bien-kich` sửa, ghi lại `script`, đặt `scriptStatus: "cho-duyet"` rồi dừng chờ duyệt lần nữa. Đổi feedback thành `"da-xu-ly"`.
+   - Nếu `projects/<slug>` chưa có trong repo (phiên trước không push được), dựng lại `brief.md` từ request và `narration.txt` từ `videos/<slug>.script`, rồi làm tiếp.
+6. Người dùng có thể **xóa video** trong app (doc `videos/<slug>` biến mất, video và ảnh bìa bị xóa). Đang làm mà thấy doc đã mất thì dừng video đó, không tạo lại doc. Giữ thư mục `projects/<slug>` trong repo.
 
 ### Học phong cách từ app (`styleRequests`)
 1. Đổi `status` thành `"dang-hoc"`, ghi `result` ngắn ở mỗi bước (app hiện dòng này).

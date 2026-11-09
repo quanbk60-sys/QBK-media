@@ -176,6 +176,14 @@ a.link{color:var(--navy)}
   const costLine = v => { const e = v.estimate; if (!e) return "";
     const parts = [`Dự toán ${usd(e.usd)}`]; if (typeof e.cap === "number") parts.push(`trần ${usd(e.cap)}`); if (typeof e.spent === "number") parts.push(`đã chi ${usd(e.spent)}`);
     return `<span class="small" style="color:${needCost(v) ? "var(--red-ink)" : "var(--green-ink)"}">${esc(parts.join(" · "))}${needCost(v) ? " · vượt trần, chờ bạn duyệt" : ""}</span>`; };
+  // Duyệt kịch bản (khi bạn tích "Cho mình duyệt kịch bản trước"): đoàn phim ghi videos/<id>.script và scriptStatus = "cho-duyet"
+  const scriptWaiting = v => (v.status === "dang-lam" || v.status === "dang-sua") && (v.scriptStatus === "cho-duyet" || (!v.scriptStatus && v.stage === "Kịch bản" && /duyệt kịch bản/i.test(v.stageNote || "")));
+  const scriptText = v => v.script || (v.report || [])[0] || "";
+  const scriptBox = v => `<details class="card col" open style="padding:10px;gap:8px;border-color:var(--red)"><summary style="cursor:pointer;font-weight:700;min-height:32px">Kịch bản chờ bạn duyệt</summary>
+      <div class="copybox" style="font-size:14px;max-height:320px;overflow:auto">${esc(scriptText(v)) || "Đoàn phim chưa gửi nội dung kịch bản."}</div>
+      <label for="sfb-${esc(v.id)}" class="small">Muốn sửa gì thì ghi ở đây (không bắt buộc)</label>
+      <textarea id="sfb-${esc(v.id)}" rows="2" placeholder="Ví dụ: thêm cảnh mẹ đón ở cửa, bớt câu cuối"></textarea>
+      <div class="tiles two" style="margin-top:2px"><button class="btn" data-scriptfb="${esc(v.id)}">Gửi góp ý</button><button class="btn ok" data-scriptok="${esc(v.id)}">Duyệt kịch bản</button></div></details>`;
   function videoCard(v, big) {
     const st = STATUS[v.status] || ["", "p-mute"];
     const stepIdx = Math.max(0, STEPS.indexOf(v.stage));
@@ -195,6 +203,7 @@ a.link{color:var(--navy)}
           ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
         </div>
       </div>
+      ${scriptWaiting(v) ? `<div style="margin-top:10px">${scriptBox(v)}</div>` : ""}
       ${working ? `<div class="col" style="margin-top:10px;gap:4px"><div class="steps">${STEPS.map((_, i) => `<i class="${i < stepIdx ? "done" : i === stepIdx ? "now" : ""}"></i>`).join("")}</div>
       <div class="steplab">${STEPS.map((s, i) => `<span class="${i === stepIdx ? "now" : ""}">${s}</span>`).join("")}</div></div>` : ""}
     </div>`;
@@ -407,6 +416,18 @@ a.link{color:var(--navy)}
   function bind(r) {
     document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { const v = S.videos.find(x => x.id === b.dataset.del); if (v) askDelete(v); });
     document.querySelectorAll("[data-sel]").forEach(a => a.addEventListener("click", () => { S.sel = a.dataset.sel; S.draftFb = []; }));
+    document.querySelectorAll("[data-scriptok]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.scriptok); if (!v || !S.db) return;
+      b.disabled = true;
+      try { await S.db.doc("videos/" + v.id).update({ scriptStatus: "da-duyet", scriptApprovedAt: nowISO(), stage: "Dự toán", stageNote: "Bạn đã duyệt kịch bản, đoàn phim làm tiếp", updatedAt: nowISO() });
+        const ok = await fireCrew("Đã duyệt kịch bản video " + v.id + ", làm tiếp"); toast(ok ? "Đã duyệt kịch bản. Đoàn phim làm tiếp ngay." : "Đã duyệt. Nhắn \"chạy đi\" cho Claude để đoàn phim làm tiếp.");
+      } catch { b.disabled = false; toast("Chưa lưu được, thử lại sau."); } });
+    document.querySelectorAll("[data-scriptfb]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.scriptfb); if (!v || !S.db) return;
+      const ta = document.getElementById("sfb-" + v.id), txt = (ta?.value || "").trim(); if (!txt) { toast("Ghi điều muốn sửa trong kịch bản trước đã"); ta?.focus(); return; }
+      b.disabled = true;
+      try { await S.db.collection("feedback").add({ video: v.id, kind: "script", round: 0, items: [{ t: 0, at: "kịch bản", text: txt }], status: "moi", createdAt: nowISO() });
+        await S.db.doc("videos/" + v.id).update({ scriptStatus: "dang-sua", stageNote: "Biên kịch đang sửa kịch bản theo góp ý của bạn", updatedAt: nowISO() });
+        const ok = await fireCrew("Góp ý kịch bản video " + v.id); toast(ok ? "Đã gửi góp ý. Biên kịch sửa ngay." : "Đã lưu góp ý. Nhắn \"chạy đi\" cho Claude.");
+      } catch { b.disabled = false; toast("Chưa gửi được, thử lại sau."); } });
     document.querySelectorAll("[data-approvecost]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.approvecost); if (!v || !S.db) return;
       b.disabled = true;
       try { await S.db.doc("videos/" + v.id).update({ estimate: { ...v.estimate, approved: true, approvedAt: nowISO() }, stageNote: "Đã duyệt chi phí, đoàn phim làm tiếp", updatedAt: nowISO() });
