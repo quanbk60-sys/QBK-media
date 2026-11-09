@@ -1,0 +1,105 @@
+{
+  "default": "Bodi",
+  "list": [
+    {
+      "desc": "Giọng mặc định của kênh (mẫu lấy từ video Bạch Đằng)",
+      "id": "Bodi",
+      "name": "Bodi",
+      "sample": "c7f9dffbf4cd2f41aa6ee9dfe43f5412"
+    },
+    {
+      "desc": "Nam · rõ ràng, kiểu thuyết minh",
+      "id": "Charon",
+      "name": "Charon",
+      "sample": "451a705ff497ef6c204f7fc82c6bec78"
+    },
+    {
+      "desc": "Nam · hiểu biết, giảng giải",
+      "id": "Sadaltager",
+      "name": "Sadaltager",
+      "sample": "b020b2930b138d07e387e0528525cded"
+    },
+    {
+      "desc": "Nam · đều, điềm đạm",
+      "id": "Schedar",
+      "name": "Schedar",
+      "sample": "a748186a3f41f49a7bb6d444d0c81e90"
+    },
+    {
+      "desc": "Nam · trầm khàn",
+      "id": "Algenib",
+      "name": "Algenib",
+      "sample": "96a6f0ccdb03454d2dc8884129b85774"
+    },
+    {
+      "desc": "Nam · thân thiện",
+      "id": "Achird",
+      "name": "Achird",
+      "sample": "e5e582faf586702b73ff8c4f43cfe9fa"
+    },
+    {
+      "desc": "Nam · vui tươi, nhanh nhẩu",
+      "id": "Puck",
+      "name": "Puck",
+      "sample": "d831306f308fb7d10f0cffbe1e49e4f3"
+    },
+    {
+      "desc": "Nam · hào hứng, sôi nổi",
+      "id": "Fenrir",
+      "name": "Fenrir",
+      "sample": "dca6900cc3f367cf852ebb5125b6612f"
+    },
+    {
+      "desc": "Nữ · chắc, dứt khoát",
+      "id": "Kore",
+      "name": "Kore",
+      "sample": "7ca945d49fc6a889ba26f8eff6f80443"
+    },
+    {
+      "desc": "Nữ · ấm áp",
+      "id": "Sulafat",
+      "name": "Sulafat",
+      "sample": "c084943b9b5aa09bba79c93630de1e9f"
+    },
+    {
+      "desc": "Nữ · nhẹ nhàng",
+      "id": "Achernar",
+      "name": "Achernar",
+      "sample": "7b7c63b4afd08ef37a02ce9ff951409a"
+    },
+    {
+      "desc": "Nữ · thoải mái, tự nhiên",
+      "id": "Callirrhoe",
+      "name": "Callirrhoe",
+      "sample": "b220c55361d75a1623bfec3e0a0aafa3"
+    },
+    {
+      "desc": "Nữ · nhẹ tênh",
+      "id": "Aoede",
+      "name": "Aoede",
+      "sample": "1e92e496d11205129493ae99435ba6f1"
+    },
+    {
+      "desc": "Nữ · trong sáng",
+      "id": "Zephyr",
+      "name": "Zephyr",
+      "sample": "375db12a732696ebcabc756dac82bdad"
+    },
+    {
+      "desc": "Nữ · tươi sáng",
+      "id": "Autonoe",
+      "name": "Autonoe",
+      "sample": "321bb9cb4b0deedc98f1c4ba4ad4529a"
+    },
+    {
+      "desc": "Nữ · trẻ trung",
+      "id": "Leda",
+      "name": "Leda",
+      "sample": "3e33f373f21df72dd5e9f6d75fa6bf37"
+    }
+  ],
+  "note": "Mô tả giọng theo tài liệu của Google, chưa nghe kiểm. Mẫu đã tăng tốc 1,2x như video thật.",
+  "sampleText": "Năm 938, trên sông Bạch Đằng, Ngô Quyền đã làm nên một chiến thắng khiến cả đạo quân Nam Hán phải khiếp sợ.",
+  "tempo": 1.2,
+  "updatedAt": "2026-11-09T08:40:00Z"
+}

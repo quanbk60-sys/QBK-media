@@ -1,0 +1,106 @@
+{
+  "full": true,
+  "list": [
+    {
+      "color": "#d9d5ce",
+      "engine": "3d",
+      "genres": "Khoa học",
+      "id": "thi-nghiem",
+      "name": "Thí nghiệm cổ · 3D",
+      "note": "Dựng 3D thực tế: đồ vật gỗ, sắt, nước, băng, lửa có ánh sáng và bóng đổ, khung 16:9 giữa nền mờ, chữ 2–3 từ có từ khóa vàng, nhãn trắng chỉ vào đồ vật. Hợp cách làm, khoa học đời thường, mẹo dân gian. Mỗi video dựng khoảng 17 phút.",
+      "thumb": "c0c34f8aef29e3c705490fd2eff4c705"
+    },
+    {
+      "color": "#0b1118",
+      "engine": "ve-tinh",
+      "genres": "Địa lý",
+      "id": "ve-tinh",
+      "name": "Vệ tinh · ảnh thật",
+      "note": "Ảnh vệ tinh thật, zoom từ quả địa cầu, ghim, đường phát sáng, thẻ ảnh thật Wikimedia, ô số liệu, chữ trắng cam. Hợp địa lý, trận đánh có địa điểm thật, công trình.",
+      "thumb": "87d195ecaf544aef526c6c32c11418c0"
+    },
+    {
+      "color": "#F3EADB",
+      "engine": "2d",
+      "genres": "Ngụ ngôn",
+      "id": "giay-muc",
+      "name": "Giấy mực",
+      "note": "Nét mực run tay, bàn tay vẽ từng nét, chuyển cảnh mờ. Hợp ngụ ngôn, kể chuyện.",
+      "thumb": "955b90f908ea951f3bc8294eb315db17"
+    },
+    {
+      "color": "#2F4A3A",
+      "engine": "2d",
+      "genres": "Khoa học",
+      "id": "bang-phan",
+      "name": "Bảng phấn",
+      "note": "Nét phấn đứt quãng trên bảng xanh, tự viết không có tay, chuyển cảnh quệt phấn, phụ đề chữ viết tay. Hợp 'vì sao', mẹo học.",
+      "thumb": "7d7e794cdedd30a399efabfdfa7628bf"
+    },
+    {
+      "color": "#1F4E8C",
+      "engine": "2d",
+      "genres": "Lịch sử",
+      "id": "ban-ve",
+      "name": "Bản vẽ kỹ thuật",
+      "note": "Nét máy mảnh trên giấy xanh kẻ ô, dòng quét chuyển cảnh, phụ đề khung nhãn gõ dần. Hợp công trình, phát minh.",
+      "thumb": "96385c41dd58cf2c051056326c13f89f"
+    },
+    {
+      "color": "#FFFDF6",
+      "engine": "2d",
+      "genres": "Tâm lý",
+      "id": "so-tay",
+      "name": "Sổ tay",
+      "note": "Bút dạ tô lệch màu trên giấy kẻ dòng, lật trang, phụ đề giấy nhớ vàng. Hợp tâm lý, kỹ năng.",
+      "thumb": "6a636b6df95b563ba42fb6fb7045375a"
+    },
+    {
+      "color": "#FFD23F",
+      "engine": "2d",
+      "genres": "Hoạt hình vui",
+      "id": "pop",
+      "name": "Pop sặc sỡ",
+      "note": "Vector dày, bóng đổ đen, hình bật ra, chớp sáng chuyển cảnh, phụ đề sticker. Hợp hài, meme.",
+      "thumb": "fc4f670efe910cb25079e4db1383f928"
+    },
+    {
+      "color": "#EFE2C4",
+      "engine": "2d",
+      "genres": "Lịch sử",
+      "id": "dan-gian",
+      "name": "Tranh dân gian",
+      "note": "Nét khắc gỗ đậm, vân giấy, khung viền đỏ, hình hiện dần như in. Hợp cổ tích, lễ Tết.",
+      "thumb": "e19e20c6e102607ebb8e6593d2810d28"
+    },
+    {
+      "color": "#1A1A1A",
+      "engine": "2d",
+      "genres": "Hoạt hình vui",
+      "id": "phim-cam",
+      "name": "Phim câm",
+      "note": "Đen trắng có hạt phim, chuyển cảnh mống mắt, phụ đề khung phim câm. Hợp bí ẩn, hài kiểu cũ.",
+      "thumb": "61cbb162a93d6d6c654f90fb66a95f08"
+    },
+    {
+      "color": "#BFB9AD",
+      "engine": "2d",
+      "genres": "Tâm lý",
+      "id": "phac-thao",
+      "name": "Phác thảo điện ảnh",
+      "note": "Chì nhiều nét, gạch bóng, tông sepia, dải đen điện ảnh. Hợp chuyện sâu lắng.",
+      "thumb": "d02e358978c0345ee477bcc93ce4134f"
+    },
+    {
+      "color": "#14202B",
+      "engine": "2d",
+      "genres": "Địa lý",
+      "id": "ban-do-toi",
+      "name": "Bản đồ dữ liệu tối",
+      "note": "Nét phát sáng trên nền tối, bảng số liệu. Hợp kinh tế, so sánh.",
+      "thumb": "6a1c48884fcea5ce757cdb8b57b6110d"
+    }
+  ],
+  "note": "Danh sách đầy đủ phong cách app hiển thị: {id, name, thumb (asset id ảnh xem trước), color, note, genres, engine: '2d'|'3d'|'ve-tinh'}. Phong cách học thêm thì thêm vào đây, kèm ảnh xem trước 270x480.",
+  "updatedAt": "2026-11-09T09:30:00Z"
+}

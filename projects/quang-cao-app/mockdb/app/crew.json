@@ -1,0 +1,99 @@
+{
+  "agents": [
+    {
+      "model": "opus",
+      "name": "Biên kịch",
+      "note": "Viết lời, kiểm chứng nguồn",
+      "state": "idle"
+    },
+    {
+      "model": "haiku",
+      "name": "Lồng tiếng",
+      "note": "Giọng Bodi 1,2x, căn phụ đề",
+      "state": "idle"
+    },
+    {
+      "model": "opus",
+      "name": "Đạo diễn",
+      "note": "Phân cảnh, chọn phong cách",
+      "state": "idle"
+    },
+    {
+      "model": "sonnet",
+      "name": "Họa sĩ",
+      "note": "Vẽ thêm đồ và động tác bằng code",
+      "state": "idle"
+    },
+    {
+      "model": "sonnet",
+      "name": "Dựng phim",
+      "note": "Render và soát kỹ thuật",
+      "state": "idle"
+    },
+    {
+      "model": "sonnet",
+      "name": "Kiểm định",
+      "note": "Soát sử liệu, chính tả, bố cục",
+      "state": "idle"
+    },
+    {
+      "model": "sonnet",
+      "name": "Phát hành",
+      "note": "Ảnh bìa, tiêu đề, mô tả",
+      "state": "idle"
+    },
+    {
+      "model": "sonnet",
+      "name": "Nghiên cứu mẫu",
+      "note": "Học phong cách từ mẫu bạn gửi",
+      "state": "idle"
+    },
+    {
+      "model": "sonnet",
+      "name": "Săn trend",
+      "note": "Báo cáo trend 08/11 đã xong",
+      "state": "done"
+    }
+  ],
+  "headline": "9 agent · 10 phong cách · vừa học phong cách Vệ tinh ảnh thật",
+  "lessons": [
+    "Giọng đọc mặc định tăng tốc 1,2x, giữ nguyên cao độ",
+    "Không dùng tiếng bút sột soạt khi bàn tay vẽ",
+    "Tiếng bụp đặt sớm hơn đầu câu thoại khoảng 0,15 giây",
+    "Bàn tay vẽ không được che phụ đề",
+    "Keyframe camera đầu tiên ghi rõ tọa độ",
+    "Bóng nghĩ không chạm mặt nhân vật",
+    "Nhân vật cách lề tối thiểu 40px",
+    "Ngụ ngôn: đọc tên theo phiên âm Việt, nói \"tương truyền\"",
+    "Vệ tinh: đường sông, đường tiến quân phải dò lại trên ảnh vệ tinh, đi đúng lòng sông",
+    "Vệ tinh: ảnh thật chỉ dùng khi rõ tác giả và giấy phép (CC0, PD, CC BY, CC BY-SA), ghi ngay dưới ảnh",
+    "Vệ tinh: vị trí không có nguồn chính xác thì ghi \"minh họa\" trên hình"
+  ],
+  "references": [
+    {
+      "fit": "Địa lý, trận đánh có địa điểm thật, công trình, dự án",
+      "have": "ảnh vệ tinh Esri, địa cầu xoay, zoom liền mạch, ghim, đường phát sáng, thẻ ảnh Wikimedia, ô số liệu, mây",
+      "miss": "khối 3D mọc lên, đường sông lấy tự động từ OpenStreetMap",
+      "name": "Vệ tinh ảnh thật (mẫu 09/11)"
+    },
+    {
+      "fit": "Ngụ ngôn, thiếu nhi",
+      "have": "bàn tay vẽ, Giấy mực",
+      "miss": "nét chì mảnh, chuyển cảnh xóa trắng",
+      "name": "Vẽ tay bút chì màu"
+    },
+    {
+      "fit": "Địa lý, chiến tranh, kinh tế",
+      "have": "nền tối, màu, camera; bản đồ thật thì dùng Vệ tinh",
+      "miss": "bảng thông tin",
+      "name": "Bản đồ địa chính trị"
+    },
+    {
+      "fit": "Tâm lý, đời sống",
+      "have": "sepia, dải đen",
+      "miss": "nội thất, tư thế ngồi và nằm",
+      "name": "Phác thảo điện ảnh sepia"
+    }
+  ],
+  "updatedAt": "2026-11-09T05:45:00Z"
+}

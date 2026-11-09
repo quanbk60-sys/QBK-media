@@ -1,0 +1,17 @@
+{
+  "costMonth": "0đ",
+  "costNote": "Gemini TTS gói miễn phí",
+  "insight": "Cần khoảng 10 video đã đăng để so sánh thể loại, phong cách và giờ đăng. Hiện có 2 video, 1 đã duyệt chờ đăng.",
+  "period": "Từ khi mở xưởng (08/11/2026)",
+  "platforms": {
+    "facebook": {
+      "connected": false
+    },
+    "tiktok": {
+      "connected": false
+    },
+    "youtube": {
+      "connected": false
+    }
+  }
+}

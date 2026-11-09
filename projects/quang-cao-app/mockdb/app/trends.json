@@ -1,0 +1,96 @@
+{
+  "google": [
+    {
+      "q": "epl",
+      "traffic": "5000+ lượt"
+    },
+    {
+      "q": "f1",
+      "traffic": "500+ lượt"
+    },
+    {
+      "q": "villarreal đấu với getafe",
+      "traffic": "500+ lượt"
+    },
+    {
+      "q": "bruno fernandes",
+      "traffic": "200+ lượt"
+    },
+    {
+      "q": "youri tielemans",
+      "traffic": "200+ lượt"
+    },
+    {
+      "q": "fpt",
+      "traffic": "200+ lượt"
+    }
+  ],
+  "picks": [
+    {
+      "deadline": "2026-11-23",
+      "deadlineLabel": "23/11",
+      "genre": "Lịch sử",
+      "note": "Hội nghị Văn hóa toàn quốc 24/11/1946",
+      "score": {
+        "easy": 4,
+        "fit": 4,
+        "hot": 5,
+        "safe": 4
+      },
+      "style": "giay-muc",
+      "topic": "Vì sao 24/11 là Ngày Văn hóa Việt Nam?"
+    },
+    {
+      "genre": "Khoa học",
+      "score": {
+        "easy": 4,
+        "fit": 5,
+        "hot": 3,
+        "safe": 5
+      },
+      "style": "bang-phan",
+      "topic": "Vì sao bầu trời màu xanh?"
+    },
+    {
+      "deadline": "2026-12-18",
+      "deadlineLabel": "18/12",
+      "genre": "Lịch sử",
+      "note": "chủ đề lịch sử nhạy cảm, nên duyệt kịch bản trước",
+      "score": {
+        "easy": 3,
+        "fit": 4,
+        "hot": 5,
+        "safe": 4
+      },
+      "sensitive": true,
+      "style": "ban-do-toi",
+      "topic": "80 năm Toàn quốc kháng chiến (19/12/1946)"
+    },
+    {
+      "deadline": "2027-01-29",
+      "deadlineLabel": "29/1/2027",
+      "genre": "Ngụ ngôn",
+      "note": "ngày 23 tháng Chạp cần kiểm lại",
+      "score": {
+        "easy": 3,
+        "fit": 5,
+        "hot": 4,
+        "safe": 3
+      },
+      "style": "dan-gian",
+      "topic": "Sự tích Ông Công Ông Táo"
+    },
+    {
+      "genre": "Ngụ ngôn",
+      "score": {
+        "easy": 3,
+        "fit": 5,
+        "hot": 2,
+        "safe": 5
+      },
+      "style": "giay-muc",
+      "topic": "Ếch ngồi đáy giếng"
+    }
+  ],
+  "updatedAt": "08/11/2026"
+}

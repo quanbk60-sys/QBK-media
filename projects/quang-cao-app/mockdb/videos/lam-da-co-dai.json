@@ -1,0 +1,32 @@
+{
+  "createdAt": "2026-11-09T08:24:00Z",
+  "duration": 50,
+  "genre": "Khoa học",
+  "publish": {
+    "pinned": "Nếu không có điện, bạn sẽ làm đá thế nào?",
+    "tiktok": "Không tủ lạnh, không điện, người Ba Tư cổ vẫn có đá giữa sa mạc: dẫn nước vào hồ nông, chờ đêm khô lạnh, rồi cất đá trong nhà hình nón. Bạn sẽ làm đá thế nào? #LamDa #BaTu #KhoaHoc #LichSu",
+    "titles": [
+      "Không điện, 2400 năm trước họ vẫn làm ra đá",
+      "Làm đá giữa sa mạc Ba Tư bằng 3 bước",
+      "Ngôi nhà hình nón giữ đá qua mùa hè"
+    ],
+    "when": "Gợi ý: 19–22h hoặc 11–13h",
+    "youtube": "Khoảng 2.400 năm trước (theo nhiều tài liệu), người Ba Tư làm đá ở sa mạc bằng hồ nông, đêm khô thoát nhiệt, rồi giữ trong yakhchal xây bằng vữa sarooj. Một số yakhchal ở Kerman còn đến nay.\n\nHình trong video là mô phỏng 3D.\n\nNguồn: Wikipedia Yakhchāl, designingbuildings.co.uk, ancientpages.com, brewminate.com.\n\n#Shorts #KhoaHoc #LichSu"
+  },
+  "report": [
+    "Vòng 2: dựng lại toàn bộ bằng 3D thực tế (engine3d mới, three.js, miễn phí): chậu, băng trong, hồ nước đóng băng ban đêm, nhà vòm Yakhchal, kênh Qanat, nguyên liệu vữa Sarooj, hầm chứa đá.",
+    "Bố cục giống mẫu TikTok: khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng, camera đẩy chậm, nhãn trắng gắn vào đồ vật.",
+    "Giọng và lời giữ nguyên bản trước (tách từ video vòng 1). Sửa chữ 'lòng dê' thành 'lông dê' trong phụ đề.",
+    "Không còn ảnh Wikimedia; cảnh Kerman ghi 'Mô phỏng 3D, không phải ảnh chụp'. Độ dày tường có ghi chú nguồn lệch nhau.",
+    "Chưa có nhạc nền."
+  ],
+  "round": 2,
+  "stage": "Kiểm định",
+  "stageNote": "",
+  "status": "cho-duyet",
+  "style": "thi-nghiem",
+  "thumb": "59da6f426f0927c0208d32f18f101474",
+  "title": "Làm đá thời cổ đại",
+  "updatedAt": "2026-11-09T09:10:00Z",
+  "video": "58370b0a56ed67d5faf63282f0bdb885"
+}
