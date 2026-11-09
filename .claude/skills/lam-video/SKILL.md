@@ -83,7 +83,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 | `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |
 | `app/voices` | Nhà sản xuất | Danh sách giọng nghe thử: `default, tempo, list: [{id, name, desc, sample}]` (`sample` là id asset, video nhỏ có tiếng). Thêm giọng mới: tạo mẫu bằng `tts.py` với `sampleText`, tăng tốc 1,2x, gói thành mp4 có hình tĩnh (kho asset không nhận file chỉ có tiếng), tải lên rồi thêm vào `list` |
 | `app/styles` | Nhà sản xuất | `full: true`, `list: [{id, name, thumb, color, note, genres, engine}]`: **toàn bộ** phong cách app hiển thị (ảnh xem trước, mô tả, thứ tự). Thêm, sửa hoặc ẩn phong cách ở đây, không cần đăng lại app |
-| `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu |
+| `app/trends`, `app/crew`, `app/stats` | Nhà sản xuất | Báo cáo trend, trạng thái agent và bài học, số liệu. **Khi đổi vai trò agent (file trong `.claude/agents/`), thêm bài học hoặc học phong cách mới thì cập nhật luôn `app/crew`** (`agents[].note`, `headline`, `lessons`, `references`) |
 
 **Kích hoạt:** app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB` ("Đoàn phim QBK: nhận việc từ app") ngay khi người dùng gửi yêu cầu, góp ý hoặc duyệt. Mỗi lần kích hoạt mở một session cloud mới chạy prompt của tác vụ. Người dùng cũng có thể nhắn "chạy đi" trong chat.
 
