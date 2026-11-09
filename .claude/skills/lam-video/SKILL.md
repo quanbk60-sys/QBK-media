@@ -23,7 +23,7 @@ Các phong cách 2D cũ (giấy mực, bảng phấn, pop...) **đã gỡ khỏi
 | 2 Bảng phân cảnh | `dao-dien` → `storyboard.md` | `dao-dien` → `storyboard.md` | `dao-dien` → `scene.json` / `scene3d.json` |
 | ⛳ Cổng 1 | Kịch bản (+ bảng phân cảnh) nếu người dùng bật | như trái | như trái |
 | 3 Dự toán | `du-toan` | `du-toan` | `du-toan` (thường 0đ) |
-| ⛳ Cổng 2 | Duyệt chi phí khi vượt trần (luôn có với Omni lần đầu của phim) | khi vượt trần | khi vượt trần |
+| ⛳ Cổng 2 | Duyệt chi phí khi vượt trần. **Người dùng duyệt thì Nhà sản xuất cập nhật ngay `studio/budget.json` theo dự toán đã duyệt**: `projects.<slug>` = tiền ảnh đã chi + phần ảnh của dự toán (kể cả dự phòng), `video_projects.<slug>.usd` = phần video AI + dự phòng, nâng `month_usd` nếu tổng tháng vượt. Không để phim đã duyệt bị chặn vì trần cũ (luôn có với Omni lần đầu của phim) | khi vượt trần | khi vượt trần |
 | 4 Mỹ thuật | `chi-dao-my-thuat` → `art-bible.md`, tờ nhân vật | `chi-dao-my-thuat` (dùng lại thư viện khi được) | không gọi |
 | 5 Khung hình | `hoa-si` → `keys/sNN.png` | `hoa-si` → khung 2K | `hoa-si` chỉ khi thiếu đạo cụ |
 | 6 Animatic | `dung-phim` `--animatic` | (khung chính là phim) | không |
