@@ -15,3 +15,4 @@ projects/_mau/*/output/*.mp4
 
 # File thử nghiệm người dùng gửi (ảnh, video bên thứ ba): không đưa vào repo
 projects/_thu/
+projects/*/output/final.mp4
