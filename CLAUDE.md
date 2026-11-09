@@ -3,7 +3,7 @@
 Repo này là **đoàn phim thu nhỏ**. Nó tạo video 9:16 cho TikTok và YouTube Shorts: lời đọc tiếng Việt, phụ đề, âm thanh. Hình làm theo **đúng phong cách người dùng chọn hoặc gửi mẫu**: vẽ bằng code, ảnh vệ tinh hoặc ảnh tư liệu, 3D, hoặc tranh anime bằng ảnh AI Gemini kết hợp chuyển động bằng code. **Không làm người thật**: nhân vật người vẽ kiểu anime. Người que chỉ là một trong các phong cách, không phải mặc định.
 
 ## Bắt đầu
-- Làm video: `/lam-video <chủ đề>` hoặc "làm video tiếp theo". Skill `.claude/skills/lam-video` điều phối 9 agent trong `.claude/agents/`: bien-kich, long-tieng, dao-dien, hoa-si, dung-phim, kiem-dinh, phat-hanh, nghien-cuu-mau, san-trend.
+- Làm video: `/lam-video <chủ đề>` hoặc "làm video tiếp theo". Skill `.claude/skills/lam-video` điều phối 10 agent trong `.claude/agents/`: bien-kich, du-toan, long-tieng, dao-dien, hoa-si, dung-phim, kiem-dinh, phat-hanh, nghien-cuu-mau, san-trend. Sau kịch bản, `du-toan` ước tính chi phí cả video; vượt trần thì chờ người dùng duyệt.
 - Quy trình v2: đoàn phim làm **trọn video** rồi gửi người dùng duyệt. Người dùng chỉ ra các điểm cần sửa, Nhà sản xuất chuyển về đúng agent, làm lại và gửi lại. Góp ý dùng được cho mọi video sau được ghi vào `studio/lessons.md`.
 - 10 gói phong cách (`"style"` trong scene.json), gợi ý theo thể loại trong skill `lam-video`.
 - Agent được tự sáng tạo ngoài skill, ghi lý do vào `notes.md`. Luật cứng giữ nguyên.
@@ -13,7 +13,7 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video 9:16 cho TikTok và You
 
 ## Cấu trúc
 - `studio/engine/`: engine hoạt hình (Node + @napi-rs/canvas + ffmpeg). `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Lần đầu chạy `npm ci` trong thư mục này.
-- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài), `satmap.py` + `satgrid.py` (ảnh vệ tinh Esri), `commons.py` (ảnh Wikimedia), `tiktok.py` (đọc link TikTok), `genimage.py` (ảnh Gemini có phí, trần trong `studio/budget.json`, sổ chi `studio/costs.jsonl`), `keyout.py` (xóa nền magenta).
+- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài), `satmap.py` + `satgrid.py` (ảnh vệ tinh Esri), `commons.py` (ảnh Wikimedia), `tiktok.py` (đọc link TikTok), `genimage.py` (ảnh Gemini có phí, trần trong `studio/budget.json`, sổ chi `studio/costs.jsonl`), `keyout.py` (xóa nền magenta), `genvideo.py` (video Gemini Omni, đang tắt), `estimate.py` (dự toán chi phí).
 - `studio/ai-art/`: thư viện hình AI dùng lại cho nhiều video (tranh nền, vật thể đã xóa nền).
 - `studio/references/`: thư viện mẫu tham khảo (thẻ kiến thức về phong cách). Người dùng gửi mẫu thì agent `nghien-cuu-mau` học theo skill `hoc-mau`.
 - `studio/trends/`: báo cáo săn trend (agent `san-trend`).

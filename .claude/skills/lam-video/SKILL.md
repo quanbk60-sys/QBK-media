@@ -9,7 +9,7 @@ Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude
 
 ## Chế độ tiết kiệm (mặc định, người dùng yêu cầu 08/11/2026)
 - **Dựng ở session mới**, không trong chat dài: app gọi tác vụ `trig_01S2GWJmEdKSxZesBjXC3gFB`. Chat chính chỉ dùng để bàn kế hoạch.
-- **Model:** biên kịch Sonnet. Chủ đề lịch sử, chính trị hoặc nhạy cảm thì truyền `model: "opus"` khi giao. Đạo diễn Opus. Kiểm định, họa sĩ Sonnet. Lồng tiếng, phát hành Haiku.
+- **Model:** biên kịch Sonnet. Chủ đề lịch sử, chính trị hoặc nhạy cảm thì truyền `model: "opus"` khi giao. Đạo diễn, họa sĩ Opus. Kiểm định, dự toán Sonnet. Lồng tiếng, phát hành Haiku.
 - **Đạo diễn kiêm dựng phim.** Chỉ gọi `dung-phim` khi render lỗi phức tạp.
 - **Họa sĩ chỉ chạy khi thật thiếu đồ.** Ưu tiên ghép đạo cụ có sẵn (`node studio/engine/catalog.mjs`).
 - **Kiểm định nhẹ** (nguồn, phụ đề, 6–8 khung, âm lượng), tối đa 1 vòng sửa tự động.
@@ -21,7 +21,8 @@ Bạn là **Nhà sản xuất**. Bạn giao việc cho các agent trong `.claude
 |---|---|---|
 | 0 | Nhà sản xuất | `brief.md` (có **phong cách**), `checkpoint.json` |
 | 1 | `bien-kich` (opus) | `narration.txt`, `script.md`, `sources.md`, `captions-phrases.txt` |
-| 2 | `long-tieng` (haiku) ∥ `hoa-si` (sonnet, khi cần đồ mới) | `audio/narration.wav` (mặc định 1,2x), `captions-audio.json` / engine |
+| 1b | `du-toan` (sonnet) | `estimate.md`, `estimate.json`: chi phí cả video (ảnh AI, video AI, giọng, dựng), so với trần. Ghi vào `videos/<slug>.estimate`, `stage: "Dự toán"`. **Vượt trần thì dừng** đến khi người dùng bấm "Duyệt chi phí" trong app (`estimate.approved`) hoặc đồng ý trong chat |
+| 2 | `long-tieng` (haiku) ∥ `hoa-si` (opus, khi cần đồ mới) | `audio/narration.wav` (mặc định 1,2x), `captions-audio.json` / engine |
 | 3 | `dao-dien` (opus) | `scene.json` |
 | 4 | `dung-phim` (sonnet) | `output/final.mp4` |
 | 5 | `kiem-dinh` (sonnet) | `qa.md`: lỗi được trả về đúng agent, tối đa 2 vòng |
@@ -35,7 +36,7 @@ Các bước độc lập nhau thì chạy song song: lồng tiếng song song v
 ## Quy trình
 1. **Nhận yêu cầu.** Có chủ đề thì dùng chủ đề đó. Người dùng nói "video tiếp theo" thì lấy mục `ý tưởng` đầu tiên trong `studio/topics.md`. Chưa có chủ đề thì lấy từ báo cáo trend gần nhất, hoặc giao `san-trend` tìm mới, rồi đề xuất 3 chủ đề. Chủ đề có hạn đăng (ngày lễ, ngày kỷ niệm) được ưu tiên trước.
 2. **Tạo dự án** `projects/<slug>/`. Ghi `brief.md` gồm: chủ đề, mảng, **phong cách** (chọn theo bảng dưới, hoặc theo yêu cầu người dùng), đối tượng, độ dài 45–75 giây, giọng (Gemini `gemini-3.8-flash-tts`, Bodi, tempo 1,2). Tạo `checkpoint.json`.
-3. **Chạy đủ các bước 1 → 6** mà không dừng chờ người dùng, trừ khi người dùng dặn "duyệt kịch bản trước", hoặc chủ đề nhạy cảm (chính trị, tranh chấp lãnh thổ, nhân vật còn sống) thì dừng hỏi sau bước 1. Báo tiến độ một dòng ở mỗi mốc lớn.
+3. **Chạy đủ các bước 1 → 6** (có bước 1b dự toán) mà không dừng chờ người dùng, trừ khi dự toán vượt trần (dừng ở bước Dự toán, chờ duyệt chi phí), trừ khi người dùng dặn "duyệt kịch bản trước", hoặc chủ đề nhạy cảm (chính trị, tranh chấp lãnh thổ, nhân vật còn sống) thì dừng hỏi sau bước 1. Báo tiến độ một dòng ở mỗi mốc lớn.
 4. **Gửi người dùng** `final.mp4`, `thumbnail.png` và `publish.md` (SendUserFile), kèm tóm tắt ngắn: phong cách, độ dài, nguồn đã kiểm chứng, những chỗ agent làm khác skill (lấy từ `notes.md`), và lưu ý rằng âm thanh cần người nghe đánh giá.
 5. **Vòng góp ý.** Người dùng chỉ ra các điểm cần sửa:
    - Ghi vào `feedback.md` mục `## Vòng N`, mỗi điểm một dòng, kèm **agent chịu trách nhiệm**:
@@ -77,7 +78,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 | Collection / doc | Ai ghi | Nội dung |
 |---|---|---|
 | `requests` | App | Chủ đề mới: `topic, genre, style, length, gateScript, voice` (tên giọng Gemini người dùng chọn, mặc định `Bodi`; ghi vào brief.md và truyền `--voice` cho `tts.py`), `status: "moi"`. Khi nhận việc, Nhà sản xuất đổi thành `"da-nhan"` và tạo `videos/<slug>` |
-| `videos/<slug>` | Nhà sản xuất, app | `title, genre, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Giọng, Phân cảnh, Dựng, Kiểm định), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
+| `videos/<slug>` | Nhà sản xuất, app | `title, genre, style, duration, status` (`dang-lam`, `cho-duyet`, `dang-sua`, `da-duyet`, `da-dang`), `round, stage` (Kịch bản, Dự toán, Giọng, Phân cảnh, Dựng, Kiểm định), `estimate` (nội dung `estimate.json` của agent `du-toan`: `usd, cap, items[], needApproval, approved, spent`; app hiện dòng chi phí và nút "Duyệt chi phí", bấm thì `approved: true` và gọi lại đoàn phim; video xong thì cập nhật `spent` từ `studio/costs.jsonl`), `stageNote, video, thumb` (id asset), `report[]`, `publish{titles[], tiktok, youtube, pinned, when}`. App đổi `status` khi người dùng duyệt (`da-duyet`), gửi góp ý (`dang-sua`) hoặc bấm đã đăng (`da-dang`) |
 | `feedback` | App | `video, round, items[{t, at, text}], status: "moi"`. Chuyển từng mục cho đúng agent, xong thì đổi `status` thành `"da-xu-ly"` |
 | `tiktokLinks` | App | Link TikTok người dùng lưu (`status: "moi"`). Đọc bằng `python3 studio/tools/tiktok.py <url>` (hỗ trợ link rút gọn vt.tiktok.com), ghi `title, author` (tên kênh · độ dài · lượt xem), `fullUrl`, `status: "da-doc"` |
 | `styleRequests` | App | Yêu cầu **học phong cách mới**: `url` (video mẫu), `name`, `note`, `status: "moi"`. Xem quy trình "Học phong cách từ app" bên dưới |

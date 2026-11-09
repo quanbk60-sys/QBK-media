@@ -52,9 +52,9 @@ h2{font:700 12.5px var(--body);letter-spacing:.07em;text-transform:uppercase;col
 .chip{min-height:36px;padding:0 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:13px var(--body);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:600}
 .thumb{width:74px;aspect-ratio:9/16;object-fit:cover;border-radius:10px;border:1.5px solid var(--ink);flex-shrink:0;background:var(--soft)}
-.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
 .steps i{height:6px;border-radius:3px;background:var(--line)} .steps i.done{background:var(--green)} .steps i.now{background:var(--gold)}
-.steplab{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;font-size:10.5px;color:var(--muted)}
+.steplab{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;font-size:10px;color:var(--muted)}
 .steplab .now{color:var(--ink);font-weight:600}
 label.f{font-size:13px;font-weight:700}
 input[type=text],input[type=url],textarea,select{width:100%;font:16px var(--body);padding:11px 12px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink)}
@@ -126,7 +126,7 @@ a.link{color:var(--navy)}
   const STYLE_NOTE = {"ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
   const GENRES = ["Lịch sử","Khoa học","Ngụ ngôn","Hoạt hình vui","Tâm lý","Địa lý"];
   const GENRE_STYLE = {"Lịch sử":"giay-muc","Khoa học":"thi-nghiem","Ngụ ngôn":"giay-muc","Hoạt hình vui":"pop","Tâm lý":"so-tay","Địa lý":"ve-tinh"};
-  const STEPS = ["Kịch bản","Giọng","Phân cảnh","Dựng","Kiểm định"];
+  const STEPS = ["Kịch bản","Dự toán","Giọng","Phân cảnh","Dựng","Kiểm định"];
   const STATUS = {
     "dang-lam": ["Đang làm","p-work"], "cho-duyet": ["Chờ duyệt","p-wait"], "dang-sua": ["Đang sửa","p-work"],
     "da-duyet": ["Đã duyệt · chờ đăng","p-ok"], "da-dang": ["Đã đăng","p-navy"], "tam-dung": ["Tạm dừng","p-mute"]};
@@ -170,6 +170,12 @@ a.link{color:var(--navy)}
     $("#tabs").innerHTML = TABS.map(([k, l]) => `<a class="tab" href="#${k}" ${active === k ? 'aria-current="page"' : ""}>${svg(k)}${l}${k === "home" && waiting ? `<span class="badge">${waiting}</span>` : ""}</a>`).join("");
   }
 
+  // Dự toán do agent du-toan ghi vào videos/<id>.estimate = {usd, cap, items:[{what, usd}], note, needApproval, approved, spent}
+  const usd = n => (typeof n === "number" ? (n < 0.005 ? "0 USD" : n.toFixed(2).replace(".", ",") + " USD") : "?");
+  const needCost = v => !!(v.estimate && v.estimate.needApproval && !v.estimate.approved);
+  const costLine = v => { const e = v.estimate; if (!e) return "";
+    const parts = [`Dự toán ${usd(e.usd)}`]; if (typeof e.cap === "number") parts.push(`trần ${usd(e.cap)}`); if (typeof e.spent === "number") parts.push(`đã chi ${usd(e.spent)}`);
+    return `<span class="small" style="color:${needCost(v) ? "var(--red-ink)" : "var(--green-ink)"}">${esc(parts.join(" · "))}${needCost(v) ? " · vượt trần, chờ bạn duyệt" : ""}</span>`; };
   function videoCard(v, big) {
     const st = STATUS[v.status] || ["", "p-mute"];
     const stepIdx = Math.max(0, STEPS.indexOf(v.stage));
@@ -182,6 +188,8 @@ a.link{color:var(--navy)}
           <span style="font:400 23px/1.05 var(--display)">${esc(v.title)}</span>
           <span class="small">${esc(v.genre || "")} · ${esc(styleName(v.style))}${v.duration ? " · " + esc(v.duration) + " giây" : ""}</span>
           ${working ? `<span class="small">${esc(v.stageNote || "")}</span>` : ""}
+          ${costLine(v)}
+          ${needCost(v) ? `<button class="btn ok sm" data-approvecost="${esc(v.id)}">Duyệt chi phí ${esc(usd(v.estimate.usd))}</button>` : ""}
           ${v.status === "cho-duyet" ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
           ${v.status === "da-duyet" ? `<a class="btn sm" href="#post" data-sel="${esc(v.id)}">Mở bộ đăng bài</a>` : ""}
           ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
@@ -199,7 +207,7 @@ a.link{color:var(--navy)}
     const ready = S.videos.filter(v => v.status === "da-duyet");
     const pending = S.requests.filter(r => r.status === "moi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
-    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng video ngắn: vẽ bằng code và ảnh vệ tinh</p></div></div>
+    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng video ngắn: vẽ bằng code, tranh anime AI và ảnh vệ tinh</p></div></div>
       <a class="btn primary big" href="#new">Làm video mới</a>
       <div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
@@ -235,7 +243,7 @@ a.link{color:var(--navy)}
           <span class="small">Bấm ▶ để nghe thử câu mẫu, bấm vào dòng để chọn giọng.</span>` : `<span class="small">Đang tải danh sách giọng…</span>`}</div>
         <div class="row between"><label for="gate" style="font-size:14px">Cho mình duyệt kịch bản trước</label><input id="gate" type="checkbox" ${f.gate ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
       </div>
-      <p class="small" style="text-align:center;margin:0">Chi phí ước tính <b>0đ</b>. Đoàn phim làm xong sẽ gửi video về mục "Cần bạn duyệt".</p>
+      <p class="small" style="text-align:center;margin:0">Có kịch bản xong, đoàn phim <b>dự toán chi phí</b> cho cả video. Vượt trần thì dừng chờ bạn duyệt. Làm xong sẽ gửi video về mục "Cần bạn duyệt".</p>
       <button class="btn primary big" type="submit" ${S.db ? "" : "disabled"}>Giao cho đoàn phim</button>
       ${S.db ? "" : `<p class="small">Không kết nối được cơ sở dữ liệu của app, nên chưa gửi được yêu cầu.</p>`}
     </form>`;
@@ -259,7 +267,8 @@ a.link{color:var(--navy)}
     const v = S.videos.find(x => x.id === S.sel) || S.videos.find(x => x.status === "cho-duyet");
     if (!v) return `<div class="row"><a class="back" href="#home" aria-label="Quay lại">${svg("back")}</a><h1>Duyệt video</h1></div><div class="empty">Không có video nào chờ duyệt.</div>`;
     S.sel = v.id;
-    const report = (v.report || []).map(r => `<span style="font-size:12.5px;line-height:1.45">${esc(r)}</span>`).join("");
+    const est = v.estimate ? [`Chi phí: dự toán ${usd(v.estimate.usd)}${typeof v.estimate.spent === "number" ? ", thực tế " + usd(v.estimate.spent) : ""}`, ...(v.estimate.items || []).map(it => `· ${it.what}: ${usd(it.usd)}`)] : [];
+    const report = [...(v.report || []), ...est].map(r => `<span style="font-size:12.5px;line-height:1.45">${esc(r)}</span>`).join("");
     return `<div class="row"><a class="back" href="#home" aria-label="Quay lại">${svg("back")}</a><div><h1 style="font-size:28px">${esc(v.title)}</h1><p class="sub">${esc(styleName(v.style))} · ${esc(v.duration || "?")} giây · vòng ${esc(v.round || 1)}</p></div></div>
       <div class="vidbox">
         ${v.video ? `<video id="vid" src="${blob(v.video)}" controls playsinline preload="metadata" ${v.thumb ? `poster="${blob(v.thumb)}"` : ""}></video>` : `<div class="empty" style="width:160px">Chưa có file video</div>`}
@@ -398,6 +407,11 @@ a.link{color:var(--navy)}
   function bind(r) {
     document.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { const v = S.videos.find(x => x.id === b.dataset.del); if (v) askDelete(v); });
     document.querySelectorAll("[data-sel]").forEach(a => a.addEventListener("click", () => { S.sel = a.dataset.sel; S.draftFb = []; }));
+    document.querySelectorAll("[data-approvecost]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.approvecost); if (!v || !S.db) return;
+      b.disabled = true;
+      try { await S.db.doc("videos/" + v.id).update({ estimate: { ...v.estimate, approved: true, approvedAt: nowISO() }, stageNote: "Đã duyệt chi phí, đoàn phim làm tiếp", updatedAt: nowISO() });
+        const ok = await fireCrew("Đã duyệt chi phí video " + v.id + ", làm tiếp"); toast(ok ? "Đã duyệt chi phí. Đoàn phim làm tiếp." : "Đã duyệt. Nhắn \"chạy đi\" cho Claude để đoàn phim làm tiếp.");
+      } catch { b.disabled = false; toast("Chưa lưu được, thử lại sau."); } });
     if (r === "new") {
       const f = S.form, topic = $("#topic");
       topic.addEventListener("input", () => f.topic = topic.value);
