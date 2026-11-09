@@ -12,3 +12,6 @@ studio/engine3d/node_modules/
 projects/_mau/*.mp4
 projects/_mau/*/output/*.mp4
 projects/_mau/*/output/*.mp4
+
+# File thử nghiệm người dùng gửi (ảnh, video bên thứ ba): không đưa vào repo
+projects/_thu/
