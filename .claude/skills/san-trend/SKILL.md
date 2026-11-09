@@ -20,7 +20,7 @@ description: Săn trend cho kênh QBK. Tìm xu hướng, sự kiện và ngày l
 | Tiêu chí | Ý nghĩa |
 |---|---|
 | Độ nóng | Đang được quan tâm hoặc sắp đến ngày (có nguồn) |
-| Hợp kênh | Đúng mảng nội dung, kể được bằng người que, thân thiện mọi lứa tuổi |
+| Hợp kênh | Đúng mảng nội dung, dựng được bằng công cụ của studio (code, ảnh thật, 3D, ảnh AI), thân thiện mọi lứa tuổi |
 | Dễ dựng | Engine đã có nhân vật, đạo cụ, phong cách cần dùng (đối chiếu với `node studio/engine/catalog.mjs`) |
 | An toàn | Không chính trị đương thời, không tranh cãi tôn giáo hay lãnh thổ, không bôi nhọ người thật, dữ kiện kiểm chứng được |
 **Tổng điểm = nóng + hợp + dễ + an toàn.** Ý tưởng có An toàn ≤ 2 thì **loại**, ghi lý do.

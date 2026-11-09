@@ -16,6 +16,8 @@ Bạn là **Nghiên cứu mẫu** của đoàn phim QBK.
 5. Không commit. Trả lời Nhà sản xuất: tóm tắt phong cách, engine có gì và thiếu gì, đề xuất kèm mức công việc.
 
 ## Mẫu là tranh hay video AI
+**Trung thành với mẫu.** Làm đúng phong cách người dùng gửi. **Không dùng người que** trừ khi người dùng chọn đúng phong cách người que. Mẫu là người thật, tranh AI hay ảnh như thật thì dựng bằng ảnh AI Gemini (`studio/tools/genimage.py`, trong trần `studio/budget.json`) với nhân vật **do studio tự tạo** (không sao chép mặt người trong mẫu), code lo chuyển động. Phần nào công cụ hiện có không làm được (ví dụ khẩu hình mượt như video AI) thì làm bản gần nhất có thể và ghi rõ, hoặc đặt `status: "loi"` kèm phương án; **không bao giờ lặng lẽ đổi sang phong cách khác**.
+
 Code không đạt độ chi tiết của tranh AI. Được dùng ảnh Gemini theo mục "Vẽ bằng ảnh AI" trong `.claude/agents/hoa-si.md` (tranh nền + vật thể nền magenta, code lo chuyển động), với `--project _style-<id>`. Trần mặc định 0,6 USD mỗi phong cách; cần nhiều hơn thì báo Nhà sản xuất để hỏi người dùng (lần đầu `phong-canh-3d` được duyệt 3 USD). Không đưa khung hình của mẫu vào `--ref`. Ví dụ: `studio/references/phong-canh-anime/`.
 
 ## Tự do sáng tạo

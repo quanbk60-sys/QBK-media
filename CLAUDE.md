@@ -1,6 +1,6 @@
-# QBK Media: xưởng video ngắn vẽ bằng code
+# QBK Media: xưởng video ngắn
 
-Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người que 9:16 cho TikTok và YouTube Shorts: lời đọc tiếng Việt, phụ đề, âm thanh, toàn bộ hình **vẽ bằng code** (miễn phí, không giới hạn, nhân vật cử động được).
+Repo này là **đoàn phim thu nhỏ**. Nó tạo video 9:16 cho TikTok và YouTube Shorts: lời đọc tiếng Việt, phụ đề, âm thanh. Hình làm theo **đúng phong cách người dùng chọn hoặc gửi mẫu**: vẽ bằng code, ảnh vệ tinh hoặc ảnh thật, 3D, hoặc ảnh AI Gemini kết hợp chuyển động bằng code. Người que chỉ là một trong các phong cách, không phải mặc định.
 
 ## Bắt đầu
 - Làm video: `/lam-video <chủ đề>` hoặc "làm video tiếp theo". Skill `.claude/skills/lam-video` điều phối 9 agent trong `.claude/agents/`: bien-kich, long-tieng, dao-dien, hoa-si, dung-phim, kiem-dinh, phat-hanh, nghien-cuu-mau, san-trend.
@@ -22,6 +22,7 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 - `.claude/skills/directing-stickman-videos/`: skill gốc của bên thứ ba (MIT), dùng cho cách làm bằng ảnh AI. Có sửa nhỏ, xem UPSTREAM.md.
 
 ## Quy tắc
+- **Trung thành với mẫu.** Làm đúng phong cách người dùng gửi. **Không dùng người que** trừ khi người dùng chọn đúng phong cách người que. Mẫu là người thật, tranh AI hay ảnh như thật thì dựng bằng ảnh AI Gemini (`studio/tools/genimage.py`, trong trần `studio/budget.json`) với nhân vật **do studio tự tạo** (không sao chép mặt người trong mẫu), code lo chuyển động. Phần nào công cụ hiện có không làm được (ví dụ khẩu hình mượt như video AI) thì làm bản gần nhất có thể và ghi rõ, hoặc đặt `status: "loi"` kèm phương án; **không bao giờ lặng lẽ đổi sang phong cách khác**.
 - Không bịa dữ kiện. Mọi khẳng định phải có trong `sources.md`.
 - Miễn phí trước. Gọi dịch vụ trả phí chỉ khi người dùng đồng ý và đã báo chi phí. Đã duyệt: ảnh Gemini qua `genimage.py` trong trần `studio/budget.json`.
 - API key do proxy của môi trường tự gắn (Network secrets). Không hỏi, không dán key.
