@@ -11,3 +11,4 @@ studio/engine3d/node_modules/
 # Video mẫu tải về (của bên thứ ba) và bản render lớn trong _mau
 projects/_mau/*.mp4
 projects/_mau/*/output/*.mp4
+projects/_mau/*/output/*.mp4
