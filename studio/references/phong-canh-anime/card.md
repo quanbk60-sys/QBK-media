@@ -17,6 +17,10 @@
 - Toàn bộ bố cục, màu, nhịp, camera, nhân vật, đường đá, hoa, cây, nhà, mây, biển, thị trấn, hai cảnh `bien` và `nui`, chuyển cảnh mờ chồng.
 - Âm thanh tự tổng hợp: gió, chim, vòng hợp âm I–vi–IV–V và nốt gảy (không dùng nhạc gốc vì có bản quyền).
 
+## Bài học khi làm lại (góp ý người dùng)
+- Mọi chi tiết trên mặt đất phải chạy theo phối cảnh. Lớp cỏ vẽ sẵn đứng yên làm hoa trông như trượt trên nền: nay thảm cỏ là từng hàng gắn với độ sâu z, hoa có bóng dưới gốc.
+- Cây tán xòe (cụm lá ở đầu cành) đặt sát đường, lướt qua to; camera nghiêng theo khúc cua; vật sát ống kính nhòe theo độ sâu.
+
 ## Thay thế / còn thiếu
 - Nét vẽ phẳng hơn tranh AI của mẫu (mẫu có độ chi tiết vẽ tay rất cao). Cây là cụm lá tròn, chưa có tán xòe tự nhiên.
 - Chưa có dây điện, cột điện, chậu cây, bậc thềm nhà.

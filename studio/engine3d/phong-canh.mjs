@@ -29,12 +29,12 @@ const smooth = k => k * k * (3 - 2 * k);
 // ===================== THEMES =====================
 const THEMES = {
   bien: { // đổ dốc ra biển, thị trấn ven biển, hoa trắng hồng
-    yH: 300, yV: 770, bend: [0.9, 0.045, 0.5, 0.11],
+    yH: 300, yV: 770, bend: [1.6, 0.05, 0.5, 0.11],
     sky: ['#0636a8', '#1f63cf', '#5fa6ea', '#cfe7f8'],
     flowers: [['#ffffff', '#f4d24a', 0.45], ['#ffb3c7', '#ffffff', 0.18], ['#ff6f91', '#ffe08a', 0.12], ['#b98cff', '#ffffff', 0.08], ['#fff3a8', '#e8a020', 0.17]],
     grass: [100, 118], house: true, tree: 0.5, bg: 'sea'},
   nui: { // đường đá men sườn núi, hoa cúc cam, thung lũng và núi xanh
-    yH: 560, yV: 880, bend: [1.6, 0.05, 0.6, 0.09],
+    yH: 560, yV: 880, bend: [2.2, 0.055, 0.6, 0.09],
     sky: ['#0a3aa6', '#1e66d0', '#6aaeea', '#d7ecf8'],
     flowers: [['#ff9a1f', '#ffd25a', 0.62], ['#ffb733', '#ff7a00', 0.2], ['#ffffff', '#f4d24a', 0.1], ['#ff6f91', '#ffe08a', 0.08]],
     grass: [92, 112], house: true, tree: 0.7, bg: 'valley', slopeRight: true},
@@ -99,15 +99,24 @@ function foliage(g, r, cx, cy, rw, rh, hue, n, sun = [0.6, -0.8]) {
   }
 }
 function bushSprite(r, hue) { const w = 320, h = 260, [c, g] = mk(w, h); foliage(g, r, w / 2, h * 0.58, w * 0.4, h * 0.36, hue, 24); bladeTuft(g, r, w / 2, h, w * 0.9, h * 0.3, hue, 30); return c; }
-function treeSprite(r, hue) {
-  const w = 700, h = 900, [c, g] = mk(w, h);
-  g.strokeStyle = '#4a3324'; g.lineCap = 'round';
-  const branch = (x, y, a, len, wd, d) => { if (d > 4 || len < 20) return; const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len; g.lineWidth = wd; g.strokeStyle = d ? '#56402f' : '#45301f'; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo((x + x2) / 2 + (r() - 0.5) * 30, (y + y2) / 2, x2, y2); g.stroke(); branch(x2, y2, a - 0.4 - r() * 0.4, len * 0.7, wd * 0.62, d + 1); branch(x2, y2, a + 0.3 + r() * 0.4, len * 0.68, wd * 0.6, d + 1); };
-  branch(w / 2, h, -Math.PI / 2 + (r() - 0.5) * 0.3, h * 0.32, 44, 0);
-  g.fillStyle = 'rgba(255,230,190,0.18)'; g.fillRect(w / 2 + 6, h * 0.6, 10, h * 0.4);
-  for (let i = 0; i < 5; i++) foliage(g, r, w * (0.3 + 0.4 * r()), h * (0.18 + 0.32 * r()), w * (0.16 + 0.1 * r()), h * (0.1 + 0.06 * r()), hue, 22);
-  foliage(g, r, w / 2, h * 0.3, w * 0.36, h * 0.2, hue, 40);
-  bladeTuft(g, r, w / 2, h, w * 0.4, h * 0.08, hue, 30);
+function treeSprite(r, hue) { // tán xòe: cụm lá mọc ở đầu từng cành, bóng tối phía dưới tán
+  const w = 900, h = 1000, [c, g] = mk(w, h), tips = [];
+  g.lineCap = 'round';
+  const branch = (x, y, a, len, wd, d) => {
+    const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len;
+    g.lineWidth = wd; g.strokeStyle = d ? '#4f3a2a' : '#3e2b1d'; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo((x + x2) / 2 + (r() - 0.5) * len * 0.3, (y + y2) / 2 + (r() - 0.5) * len * 0.2, x2, y2); g.stroke();
+    if (d >= 4 || len < 40) { tips.push([x2, y2, d]); return; }
+    const k = d === 0 ? 3 : 2; for (let i = 0; i < k; i++) branch(x2, y2, a + (i - (k - 1) / 2) * (0.7 + r() * 0.4) + (r() - 0.5) * 0.3, len * (0.62 + r() * 0.14), wd * 0.6, d + 1);
+  };
+  branch(w / 2, h, -Math.PI / 2 + (r() - 0.5) * 0.25, h * 0.3, 52, 0);
+  g.fillStyle = 'rgba(255,230,190,0.16)'; g.fillRect(w / 2 + 8, h * 0.72, 12, h * 0.28);
+  // lớp tối dưới tán
+  for (const [x, y] of tips) { g.fillStyle = hsl(hue + 20, 45, 9, 0.9); g.beginPath(); g.ellipse(x, y + 30, 120 + r() * 40, 60 + r() * 25, 0, 0, 7); g.fill(); }
+  tips.sort((p, q) => q[1] - p[1]);
+  for (const [x, y] of tips) foliage(g, r, x, y, 95 + r() * 55, 55 + r() * 30, hue, 9);
+  // lá lẻ rủ ra mép tán
+  for (let i = 0; i < 140; i++) { const [x, y] = tips[r() * tips.length | 0], a = r() * 6.283, d = 110 + r() * 70; g.fillStyle = hsl(hue - 10 + r() * 20, 55, 18 + r() * 22); g.beginPath(); g.ellipse(x + Math.cos(a) * d, y + Math.sin(a) * d * 0.6, 10 + r() * 8, 5 + r() * 4, a, 0, 7); g.fill(); }
+  bladeTuft(g, r, w / 2, h, w * 0.3, h * 0.07, hue, 30);
   return c;
 }
 function houseSprite(r) { // nhà gỗ hai tầng nhìn chéo, mái ván
@@ -281,14 +290,15 @@ function makeWorld(th, seed) {
     const q = R(seed * 7919 + i * 104729 + 13), zw = i * CELL, out = [];
     for (const s of [-1, 1]) {
       out.push({X: s * (1.08 + q() * 0.25), zw: zw + q() * CELL, img: spr.tuft[q() * 8 | 0], hw: 0.45 + q() * 0.4, flip: q() < 0.5});
+      for (let k = 0; k < 1; k++) out.push({X: s * (1.4 + Math.pow(q(), 1.3) * 9), zw: zw + q() * CELL, img: spr.tuft[q() * 8 | 0], hw: 0.5 + q() * 0.6, flip: q() < 0.5});
       if (q() < 0.95) out.push({X: s * (1.2 + q() * 1.2), zw: zw + q() * CELL, img: pickFlower(q()), hw: 0.8 + q() * 0.9, flip: q() < 0.5});
       if (q() < 0.7) out.push({X: s * (2.4 + q() * 3.5), zw: zw + q() * CELL, img: q() < 0.65 ? pickFlower(q()) : spr.tuft[q() * 8 | 0], hw: 1 + q() * 1, flip: q() < 0.5});
       if (q() < 0.05) out.push({X: s * (2.6 + q() * 3), zw: zw + q() * CELL, img: spr.bush[q() * 6 | 0], hw: 1.4 + q() * 1.2, flip: q() < 0.5});
       if (q() < 0.07) out.push({X: s * (5 + q() * 6), zw: zw + q() * CELL, img: spr.bush[q() * 6 | 0], hw: 2 + q() * 2, flip: q() < 0.5});
     }
     // cây lớn bên phải, nhà gỗ bên trái theo nhịp
-    if (i % 46 === 23 && q() < th.tree + 0.3) out.push({X: 3.2 + q() * 1.8, zw, img: spr.tree[q() * 3 | 0], hw: 7 + q() * 2.5, flip: q() < 0.5, big: true});
-    if (i % 46 === 5 && q() < th.tree) out.push({X: -(3.6 + q() * 2), zw, img: spr.tree[q() * 3 | 0], hw: 6 + q() * 2, flip: true, big: true});
+    if (i % 40 === 23 && q() < th.tree + 0.3) out.push({X: 2.7 + q() * 1.4, zw, img: spr.tree[q() * 3 | 0], hw: 7 + q() * 2.5, flip: q() < 0.5, big: true});
+    if (i % 40 === 5 && q() < th.tree) out.push({X: -(3 + q() * 1.6), zw, img: spr.tree[q() * 3 | 0], hw: 6 + q() * 2, flip: true, big: true});
     if (th.house && i % 120 === 30) out.push({X: -3.4, zw, img: spr.house, hw: 7, flip: false, big: true});
     cache.set(i, out); if (cache.size > 2000) cache.delete(cache.keys().next().value);
     return out;
@@ -302,15 +312,20 @@ function makeShotRenderer(sh) {
   const seed = sh.seed ?? 3, r = R(seed);
   const bg = th.bg === 'sea' ? bgSea(th, r) : bgValley(th, r);
   const world = makeWorld(th, seed);
-  const [fg, fgx] = mk(W, H), [tmp, tmpx] = mk(W, H), [mask, maskx] = mk(W, H), [out, o] = mk(W, H);
+  const [fg, fgx] = mk(W, H), [tmp, tmpx] = mk(W, H), [mask, maskx] = mk(W, H), [out, o] = mk(W, H), [fin, fx] = mk(W, H);
   // mặt nạ mờ chuyển động: trong suốt ở giữa (quanh xe và điểm tụ), đậm dần ra mép và đáy
   { const gr = maskx.createRadialGradient(CX, th.yV + 240, 120, CX, th.yV + 300, 900); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(0.45, 'rgba(0,0,0,0.25)'); gr.addColorStop(1, 'rgba(0,0,0,1)'); maskx.fillStyle = gr; maskx.fillRect(0, 0, W, H); }
   const [A, w1, B, w2] = th.bend, curve = zw => A * Math.sin(zw * w1 + seed) + B * Math.sin(zw * w2 + seed * 2);
   const speed = sh.speed ?? 4.2;
-  // nền đất tĩnh (vệt cỏ vẽ tay)
+  const bands = []; for (let v = 0; v < 6; v++) { const [b, bx] = mk(2400, 140), hue = lerp(th.grass[0], th.grass[1], v / 5);
+    for (let i = 0; i < 2600; i++) { const x = r() * 2400, bh = 50 + r() * 88, lean = (r() - 0.5) * 30, bw = 2.5 + r() * 4.5, back = i < 900;
+      bx.fillStyle = hsl(hue + (r() - 0.5) * 26, 42 + r() * 25, back ? 14 + r() * 12 : 22 + r() * 30 + (v % 3) * 3);
+      bx.beginPath(); bx.moveTo(x - bw, 140); bx.quadraticCurveTo(x + lean * 0.3, 140 - bh * 0.6, x + lean, 140 - bh); bx.quadraticCurveTo(x + lean * 0.3 + bw, 140 - bh * 0.6, x + bw, 140); bx.fill(); }
+    bands.push(b); }
+  // nền đất: chỉ một dải màu trơn (mọi chi tiết cỏ đều chạy theo phối cảnh, không có lớp vẽ đứng yên)
   const [verge, vx] = mk(W, H);
   { const gr = vx.createLinearGradient(0, th.yV, 0, H); gr.addColorStop(0, hsl(th.grass[0] - 8, 40, 32)); gr.addColorStop(1, hsl(th.grass[1], 45, 20)); vx.fillStyle = gr; vx.fillRect(0, th.yV - 30, W, H);
-    for (let i = 0; i < 2600; i++) { const y = th.yV - 30 + Math.pow(r(), 0.7) * (H - th.yV + 30), k = (y - th.yV) / (H - th.yV); bladeTuft(vx, r, r() * W, y, 10 + k * 70, 8 + k * 60, lerp(th.grass[0], th.grass[1], r()), 2, r() * 10); } }
+  }
 
   return (t, tl) => { // t: thời gian tuyệt đối, tl: thời gian trong shot
     const s = 3 + tl * speed, ctx = fgx;
@@ -329,6 +344,15 @@ function makeShotRenderer(sh) {
     // nền cỏ: chỉ phần dưới đường viền đồi (zmax)
     const crest = yOf(ZMAX);
     ctx.save(); ctx.beginPath(); ctx.moveTo(0, H); for (let x = 0; x <= W; x += 20) ctx.lineTo(x, crest + 30 + 22 * Math.sin(x * 0.013 + seed) + (th.slopeRight ? -(x - CX) * 0.05 : 0)); ctx.lineTo(W, H); ctx.clip(); ctx.drawImage(verge, 0, 0); ctx.restore();
+    // thảm cỏ: từng hàng cỏ gắn với mặt đất ở độ sâu z, trôi và to dần theo phối cảnh (không có lớp cỏ đứng yên)
+    const GR = 0.32, gFar = Math.floor((s + ZMAX) / GR), gNear = Math.floor((s + 1.0) / GR);
+    for (let gi = gFar; gi >= gNear; gi--) {
+      const q = R(gi * 40503 + seed * 17), z = gi * GR - s; if (z < 1.0) continue;
+      const band = bands[gi % bands.length], bh = 0.42 * F / z * 0.55, xL = xOf(-16, z), xR = xOf(16, z), sw = band.width * 0.5, sx = q() * (band.width - sw);
+      ctx.globalAlpha = clamp((ZMAX - z) / 8);
+      ctx.drawImage(band, sx, 0, sw, band.height, xL, yOf(z) - bh, xR - xL, bh * 1.08);
+    }
+    ctx.globalAlpha = 1;
     // mặt đường: dải nền rồi từng hàng đá, xa -> gần
     const iFar = Math.floor((s + ZMAX) / CELL), iNear = Math.floor((s + ZMIN * 0.6) / CELL);
     const pathW = 1.1;
@@ -364,9 +388,13 @@ function makeShotRenderer(sh) {
       const x = xOf(ob.X, z), y = yOf(z) + h * 0.04;
       const a = clamp((ZMAX - z) / 6);
       ctx.globalAlpha = a;
-      if (ob.big) { ctx.save(); ctx.translate(x, y); if (ob.flip) ctx.scale(-1, 1); ctx.drawImage(ob.img, -w / 2, -h, w, h); ctx.restore(); }
-      else if (z < 3.2) { // gần sát: kéo vệt mờ hướng tâm
-        const dx = (x - CX), dy = (y - th.yV); for (let k = 3; k >= 0; k--) { ctx.globalAlpha = a * (k ? 0.22 : 0.75); const m = 1 + k * 0.05; ctx.drawImage(ob.img, CX + dx * m - w / 2 * m, th.yV + dy * m - h * m, w * m, h * m); }
+      // bóng dưới gốc (nắng trước-phải -> bóng ngả sau-trái) để vật "mọc" từ đất
+      ctx.fillStyle = 'rgba(8,28,10,0.32)'; ctx.beginPath(); ctx.ellipse(x - w * (ob.big ? 0.12 : 0.08), y + h * 0.01, w * (ob.big ? 0.22 : 0.42), Math.max(1, w * (ob.big ? 0.05 : 0.1) * CAMH / z), 0, 0, 7); ctx.fill();
+      if (ob.big) { ctx.save(); ctx.translate(x, y); if (ob.flip) ctx.scale(-1, 1); if (z < 4) ctx.filter = `blur(${((4 - z) * 3).toFixed(1)}px)`; ctx.drawImage(ob.img, -w / 2, -h, w, h); ctx.restore(); }
+      else if (z < 3.4) { // gần sát ống kính: nhòe theo độ sâu + vệt hướng tâm
+        ctx.filter = `blur(${((3.4 - z) * 5 + 1).toFixed(1)}px)`;
+        const dx = (x - CX), dy = (y - th.yV); for (let k = 2; k >= 0; k--) { ctx.globalAlpha = a * (k ? 0.3 : 0.85); const m = 1 + k * 0.05; ctx.drawImage(ob.img, CX + dx * m - w / 2 * m, th.yV + dy * m - h * m, w * m, h * m); }
+        ctx.filter = 'none';
       } else { if (ob.flip) { ctx.save(); ctx.translate(x, 0); ctx.scale(-1, 1); ctx.drawImage(ob.img, -w / 2, y - h, w, h); ctx.restore(); } else ctx.drawImage(ob.img, x - w / 2, y - h, w, h); }
       ctx.globalAlpha = 1;
     }
@@ -380,7 +408,10 @@ function makeShotRenderer(sh) {
     // ánh nắng + họa tiết màu
     const sun = o.createRadialGradient(W * 0.85, th.yH * 0.4, 20, W * 0.85, th.yH * 0.4, 900); sun.addColorStop(0, 'rgba(255,250,225,0.35)'); sun.addColorStop(1, 'rgba(255,250,225,0)'); o.fillStyle = sun; o.fillRect(0, 0, W, H);
     const vg = o.createRadialGradient(CX, H * 0.48, H * 0.35, CX, H * 0.5, H * 0.75); vg.addColorStop(0, 'rgba(0,10,30,0)'); vg.addColorStop(1, 'rgba(0,10,30,0.28)'); o.fillStyle = vg; o.fillRect(0, 0, W, H);
-    return out;
+    // camera nghiêng nhẹ theo khúc cua và rung tay
+    const curv = (curve(s + 10) - 2 * curve(s + 5) + curve(s)) / 25, roll = clamp(-curv * 6, -0.025, 0.025) + Math.sin(tl * 0.8) * 0.005;
+    fx.setTransform(1, 0, 0, 1, 0, 0); fx.translate(CX, H * 0.55); fx.rotate(roll); fx.scale(1.065, 1.065); fx.translate(-CX, -H * 0.55); fx.drawImage(out, 0, 0); fx.setTransform(1, 0, 0, 1, 0, 0);
+    return fin;
   };
 }
 function roundPoly(g, P, k) { g.beginPath(); const n = P.length; for (let i = 0; i < n; i++) { const a = P[i], b = P[(i + 1) % n], p = P[(i + n - 1) % n]; const s = [lerp(a[0], p[0], k * 0.5), lerp(a[1], p[1], k * 0.5)], e = [lerp(a[0], b[0], k * 0.5), lerp(a[1], b[1], k * 0.5)]; i ? g.lineTo(...s) : g.moveTo(...s); g.quadraticCurveTo(a[0], a[1], ...e); } g.closePath(); }

@@ -32,3 +32,5 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 
 ## Vận hành
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*
+
+- **Cảnh chuyển động tới trước (đạp xe, đi bộ, bay):** mọi chi tiết trên mặt đất phải trôi theo phối cảnh. Không để lớp nền có họa tiết đứng yên dưới vật đang chạy, nếu không vật trông như trượt trên nền (góp ý phong cách phong-canh-3d, 09/11/2026). Vật mọc trên đất cần bóng dưới gốc.
