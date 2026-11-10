@@ -33,6 +33,9 @@ export const POSES = {
   celebrate: {fu: 2.55, ff: 2.85, bu: -2.55, bf: -2.85, ft: 0.4, fk: -0.7, bt: -0.3, bk: -0.5, lean: -0.06, sp: 0.15},
   scratch: {fu: 0.2, ff: 0.15, bu: -2.39, bf: 2.6, ft: 0.06, fk: 0, bt: -0.06, bk: 0, lean: 0.06, sp: 0, nod: 0.22},
 };
+// v3 (Su Ton Xuc Xich, nhan vat con vat chibi): ngoi bet va nam ghe luoi (nguoi que cung ve duoc)
+POSES.sit = {fu: 0.5, ff: 0.9, bu: -0.4, bf: 0.2, ft: 1.3, fk: 0, bt: 1.2, bk: 0.1, lean: 0.02, sp: 0, lie: 1};
+POSES.lounge = {fu: -2.4, ff: 2.6, bu: -2.39, bf: 2.6, ft: 1.35, fk: -0.05, bt: 1.25, bk: 0.2, lean: -0.3, sp: 0, nod: -0.08, lie: 1};
 POSES.scratchHead = POSES.scratch;
 const FIELDS = ['fu', 'ff', 'bu', 'bf', 'ft', 'fk', 'bt', 'bk', 'lean'];
 
@@ -110,6 +113,12 @@ export const EXPR = {
   asleep:     {brow: -0.2, eye: 'shut', mouth: 'o'},
   yawn:       {brow: -0.5, eye: 'shut', mouth: 'shout'},
   embarrassed:{brow: -0.6, eye: 'dot', mouth: 'wobble', blush: true, sweat: true},
+  // v3 (bieu cam phong dai kieu meme, dung ro nhat voi nhan vat con vat; nguoi que ve gan dung)
+  cry:        {brow: -0.9, eye: 'shut', mouth: 'shout', tear: true, tears: true},
+  laugh:      {brow: -0.4, eye: 'shut', mouth: 'grin', laugh: true},
+  dazed:      {brow: -0.5, eye: 'wide', mouth: 'o', dazed: true},
+  proud:      {brow: 0.5, eye: 'squint', mouth: 'smirk', proud: true},
+  fury:       {brow: 1, eye: 'dot', mouth: 'shout', vein: true},
 };
 // how far bunny ears droop for each expression (costume.earsDown overrides)
 const EAR_DROOP = {sad: 0.9, scared: 0.7, pain: 0.6, sleepy: 0.55, asleep: 0.75, yawn: 0.3, embarrassed: 0.5};

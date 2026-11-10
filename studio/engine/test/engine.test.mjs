@@ -37,3 +37,11 @@ test('v2 props accept their parameters', () => {
     const R = new Recorder(); PROPS[n](R, p, 1.3); if (p.progress !== 0) assert.ok(R.ops.length > 0, n);
   }
 });
+
+test('animal cast draws for every species x pose x expression', async () => {
+  const {drawAnimal, SPECIES_NAMES} = await import('../lib/animals.mjs');
+  for (const sp of SPECIES_NAMES) for (const p of Object.keys(POSES)) for (const e of Object.keys(EXPR)) {
+    const R = new Recorder(); drawAnimal(R, {pose: blendPose(p, p, 0), expr: e, costume: {species: sp, swollen: e === 'cry'}, t: 0.5});
+    assert.ok(R.ops.length > 30 && strokeLength(R.ops) > 100, `${sp}/${p}/${e}`);
+  }
+});
