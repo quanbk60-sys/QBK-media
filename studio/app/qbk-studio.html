@@ -558,13 +558,64 @@ a.link{color:var(--navy)}
   // Không gọi API: app giữ tệp, viết câu lệnh, chép sẵn và mở app ChatGPT/Gemini; bạn tạo bằng gói của mình rồi bấm "Nhận" để đưa kết quả về.
   // db: pipelines/<id> = {title, idea, look, src:{id,name}, imgPrompt, imgEdited, images:[{id,name,pick}], motion, vidPrompt, vidEdited, clips:[{id,name}],
   //   edit:{narration, script, captions, music, note}, stage: hoa-si|quay-phim|dung-phim, status: dang-lam|cho-dung|dang-dung|xong|loi, result, video, videoId}
-  const PSTEPS = [["hoa-si", "Họa Sĩ", "ChatGPT · tạo ảnh"], ["quay-phim", "Quay Phim", "Gemini · tạo video"], ["dung-phim", "Dựng Phim", "Claude · ghép"]];
+  const PSTEPS = [["hoa-si", "Họa Sĩ", "ChatGPT · tạo ảnh"], ["quay-phim", "Quay Phim", "Gemini, Seedance… · video"], ["dung-phim", "Dựng Phim", "Claude · ghép"]];
   const LOOKS = [["nguoi-que", "Người que nét mực", "người que nét mực đen vẽ tay trên nền giấy ấm, nét đơn giản"],
     ["anime", "Anime", "tranh anime, nét sạch, tô bóng mềm, màu tươi"], ["hoat-hinh-3d", "Hoạt hình 3D", "phim hoạt hình 3D, ánh sáng mềm, nhân vật dễ thương"],
     ["dien-anh", "Ảnh thật điện ảnh", "ảnh chân thực kiểu điện ảnh, ánh sáng tự nhiên, xóa phông nhẹ"], ["mau-nuoc", "Màu nước", "tranh màu nước, loang mềm, vân giấy"]];
-  const MOVES = ["Máy quay tiến chậm vào nhân vật", "Nhân vật bước đi", "Gió thổi nhẹ, tóc và lá bay", "Máy quay xoay quanh nhân vật", "Nhân vật quay đầu nhìn máy", "Ánh sáng chuyển từ ngày sang tối"];
+  const MOVES = ["Nhảy theo trend vui nhộn", "Máy quay tiến chậm vào nhân vật", "Nhân vật bước đi", "Gió thổi nhẹ, tóc và lá bay", "Máy quay xoay quanh nhân vật", "Nhân vật quay đầu nhìn máy", "Ánh sáng chuyển từ ngày sang tối"];
   const PST = { "dang-lam": ["Đang làm", "p-work"], "cho-dung": ["Chờ đoàn phim dựng", "p-wait"], "dang-dung": ["Đoàn phim đang dựng", "p-work"], "xong": ["Đã dựng xong", "p-ok"], "loi": ["Cần bạn xem", "p-wait"] };
-  const GPT_URL = "https://chatgpt.com/", GEMINI_URL = "https://gemini.google.com/app";
+  const GPT_URL = "https://chatgpt.com/";
+  // Công cụ tạo video: nút mở đúng trang, và Claude viết câu lệnh theo cách công cụ đó hiểu tốt nhất
+  const VTOOLS = [["gemini", "Gemini Veo", "https://gemini.google.com/app"], ["seedance", "Seedance", "https://dreamina.capcut.com/"],
+    ["kling", "Kling", "https://klingai.com/"], ["openart", "OpenArt", "https://openart.ai/"]];
+  const vtoolOf = id => VTOOLS.find(t => t[0] === id) || VTOOLS[0];
+  const VGUIDE = {
+    gemini: "Target: Google Veo (inside the Gemini app), image-to-video, 8 seconds, vertical 9:16. Write one flowing natural-language paragraph: subject (precise identity details from the image), the action as a short timed sequence (0-3s, 3-6s, 6-8s), camera (shot size, angle, movement), lighting and mood, then an 'Audio:' sentence (ambience, sound effects or music feel; no dialogue unless asked).",
+    seedance: "Target: ByteDance Seedance, image-to-video, 5-10 seconds, vertical 9:16. Start with 'The uploaded image is the first frame.' Then: keep-identity sentence, 3-5 clear action beats in order (use 'then'), one explicit camera instruction (e.g. 'fixed camera', 'slow push-in', 'orbit left'), motion quality (smooth, natural, rhythmic), lighting. Keep it concise; too many actions cause artifacts.",
+    kling: "Target: Kling AI, image-to-video, 5-10 seconds, vertical 9:16. Structure: subject + motion + scene + camera movement + atmosphere, in 2-4 compact sentences. Put things to avoid only in the negative prompt.",
+    openart: "Target: OpenArt video (model chosen there, e.g. Kling/Veo/Seedance), image-to-video, vertical 9:16. Write a model-agnostic prompt: keep-identity sentence, 3-5 action beats in order, one camera instruction, lighting and mood, motion quality."
+  };
+  const PROMPT_RULES = `Rules:
+- Do NOT copy the user's words literally. Understand the intent, translate from Vietnamese, and expand it into a professional prompt with concrete visual detail.
+- If a reference image is attached, study it and describe what must stay the same (face, hairstyle, outfit, accessories, colours, setting) precisely, so the result keeps the same person or character.
+- Write the prompt in English. Be specific and visual; no filler words like "masterpiece".
+- Keep it tasteful and platform-safe for TikTok/YouTube: no nudity or sexualised framing, no gore, no real-world brand logos or on-screen text unless the user asks.
+- If the idea is empty, infer a fitting, engaging idea from the image.`;
+  const imgAsk = p => `You are an expert prompt writer for ChatGPT image generation.
+Task: write one prompt that makes a vertical 9:16 image.
+User idea (Vietnamese): "${(p.idea || "").trim() || "(none)"}"
+Visual style: ${lookOf(p.look)[1]} — ${lookOf(p.look)[2]}
+${p.src ? "A reference image is attached: begin the prompt with 'Using the attached image as reference,' and keep the same subject." : "No reference image."}
+${PROMPT_RULES}
+Structure: subject and identity details, pose/action, setting, composition and framing (vertical 9:16), lighting, colour palette, style.
+Reply with only JSON: {"prompt": "...", "note_vi": "one short Vietnamese sentence describing what the image will show"}`;
+  const vidAsk = (p, nImg) => `You are an expert prompt writer for AI image-to-video tools.
+${VGUIDE[p.vtool || "gemini"]}
+User idea (Vietnamese): "${(p.idea || "").trim() || "(none)"}"
+Desired motion (Vietnamese): "${(p.motion || "").trim() || "(none — choose motion that fits the image and idea)"}"
+${nImg ? `${nImg} image(s) attached: they are the starting frame(s). Describe the subject so identity, outfit and setting stay consistent.` : "No image attached."}
+${PROMPT_RULES}
+- If the user wants a dance or trend, describe a concrete, beat-synced choreography (named moves in order), energetic but not sexualised; say music will be added later in the app, so describe tempo (e.g. 120 BPM) rather than a song.
+Reply with only JSON: {"prompt": "...", "negative": "comma-separated things to avoid (identity drift, distorted hands, extra limbs, flicker, text, watermark, ...)", "note_vi": "one short Vietnamese sentence describing the video"}`;
+  const SAMPLE_ERR = { not_granted: "Bạn chưa cho phép app nhờ Claude. Mở lại app và bấm Cho phép.", rate_limited: "Claude đang bận, chờ một phút rồi thử lại.",
+    refused: "Claude từ chối ý tưởng này, thử viết ý tưởng khác.", image_rejected: "Ảnh quá lớn hoặc không đọc được.", images_unavailable: "Thiết bị này chưa gửi ảnh cho Claude được.",
+    invalid_json: "Claude trả lời chưa đúng dạng, bấm lại một lần nữa.", cancelled: "Đã dừng." };
+  async function askClaude(kind, btn) {
+    const p = curPipe(); if (!p || !S.sample) return;
+    const old = btn.innerHTML; btn.disabled = true; btn.textContent = "Claude đang xem ảnh và viết…";
+    try {
+      const ids = kind === "img" ? (p.src ? [p.src.id] : []) : (pickedImgs(p).length ? pickedImgs(p).slice(0, 3).map(x => x.id) : p.src ? [p.src.id] : []);
+      const lim = await S.sample.limits().catch(() => ({}));
+      const use = lim.images ? ids.slice(0, lim.images.maxCount || 1) : [];
+      const images = await Promise.all(use.map(id => fetch(blob(id)).then(r => r.blob())));
+      const out = await S.sample.json(kind === "img" ? imgAsk(p) : vidAsk(p, images.length), images.length ? { images } : {});
+      if (!out || typeof out.prompt !== "string" || !out.prompt.trim()) throw { code: "invalid_json" };
+      const patch = kind === "img" ? { imgPrompt: out.prompt.trim(), imgEdited: true, imgNote: String(out.note_vi || ""), imgBy: "claude" }
+        : { vidPrompt: out.prompt.trim(), vidEdited: true, vidNeg: String(out.negative || ""), vidNote: String(out.note_vi || ""), vidBy: "claude" };
+      await savePipe(p.id, patch, true); render(); toast("Claude đã viết xong câu lệnh");
+    } catch (e) { btn.disabled = false; btn.innerHTML = old; toast(SAMPLE_ERR[e?.code] || "Chưa nhờ Claude được, thử lại sau."); }
+  }
+  const claudeBtn = kind => S.sample ? `<button type="button" class="btn dark" data-pclaude="${kind}">✨ Claude viết câu lệnh chuẩn</button>` : "";
   const lookOf = id => LOOKS.find(l => l[0] === id) || LOOKS[0];
   const buildImg = p => `Vẽ cho mình một ảnh khung dọc 9:16${p.src ? ", dựa trên ảnh mình gửi kèm (giữ nguyên nhân vật, gương mặt và bố cục chính)" : ""}.
 Nội dung: ${(p.idea || "").trim() || "(mô tả cảnh)"}.
@@ -617,8 +668,11 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
         <textarea id="pidea" rows="3" placeholder="Ví dụ: cậu bé người que đứng trên đỉnh núi lúc bình minh, tay giơ lá cờ">${esc(p.idea || "")}</textarea></div>
       <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Phong cách ảnh</span>
         <div class="chips sm">${LOOKS.map(([id, n]) => `<button type="button" class="chip" data-plook="${id}" aria-pressed="${(p.look || "nguoi-que") === id}">${n}</button>`).join("")}</div></div>
-      <div class="col" style="gap:4px"><div class="row between"><label class="f" for="pimg">Câu lệnh gửi Họa Sĩ</label>${p.imgEdited ? `<button type="button" class="del" id="pimgreset" style="padding:0">Viết lại tự động</button>` : ""}</div>
-        <textarea id="pimg" rows="5">${esc(p.imgEdited ? p.imgPrompt : buildImg(p))}</textarea></div>
+      ${claudeBtn("img")}
+      <div class="col" style="gap:4px"><div class="row between"><label class="f" for="pimg">Câu lệnh gửi Họa Sĩ${p.imgBy === "claude" ? ' <span class="pill p-ok">Claude viết</span>' : ""}</label>${p.imgEdited ? `<button type="button" class="del" id="pimgreset" style="padding:0">Về mẫu đơn giản</button>` : ""}</div>
+        ${p.imgNote && p.imgBy === "claude" ? `<span class="small"><b>Ảnh sẽ ra:</b> ${esc(p.imgNote)}</span>` : ""}
+        <textarea id="pimg" rows="${p.imgBy === "claude" ? 8 : 5}">${esc(p.imgEdited ? p.imgPrompt : buildImg(p))}</textarea>
+        ${S.sample && p.imgBy !== "claude" ? `<span class="small">Đây là mẫu đơn giản. Bấm "✨ Claude viết câu lệnh chuẩn" để có câu lệnh chuẩn, chi tiết hơn.</span>` : ""}</div>
       <a class="btn primary big" href="${GPT_URL}" target="_blank" rel="noopener" data-popenapp="img">Chép câu lệnh và mở Họa Sĩ</a>
       <span class="small">Trong ChatGPT: ${p.src ? "đính kèm ảnh gốc, " : ""}dán câu lệnh rồi gửi. Lưu ảnh vẽ xong về máy, quay lại đây bấm "Nhận ảnh". Muốn thêm ảnh khác thì làm lại.</span>
       <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Ảnh Họa Sĩ đã vẽ (${imgs.length})</span>
@@ -632,19 +686,30 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
   function pipeQuayPhim(p) {
     const imgs = pickedImgs(p);
     return `<div class="card col" style="gap:12px">
-      <div class="row between"><b>2. Quay Phim</b><span class="who">dùng Gemini</span></div>
+      <div class="row between"><b>2. Quay Phim</b><span class="who">dùng ${esc(vtoolOf(p.vtool)[1])}</span></div>
       ${imgs.length ? `<div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Ảnh từ Họa Sĩ (${imgs.length})</span>
         <div class="gal">${imgs.map((x, i) => `<div class="gi"><img src="${blob(x.id)}" alt="Ảnh ${i + 1}">${S.dl ? `<div class="tools"><button class="btn sm" data-psave="${esc(x.id)}">Lưu về máy</button></div>` : ""}</div>`).join("")}</div>
-        <span class="small">Mỗi ảnh làm một clip 8 giây. Gửi từng ảnh cho Quay Phim cùng câu lệnh bên dưới.</span></div>` : `<span class="small">Chưa có ảnh từ Họa Sĩ. Bạn vẫn có thể gửi ảnh riêng cho Gemini, hoặc đưa video có sẵn vào ô "Nhận video".</span>`}
+        <span class="small">Mỗi ảnh làm một clip. Gửi từng ảnh cùng câu lệnh bên dưới.</span></div>`
+        : p.src ? `<div class="att"><img class="pv" src="${blob(p.src.id)}" alt=""><div class="grow"><span class="nm">${esc(p.src.name || "Ảnh đầu vào")}</span><span class="small">Ảnh đầu vào cho video. Nhớ đính kèm khi gửi.</span></div><button type="button" class="xbtn" id="psrcx" aria-label="Bỏ ảnh">×</button></div>`
+        : `<div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Ảnh đầu vào</span>${upBox("psrc", "Chọn ảnh làm video", "Ảnh sẽ được Claude xem để viết câu lệnh", "image/*", false)}</div>`}
+      <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Công cụ tạo video</span>
+        <div class="chips sm">${VTOOLS.map(([id, n]) => `<button type="button" class="chip" data-pvtool="${id}" aria-pressed="${(p.vtool || "gemini") === id}">${n}</button>`).join("")}</div></div>
+      <div class="col" style="gap:4px"><label class="f" for="pidea2">Ý tưởng video</label>
+        <textarea id="pidea2" rows="2" placeholder="Ví dụ: cô gái nhảy theo trend K-pop vui nhộn">${esc(p.idea || "")}</textarea></div>
       <div class="col" style="gap:6px"><label class="f" for="pmotion">Chuyển động trong video</label>
         <div class="chips sm">${MOVES.map(m => `<button type="button" class="chip" data-pmove="${esc(m)}">+ ${esc(m)}</button>`).join("")}</div>
         <textarea id="pmotion" rows="2" placeholder="Ví dụ: lá cờ bay trong gió, máy quay lùi dần ra xa">${esc(p.motion || "")}</textarea></div>
-      <div class="col" style="gap:4px"><div class="row between"><label class="f" for="pvid">Câu lệnh gửi Quay Phim</label>${p.vidEdited ? `<button type="button" class="del" id="pvidreset" style="padding:0">Viết lại tự động</button>` : ""}</div>
-        <textarea id="pvid" rows="5">${esc(p.vidEdited ? p.vidPrompt : buildVid(p))}</textarea></div>
-      <a class="btn primary big" href="${GEMINI_URL}" target="_blank" rel="noopener" data-popenapp="vid">Chép câu lệnh và mở Quay Phim</a>
-      <span class="small">Trong Gemini: chọn công cụ tạo video, đính kèm ảnh, dán câu lệnh rồi gửi. Tải video về máy, quay lại đây bấm "Nhận video".</span>
+      ${claudeBtn("vid")}
+      <div class="col" style="gap:4px"><div class="row between"><label class="f" for="pvid">Câu lệnh cho ${esc(vtoolOf(p.vtool)[1])}${p.vidBy === "claude" ? ' <span class="pill p-ok">Claude viết</span>' : ""}</label>${p.vidEdited ? `<button type="button" class="del" id="pvidreset" style="padding:0">Về mẫu đơn giản</button>` : ""}</div>
+        ${p.vidNote && p.vidBy === "claude" ? `<span class="small"><b>Video sẽ ra:</b> ${esc(p.vidNote)}</span>` : ""}
+        <textarea id="pvid" rows="${p.vidBy === "claude" ? 9 : 5}">${esc(p.vidEdited ? p.vidPrompt : buildVid(p))}</textarea>
+        ${S.sample && p.vidBy !== "claude" ? `<span class="small">Đây là mẫu đơn giản. Bấm "✨ Claude viết câu lệnh chuẩn" để có câu lệnh chuẩn theo ${esc(vtoolOf(p.vtool)[1])}.</span>` : ""}</div>
+      ${p.vidNeg && p.vidBy === "claude" ? `<div class="col" style="gap:4px"><div class="row between"><label class="f" for="pneg">Không muốn có (negative prompt)</label><button type="button" class="btn sm" id="pnegcopy">Sao chép</button></div>
+        <textarea id="pneg" rows="2">${esc(p.vidNeg)}</textarea><span class="small">Dán vào ô "Negative prompt" nếu công cụ có ô đó. Gemini không có thì bỏ qua.</span></div>` : ""}
+      <a class="btn primary big" href="${vtoolOf(p.vtool)[2]}" target="_blank" rel="noopener" data-popenapp="vid">Chép câu lệnh và mở ${esc(vtoolOf(p.vtool)[1])}</a>
+      <span class="small">Trong ${esc(vtoolOf(p.vtool)[1])}: chọn tạo video từ ảnh, đính kèm ảnh, dán câu lệnh rồi gửi. Tải video về máy, quay lại đây bấm "Nhận video".</span>
       <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Clip đã nhận (${(p.clips || []).length})</span>${clipList(p)}
-        ${upBox("pclips", "Nhận video", `Chọn video vừa lưu từ Gemini, tối đa ${MAX_MB}MB mỗi clip`, "video/*", true)}</div>
+        ${upBox("pclips", "Nhận video", `Chọn video vừa lưu từ ${esc(vtoolOf(p.vtool)[1])}, tối đa ${MAX_MB}MB mỗi clip`, "video/*", true)}</div>
       <button class="btn ok big" data-pgo="dung-phim" ${(p.clips || []).length ? "" : "disabled"}>Chuyển ${(p.clips || []).length || ""} clip sang Dựng Phim →</button></div>`;
   }
   function pipeDungPhim(p) {
@@ -708,13 +773,18 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
     const refreshImg = () => { const q = curPipe(), el = $("#pimg"); if (el && !q.imgEdited) el.value = buildImg(q); };
     const refreshVid = () => { const q = curPipe(), el = $("#pvid"); if (el && !q.vidEdited) el.value = buildVid(q); };
     field("#pidea", "idea", { after: refreshImg });
+    field("#pidea2", "idea", { after: () => refreshVid() });
+    field("#pneg", "vidNeg");
+    document.querySelectorAll("[data-pclaude]").forEach(b => b.onclick = () => askClaude(b.dataset.pclaude, b));
+    document.querySelectorAll("[data-pvtool]").forEach(b => b.onclick = () => { savePipe(id, { vtool: b.dataset.pvtool }, true); render(); });
+    const nc = $("#pnegcopy"); if (nc) nc.onclick = () => navigator.clipboard?.writeText($("#pneg").value).then(() => toast("Đã chép negative prompt"), () => toast("Giữ ngón tay trên ô để sao chép"));
     field("#pimg", "", { wrap: v => ({ imgPrompt: v, imgEdited: true }) });
     field("#pmotion", "motion", { after: refreshVid });
     field("#pvid", "", { wrap: v => ({ vidPrompt: v, vidEdited: true }) });
     const editField = (sel, key, isBox) => { const el = $(sel); if (el) el.addEventListener(isBox ? "change" : "input", () => { savePipe(id, { edit: { ...(curPipe().edit || {}), [key]: isBox ? el.checked : el.value } }, isBox); if (isBox && key === "narration") render(); }); };
     editField("#pscript", "script"); editField("#pnote", "note"); editField("#pnarr", "narration", true); editField("#pcap", "captions", true); editField("#pmusic", "music", true);
-    const ir = $("#pimgreset"); if (ir) ir.onclick = () => { savePipe(id, { imgEdited: false, imgPrompt: "" }, true); render(); };
-    const vr = $("#pvidreset"); if (vr) vr.onclick = () => { savePipe(id, { vidEdited: false, vidPrompt: "" }, true); render(); };
+    const ir = $("#pimgreset"); if (ir) ir.onclick = () => { savePipe(id, { imgEdited: false, imgPrompt: "", imgBy: "", imgNote: "" }, true); render(); };
+    const vr = $("#pvidreset"); if (vr) vr.onclick = () => { savePipe(id, { vidEdited: false, vidPrompt: "", vidBy: "", vidNote: "", vidNeg: "" }, true); render(); };
     document.querySelectorAll("[data-plook]").forEach(b => b.onclick = () => { savePipe(id, { look: b.dataset.plook }, true); render(); });
     document.querySelectorAll("[data-pmove]").forEach(b => b.onclick = () => { const q = curPipe(), m = b.dataset.pmove;
       const v = (q.motion || "").trim() ? q.motion.trim().replace(/[.,;]$/, "") + ", " + m.toLowerCase() : m; savePipe(id, { motion: v }); $("#pmotion").value = v; refreshVid(); });
@@ -723,7 +793,7 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
     // Chép câu lệnh vào bộ nhớ tạm rồi để liên kết tự mở ChatGPT / Gemini ở thẻ mới
     document.querySelectorAll("[data-popenapp]").forEach(a => a.addEventListener("click", () => {
       const isImg = a.dataset.popenapp === "img", text = (isImg ? $("#pimg") : $("#pvid"))?.value || "";
-      navigator.clipboard?.writeText(text).then(() => toast(`Đã chép câu lệnh. Dán vào ${isImg ? "ChatGPT" : "Gemini"} nhé.`), () => toast("Chưa chép tự động được: giữ ngón tay trên ô câu lệnh để sao chép."));
+      navigator.clipboard?.writeText(text).then(() => toast(`Đã chép câu lệnh. Dán vào ${isImg ? "ChatGPT" : vtoolOf(curPipe().vtool)[1]} nhé.`), () => toast("Chưa chép tự động được: giữ ngón tay trên ô câu lệnh để sao chép."));
       if (isImg && !curPipe().src) a.href = GPT_URL + "?q=" + encodeURIComponent(text); // không có ảnh gốc: câu lệnh điền sẵn luôn
     }));
     const sp = $("#psrc"); if (sp) sp.onchange = () => { const f = [...sp.files]; sp.value = ""; uploadTo(p, "src", f, "src"); };
@@ -958,6 +1028,7 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
     S.dl = await window.claude?.use?.("downloads").catch(() => null);
     S.assets = await window.claude?.use?.("assets").catch(() => null);
     S.mcp = await window.claude?.use?.("mcp").catch(() => null);
+    S.sample = await window.claude?.use?.("sample").catch(() => null); if (S.sample && route() === "xuong") render();
     pollRun();
     if (!db) { S.ready = true; render(); return; }
     S.db = db;
