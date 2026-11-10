@@ -18,20 +18,15 @@
 - **Tự kiểm tra bố cục**: dựng mỗi 0,2 s, ghi hình chữ nhật mọi chữ/label/thẻ, báo vi phạm lề 36 px, label chồng nhau, label đè icon, label sát thẻ. Phải bằng 0 mới ghi.
 - Dữ liệu: tuyến + km + phút từ **OSRM** (router.project-osrm.org, xe hơi, không có kẹt xe → ghi "ước tính"), tọa độ từ Photon, đối chiếu tên để không lấy nhầm dự án trùng tên. Không có tọa độ thật thì ghi rõ "vị trí tạm".
 
-## So với QBK hiện có
-| Skill gốc có | Engine `ve-tinh` hiện có |
-|---|---|
-| Nghiêng 3D 40° | Chỉ nhìn thẳng từ trên (chưa có) |
-| Tuyến OSRM thật | `route` có, nhưng path dò tay |
-| Ghim + label kim loại, tự né | `marker`, `tag` (trắng/cam/xanh/đỏ), không tự né |
-| Thẻ địa điểm km/phút, tiến trình | `stats` gần giống, chưa có thẻ đúng kiểu |
-| Kiểm tra va chạm tự động | `dung-phim` có soát chồng lấn, chưa ở mức từng label |
-| Không giọng đọc, không phụ đề, WebM | QBK có giọng Gemini, phụ đề, sfx, MP4 1080×1920 |
+## Đã đưa vào engine: phong cách `bds` (10/11/2026)
+Người dùng yêu cầu: làm một phong cách giống skill này, kèm phần giới thiệu BĐS bằng ảnh thật của dự án.
+- `view.tilt` + `satmap` nghiêng 3D (warp từng hàng điểm ảnh, `lib/geo.mjs`), mọi phần tử `geo` chiếu theo phối cảnh.
+- `lib/bds.mjs`: ghim + nhãn kim loại tự né, tuyến 3 lớp, thẻ km/phút, thanh tiến trình, chữ mở đầu, thẻ kết, chân trang ghi nguồn; phần BĐS: `bdsPhoto` (cover hoặc khung trên nền mờ, lia chậm), `bdsCaption`, `bdsSpecs`, `bdsChips`.
+- `studio/tools/bds_build.py`: `bds.json` → tuyến OSRM (`routes.json`), zoom tự động, ảnh vệ tinh đúng vùng cần, `scene.json` (khớp giọng đọc bằng `cue`). Mẫu: `bds.example.json`.
+- `studio/engine/check_layout.mjs`: kiểm tra tự động như skill gốc (lề, nhãn chồng, nhãn đè ghim/thẻ, nhãn sát thẻ) + bảng khung hình.
+- Khác skill gốc: khung 1080×1920 MP4, có giọng đọc và phụ đề (đặt ở trên, y = 250, vì đáy là thẻ), thêm phần ảnh dự án, nền vệ tinh lấy trước bằng `satmap.py` thay vì tải tile trong trình duyệt.
 
-Mạng phiên cloud (kiểm 10/11/2026): Esri tile 200, OSRM 200, Photon **bị chặn**. Tọa độ địa điểm phải lấy cách khác (người dùng cung cấp, tra web, hoặc dò trên ảnh bằng `satgrid.py`).
-
-## Đề xuất đưa vào engine (chưa làm)
-1. `studio/tools/osrm.py`: lấy tuyến, km, phút cho danh sách điểm → JSON dùng trực tiếp cho `route.path`.
-2. Phần tử `poiCard` (thẻ dưới) + `progress` (thanh N đoạn) + biến thể `marker` kim loại gold/blue/ruby.
-3. Thuộc tính `tilt` cho `view` (strip warp như skill gốc).
-4. Bộ đặt label tự né + kiểm tra va chạm trong `dung-phim`.
+## Còn thiếu
+- Kho icon/label riêng của người dùng (skill gốc cũng chưa có): khi có, thay `GLYPH`, `pinBody`, `drawLabel` trong `lib/bds.mjs`.
+- Khối 3D tòa nhà mọc lên trên bản đồ.
+- Nhạc nền: chưa có thư viện nhạc có giấy phép; thêm `music` trong `bds.json` khi người dùng gửi.

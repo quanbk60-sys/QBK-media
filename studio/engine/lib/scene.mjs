@@ -124,7 +124,7 @@ export function makeRenderer(s) {
     const cam = sampleTrack(camKeys, t, ['zoom', 'x', 'y']);
     const z = cam.zoom ?? 1, cx = cam.x ?? s.width / 2, cy = cam.y ?? s.height / 2;
     ctx.setTransform(z, 0, 0, z, s.width / 2 - cx * z, s.height / 2 - cy * z);
-    let pen = null, drawing = false;
+    let pen = null, drawing = false; s._rects = [];
     const view = sampleView(sh.view, t);
     for (const [idx, e] of (sh.elements || []).entries()) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;

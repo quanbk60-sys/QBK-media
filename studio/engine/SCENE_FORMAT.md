@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `bds` (giới thiệu bất động sản: vệ tinh nghiêng 3D, tuyến đường, ảnh dự án; xem mục "Phong cách BĐS") | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -171,6 +171,31 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
+
+## Phong cách BĐS (`bds`, `lib/bds.mjs`)
+Video giới thiệu bất động sản: mở đầu trên ảnh vệ tinh → ảnh thật của dự án (thông số, tiện ích) → từng địa điểm lân cận có tuyến đường, km, phút → thẻ kêu gọi. Phần vị trí học từ skill `map-location-video` (thẻ `studio/references/vi-tri-ket-noi-bds/card.md`).
+**Không viết tay scene này**: điền `projects/<slug>/bds.json` (mẫu `studio/references/vi-tri-ket-noi-bds/bds.example.json`) rồi chạy `python3 studio/tools/bds_build.py projects/<slug>`. Builder lấy tuyến OSRM, tính zoom, tải ảnh vệ tinh, viết `scene.json`. Kiểm tra: `node studio/engine/check_layout.mjs scene.json --sheet sheet.png` (phải 0 lỗi).
+
+- `view` nhận thêm `tilt` (độ, 0 = nhìn thẳng). Có `tilt` thì `satmap` nghiêng 3D (tâm khung luôn là tâm view) và mọi phần tử `geo` chiếu theo phối cảnh. Dùng được cho cả `ve-tinh`.
+- Scene đặt `"credit": ""` để tắt dòng Esri góc trên; nguồn nằm trong `bdsFooter`.
+- Kích thước viết theo khung 576 px của skill gốc nhân 1,875. Lề 36 (67 px), đáy thẻ cách đáy 84 (158 px). Phụ đề ở trên: `captions.y` = 250.
+
+| Phần tử | Thuộc tính |
+|---|---|
+| `bdsShade` | lớp tối, sương ở xa, viền tối (đặt ngay sau `satmap` có `shade: false`). `dim` |
+| `bdsRoute` | `path` [[lat,lon]…], `sty`, `grow {at, dur}`, `alpha`, `head` (chấm đầu khi đang vẽ), `width` |
+| `bdsPin` | ghim kim loại: `geo`, `sty` (gold, blue, ruby, green, violet), `label`, `project: true` (nhãn vàng, to 1,15), `size`, `pop: false` (hiện ngay), `id`, `bottom`/`top` (giới hạn nhãn). Nhãn tự đặt trên/trái/phải, né nhãn và ghim vẽ trước trong cùng khung → đặt ghim dự án trước |
+| `bdsCard` | thẻ địa điểm dưới: `cat`, `name`, `km`, `min`, `extra` (chip thứ ba), `sty`, `index`, `total` |
+| `bdsBar` | thanh trên: `name`, `area`, `colors` [sty…], `active` (đoạn đang chạy, đầy dần theo cảnh) |
+| `bdsHeadline` | chữ mở đầu: `lines` [dòng trắng, dòng vàng], `sub`, `y` |
+| `bdsOutro` | thẻ kết: `name`, `tagline`, `cta` (nút vàng), `note` |
+| `bdsFooter` | chân: `text`, `credit` |
+| `bdsPhoto` | ảnh dự án: `path`, `mode` (`cover` phủ kín; `card` ảnh nguyên trong khung viền vàng trên nền mờ; mặc định ảnh ngang → `card`), `zoom` [1, 1.1], `focus`, `focusTo`, `dim`, `bottom` (đáy khung `card`), `illustration` (true hoặc chữ: ghi "Ảnh minh họa") |
+| `bdsCaption` | `kicker` (nhãn kim loại), `title`, `sub`, `sty`, `y` (neo đáy) |
+| `bdsSpecs` | thẻ thông số: `title`, `items` [{`icon`, `label`, `value`}], `y` (đáy). Icon: area, bed, bath, money, key, doc, building, compass, car, calendar, pool, pin, star |
+| `bdsChips` | chip tiện ích: `items` [chữ…], `y` (đáy), `sty` |
+
+Icon thẻ địa điểm chọn theo `cat`: y tế/bệnh viện (chữ thập), mua sắm/chợ/siêu thị (túi), giáo dục/trường (mũ), công viên/hồ/sông (cây), giải trí/thể thao (sao), hành chính (tòa nhà), metro/ga (tàu), còn lại (mũi tên).
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).

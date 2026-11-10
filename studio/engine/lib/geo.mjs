@@ -6,9 +6,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createCanvas, loadImage} from '@napi-rs/canvas';
 import {clamp, ease, backOut, sampleTrack, rng} from './math.mjs';
+import {BDS_TYPES, BDS_PAINT, validateBds, preloadBds} from './bds.mjs';
 
 export const ORANGE = '#FF8A1F', WHITE = '#FFFFFF', DARK = '#111418';
-export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade'];
+export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade', ...BDS_TYPES];
 const col = c => ({orange: ORANGE, white: WHITE, dark: DARK, blue: '#3FB6FF', red: '#E5484D', yellow: '#FFD23F', green: '#46C46B'}[c] || c || ORANGE);
 const F = {black: 'QBKBlack', italic: 'QBKItalic', bold: 'QBKBold'};
 
@@ -21,16 +22,33 @@ const worldPx = z => 256 * 2 ** z;
 export function sampleView(keys, t) {
   if (!keys?.length) return null;
   const K = keys.map(k => ({...k, m: merc(k.lat, k.lon)}));
-  if (t <= K[0].t) return {c: K[0].m, zoom: K[0].zoom, lat: K[0].lat};
-  const i = K.findIndex(k => k.t > t); if (i < 0) { const k = K.at(-1); return {c: k.m, zoom: k.zoom, lat: k.lat}; }
+  const one = k => ({c: k.m, zoom: k.zoom, lat: k.lat, tilt: k.tilt ?? 0});
+  if (t <= K[0].t) return one(K[0]);
+  const i = K.findIndex(k => k.t > t); if (i < 0) return one(K.at(-1));
   const a = K[i - 1], b = K[i], u = (t - a.t) / (b.t - a.t), e = b.ease === 'linear' ? u : ease(u);
   const Z = a.zoom + (b.zoom - a.zoom) * e; let c;
   if (b.zoom > a.zoom + 0.01) { const f = 2 ** (a.zoom - Z) * (1 - e); c = [b.m[0] - (b.m[0] - a.m[0]) * f, b.m[1] - (b.m[1] - a.m[1]) * f]; }
   else if (a.zoom > b.zoom + 0.01) { const g = 2 ** (b.zoom - Z) * e; c = [a.m[0] + (b.m[0] - a.m[0]) * g, a.m[1] + (b.m[1] - a.m[1]) * g]; }
   else c = [a.m[0] + (b.m[0] - a.m[0]) * e, a.m[1] + (b.m[1] - a.m[1]) * e];
-  return {c, zoom: Z, lat: a.lat + (b.lat - a.lat) * e};
+  return {c, zoom: Z, lat: a.lat + (b.lat - a.lat) * e, tilt: (a.tilt ?? 0) + ((b.tilt ?? 0) - (a.tilt ?? 0)) * e};
 }
-export const project = (v, s, lat, lon) => { const m = merc(lat, lon), W = worldPx(v.zoom); return [s.width / 2 + (m[0] - v.c[0]) * W, s.height / 2 + (m[1] - v.c[1]) * W]; };
+// Tilted camera (view key "tilt", degrees): the map plane leans back around the frame centre, like the
+// map-location-video skill (strip warp). D = perspective distance in px. Returns [x, y, depthScale].
+export const TILT_D = w => w * 1.736, TILT_TOP = h => Math.round(h * 0.127);
+export const project = (v, s, lat, lon) => {
+  const m = merc(lat, lon), W = worldPx(v.zoom), u = (m[0] - v.c[0]) * W, w = (m[1] - v.c[1]) * W;
+  if (!(v.tilt > 0.5)) return [s.width / 2 + u, s.height / 2 + w, 1];
+  const ph = v.tilt * Math.PI / 180, D = TILT_D(s.width), den = D - w * Math.sin(ph);
+  if (den < D * 0.05) return [s.width / 2, -99999, 0.05];
+  const sc = D / den; return [s.width / 2 + u * sc, s.height / 2 + sc * w * Math.cos(ph), sc];
+};
+// flat-map rectangle (px at view zoom, relative to the view centre) that a tilted frame shows below TILT_TOP
+export function tiltRect(s, tilt) {
+  const ph = tilt * Math.PI / 180, c = Math.cos(ph), sn = Math.sin(ph), D = TILT_D(s.width), cy = s.height / 2;
+  const row = ys => { const yp = ys - cy, Q = D * c + yp * sn; return {v: yp * D / Q, half: s.width / 2 / (Q / (D * c))}; };
+  const top = row(TILT_TOP(s.height)), bot = row(s.height);
+  return {x0: -top.half - 12, x1: top.half + 12, y0: top.v - 12, y1: bot.v + 12};
+}
 
 // ---------- assets ----------
 const cache = new Map();
@@ -43,7 +61,7 @@ async function loadSat(s) {
 }
 export async function preloadGeo(s) {
   s._sat = await loadSat(s);
-  s._photos = new Map();
+  s._photos = new Map(); await preloadBds(s);
   for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'photo' && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
   if (s.shots.some(sh => (sh.elements || []).some(e => e.type === 'globe'))) {
     const w = s._sat?.levels.filter(l => l.world).at(-1); if (!w) throw new Error('globe cần một mức "world" trong satmap.json (satmap.py --level 4:world)');
@@ -53,6 +71,7 @@ export async function preloadGeo(s) {
 }
 export function validateGeo(s, e, where, err) {
   if (!GEO_TYPES.includes(e.type)) return false;
+  if (BDS_TYPES.includes(e.type)) { validateBds(s, e, where, err); return true; }
   if (['satmap', 'globe'].includes(e.type) && !s.satmap) err(`${where}: scene cần "satmap": "đường/dẫn/satmap.json"`);
   if (e.type === 'photo' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
   if (e.type === 'route' && !(e.path?.length >= 2)) err(`${where}: route cần path [[lat,lon],...]`);
@@ -72,8 +91,42 @@ function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
 function fitFont(ctx, text, family, size, maxW) { let sz = size; do { ctx.font = `${sz}px ${family}`; if (ctx.measureText(text).width <= maxW) break; sz -= 2; } while (sz > 20); return sz; }
 
 // ---------- painters ----------
+let flatCv = null;
+function satmapTilted(ctx, e, t, s, v) {
+  const sat = s._sat, R = tiltRect(s, v.tilt), FW = Math.ceil(R.x1 - R.x0), FH = Math.ceil(R.y1 - R.y0);
+  if (!flatCv || flatCv.width < FW || flatCv.height < FH) flatCv = createCanvas(Math.max(FW, flatCv?.width || 0), Math.max(FH, flatCv?.height || 0));
+  const fx = flatCv.getContext('2d'), FX0 = -R.x0, FY0 = -R.y0, Wv = worldPx(v.zoom);
+  fx.setTransform(1, 0, 0, 1, 0, 0); fx.fillStyle = '#0A0F1C'; fx.fillRect(0, 0, flatCv.width, flatCv.height); fx.imageSmoothingQuality = 'high';
+  const rect = l => { const Wz = worldPx(l.z), k = Wv / Wz; return {k, dx: FX0 + (l.x0 / Wz - v.c[0]) * Wv, dy: FY0 + (l.y0 / Wz - v.c[1]) * Wv}; };
+  const covers = l => { if (l.world) return true; const {k, dx, dy} = rect(l); return dx <= 0 && dy <= 0 && dx + l.w * k >= FW && dy + l.h * k >= FH; };
+  const cand = sat.levels.filter(l => l.z <= v.zoom + 1.6), fi = cand.findLastIndex(covers);
+  for (const l of fi >= 0 ? cand.slice(fi) : cand) { // covering level first, sharper partial levels on top
+    const {k, dx, dy} = rect(l); if (dx > FW || dy > FH || dx + l.w * k < 0 || dy + l.h * k < 0) continue;
+    if (l.world) for (const off of [-1, 0, 1]) fx.drawImage(l.img, dx + off * Wv, dy, l.w * k, l.h * k); else fx.drawImage(l.img, dx, dy, l.w * k, l.h * k);
+  }
+  // warp in JS (drawImage from a canvas copies it on every call): each screen row samples one flat row, bilinear
+  const ph = v.tilt * Math.PI / 180, c = Math.cos(ph), sn = Math.sin(ph), D = TILT_D(s.width), cy = s.height / 2, top = TILT_TOP(s.height), W = s.width, OH = s.height - top;
+  const src = fx.getImageData(0, 0, FW, FH).data, out = ctx.createImageData(W, OH), o = out.data;
+  for (let r = 0; r < OH; r++) {
+    const yp = top + r + 0.5 - cy, Q = D * c + yp * sn, fy = Math.min(FH - 1.001, Math.max(0, FY0 + yp * D / Q - 0.5)), y0 = fy | 0, wy = fy - y0, inv = (D * c) / Q;
+    const r0 = y0 * FW, r1 = (y0 + 1) * FW; let q = r * W * 4;
+    for (let x = 0; x < W; x++, q += 4) {
+      const fxp = Math.min(FW - 1.001, Math.max(0, FX0 + (x + 0.5 - W / 2) * inv - 0.5)), x0 = fxp | 0, wx = fxp - x0;
+      const p00 = (r0 + x0) * 4, p01 = p00 + 4, p10 = (r1 + x0) * 4, p11 = p10 + 4, a00 = (1 - wx) * (1 - wy), a01 = wx * (1 - wy), a10 = (1 - wx) * wy, a11 = wx * wy;
+      o[q] = src[p00] * a00 + src[p01] * a01 + src[p10] * a10 + src[p11] * a11;
+      o[q + 1] = src[p00 + 1] * a00 + src[p01 + 1] * a01 + src[p10 + 1] * a10 + src[p11 + 1] * a11;
+      o[q + 2] = src[p00 + 2] * a00 + src[p01 + 2] * a01 + src[p10 + 2] * a10 + src[p11 + 2] * a11;
+      o[q + 3] = 255;
+    }
+  }
+  ctx.save(); ctx.fillStyle = '#0A0F1C'; ctx.fillRect(0, 0, W, top); ctx.putImageData(out, 0, top);
+  if (e.dim) { ctx.fillStyle = `rgba(0,0,0,${e.dim})`; ctx.fillRect(0, 0, s.width, s.height); }
+  ctx.restore();
+  if (e.shade !== false) shade(ctx, {}, t, s);
+}
 function satmap(ctx, e, t, s, v) {
   const sat = s._sat; if (!sat || !v) return;
+  if (v.tilt > 0.5) return satmapTilted(ctx, e, t, s, v);
   ctx.save(); ctx.globalAlpha = fadeA({...e, enter: e.enter ?? 'none'}, t); ctx.imageSmoothingQuality = 'high';
   ctx.fillStyle = '#05080C'; ctx.fillRect(0, 0, s.width, s.height);
   const Wv = worldPx(v.zoom);
@@ -252,5 +305,5 @@ function clouds(ctx, e, t, s) {
 function note(ctx, e, t, s) { ctx.save(); ctx.globalAlpha = fadeA(e, t) * 0.85; ctx.font = `${e.size ?? 22}px ${F.bold}`; ctx.fillStyle = '#D5D9DF'; ctx.textAlign = e.align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(e.text, e.x ?? 66, e.y ?? 1330); ctx.restore(); }
 export function credit(ctx, s, text, y = 120, align = 'right') { ctx.save(); ctx.font = `18px ${F.bold}`; ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(text, align === 'right' ? s.width - 40 : 40, y); ctx.restore(); }
 
-const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade};
+const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade, ...BDS_PAINT};
 export function drawGeo(ctx, e, t, s, v, shotDur) { e._shotDur = shotDur; PAINT[e.type](ctx, e, t, s, v); }
