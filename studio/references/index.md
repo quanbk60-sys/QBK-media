@@ -9,4 +9,6 @@
 | [Thí nghiệm cổ](thi-nghiem-co/card.md) | `thi-nghiem` (khung 16:9 giữa + nền mờ, chữ 2–3 từ có từ khóa vàng) | Khoa học đời thường, cách làm, mẹo dân gian | Cảnh 8–9 s, camera đẩy chậm | Đã làm bố cục · thiếu 3D thật |
 | [BĐS: bản đồ tiện ích kiểu CapCut](bds-ban-do-tien-ich/card.md) (2 mẫu) | `bds-tien-ich` (ghim kim loại có icon, đường neon có tên, khối 3D lô đất, thẻ ảnh, camera nghiêng) | Bất động sản: vị trí, tiện ích | Một cảnh dài, lớp hiện dần theo nhạc | Đã làm · thiếu flycam thật |
 | [BĐS: skill bản đồ hạ tầng](bds-ban-do-ha-tang/card.md) | `bds-tien-ich` (chương, tuyến nhiều màu, vòng km, chú giải, checklist) + `osrm.py`; skill `map-location-video` | Bất động sản: hạ tầng, kết nối | Chương 4–6 s | Đã làm · thiếu tự tìm hạ tầng (Overpass bị chặn) |
+| [Phong cảnh anime · đạp xe](phong-canh-anime/card.md) | `phong-canh-3d` (`engine3d/phong-canh.mjs`, phối cảnh giả 3D) | Thư giãn, chill | Camera bám sau đổ dốc liên tục, 2 cảnh, chuyển cảnh mờ | Đã làm · nét phẳng hơn tranh AI |
+| [Cách viết lệnh Omni](omni-prompt/card.md) | công cụ cho `anime-dong` (quay phim) | Mọi phim anime động | Clip 4–8 giây, ba nhịp có mốc giờ | Tài liệu tham khảo (MIT, rút từ Stickman Video Director) |
 | Slide "Stickman Video Director" (ảnh, đầu cuộc trò chuyện) | 10 phong cách A1–B4 của skill gốc | Đa thể loại | | Tham khảo cho các gói phong cách |

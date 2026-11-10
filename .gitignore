@@ -8,3 +8,12 @@ projects/*/output/.*
 studio/engine/examples/styles/out/
 studio/engine3d/node_modules/
 __pycache__/
+
+# Video mẫu tải về (của bên thứ ba) và bản render lớn trong _mau
+projects/_mau/*.mp4
+projects/_mau/*/output/*.mp4
+projects/_mau/*/output/*.mp4
+
+# File thử nghiệm người dùng gửi (ảnh, video bên thứ ba): không đưa vào repo
+projects/_thu/
+projects/*/output/final.mp4
