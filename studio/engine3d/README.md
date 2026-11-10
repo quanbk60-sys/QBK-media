@@ -69,3 +69,16 @@ Mỗi cảnh có thể lấy tranh nền và bộ vật thể vẽ sẵn trong `
 - `bg`: tranh nền (đường dẫn tính từ file json), `horizon`: vị trí đường chân trời trong ảnh (tỉ lệ chiều cao), `yH`: đặt chân trời ở pixel nào của khung 1920. `yV` chỉnh điểm tụ của đường nếu cần.
 - `art`: cây, nhà, bụi, người đạp xe (có nhún theo nhịp đạp), vân đá; `flowersArt` theo từng cảnh (khoảng 30% số bụi hoa dùng ảnh AI, còn lại vẽ code để đỡ lặp).
 - Mẫu: `projects/_mau/phong-canh-ai/phongcanh.json`.
+
+## Gấp giấy mô phỏng thật (`origami`, file `origami.js`)
+Gấp cứng (rigid origami): mỗi mặt giấy là đa giác phẳng, gắn mặt cha bằng bản lề là đường nếp; không mặt nào bị uốn hay giãn. Gấp ngược vào trong (cổ, đầu, đuôi) được giải bằng ràng buộc đối xứng: đây là mode gấp cứng thật của đỉnh bậc 4 thỏa Kawasaki, nên phải **mở phẳng rồi gập lại theo nếp đã miết** (đúng như gấp tay).
+```json
+{"type": "origami", "color": "#b5121b", "size": 0.106, "at": [0, 0.052, 0], "rot": [0, -28, 0],
+ "track": [{"t": 0, "spine": 0, "kiteL": 0, "kiteR": 0, "rev": 0, "layerB": 0, "wing": 0, "guides": 0}, {"t": 1, "kiteL": 180}]}
+```
+- `size`: mét trên một đơn vị giấy (đường chéo = 2 đơn vị; tờ 15 cm là 0,106). Đặt `at` cao hơn mặt bàn 2 mm (các lớp lệch nhau tối đa khoảng 1 mm).
+- Track: `spine` (0 phẳng → 180 gập đôi theo đường chéo), `kiteL`, `kiteR` (0 → 180, hai mép vào giữa), `rev` (0: gập thẳng; 2: bật gấp ngược cổ, đầu, đuôi; đổi **khi `spine` = 0**), `layerB` (0 → 1, đổi thứ tự lớp sang dạng sau gấp ngược, cũng làm khi giấy đang phẳng), `wing` (độ hạ cánh, khoảng 84 khi đặt trên bàn), `guides` (0..1, nét đứt chỉ nếp cổ, đầu, đuôi), `flapAmp`, `flapHz` (vỗ cánh khi bay).
+- Giấy hai mặt: `color` mặt ngoài, `back` mặt trong (mặc định trắng). Mặt trắng lộ ra ở đuôi và mặt trên cánh là đúng như gấp thật.
+- Tham số mẫu (`params`): `neck`, `head`, `tail`, `wing`, `neckAngle`, `headAngle`, `tailAngle`. Phim mẫu: `projects/chim-giay-bay/build_scene3d.py`.
+- `ricefield`: ruộng lúa chín (lá instanced, lắc theo gió): `size`, `count`, `color`, `groundColor`.
+- Mỗi cảnh có thể đặt `shadowSize` (mét) cho vật nhỏ trên bàn (0,5) để bóng sắc nét.
