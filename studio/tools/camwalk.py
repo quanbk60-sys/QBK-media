@@ -50,13 +50,13 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('img'); ap.add_argument('out')
     ap.add_argument('--dur', type=float, default=5); ap.add_argument('--fps', type=int, default=30)
     ap.add_argument('--fwd', type=float, default=0.25); ap.add_argument('--side', type=float, default=0); ap.add_argument('--up', type=float, default=0)
-    ap.add_argument('--yaw', default='0,0'); ap.add_argument('--pitch', default='0,0'); ap.add_argument('--hand', type=float, default=1)
+    ap.add_argument('--yaw', default='0,0'); ap.add_argument('--pitch', default='0,0'); ap.add_argument('--hand', type=float, default=1); ap.add_argument('--bob', type=float, default=None, help='nhún bước chân, mặc định = hand; gimbal: 0')
     ap.add_argument('--zoom', type=float, default=1.1); ap.add_argument('--fov', type=float, default=70); ap.add_argument('--size', default='1080x1920')
     ap.add_argument('--focus', default='0.5,0.5', help='điểm giữa khung ra trên ảnh gốc (0..1), dùng cho ảnh ngang')
     ap.add_argument('--ease', default='walk', help='walk: đi đều, vào/ra mềm; linear')
     a = ap.parse_args()
     OW, OH = map(int, a.size.lower().split('x'))
-    sig = hashlib.md5(json.dumps({**vars(a), 'out': None, 'v': 4}, sort_keys=True).encode()).hexdigest()[:12]
+    sig = hashlib.md5(json.dumps({**vars(a), 'out': None, 'v': 5}, sort_keys=True).encode()).hexdigest()[:12]
     meta_f = os.path.join(a.out, 'clip.json')
     if os.path.exists(meta_f) and json.load(open(meta_f)).get('sig') == sig:
         print(json.dumps({'out': a.out, 'cached': True})); return
@@ -85,8 +85,8 @@ def main():
     for i in range(N):
         tt = i / a.fps; u = i / max(1, N - 1)
         q = u if a.ease == 'linear' else (u * u * (3 - 2 * u) * 0.35 + u * 0.65)   # gần đều, đầu cuối mềm
-        hand = a.hand
-        C = np.array([a.side * q + hand * 0.006 * smooth_noise(tt, 1), a.up * q - hand * 0.006 * abs(math.sin(math.pi * 1.8 * tt)) + hand * 0.004 * smooth_noise(tt, 2), a.fwd * q])
+        hand = a.hand; bob = a.hand if a.bob is None else a.bob
+        C = np.array([a.side * q + hand * 0.006 * smooth_noise(tt, 1), a.up * q - bob * 0.006 * abs(math.sin(math.pi * 1.8 * tt)) + hand * 0.004 * smooth_noise(tt, 2), a.fwd * q])
         R = rot(base_yaw + y0 + (y1 - y0) * q + hand * 0.35 * smooth_noise(tt, 3), base_pitch + p0 + (p1 - p0) * q + hand * 0.25 * smooth_noise(tt, 4), hand * 0.3 * smooth_noise(tt, 5))
         Pc = (P - C) @ R            # = R^T (P - C)
         zc = Pc[:, 2]; ok = zc > 0.05

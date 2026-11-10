@@ -223,6 +223,8 @@ def main():
         shots.append(sh); t += d
     if caps and shots[-1]['end'] < narr_end + 0.8: shots[-1]['end'] = round(narr_end + 0.8, 2)
     for x in shots: x['start'], x['end'] = round(x['start'], 2), round(x['end'], 2); x.pop('_photo', None)
+    if cfg.get('sfx') is False:  # bỏ hết tiếng hiệu ứng (whoosh, pop, chime), chỉ còn giọng đọc và nhạc
+        for x in shots: x.pop('sfx', None)
     # dựng cảnh quay: mỗi ảnh có "cam" dài bằng cảnh + đoạn nhòa sang cảnh sau
     xf = (cfg.get('walk') or {}).get('xfade', 0.7); tool = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'camwalk.py')
     for sh in shots:

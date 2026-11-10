@@ -56,18 +56,6 @@
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
     }
-   ],
-   "sfx": [
-    {
-     "t": 0.05,
-     "kind": "whoosh",
-     "gain": 0.4
-    },
-    {
-     "t": 0.45,
-     "kind": "pop",
-     "gain": 0.3
-    }
    ]
   },
   {
@@ -114,13 +102,6 @@
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
     }
-   ],
-   "sfx": [
-    {
-     "t": 0.1,
-     "kind": "whoosh",
-     "gain": 0.25
-    }
    ]
   },
   {
@@ -164,13 +145,6 @@
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
     }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.4
-    }
    ]
   },
   {
@@ -181,7 +155,7 @@
      "type": "bdsClip",
      "dir": "clips/p5-loi-vao",
      "from": -6.13,
-     "to": 0.8,
+     "to": 1.1,
      "dur": 6.13,
      "enterDur": 0,
      "overlay": false
@@ -189,19 +163,12 @@
     {
      "type": "bdsClip",
      "dir": "clips/p6-tu-chanh",
-     "enterDur": 0.8
+     "enterDur": 1.1
     },
     {
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.12
     }
    ]
   },
@@ -213,7 +180,7 @@
      "type": "bdsClip",
      "dir": "clips/p6-tu-chanh",
      "from": -4.799999999999999,
-     "to": 0.8,
+     "to": 1.1,
      "dur": 4.799999999999999,
      "enterDur": 0,
      "overlay": false
@@ -221,19 +188,12 @@
     {
      "type": "bdsClip",
      "dir": "clips/p2-cong-vom-hanh-lang",
-     "enterDur": 0.8
+     "enterDur": 1.1
     },
     {
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.12
     }
    ]
   },
@@ -245,7 +205,7 @@
      "type": "bdsClip",
      "dir": "clips/p2-cong-vom-hanh-lang",
      "from": -4.190000000000001,
-     "to": 0.8,
+     "to": 1.1,
      "dur": 4.190000000000001,
      "enterDur": 0,
      "overlay": false
@@ -253,19 +213,12 @@
     {
      "type": "bdsClip",
      "dir": "clips/p4-sofa",
-     "enterDur": 0.8
+     "enterDur": 1.1
     },
     {
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.12
     }
    ]
   },
@@ -277,7 +230,7 @@
      "type": "bdsClip",
      "dir": "clips/p4-sofa",
      "from": -3.629999999999999,
-     "to": 0.8,
+     "to": 1.1,
      "dur": 3.629999999999999,
      "enterDur": 0,
      "overlay": false
@@ -285,19 +238,12 @@
     {
      "type": "bdsClip",
      "dir": "clips/p7-tong-quan",
-     "enterDur": 0.8
+     "enterDur": 1.1
     },
     {
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.12
     }
    ]
   },
@@ -309,7 +255,7 @@
      "type": "bdsClip",
      "dir": "clips/p7-tong-quan",
      "from": -5.84,
-     "to": 0.8,
+     "to": 1.1,
      "dur": 5.84,
      "enterDur": 0,
      "overlay": false
@@ -317,19 +263,12 @@
     {
      "type": "bdsClip",
      "dir": "clips/p3-bep-ban-an",
-     "enterDur": 0.8
+     "enterDur": 1.1
     },
     {
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.12
     }
    ]
   },
@@ -341,7 +280,7 @@
      "type": "bdsClip",
      "dir": "clips/p3-bep-ban-an",
      "from": -4.690000000000001,
-     "to": 0.8,
+     "to": 1.1,
      "dur": 4.690000000000001,
      "enterDur": 0,
      "overlay": false
@@ -349,19 +288,12 @@
     {
      "type": "bdsClip",
      "dir": "clips/p1-rem-cua-so-ke",
-     "enterDur": 0.8
+     "enterDur": 1.1
     },
     {
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.02,
-     "kind": "whoosh",
-     "gain": 0.12
     }
    ]
   },
@@ -431,13 +363,6 @@
      "type": "bdsFooter",
      "text": "",
      "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
-    }
-   ],
-   "sfx": [
-    {
-     "t": 0.6,
-     "kind": "chime",
-     "gain": 0.3
     }
    ],
    "transition": "fade",
