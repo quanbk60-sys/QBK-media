@@ -3,12 +3,15 @@
 // Bổ sung phần tử cho geo.mjs: poi (ghim kim loại có icon), project (ghim dự án + vòng radar + hộp tên), rings (vòng bán kính km),
 // block (khối 3D lô đất), pcard (thẻ ảnh + đường dẫn), info (thẻ km/phút), checklist, legend, chapter (tiêu đề chương), cta.
 // Camera nghiêng 3D: shot có "tilt" (scene.mjs dựng lớp mặt đất rồi chiếu phối cảnh). Định dạng: SCENE_FORMAT.md, mục "Phong cách BĐS".
+import fs from 'node:fs';
+import path from 'node:path';
+import {loadImage} from '@napi-rs/canvas';
 import {clamp, ease, backOut} from './math.mjs';
 import {GEO_TYPES, PAINT, F, WHITE, DARK, col, local, grow, fadeA, pos, rr, fitFont, project, mpp, merc, worldPx} from './geo.mjs';
 
-export const BDS_TYPES = ['poi', 'project', 'rings', 'block', 'pcard', 'info', 'checklist', 'legend', 'chapter', 'cta'];
+export const BDS_TYPES = ['overlay', 'poi', 'project', 'rings', 'block', 'pcard', 'info', 'checklist', 'legend', 'chapter', 'cta'];
 // phần tử nằm trên mặt đất: khi shot nghiêng, vẽ vào lớp mặt đất rồi chiếu phối cảnh cùng ảnh vệ tinh
-export const GROUND_TYPES = new Set(['satmap', 'route', 'area', 'dots', 'rings']);
+export const GROUND_TYPES = new Set(['satmap', 'overlay', 'route', 'area', 'dots', 'rings']);
 
 // kim loại: [sáng, giữa, tối]
 export const METAL = {
@@ -232,5 +235,20 @@ function cta(ctx, e, t, s) {
   ctx.restore();
 }
 
-Object.assign(PAINT, {poi, project: projectPin, rings, block, pcard, info, checklist, legend, chapter, cta});
+// ảnh dự án đã nắn về lưới vệ tinh bằng studio/tools/georef.py (quy hoạch 1/500, mặt bằng phân lô): `path` = file .json của georef.
+// alpha, reveal: {at, dur} (hiện dần từ trái sang phải theo trục chéo), enterDur.
+const overlays = new Map();
+export async function preloadOverlays(s) {
+  for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'overlay' && !overlays.has(e.path)) {
+    const f = path.join(s.base, e.path), meta = JSON.parse(fs.readFileSync(f, 'utf8')); meta.img = await loadImage(path.join(path.dirname(f), meta.file)); overlays.set(e.path, meta); }
+}
+function overlay(ctx, e, t, s, v) {
+  const m = overlays.get(e.path); if (!m || !v) return; const Wv = worldPx(v.zoom), Wz = worldPx(m.z), k = Wv / Wz;
+  const dx = s.width / 2 + (m.x0 / Wz - v.c[0]) * Wv, dy = s.height / 2 + (m.y0 / Wz - v.c[1]) * Wv, w = m.w * k, h = m.h * k;
+  ctx.save(); ctx.globalAlpha = fadeA(e, t) * (e.alpha ?? 0.8);
+  if (e.reveal) { const q = ease(clamp((local(e, t) - (e.reveal.at ?? 0)) / (e.reveal.dur ?? 1.2))); ctx.beginPath(); ctx.rect(dx, dy, w * q, h); ctx.clip(); }
+  ctx.drawImage(m.img, dx, dy, w, h); ctx.restore();
+}
+
+Object.assign(PAINT, {overlay, poi, project: projectPin, rings, block, pcard, info, checklist, legend, chapter, cta});
 for (const ty of BDS_TYPES) if (!GEO_TYPES.includes(ty)) GEO_TYPES.push(ty);

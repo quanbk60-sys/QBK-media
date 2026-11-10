@@ -181,6 +181,7 @@ Bản đồ vị trí và tiện ích dự án trên ảnh vệ tinh. Dùng đư
 | Phần tử (`type`) | Thuộc tính |
 |---|---|
 | `route` (thêm) | `neon: true` (quầng + lõi trắng + vệt sáng chạy, `flow: false` tắt, `flowSpeed`), `name` (tên đường viết dọc theo đường), `nameAt` 0..1, `nameSize`, `nameColor`, `nameOffset` |
+| `overlay` | ảnh dự án (quy hoạch, mặt bằng) đã nắn khớp vệ tinh bằng `studio/tools/georef.py`: `path` (file .json georef ra), `alpha` (0,8), `reveal: {at, dur}` hiện dần. Nằm trên mặt đất (nghiêng theo `tilt`) |
 | `poi` | ghim kim loại có icon: `geo`, `icon`, `color` (gold, blue, ruby, green, purple, teal, orange, silver), `label`, `sub` (dòng phụ trắng, ví dụ "cách dự án 0,5 km"), `side` (0 trên, 1 phải, -1 trái, `"below"` dưới chân ghim), `size`, `labelSize`, `labelColor`, `pulse: false`, `instant: true` (hiện sẵn, không rơi) |
 | `project` | ghim dự án + vòng radar + hộp tên trắng chữ xanh than: `geo`, `label`, `sub`, `icon` (home), `color` (gold), `size` |
 | `rings` | vòng bán kính nét đứt theo km thật: `geo`, `km` [1, 3, 5], `color`, `stagger`, `labelAngle` |

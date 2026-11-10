@@ -60,6 +60,7 @@ export function validateGeo(s, e, where, err) {
   if (!GEO_TYPES.includes(e.type)) return false;
   if (['satmap', 'globe'].includes(e.type) && !s.satmap) err(`${where}: scene cần "satmap": "đường/dẫn/satmap.json"`);
   if ((e.type === 'photo' || (e.type === 'pcard' && e.path)) && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
+  if (e.type === 'overlay' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing overlay ${e.path} (tạo bằng studio/tools/georef.py)`);
   if (e.type === 'route' && !(e.path?.length >= 2)) err(`${where}: route cần path [[lat,lon],...]`);
   return true;
 }

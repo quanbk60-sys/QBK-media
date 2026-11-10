@@ -13,7 +13,7 @@ Repo này là **đoàn phim thu nhỏ**. Nó tạo video hoạt hình người q
 
 ## Cấu trúc
 - `studio/engine/`: engine hoạt hình (Node + @napi-rs/canvas + ffmpeg). `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Lần đầu chạy `npm ci` trong thư mục này.
-- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài), `satmap.py` + `satgrid.py` (ảnh vệ tinh Esri), `osrm.py` (tuyến đường, km, phút), `commons.py` (ảnh Wikimedia), `tiktok.py` (đọc link TikTok).
+- `studio/tools/`: `tts.py` (Gemini TTS), `align.py` (căn phụ đề), `retime.py` (đổi tốc độ giọng), `analyze_ref.py` (phân tích mẫu), `cutout.py` (xóa nền ảnh ngoài), `satmap.py` + `satgrid.py` (ảnh vệ tinh Esri), `osrm.py` (tuyến đường, km, phút), `georef.py` (nắn ảnh quy hoạch khớp vệ tinh; skill `doi-chieu-ve-tinh`), `commons.py` (ảnh Wikimedia), `tiktok.py` (đọc link TikTok).
 - `studio/references/`: thư viện mẫu tham khảo (thẻ kiến thức về phong cách). Người dùng gửi mẫu thì agent `nghien-cuu-mau` học theo skill `hoc-mau`.
 - `studio/trends/`: báo cáo săn trend (agent `san-trend`).
 - `studio/topics.md`: danh sách chủ đề. `studio/lessons.md`: bài học từ góp ý (mọi agent đọc trước khi làm).

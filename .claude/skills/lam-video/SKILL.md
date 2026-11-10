@@ -111,6 +111,6 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 
 ## Công cụ của studio
 - Engine `studio/engine/`: `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Video mẫu 9 phong cách: `studio/engine/examples/styles/`.
-- `studio/tools/`: `osrm.py` (tuyến đường thật, km, phút cho `bds-tien-ich`), `tts.py`, `align.py`, `retime.py` (đổi tốc độ giọng và co giãn cả scene theo), `cutout.py`.
+- `studio/tools/`: `georef.py` (nắn ảnh quy hoạch khớp vệ tinh, skill `doi-chieu-ve-tinh`), `osrm.py` (tuyến đường thật, km, phút cho `bds-tien-ich`), `tts.py`, `align.py`, `retime.py` (đổi tốc độ giọng và co giãn cả scene theo), `cutout.py`.
 - `studio/topics.md` (chủ đề), `studio/lessons.md` (bài học).
 - Phim mẫu: `projects/rua-va-tho/` (đầy đủ quy trình), `projects/bach-dang-938/`.
