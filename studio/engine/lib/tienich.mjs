@@ -9,7 +9,7 @@ import {loadImage} from '@napi-rs/canvas';
 import {clamp, ease, backOut} from './math.mjs';
 import {GEO_TYPES, PAINT, F, WHITE, DARK, col, local, grow, fadeA, pos, rr, fitFont, project, mpp, merc, worldPx} from './geo.mjs';
 
-export const BDS_TYPES = ['overlay', 'poi', 'project', 'rings', 'block', 'pcard', 'info', 'checklist', 'legend', 'chapter', 'cta'];
+export const BDS_TYPES = ['overlay', 'frame', 'poi', 'project', 'rings', 'block', 'pcard', 'info', 'checklist', 'legend', 'chapter', 'cta'];
 // phần tử nằm trên mặt đất: khi shot nghiêng, vẽ vào lớp mặt đất rồi chiếu phối cảnh cùng ảnh vệ tinh
 export const GROUND_TYPES = new Set(['satmap', 'overlay', 'route', 'area', 'dots', 'rings']);
 
@@ -250,5 +250,20 @@ function overlay(ctx, e, t, s, v) {
   ctx.drawImage(m.img, dx, dy, w, h); ctx.restore();
 }
 
-Object.assign(PAINT, {overlay, poi, project: projectPin, rings, block, pcard, info, checklist, legend, chapter, cta});
+// khung phát sáng vẽ dần trên ảnh (ví dụ đánh dấu một block trên ảnh flycam): x, y, w, h (hoặc points [[x,y]…]), color, label, labelSide (top|bottom)
+function frame(ctx, e, t, s) {
+  const k = local(e, t), a = fadeA(e, t), p = ease(clamp(k / (e.drawDur ?? 0.9))), [hi, mid] = metal(e.color || 'gold');
+  const P = e.points || [[e.x, e.y], [e.x + e.w, e.y], [e.x + e.w, e.y + e.h], [e.x, e.y + e.h]];
+  const L = P.map((q, i) => Math.hypot(q[0] - P[(i + 1) % P.length][0], q[1] - P[(i + 1) % P.length][1])), tot = L.reduce((x, y) => x + y, 0);
+  ctx.save(); ctx.globalAlpha = a; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.setLineDash([tot * p, tot]); const pulse = 0.75 + 0.25 * Math.sin(k * 5);
+  ctx.strokeStyle = mid; ctx.shadowColor = mid; ctx.shadowBlur = 28; ctx.lineWidth = 12; ctx.globalAlpha = a * 0.5 * pulse; poly(ctx, P); ctx.stroke();
+  ctx.globalAlpha = a; ctx.shadowBlur = 10; ctx.lineWidth = 6; ctx.strokeStyle = hi; poly(ctx, P); ctx.stroke(); ctx.setLineDash([]); ctx.shadowBlur = 0;
+  if (p >= 1) { ctx.globalAlpha = a * 0.16 * pulse; ctx.fillStyle = mid; poly(ctx, P); ctx.fill(); }
+  if (e.label && k > 0.6) { ctx.globalAlpha = a * clamp((k - 0.6) / 0.3); const xs = P.map(q => q[0]), ys = P.map(q => q[1]), cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    const top = e.labelSide !== 'bottom'; glowLabel(ctx, cx, top ? Math.min(...ys) - 26 : Math.max(...ys) + 60, e.label, e.sub, {size: e.labelSize ?? 44, color: hi === '#FFF1B8' ? '#FFD54A' : hi}); }
+  ctx.restore();
+}
+
+Object.assign(PAINT, {overlay, frame, poi, project: projectPin, rings, block, pcard, info, checklist, legend, chapter, cta});
 for (const ty of BDS_TYPES) if (!GEO_TYPES.includes(ty)) GEO_TYPES.push(ty);

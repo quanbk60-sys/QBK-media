@@ -22,3 +22,9 @@
 - `mat-bang-phan-lo.jpg`: mặt bằng sản phẩm (cafeland, ảnh 3).
 - `flycam-tien-do.jpg`: "Tiến độ dự án" (cafeland, ảnh 12). `flycam-ho.jpg`: "Hồ trung tâm" (cafeland, ảnh 13).
 - Ảnh tải qua https://cafeland.vn/image-data/…/static1.cafeland.vn/cafelandnew/hinh-anh/2024/12/04/195/image-20241204161002-N.(jpeg|png)
+
+## Tiện ích và khoảng cách (cảnh 5)
+- Tọa độ Chợ nổi Cái Răng (10.0040, 105.7468), Đại học Cần Thơ cổng B (10.02989, 105.76968), Bến Ninh Kiều (10.03490, 105.78903): lấy từ sources.md dự án gioi-thieu-can-ho (nhánh ccr-fc7b1c4b-9uhwnb), đã đối chiếu ảnh Esri z17 và tên đường OpenStreetMap.
+- km, phút: OSRM driving từ lô A (`routes.json`), ước tính lúc đường vắng.
+## Chữ trên hình (cảnh 6)
+- "Góc đường N3 · D7": OSRM nearest. "Ngay đầu nam hồ trung tâm": ảnh vệ tinh và flycam. "≈ 2.200 m²": đo trên ảnh vệ tinh (notes.md), ghi chú "đo ước tính".

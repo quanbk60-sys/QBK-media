@@ -1,0 +1,7 @@
+{"project": {"name": "EHomeS · Nam Long II", "lat": 9.9944092, "lon": 105.7837265},
+ "pois": [
+  {"name": "Chợ nổi Cái Răng", "lat": 10.0040, "lon": 105.7468, "cat": "DU LỊCH", "icon": "water", "color": "teal"},
+  {"name": "Đại học Cần Thơ", "lat": 10.02989, "lon": 105.76968, "cat": "GIÁO DỤC", "icon": "school", "color": "blue"},
+  {"name": "Bến Ninh Kiều", "lat": 10.03490, "lon": 105.78903, "cat": "TRUNG TÂM", "icon": "star", "color": "gold"},
+  {"name": "Cầu Cần Thơ", "lat": 10.0316, "lon": 105.8086, "cat": "KẾT NỐI", "icon": "bridge", "color": "purple"}
+ ]}
