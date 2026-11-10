@@ -119,6 +119,8 @@ def main():
     fits = [fit_zoom(c, proj_pt + [tuple(x) for x in p['_r']['path']], FIT_TOP, CARD_TOP - 44 * K) for p in pois]
     fit_all = fit_zoom(c, proj_pt + [tuple(x) for p in pois for x in p['_r']['path']], FIT_TOP, OUT_TOP - 44 * K) if pois else 13
     z_intro = (min(12.8, (fits[0] if fits else 15) - 2), min(15.0, max(fits) if fits else 15))
+    if cfg.get('introZoom'): z_intro = tuple(cfg['introZoom'])
+    if cfg.get('outroZoom'): fit_all = cfg['outroZoom']
 
     # thời gian theo giọng đọc
     caps_f = os.path.join(root, 'captions-audio.json'); lead = cfg.get('lead', 0.15)
@@ -158,7 +160,7 @@ def main():
                       sfx=[{'t': 0.05, 'kind': 'whoosh', 'gain': 0.4}, {'t': 0.45, 'kind': 'pop', 'gain': 0.3}])
             last_view = {'zoom': z_intro[1], 'tilt': TILT}
         elif kind == 'photo':
-            ph = item; els = [{'type': 'bdsPhoto', 'path': ph['path'], **{k: ph[k] for k in ('mode', 'focus', 'focusTo', 'zoom', 'dim', 'illustration') if k in ph}}]
+            ph = item; els = [{'type': 'bdsPhoto', 'path': ph['path'], **{k: ph[k] for k in ('mode', 'focus', 'focusTo', 'zoom', 'dim', 'illustration', 'move') if k in ph}}]
             cap = {'type': 'bdsCaption', **{k: ph[k] for k in ('kicker', 'title', 'sub', 'sty') if k in ph}, 'from': 0.25}
             if ph.get('show') == 'specs' and spec_items:
                 hspec = (40 + 44 * len(spec_items) + 12) * K

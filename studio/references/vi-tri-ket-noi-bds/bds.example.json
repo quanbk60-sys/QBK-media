@@ -14,7 +14,7 @@
  "order": ["intro", "photos", "map", "outro"],
  "_durations": "Giây mỗi cảnh khi không có cue. photo: ảnh thường; specs: ảnh có thẻ thông số; poi: mỗi địa điểm.",
  "durations": {"intro": 3.5, "photo": 3.2, "specs": 4.5, "poi": 5.5, "outro": 4.0},
- "_photos": "Ảnh dự án trong photos/. show: specs (thẻ thông số) | chips (tiện ích). mode: cover | card (mặc định ảnh ngang = card). focus/focusTo: điểm nhìn 0..1 để lia chậm. illustration: true nếu là phối cảnh/ảnh minh họa. cue: số thứ tự cụm phụ đề bắt đầu cảnh. dur: giây riêng.",
+ "_photos": "Ảnh dự án trong photos/. show: specs (thẻ thông số) | chips (tiện ích). mode: cover | card (mặc định ảnh ngang = card). focus/focusTo: điểm nhìn 0..1 để lia chậm. illustration: true nếu là phối cảnh/ảnh minh họa. cue: số thứ tự cụm phụ đề bắt đầu cảnh. dur: giây riêng. move: {push, pan, vp} để ảnh chuyển động như cảnh quay (nên dùng, kèm mode cover). introZoom/outroZoom: zoom mở đầu [xa, gần] và zoom cảnh kết khi không có địa điểm.",
  "photos": [
   {"path": "photos/phoi-canh.jpg", "kicker": "Phối cảnh", "title": "Happy One Elite", "sub": "Căn hộ cao cấp tại Thủ Đức", "focus": [0.5, 0.4], "focusTo": [0.5, 0.6], "illustration": true},
   {"path": "photos/phong-khach.jpg", "kicker": "Tổng quan", "title": "Thông tin nổi bật", "show": "specs"},

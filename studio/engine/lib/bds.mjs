@@ -203,6 +203,40 @@ function bdsFooter(ctx, e, t, s) {
 }
 
 // ---------- giới thiệu BĐS ----------
+
+// ---------- "cảnh quay" từ ảnh tĩnh ----------
+// move: {push, pan, tilt, vp:[x,y], shake}. Không có bản đồ chiều sâu thật: coi điểm tụ vp (cửa, cuối phòng) là xa nhất,
+// càng ra mép càng gần. Máy tiến (push) thì vật gần phóng to nhanh hơn vật xa; lia (pan/tilt) thì vật gần trôi nhiều hơn.
+// Ánh xạ ngược từng điểm ảnh, không gập ảnh khi push ≤ 0,35. Ảnh nguồn cắt sẵn rộng hơn khung để lia không lộ mép.
+function cameraShot(e, A, W, H, u, tl) {
+  const m = e.move, push = m.push ?? 0.18, pan = m.pan ?? 0, tilt = m.tilt ?? 0, vp = m.vp || e.focus || [0.5, 0.45];
+  if (!e._cam) {
+    const im = A.im, need = 1 + Math.abs(pan) + 0.06, needV = 1 + Math.abs(tilt) + 0.06;
+    const sc = Math.max(W * need / im.width, H * needV / im.height), sw = Math.round(Math.min(im.width * sc, W * Math.max(need, needV) * 2.2)), sh = Math.round(Math.min(im.height * sc, H * Math.max(need, needV) * 2.2));
+    const c = createCanvas(sw, sh), x = c.getContext('2d'); x.imageSmoothingQuality = 'high';
+    const f = e.focus || [0.5, 0.5], dw = im.width * sc, dh = im.height * sc; x.drawImage(im, (sw - dw) * f[0], (sh - dh) * f[1], dw, dh);
+    const near = new Float32Array(W * H), vx = vp[0] * W, vy = vp[1] * H, R = Math.hypot(Math.max(vx, W - vx), Math.max(vy, H - vy));
+    for (let y = 0; y < H; y++) for (let xx = 0; xx < W; xx++) near[y * W + xx] = Math.pow(Math.min(1, Math.hypot(xx - vx, (y - vy) * 0.8) / R), 1.15);
+    e._cam = {src: x.getImageData(0, 0, sw, sh).data, sw, sh, near, out: createCanvas(W, H)};
+  }
+  const C = e._cam, ctx = C.out.getContext('2d'), img = ctx.createImageData(W, H), o = img.data, S = C.src, sw = C.sw, sh = C.sh;
+  const q = ease(u), a = push * q, base = Math.min(sw / (W * (1 + Math.abs(pan) + 0.06)), sh / (H * (1 + Math.abs(tilt) + 0.06))), vx = vp[0] * W, vy = vp[1] * H;
+  const shk = m.shake ?? 1, jx = shk * (Math.sin(tl * 1.7) * 2.2 + Math.sin(tl * 3.1 + 1) * 1.1), jy = shk * (Math.sin(tl * 1.3 + 2) * 1.8 + Math.sin(tl * 2.7) * 0.9);
+  const px = pan * (q - 0.5) * W, py = tilt * (q - 0.5) * H, cx = sw / 2, cy = sh / 2;
+  for (let y = 0, q4 = 0; y < H; y++) for (let x = 0; x < W; x++, q4 += 4) {
+    const n = C.near[y * W + x], z = 1 + a * (0.3 + 0.7 * n), par = 0.35 + 0.65 * n;
+    const dx = vx + (x - vx) / z - px * par + jx, dy = vy + (y - vy) / z - py * par + jy;
+    let fx = cx + (dx - W / 2) * base, fy = cy + (dy - H / 2) * base;
+    fx = fx < 0 ? 0 : fx > sw - 1.001 ? sw - 1.001 : fx; fy = fy < 0 ? 0 : fy > sh - 1.001 ? sh - 1.001 : fy;
+    const x0 = fx | 0, y0 = fy | 0, wx = fx - x0, wy = fy - y0, p00 = (y0 * sw + x0) * 4, p10 = p00 + sw * 4;
+    const a00 = (1 - wx) * (1 - wy), a01 = wx * (1 - wy), a10 = (1 - wx) * wy, a11 = wx * wy;
+    o[q4] = S[p00] * a00 + S[p00 + 4] * a01 + S[p10] * a10 + S[p10 + 4] * a11;
+    o[q4 + 1] = S[p00 + 1] * a00 + S[p00 + 5] * a01 + S[p10 + 1] * a10 + S[p10 + 5] * a11;
+    o[q4 + 2] = S[p00 + 2] * a00 + S[p00 + 6] * a01 + S[p10 + 2] * a10 + S[p10 + 6] * a11;
+    o[q4 + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0); return C.out;
+}
 // bdsPhoto: mode "cover" (phủ kín khung, cắt theo focus) hoặc "card" (cả ảnh trong khung bo góc viền vàng, nền là bản mờ của chính ảnh).
 // Ken Burns: zoom [đầu, cuối], focus → focusTo (0..1).
 function bdsPhoto(ctx, e, t, s) {
@@ -212,7 +246,8 @@ function bdsPhoto(ctx, e, t, s) {
   ctx.save(); ctx.globalAlpha = a; ctx.imageSmoothingQuality = 'high';
   const cover = (img, bx, by, bw, bh, zz) => { const sc = Math.max(bw / img.width, bh / img.height) * zz, w = img.width * sc, h = img.height * sc; ctx.drawImage(img, bx + (bw - w) * fx, by + (bh - h) * fy, w, h); };
   const mode = e.mode || (im.width > im.height * 1.05 ? 'card' : 'cover');
-  if (mode === 'cover') cover(im, 0, 0, W, H, z);
+  if (mode === 'cover' && e.move) ctx.drawImage(cameraShot(e, A, W, H, u, local(e, t)), 0, 0);
+  else if (mode === 'cover') cover(im, 0, 0, W, H, z);
   else {
     cover(blur, 0, 0, W, H, 1.15); ctx.fillStyle = 'rgba(5,9,20,.45)'; ctx.fillRect(0, 0, W, H);
     const bw = W - 2 * 30 * k * 0.6, top = 330, bh = Math.min(H * 0.62, e.bottom ? e.bottom - top : Infinity, bw * (e.ratio ?? im.height / im.width)), bx = (W - bw) / 2, by = e.bottom && e.y == null ? Math.max(top, (top + e.bottom) / 2 - bh / 2) : (e.y ?? H * 0.47) - bh / 2;

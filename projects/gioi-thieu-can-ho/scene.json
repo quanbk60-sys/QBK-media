@@ -1,0 +1,454 @@
+{
+ "style": "bds",
+ "satmap": "sat/satmap.json",
+ "credit": "",
+ "shots": [
+  {
+   "start": 0.0,
+   "end": 7.29,
+   "view": [
+    {
+     "t": 0,
+     "lat": 9.99465,
+     "lon": 105.78452,
+     "zoom": 11.6,
+     "tilt": 15
+    },
+    {
+     "t": 6,
+     "lat": 9.99465,
+     "lon": 105.78452,
+     "zoom": 16.2,
+     "tilt": 40
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "bdsShade"
+    },
+    {
+     "type": "bdsPin",
+     "geo": [
+      9.99465,
+      105.78452
+     ],
+     "label": "CĂN HỘ NAM LONG 2",
+     "project": true,
+     "sty": "gold",
+     "id": "project",
+     "pop": true,
+     "from": 0.4
+    },
+    {
+     "type": "bdsHeadline",
+     "lines": [
+      "CĂN HỘ",
+      "NAM LONG 2"
+     ],
+     "sub": "Cái Răng · Cần Thơ"
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.45,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 7.29,
+   "end": 13.42,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p5-loi-vao.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.22,
+      "vp": [
+       0.62,
+       0.42
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Lối vào",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 13.42,
+   "end": 18.22,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p6-tu-chanh.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.16,
+      "pan": -0.08,
+      "vp": [
+       0.8,
+       0.45
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Góc tủ",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 18.22,
+   "end": 22.41,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p2-cong-vom-hanh-lang.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.12,
+      "pan": -0.55,
+      "vp": [
+       0.55,
+       0.45
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Cổng vòm",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 22.41,
+   "end": 26.04,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p4-sofa.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.2,
+      "pan": 0.06,
+      "vp": [
+       0.45,
+       0.42
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Phòng khách",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 26.04,
+   "end": 31.88,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p7-tong-quan.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.1,
+      "pan": -0.6,
+      "vp": [
+       0.55,
+       0.42
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Góc ăn uống",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 31.88,
+   "end": 36.57,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p3-bep-ban-an.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.22,
+      "vp": [
+       0.55,
+       0.42
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Bếp chữ L",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 36.57,
+   "end": 42.21,
+   "elements": [
+    {
+     "type": "bdsPhoto",
+     "path": "photos/p1-rem-cua-so-ke.jpg",
+     "mode": "cover",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "move": {
+      "push": 0.12,
+      "pan": -0.5,
+      "vp": [
+       0.7,
+       0.45
+      ]
+     }
+    },
+    {
+     "type": "bdsCaption",
+     "kicker": "Góc cửa sổ",
+     "from": 0.25
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35,
+   "sfx": [
+    {
+     "t": 0.02,
+     "kind": "whoosh",
+     "gain": 0.22
+    }
+   ]
+  },
+  {
+   "start": 42.21,
+   "end": 47.82,
+   "view": [
+    {
+     "t": 0,
+     "lat": 9.99465,
+     "lon": 105.78452,
+     "zoom": 16.2,
+     "tilt": 40
+    },
+    {
+     "t": 1.8,
+     "lat": 9.99465,
+     "lon": 105.78452,
+     "zoom": 14.6,
+     "tilt": 40
+    },
+    {
+     "t": 5,
+     "lat": 9.99465,
+     "lon": 105.78452,
+     "zoom": 14.6,
+     "tilt": 40
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "bdsShade"
+    },
+    {
+     "type": "bdsPin",
+     "geo": [
+      9.99465,
+      105.78452
+     ],
+     "label": "CĂN HỘ NAM LONG 2",
+     "project": true,
+     "sty": "gold",
+     "id": "project",
+     "pop": false,
+     "bottom": 1406.25
+    },
+    {
+     "type": "bdsOutro",
+     "name": "CĂN HỘ NAM LONG 2",
+     "tagline": "Nhỏ xinh · ấm áp · nhiều ánh sáng",
+     "cta": "LIÊN HỆ HẸN XEM NHÀ",
+     "note": "Vị trí theo tọa độ chủ nhà cung cấp",
+     "from": 0.6
+    },
+    {
+     "type": "bdsBar",
+     "name": "CĂN HỘ NAM LONG 2",
+     "area": "CÁI RĂNG · CẦN THƠ",
+     "colors": [],
+     "active": 0
+    },
+    {
+     "type": "bdsFooter",
+     "text": "",
+     "credit": "Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.6,
+     "kind": "chime",
+     "gain": 0.3
+    }
+   ],
+   "transition": "fade",
+   "transitionDur": 0.35
+  }
+ ],
+ "captions": {
+  "path": "captions-audio.json",
+  "lead": 0.15,
+  "y": 250,
+  "size": 54
+ },
+ "narration": {
+  "path": "audio/narration.wav",
+  "lead": 0.15
+ }
+}

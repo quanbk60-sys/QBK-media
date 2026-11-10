@@ -190,7 +190,7 @@ Video giới thiệu bất động sản: mở đầu trên ảnh vệ tinh → 
 | `bdsHeadline` | chữ mở đầu: `lines` [dòng trắng, dòng vàng], `sub`, `y` |
 | `bdsOutro` | thẻ kết: `name`, `tagline`, `cta` (nút vàng), `note` |
 | `bdsFooter` | chân: `text`, `credit` |
-| `bdsPhoto` | ảnh dự án: `path`, `mode` (`cover` phủ kín; `card` ảnh nguyên trong khung viền vàng trên nền mờ; mặc định ảnh ngang → `card`), `zoom` [1, 1.1], `focus`, `focusTo`, `dim`, `bottom` (đáy khung `card`), `illustration` (true hoặc chữ: ghi "Ảnh minh họa") |
+| `bdsPhoto` | ảnh dự án: `path`, `mode` (`cover` phủ kín; `card` ảnh nguyên trong khung viền vàng trên nền mờ; mặc định ảnh ngang → `card`), `zoom` [1, 1.1], `focus`, `focusTo`, `dim`, `bottom` (đáy khung `card`), `illustration` (true hoặc chữ: ghi "Ảnh minh họa"), `move` {`push` 0..0,35 (máy tiến), `pan`/`tilt` (lia, tỉ lệ khung), `vp` [x,y] điểm tụ xa nhất, `shake`}: biến ảnh tĩnh thành cảnh quay (vật gần trôi nhanh hơn vật xa), chỉ ở `mode: cover` |
 | `bdsCaption` | `kicker` (nhãn kim loại), `title`, `sub`, `sty`, `y` (neo đáy) |
 | `bdsSpecs` | thẻ thông số: `title`, `items` [{`icon`, `label`, `value`}], `y` (đáy). Icon: area, bed, bath, money, key, doc, building, compass, car, calendar, pool, pin, star |
 | `bdsChips` | chip tiện ích: `items` [chữ…], `y` (đáy), `sty` |
