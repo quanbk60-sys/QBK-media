@@ -51,6 +51,20 @@ def proj(c, z, tilt, lat, lon):
     return W / 2 + u * sc, H / 2 + sc * w * math.cos(ph)
 
 
+def sample_view(V, t):
+    """Giống sampleView trong engine: tâm (merc), zoom, tilt tại thời điểm t."""
+    K = [dict(v, m=merc(v['lat'], v['lon'])) for v in V]
+    if t <= K[0]['t']: k = K[0]; return k['m'], k['zoom'], k.get('tilt', 0)
+    i = next((j for j, v in enumerate(K) if v['t'] > t), None)
+    if i is None: k = K[-1]; return k['m'], k['zoom'], k.get('tilt', 0)
+    a, b = K[i - 1], K[i]; u = (t - a['t']) / (b['t'] - a['t']); e = u if b.get('ease') == 'linear' else u * u * (3 - 2 * u)
+    Z = a['zoom'] + (b['zoom'] - a['zoom']) * e; am, bm = a['m'], b['m']
+    if b['zoom'] > a['zoom'] + 0.01: f = 2 ** (a['zoom'] - Z) * (1 - e); c = (bm[0] - (bm[0] - am[0]) * f, bm[1] - (bm[1] - am[1]) * f)
+    elif a['zoom'] > b['zoom'] + 0.01: g = 2 ** (b['zoom'] - Z) * e; c = (am[0] + (bm[0] - am[0]) * g, am[1] + (bm[1] - am[1]) * g)
+    else: c = (am[0] + (bm[0] - am[0]) * e, am[1] + (bm[1] - am[1]) * e)
+    return c, Z, a.get('tilt', 0) + (b.get('tilt', 0) - a.get('tilt', 0)) * e
+
+
 def fit_zoom(c, pts, top, bottom):
     z = 16.2
     while z > 8:
@@ -198,6 +212,18 @@ def main():
                 sh.update(elements=els, transition='fade', transitionDur=0.35, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.22}])
             sh['_photo'] = {k: v for k, v in [e for e in sh['elements'] if e['type'] in ('bdsPhoto', 'bdsClip')][-1].items() if k not in ('enterDur', 'from', 'to', 'dur', 'overlay', 'dive', 'diveDur')}
             if 'move' in sh['_photo']: sh['_photo']['move'] = {k: v for k, v in sh['_photo']['move'].items() if k not in ('dive', 'diveDur')}
+        elif kind == 'poi' and cfg.get('poiMode') == 'zoom':
+            # ghim điểm → máy lao xuống nhìn nghiêng 3D sát điểm đó → kéo ra xa về khu dự án
+            i, p = it; r = p['_r']; zA = fit_all; zc = p.get('closeZoom', cfg.get('closeZoom', 17.4)); tc = cfg.get('closeTilt', 55)
+            T1, T2, T3 = 1.7, 3.6, max(4.9, d - 1.5)
+            vk = [{'t': 0, 'lat': P['lat'], 'lon': P['lon'], 'zoom': zA, 'tilt': TILT}, {'t': T1, 'lat': P['lat'], 'lon': P['lon'], 'zoom': zA, 'tilt': TILT},
+                  {'t': T2, 'lat': p['lat'], 'lon': p['lon'], 'zoom': zc, 'tilt': tc}, {'t': T3, 'lat': p['lat'], 'lon': p['lon'], 'zoom': zc + 0.25, 'tilt': tc},
+                  {'t': d, 'lat': P['lat'], 'lon': P['lon'], 'zoom': zA, 'tilt': TILT}]
+            sh.update(view=vk, elements=MAP + [{'type': 'bdsRoute', 'path': r['path'], 'sty': p.get('sty', 'gold'), 'grow': {'at': 0.2, 'dur': 1.4}},
+                      proj_pin(), {'type': 'bdsPin', 'geo': [p['lat'], p['lon']], 'label': p['name'], 'sty': p.get('sty', 'gold'), 'id': 'poi', 'from': 1.2, 'size': 1.15},
+                      {'type': 'bdsCard', 'cat': p.get('cat', ''), 'name': p['name'], 'km': r.get('km'), 'min': r.get('min'), 'extra': p.get('extra'), 'sty': p.get('sty', 'gold'), 'index': i, 'total': len(pois), 'from': 0.5},
+                      bar(i), footer])
+            last_view = {'zoom': zA, 'tilt': TILT}
         elif kind == 'poi':
             i, p = it; r = p['_r']; z0 = last_view['zoom']
             sh.update(view=view((0, z0, TILT), (1.4 * f, fits[i], TILT), (d, fits[i], TILT)),
@@ -211,7 +237,9 @@ def main():
             last_view = {'zoom': fits[i], 'tilt': TILT}
         elif kind == 'descend':
             z0 = last_view['zoom']; zt = cfg.get('descendZoom', 18.5); tl = cfg.get('descendTilt', 48)
-            sh.update(view=view((0, z0, TILT), (d, zt, tl)), elements=MAP + [proj_pin(), footer], sfx=[{'t': 0.1, 'kind': 'whoosh', 'gain': 0.25}])
+            dc = cfg.get('descendCenter') or [P['lat'], P['lon']]
+            sh.update(view=[{'t': 0, 'lat': P['lat'], 'lon': P['lon'], 'zoom': z0, 'tilt': TILT}, {'t': d * 0.75, 'lat': dc[0], 'lon': dc[1], 'zoom': zt, 'tilt': tl}, {'t': d, 'lat': dc[0], 'lon': dc[1], 'zoom': zt + 0.15, 'tilt': tl}],
+                      elements=MAP + [proj_pin(), *([{'type': 'bdsHeadline', 'lines': cfg['descendTitle'], 'sub': cfg.get('descendSub', ''), 'from': 0.4}] if cfg.get('descendTitle') else []), footer], sfx=[{'t': 0.1, 'kind': 'whoosh', 'gain': 0.25}])
             last_view = {'zoom': zt, 'tilt': tl}
         elif kind == 'outro':
             z0 = last_view['zoom']; ob = OUT_TOP - 14 * K
@@ -238,21 +266,17 @@ def main():
 
     # 4. ảnh vệ tinh: hợp các vùng khung nhìn theo mức zoom nguyên
     need = {}
-    for sh in shots:
+    for si, sh in enumerate(shots):
         V = sh.get('view'); dsh = sh['end'] - sh['start']
         if not V: continue
         for k in range(int(dsh * 10) + 1):
-            tt = k / 10; i = next((j for j, v in enumerate(V) if v['t'] > tt), len(V))
-            if i == 0: zv, tl = V[0]['zoom'], V[0]['tilt']
-            elif i == len(V): zv, tl = V[-1]['zoom'], V[-1]['tilt']
-            else:
-                A, B = V[i - 1], V[i]; u = (tt - A['t']) / (B['t'] - A['t']); e = u * u * (3 - 2 * u)
-                zv, tl = A['zoom'] + (B['zoom'] - A['zoom']) * e, A['tilt'] + (B['tilt'] - A['tilt']) * e
-            Z = min(cfg.get('maxZ', 19), math.ceil(zv - 0.05)); x0, x1, y0, y1 = tilt_rect(tl); s = 2 ** (Z - zv)
-            r = need.setdefault(Z, [1e18, 1e18, -1e18, -1e18])
-            r[0] = min(r[0], x0 * s); r[1] = min(r[1], y0 * s); r[2] = max(r[2], x1 * s); r[3] = max(r[3], y1 * s)
+            vc, zv, tl = sample_view(V, k / 10)
+            Z = min(cfg.get('maxZ', 19), math.ceil(zv - 0.05)); x0, x1, y0, y1 = tilt_rect(tl); sc = 2 ** (Z - zv); Wz = 256 * 2 ** Z
+            ox, oy = (vc[0] - c[0]) * Wz, (vc[1] - c[1]) * Wz
+            r = need.setdefault((Z, si), [1e18, 1e18, -1e18, -1e18])
+            r[0] = min(r[0], ox + x0 * sc); r[1] = min(r[1], oy + y0 * sc); r[2] = max(r[2], ox + x1 * sc); r[3] = max(r[3], oy + y1 * sc)
     levels = []
-    for Z, (x0, y0, x1, y1) in sorted(need.items()):
+    for (Z, _si), (x0, y0, x1, y1) in sorted(need.items()):
         Wz = 256 * 2 ** Z; cx, cy = c[0] * Wz + (x0 + x1) / 2, c[1] * Wz + (y0 + y1) / 2
         w, h = min(7000, int(x1 - x0) + 64), min(8000, int(y1 - y0) + 64)
         lat, lon = unmerc(cx / Wz, cy / Wz); levels.append(f'{Z}:{lat:.6f},{lon:.6f}:{w}x{h}')

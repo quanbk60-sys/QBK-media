@@ -40,8 +40,8 @@ def main():
     N = int((a.dur + 1) * SR); L = np.zeros(N); R = np.zeros(N)
     beat = 60 / a.bpm; bar = 4 * beat; prog = PROG.get(a.mood, PROG['chill']); root = 48 + a.key
     def add(sig, start, pan=0.0, gain=1.0):
-        i = int(start * SR); j = min(N, i + len(sig))
-        if i >= N: return
+        i = max(0, int(start * SR)); j = min(N, i + len(sig))
+        if i >= N or j <= i: return
         s = sig[:j - i] * gain; L[i:j] += s * math.cos((pan + 1) * math.pi / 4); R[i:j] += s * math.sin((pan + 1) * math.pi / 4)
     nbars = int(a.dur / bar) + 2
     for b in range(nbars):

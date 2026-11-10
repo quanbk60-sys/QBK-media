@@ -1,14 +1,14 @@
 {
- "name": "CĂN HỘ NAM LONG 2",
+ "name": "CĂN HỘ NAM LONG II",
  "intro": [
   "CĂN HỘ",
-  "NAM LONG 2"
+  "NAM LONG II"
  ],
- "subtitle": "Cái Răng · Cần Thơ",
+ "subtitle": "Xung quanh có gì?",
  "area": "CÁI RĂNG · CẦN THƠ",
  "tagline": "Nhỏ xinh · ấm áp · nhiều ánh sáng",
  "cta": "LIÊN HỆ HẸN XEM NHÀ",
- "note": "Vị trí theo tọa độ chủ nhà cung cấp",
+ "note": "Khoảng cách theo đường đi, số phút ước tính",
  "footer": "",
  "project": {
   "lat": 9.99465,
@@ -18,18 +18,17 @@
   11.6,
   15.6
  ],
- "outroZoom": 14.6,
+ "outroZoom": 17.0,
  "durations": {
-  "intro": 3.8,
-  "descend": 3.4,
-  "photo": 4.4,
-  "outro": 5
+  "intro": 3.6,
+  "poi": 6.6,
+  "descend": 4.6,
+  "outro": 4.6
  },
  "order": [
   "intro",
   "map",
   "descend",
-  "photos",
   "outro"
  ],
  "photos": [
@@ -159,9 +158,32 @@
    }
   }
  ],
- "pois": [],
- "descendZoom": 18.6,
- "descendTilt": 50,
+ "pois": [
+  {
+   "cat": "GIÁO DỤC",
+   "name": "Đại học Cần Thơ",
+   "lat": 10.02989,
+   "lon": 105.76968,
+   "sty": "green"
+  },
+  {
+   "cat": "TRUNG TÂM",
+   "name": "Bến Ninh Kiều",
+   "lat": 10.0349,
+   "lon": 105.78903,
+   "sty": "gold"
+  },
+  {
+   "cat": "KẾT NỐI",
+   "name": "Cầu Cần Thơ",
+   "lat": 10.0316,
+   "lon": 105.8086,
+   "sty": "blue",
+   "closeZoom": 16.8
+  }
+ ],
+ "descendZoom": 17.8,
+ "descendTilt": 55,
  "walk": {
   "xfade": 1.1
  },
@@ -169,9 +191,17 @@
  "narration": false,
  "music": {
   "generate": true,
-  "mood": "chill",
-  "bpm": 76,
-  "seed": 3,
+  "mood": "warm",
+  "bpm": 84,
+  "seed": 5,
   "gain": 0.85
- }
+ },
+ "poiMode": "zoom",
+ "closeZoom": 17.4,
+ "closeTilt": 55,
+ "descendTitle": [
+  "KHU ĐÔ THỊ",
+  "NAM LONG II"
+ ],
+ "descendSub": "Central Lake · Cái Răng"
 }

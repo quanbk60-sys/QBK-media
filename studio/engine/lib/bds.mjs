@@ -89,7 +89,7 @@ const SPEC = { // icon thông số, nét 2,5, khung ±14
 // ---------- bản đồ ----------
 function bdsShade(ctx, e, t, s) {
   const W = s.width, H = s.height, cy = H / 2, top = Math.round(H * 0.127);
-  ctx.fillStyle = `rgba(4,8,22,${e.dim ?? 0.28})`; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = `rgba(4,8,22,${e.dim ?? 0.16})`; ctx.fillRect(0, 0, W, H);
   let g = ctx.createLinearGradient(0, top - 20, 0, cy - 75); g.addColorStop(0, 'rgba(10,15,28,1)'); g.addColorStop(0.35, 'rgba(10,15,28,.55)'); g.addColorStop(1, 'rgba(10,15,28,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, cy - 75);
   ctx.fillStyle = 'rgba(10,15,28,1)'; ctx.fillRect(0, 0, W, top - 18);
   g = ctx.createRadialGradient(W / 2, H / 2, H * 0.25, W / 2, H / 2, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.5)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -135,7 +135,7 @@ function drawLabel(ctx, rc, label, n, sc, gold) {
   font(ctx, 13 * sc); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, (rc.x0 + rc.x1) / 2, (rc.y0 + rc.y1) / 2 + sc * 0.5);
 }
 function bdsPin(ctx, e, t, s, v) {
-  if (!v) return; const [x, y, depth] = project(v, s, e.geo[0], e.geo[1]); if (y < -9000) return;
+  if (!v) return; const [x, y, depth] = project(v, s, e.geo[0], e.geo[1]); if (y < -9000 || x < -60 || x > s.width + 60 || y < 0 || y > s.height + 80) return;
   const L = LAYOUT(s), k = local(e, t), pop = e.pop === false ? 1 : ease(clamp(k / 0.35));
   const sc = L.k * (e.size ?? (e.project ? 1.15 : 1)) * clamp(depth, e.project ? 0.8 : 0.8, 1.15) * (0.4 + 0.6 * pop);
   const a = e.to !== undefined ? clamp((e.to - t) / 0.3) : 1;
@@ -145,6 +145,7 @@ function bdsPin(ctx, e, t, s, v) {
   if (e.label && pop >= 1) {
     const avoid = e.avoid === false ? [] : (s._rects || []).filter(r => r.kind === 'label' || r.kind === 'body' || r.kind === 'logo').filter(r => r.id !== (e.id || e.label || 'pin'));
     const pl = placeLabel(ctx, s, x, y, sc, e.label, avoid, e.top ?? L.TOP, e.bottom ?? L.CARD_TOP - L.GAP);
+    if (pl.rect.y0 < (e.top ?? L.TOP) - 1 || pl.rect.y1 > (e.bottom ?? L.CARD_TOP - L.GAP) + 1) { ctx.restore(); return; } // không đặt được nhãn trong vùng cho phép: tạm ẩn
     const la = e.labelFade === false || e.pop === false ? 1 : clamp((k - 0.35) / 0.25); ctx.globalAlpha = a * la;
     drawLabel(ctx, pl.rect, e.label, e.sty || 'gold', sc, !!e.project);
     rect(s, 'label', pl.rect.x0, pl.rect.y0, pl.rect.x1, pl.rect.y1, {id: e.id || e.label, mode: pl.mode, full: la >= 1 && a >= 1, bottom: e.bottom ?? L.CARD_TOP - L.GAP});

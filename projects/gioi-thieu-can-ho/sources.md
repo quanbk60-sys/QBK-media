@@ -3,3 +3,9 @@
 - "Khu dân cư Nam Long 2": tên đường gần nhất của điểm trên theo OpenStreetMap qua OSRM nearest (router.project-osrm.org, "N3 KDC Nam Long II", cách 32 m), truy vấn 10/11/2026.
 - "Quận Cái Răng, Cần Thơ": ghi chú của người dùng.
 - Mọi mô tả nội thất: chỉ tả những gì thấy trong 7 ảnh người dùng gửi (lối vào, tủ, cổng vòm, phòng khách, góc ăn, bếp, cửa sổ). Không nêu số liệu, giá, liên hệ theo yêu cầu người dùng.
+- Tiện ích (vị trí lấy từ tên đường/cầu trong OpenStreetMap qua OSRM nearest, đối chiếu ảnh vệ tinh Esri z17, 10/11/2026):
+  - Đại học Cần Thơ: cổng B, đường 3 Tháng 2 (10.02989, 105.76968), khuôn viên cạnh hồ Bún Xáng.
+  - Bến Ninh Kiều: đường Hai Bà Trưng ven sông (10.03490, 105.78903), cạnh cầu đi bộ.
+  - Cầu Cần Thơ: mặt cầu (10.0316, 105.8086), thấy trụ cầu dây văng.
+  - Km, phút: OSRM driving từ căn hộ (phút lúc đường vắng, ghi "ước tính").
+- "Khu đô thị Nam Long II Central Lake": thuvienphapluat.vn (tổng quan dự án), tin rao guland.vn.
