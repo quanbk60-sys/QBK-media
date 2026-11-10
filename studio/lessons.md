@@ -32,3 +32,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 
 ## Vận hành
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*
+
+## Gấp giấy, cách làm (người dùng, 10/11/2026)
+- Video gấp giấy phải **mô phỏng gấp thật bằng code** (`studio/engine3d`, đồ vật `origami`), không dùng ảnh AI minh họa "bước gấp". Lời đọc phải khớp đúng từng nếp trên hình. Vòng 1 chim giấy dùng 5 ảnh AI, các bước gấp không có thật, nên bị yêu cầu làm lại.
+- Video dạy gấp: chèn khoảng lặng khoảng 1 giây sau mỗi bước (xem `projects/chim-giay-bay/pad_audio.py`), giọng 1,2x không kịp cho người xem nhìn nếp.

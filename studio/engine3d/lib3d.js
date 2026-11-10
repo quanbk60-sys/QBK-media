@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
+import {birdModel, pose} from './origami.js';
 
 const W = window.__W, H = window.__H;
 const renderer = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
@@ -75,6 +76,52 @@ const shadow = (m, cast = true, recv = true) => { m.traverse(o => { if (o.isMesh
 
 // ---------- object library ----------
 const LIB = {
+
+  // giấy gấp mô phỏng cứng (origami.js). Track: spine, kiteL, kiteR, rev (0 | 1 | 2), layerB (0..1), wing, guides (0..1), flapAmp, flapHz
+  origami(p) {
+    const model = birdModel(p.params || {}), S = p.size || 0.106, g = new THREE.Group(), inner = new THREE.Group(), off = new THREE.Group();
+    inner.rotation.x = -Math.PI / 2; inner.scale.setScalar(S); off.position.set(-(p.center ?? 1), 0, 0); inner.add(off); g.add(inner);
+    const grain = canvasTex(256, 256, (c, w, h) => { c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); noise(c, w, h, 9000, 0.05, 31); noise(c, w, h, 3000, 0.05, 32, '255,255,255'); }, [4, 4]);
+    const white = new THREE.MeshStandardMaterial({color: p.back || '#f3efe6', map: grain, roughness: 0.9, side: THREE.FrontSide});
+    const colr = new THREE.MeshStandardMaterial({color: p.color || '#d23b3b', map: grain, roughness: 0.82, side: THREE.BackSide});
+    const fm = {};
+    for (const f of model.faces) { const geo = new THREE.ShapeGeometry(new THREE.Shape(f.poly.map(([x, y]) => new THREE.Vector2(x, y))));
+      const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, geo.attributes.position.getX(i) / 2, geo.attributes.position.getY(i) / 2);
+      const grp = new THREE.Group(); grp.matrixAutoUpdate = false; grp.add(new THREE.Mesh(geo, white), new THREE.Mesh(geo, colr)); off.add(grp); fm[f.id] = grp; }
+    shadow(g);
+    // nét chỉ dẫn (gạch đứt) cho các nếp gấp ngược, vẽ trên mặt giấy khi giấy mở phẳng
+    const gmat = new THREE.MeshBasicMaterial({color: p.guideColor || '#1f5fbf', transparent: true, opacity: 0, depthWrite: false}), guideGrp = new THREE.Group(); guideGrp.matrixAutoUpdate = false; off.add(guideGrp);
+    const gpos = []; for (const name of p.guides || ['neck', 'head', 'tail']) for (const [a, b] of model.creases[name]) { const L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(2, Math.round(L / 0.05)), ux = (b[0] - a[0]) / L, uy = (b[1] - a[1]) / L, w = 0.008;
+      for (let i = 0; i < n; i += 2) { const s0 = i / n * L, s1 = Math.min(L, (i + 1) / n * L), q = (s) => [a[0] + ux * s, a[1] + uy * s];
+        const [x0, y0] = q(s0), [x1, y1] = q(s1); gpos.push(x0 - uy * w, y0 + ux * w, 0, x0 + uy * w, y0 - ux * w, 0, x1 + uy * w, y1 - ux * w, 0, x0 - uy * w, y0 + ux * w, 0, x1 + uy * w, y1 - ux * w, 0, x1 - uy * w, y1 + ux * w, 0); } }
+    const ggeo = new THREE.BufferGeometry(); ggeo.setAttribute('position', new THREE.Float32BufferAttribute(gpos, 3)); const gm = new THREE.Mesh(ggeo, gmat); gm.renderOrder = 2; guideGrp.add(gm);
+    const m4 = new THREE.Matrix4();
+    g.userData.update = (q, t) => {
+      const amp = q.flapAmp ?? p.flapAmp ?? 0, hz = q.flapHz ?? p.flapHz ?? 2.2;
+      const st = {spine: q.spine ?? p.spine ?? 0, kiteL: q.kiteL ?? p.kiteL ?? 0, kiteR: q.kiteR ?? p.kiteR ?? 0, rev: Math.round(q.rev ?? p.rev ?? 0), layerB: q.layerB ?? p.layerB, wing: (q.wing ?? p.wing ?? 0) + amp * Math.sin(t * hz * Math.PI * 2)};
+      const {M} = pose(model, st);
+      for (const id in fm) { const a = M[id]; m4.set(...a); fm[id].matrix.copy(m4); }
+      const gop = q.guides ?? p.guidesOn ?? 0; gmat.opacity = 0.9 * gop; guideGrp.visible = gop > 0.01; m4.set(...M.bodyL); guideGrp.matrix.copy(m4).multiply(new THREE.Matrix4().makeTranslation(0, 0, 0.03));
+    };
+    g.userData.update({}, 0); return g;
+  },
+  // ruộng lúa: lá lúa và bông lúa dạng instanced, lắc theo gió trong vertex shader
+  ricefield(p) {
+    const [w, d] = p.size || [40, 40], n = p.count || 26000, r = rng(p.seed || 3), g = new THREE.Group();
+    const blade = new THREE.PlaneGeometry(0.035, 0.75, 1, 4); blade.translate(0, 0.375, 0);
+    const pos = blade.attributes.position; for (let i = 0; i < pos.count; i++) { const y = pos.getY(i); pos.setZ(i, y * y * 0.35); pos.setX(i, pos.getX(i) * (1 - y / 0.9)); } blade.computeVertexNormals();
+    const col = new THREE.Color(p.color || '#d9b23f'), uTime = {value: 0};
+    const m = new THREE.MeshStandardMaterial({color: '#ffffff', roughness: 0.85, side: THREE.DoubleSide, vertexColors: false});
+    m.onBeforeCompile = sh => { sh.uniforms.uTime = uTime; sh.vertexShader = 'uniform float uTime;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+      vec4 wp = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0); float k = position.y * position.y; transformed.x += sin(uTime * 1.6 + wp.x * 0.35 + wp.z * 0.2) * 0.12 * k; transformed.z += cos(uTime * 1.3 + wp.x * 0.2) * 0.06 * k;`); };
+    const im = new THREE.InstancedMesh(blade, m, n), o = new THREE.Object3D(), c = new THREE.Color();
+    for (let i = 0; i < n; i++) { o.position.set((r() - 0.5) * w, 0, (r() - 0.5) * d); o.rotation.set((r() - 0.5) * 0.3, r() * Math.PI * 2, (r() - 0.5) * 0.3); o.scale.setScalar(0.7 + r() * 0.6); o.updateMatrix(); im.setMatrixAt(i, o.matrix);
+      c.copy(col).offsetHSL((r() - 0.5) * 0.04, (r() - 0.5) * 0.15, (r() - 0.5) * 0.18); im.setColorAt(i, c); }
+    im.receiveShadow = true; g.add(im);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(w * 6, d * 3), new THREE.MeshStandardMaterial({color: p.groundColor || '#8a6a26', map: tex('dirt', [w, d]), roughness: 1})); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; g.add(ground);
+    g.userData.update = (q, t) => { uTime.value = t; };
+    return g;
+  },
   ground(p) { const g = new THREE.Mesh(p.hole ? new THREE.RingGeometry(p.hole, (p.size || 60) / 2, 64, 2) : new THREE.PlaneGeometry(p.size || 60, p.size || 60), mat(p.material || 'sand', {repeat: [(p.size || 60) / (p.tile || 4), (p.size || 60) / (p.tile || 4)]})); g.rotation.x = -Math.PI / 2; g.receiveShadow = true; return g; },
   box(p) { const m = new THREE.Mesh(new THREE.BoxGeometry(...(p.size || [1, 1, 1])), mat(p.material, {repeat: p.repeat, color: p.color})); m.position.y = (p.size || [1, 1, 1])[1] / 2; return shadow(new THREE.Group().add(m)); },
   cylinder(p) { const m = new THREE.Mesh(new THREE.CylinderGeometry(p.r ?? 0.5, p.r2 ?? p.r ?? 0.5, p.h ?? 1, 48), mat(p.material, {repeat: p.repeat, color: p.color})); m.position.y = (p.h ?? 1) / 2; return shadow(new THREE.Group().add(m)); },
@@ -178,7 +225,7 @@ function build(shot) {
   scene.background = skyTex(top, bottom); scene.fog = new THREE.Fog(bottom, shot.fogNear ?? 25, shot.fogFar ?? 90);
   hemi = new THREE.HemisphereLight(top, '#6b5a44', time === 'night' ? 0.25 : 0.9); scene.add(hemi);
   sun = new THREE.DirectionalLight(sunCol, sunI); sun.position.set(...sunPos).multiplyScalar(3); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 4; sun.shadow.bias = -0.0004;
-  const sc = sun.shadow.camera; sc.left = sc.bottom = -14; sc.right = sc.top = 14; sc.near = 1; sc.far = 120; scene.add(sun);
+  const sc = sun.shadow.camera, sh = shot.shadowSize || 14; sc.left = sc.bottom = -sh; sc.right = sc.top = sh; sc.near = 1; sc.far = 120; scene.add(sun);
   renderer.toneMappingExposure = {day: 1, dusk: 0.95, night: 0.7, studio: 1.05}[time];
   camera = new THREE.PerspectiveCamera(shot.fov || 40, W / H, 0.05, 600);
   for (const o of [...(S.sets?.[shot.set] || []), ...(shot.objects || [])]) {
@@ -219,7 +266,8 @@ window.__frame = (T) => {
   camera.position.set(...sample(ck, t, 'pos')); camera.lookAt(new THREE.Vector3(...sample(ck, t, 'target'))); const fov = sample(ck, t, 'fov'); if (fov) { camera.fov = fov; camera.updateProjectionMatrix(); }
   for (const m of objs) { const sp = m.userData.spec, tr = sp.track; const q = {};
     if (tr) { const p = sample(tr, t, 'at'); if (p) m.position.set(...p); const r = sample(tr, t, 'rot'); if (r) m.rotation.set(...r.map(d => d * Math.PI / 180)); const s = sample(tr, t, 'scale'); if (s !== undefined) m.scale.setScalar(s);
-      for (const k of ['water', 'level', 'freeze', 'grow', 'on', 'flow']) { const v = sample(tr, t, k); if (v !== undefined) q[k] = v; } const vis = sample(tr, t, 'visible'); if (vis !== undefined) m.visible = vis > 0.5; }
+      const keys = new Set(); for (const kf of tr) for (const k in kf) if (!['t', 'at', 'rot', 'scale', 'visible', 'ease'].includes(k)) keys.add(k);
+      for (const k of keys) { const v = sample(tr, t, k); if (v !== undefined) q[k] = v; } const vis = sample(tr, t, 'visible'); if (vis !== undefined) m.visible = vis > 0.5; }
     m.traverse(o => o.userData.update?.(q, T));
   }
   renderer.render(scene, camera); overlay(T, shot, t);
