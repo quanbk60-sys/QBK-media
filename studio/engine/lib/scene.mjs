@@ -5,7 +5,6 @@ import {createCanvas, GlobalFonts} from '@napi-rs/canvas';
 import {clamp, ease, backOut, sampleTrack, color, lerp, rng} from './math.mjs';
 import {Recorder, play} from './recorder.mjs';
 import {drawCharacter, blendPose, applyCycle, POSES, EXPR} from './character.mjs';
-import {drawAnimal, SPECIES} from './animals.mjs';
 import {PROPS} from './props.mjs';
 import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
@@ -47,7 +46,7 @@ export function validate(s) {
     prevEnd = sh.end;
     for (const [j, e] of (sh.elements || []).entries()) {
       const where = `shot ${i} element ${j}`;
-      if (e.type === 'actor') { if (!s.cast[e.cast]) err(`${where}: unknown cast "${e.cast}"`); if (s.cast[e.cast].species && !SPECIES[s.cast[e.cast].species]) err(`${where}: unknown species "${s.cast[e.cast].species}"`); for (const k of e.acting || []) { if (k.pose && !POSES[k.pose]) err(`${where}: unknown pose "${k.pose}"`); if (k.expr && !EXPR[k.expr]) err(`${where}: unknown expr "${k.expr}"`); } }
+      if (e.type === 'actor') { if (!s.cast[e.cast]) err(`${where}: unknown cast "${e.cast}"`); for (const k of e.acting || []) { if (k.pose && !POSES[k.pose]) err(`${where}: unknown pose "${k.pose}"`); if (k.expr && !EXPR[k.expr]) err(`${where}: unknown expr "${k.expr}"`); } }
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
       else if (validateGeo(s, e, where, err)) {}
@@ -100,8 +99,7 @@ function recordElement(s, e, t, sceneT) {
   if (e.type === 'actor') {
     const A = acting(e, t);
     const blinkAt = e.blinks || [1.3, 4.1, 7.2];
-    const costume = {...s.cast[e.cast], ...(e.costume || {})};
-    R._actor = (costume.species ? drawAnimal : drawCharacter)(R, {costume, pose: A.pose, expr: A.expr, facing: e.facing ?? 1, t: sceneT, blink: blinkAt.some(b => Math.abs(t - b) < 0.07), wind: e.wind ?? ({run: 2.5, sprint: 3.2, walk: 1.8, jump: 1.8}[A.cycle] || 1)});
+    R._actor = drawCharacter(R, {costume: {...s.cast[e.cast], ...(e.costume || {})}, pose: A.pose, expr: A.expr, facing: e.facing ?? 1, t: sceneT, blink: blinkAt.some(b => Math.abs(t - b) < 0.07), wind: e.wind ?? ({run: 2.5, sprint: 3.2, walk: 1.8, jump: 1.8}[A.cycle] || 1)});
     R._contact = A.pose.contact; R._cycle = A.cycle; R._impact = A.pose.impact;
   } else if (e.type === 'prop') {
     const params = {...(e.params || {}), ...sampleTrack(e.ptrack, t, Object.keys(Object.assign({}, ...(e.ptrack || [{}]))).filter(k => k !== 't' && k !== 'ease'))};

@@ -125,22 +125,6 @@ Bổ sung v2 (Rùa và Thỏ):
 - **Thức dậy (`wakeUp`)**: không cần tư thế riêng, dùng key `{"t": …, "pose": "scared", "expr": "surprised", "snap": true, "blend": 0.25}` ngay sau `sleep`.
 - Scene mẫu: `examples/rua-tho-kit.json`.
 
-## Nhân vật con vật chibi (v3, `lib/animals.mjs`)
-Đầu to, đứng hai chân, mặc áo tiên hiệp, nét mực `#2A2723`, tô phẳng có bóng nhẹ. Khai báo trong `cast` bằng `species`; engine tự dùng bộ vẽ con vật thay cho người que. `pose`, `expr`, `cycle`, `track`, `facing`, `scale` dùng y như người que (xem `actor`).
-```json
-"cast": {"xucxich": {"species": "xucxich"}, "meo": {"species": "meo"}, "cua": {"species": "cua"}}
-{"type": "actor", "cast": "xucxich", "x": 540, "y": 1300, "scale": 1.3, "costume": {"swollen": true},
- "acting": [{"t": 0, "pose": "stand", "expr": "proud"}, {"t": 2, "pose": "point", "expr": "cry", "snap": true}]}
-```
-- `species`: `xucxich` (chó lạp xưởng đốm, chính), `meo` (mèo con gầy, áo vá), `ga` (gà trống thiếu gia, áo gấm, mào to, đuôi sặc sỡ), `rua` (rùa trưởng lão, râu bạc, mai, gậy), `khi` (khỉ tạp dịch, khăn đỏ, chổi), `cua` (cua đi ngang, không áo).
-- `scale` 1,0 cao khoảng 470px (Xúc Xích rộng khoảng 480px vì mõm và đuôi); dùng 1,2 đến 1,5 cho cận cảnh khung 9:16. Nhân vật nhìn sang phải khi `facing: 1`.
-- `costume` (đặt ở `cast` hoặc ở element): `swollen: true` (chỉ Xúc Xích: mũi sưng đỏ bị cua kẹp, có vạch sưng), `prop` (`staff` gậy, `broom` chổi, `fan` quạt vàng, `null` bỏ vật mặc định của rùa và khỉ), `robe`, `robeShade`, `trim`, `sash`, `fur` (đổi màu áo, đai, lông).
-- Biểu cảm dùng chung `EXPR`; bổ sung v3: `cry` (khóc, hai dòng nước mắt), `laugh` (cười lớn), `dazed` (ngơ ngác, dấu ?), `proud` (vênh váo), `fury` (giận dữ, gân đỏ). Có sẵn cho cả con vật: `neutral happy grin determined angry shout scared surprised sad smug sly pain calm sleepy asleep yawn embarrassed`. Người que vẽ gần đúng các biểu cảm mới.
-- Tư thế bổ sung: `sit` (ngồi bệt), `lounge` (ngả lưng, tay gối đầu; đặt trước prop ghế). Tư thế có sẵn dùng được: `stand point crossed carry raise cheer scared bow think run (cycle) walk (cycle) ...`. Tay áo có khuỷu hai đoạn, rộng dần về cổ tay, miệng tay áo hình elip và bàn tay tròn lộ ra. `stand`: hai tay buông chếch ra ngoài, không lên trước mặt. Tay giơ cao tự dài ra (tới 80%) và vẽ đè lên đầu; tay chỉ ra trước nằm dưới mõm; `crossed` khoanh trước bụng; `lounge` gác sau đầu (bị đầu che); `think` chạm cằm. Kiểm tra mọi tư thế: `art/pose-check.png`.
-- Cua: cặp càng giơ sẵn, `point`/`cheer` đưa càng ra hoặc lên; `cycle: walk` cho chân bò ngang. Mắt cuống, mày và miệng theo `expr`; `shout`/`angry` mở càng.
-- Xúc Xích có vòng cổ đỏ thẻ xương, đuôi vẫy theo `wind`; rùa mang mai; gà đuôi nhiều màu; khỉ có đuôi cuộn.
-- Bảng nhân vật tham khảo: `projects/su-ton-xuc-xich/art/` (`build-sheets.mjs` dựng lại các bảng).
-
 ## Âm thanh (`sfx`)
 `{"t": 0.3, "kind": "drum", "gain": 0.5}` với `kind` thuộc: pop, tap, whoosh, step, drum, gong, splash, crack, scribble, chime, thud, wind, hammer, cheer (`dur` cho wind và scribble).
 

@@ -15,7 +15,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Đuôi bóng nghĩ hoặc bóng nói không được chạm mặt nhân vật. Đặt bóng cao và lệch hẳn khỏi đầu. *(QA Rùa và Thỏ)*
 - Nhân vật và khán giả cách lề tối thiểu 40px. *(QA Rùa và Thỏ)*
 
-- Nhân vật chibi con vật vẽ bằng code (`lib/animals.mjs`, dự án Sư Tôn Xúc Xích) bị người dùng chê "xấu quá" và dừng dự án. Khi người dùng gửi ảnh nhân vật kiểu hoạt hình 3D chất lượng cao, đừng mặc định vẽ lại bằng 2D code; hỏi trước hướng làm (3D, ảnh AI có phí, hay 2D) và gửi một bản phác nhỏ trước khi làm cả bộ. *(Người dùng, 10/11/2026)*
+- Nhân vật chibi con vật vẽ bằng code (dự án Sư Tôn Xúc Xích, đã xóa) bị người dùng chê "xấu quá", dự án bị dừng và xóa hẳn. Khi người dùng gửi ảnh nhân vật kiểu hoạt hình 3D chất lượng cao, đừng mặc định vẽ lại bằng 2D code; hỏi trước hướng làm (3D, ảnh AI có phí, hay 2D) và gửi một bản phác nhỏ trước khi làm cả bộ. *(Người dùng, 10/11/2026)*
 
 ## Nội dung
 - Truyện ngụ ngôn: đọc tên tác giả theo phiên âm tiếng Việt (Ê-dốp), nói "tương truyền", không khẳng định. *(Rùa và Thỏ)*
