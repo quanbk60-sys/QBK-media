@@ -9,3 +9,4 @@
   - Cầu Cần Thơ: mặt cầu (10.0316, 105.8086), thấy trụ cầu dây văng.
   - Km, phút: OSRM driving từ căn hộ (phút lúc đường vắng, ghi "ước tính").
 - "Khu đô thị Nam Long II Central Lake": thuvienphapluat.vn (tổng quan dự án), tin rao guland.vn.
+  - Chợ nổi Cái Răng: cụm ghe thuyền trên sông Cần Thơ ngay tây nam Cầu Cái Răng (cầu: tên trong OpenStreetMap, ~10.0056, 105.7502), thấy rõ trên ảnh Esri z17; điểm đích đặt ở đường Võ Tánh ven bờ (10.0040, 105.7468) để tính đường đi: 6,0 km ~10 phút.

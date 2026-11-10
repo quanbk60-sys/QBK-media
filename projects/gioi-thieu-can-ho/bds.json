@@ -21,14 +21,16 @@
  "outroZoom": 17.0,
  "durations": {
   "intro": 3.6,
-  "poi": 6.6,
+  "poi": 6.4,
   "descend": 4.6,
-  "outro": 4.6
+  "summary": 5.2,
+  "outro": 4.4
  },
  "order": [
   "intro",
   "map",
   "descend",
+  "summary",
   "outro"
  ],
  "photos": [
@@ -160,6 +162,13 @@
  ],
  "pois": [
   {
+   "cat": "DU LỊCH",
+   "name": "Chợ nổi Cái Răng",
+   "lat": 10.004,
+   "lon": 105.7468,
+   "sty": "violet"
+  },
+  {
    "cat": "GIÁO DỤC",
    "name": "Đại học Cần Thơ",
    "lat": 10.02989,
@@ -203,5 +212,6 @@
   "KHU ĐÔ THỊ",
   "NAM LONG II"
  ],
- "descendSub": "Central Lake · Cái Răng"
+ "descendSub": "Central Lake · Cái Răng",
+ "summaryTitle": "Vị trí kết nối · KĐT Nam Long II"
 }

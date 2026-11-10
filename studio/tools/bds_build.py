@@ -28,7 +28,7 @@ OUT_TOP = CARD_B - 176 * K
 TILT = 40
 CREDIT = 'Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính'
 UA = 'QBKStudio/1.0'
-DEF_DUR = {'intro': 3.5, 'photo': 3.2, 'specs': 4.5, 'poi': 5.5, 'outro': 4.0, 'descend': 3.5}
+DEF_DUR = {'summary': 5.0, 'intro': 3.5, 'photo': 3.2, 'specs': 4.5, 'poi': 5.5, 'outro': 4.0, 'descend': 3.5}
 
 
 def merc(lat, lon):
@@ -156,6 +156,7 @@ def main():
         elif sec == 'map': plan += [('poi', (i, p)) for i, p in enumerate(pois)]
         elif sec == 'outro': plan.append(('outro', cfg))
         elif sec == 'descend': plan.append(('descend', cfg))
+        elif sec == 'summary': plan.append(('summary', cfg))
     shots, t, last_view = [], 0.0, {'zoom': z_intro[1], 'tilt': TILT}
     view = lambda *keys: [{'t': round(k[0], 2), 'lat': P['lat'], 'lon': P['lon'], 'zoom': k[1], 'tilt': k[2]} for k in keys]
     for n, (kind, it) in enumerate(plan):
@@ -241,6 +242,14 @@ def main():
             sh.update(view=[{'t': 0, 'lat': P['lat'], 'lon': P['lon'], 'zoom': z0, 'tilt': TILT}, {'t': d * 0.75, 'lat': dc[0], 'lon': dc[1], 'zoom': zt, 'tilt': tl}, {'t': d, 'lat': dc[0], 'lon': dc[1], 'zoom': zt + 0.15, 'tilt': tl}],
                       elements=MAP + [proj_pin(), *([{'type': 'bdsHeadline', 'lines': cfg['descendTitle'], 'sub': cfg.get('descendSub', ''), 'from': 0.4}] if cfg.get('descendTitle') else []), footer], sfx=[{'t': 0.1, 'kind': 'whoosh', 'gain': 0.25}])
             last_view = {'zoom': zt, 'tilt': tl}
+        elif kind == 'summary':  # thẻ giới thiệu vị trí: khoảng cách tới mọi địa điểm
+            fmt = lambda r: (f"{r['km']:.1f}".replace('.', ',') + ' km') + (f" · {max(1, round(r['min']))} phút" if r.get('min') else '')
+            items = [{'icon': 'pin', 'label': p['name'], 'value': fmt(p['_r']), 'sty': p.get('sty', 'gold')} for p in sorted(pois, key=lambda p: p['_r']['km'])]
+            zl, tl = last_view['zoom'], last_view['tilt']
+            sh.update(view=[{'t': 0, 'lat': (cfg.get('descendCenter') or [P['lat']])[0], 'lon': (cfg.get('descendCenter') or [0, P['lon']])[1], 'zoom': zl, 'tilt': tl},
+                            {'t': d, 'lat': P['lat'], 'lon': P['lon'], 'zoom': zl - 0.6, 'tilt': tl}],
+                      elements=MAP + [proj_pin(bottom=CARD_B - (40 + 44 * len(items) + 12) * K - 26), {'type': 'bdsSpecs', 'title': cfg.get('summaryTitle', 'Vị trí kết nối'), 'items': items, 'from': 0.2, 'stagger': 0.3}, footer])
+            last_view = {'zoom': zl - 0.6, 'tilt': tl}
         elif kind == 'outro':
             z0 = last_view['zoom']; ob = OUT_TOP - 14 * K
             els = MAP + [{'type': 'bdsRoute', 'path': p['_r']['path'], 'sty': p.get('sty', 'gold'), 'alpha': 0.6, 'head': False} for p in pois]
