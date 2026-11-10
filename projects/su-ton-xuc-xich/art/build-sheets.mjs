@@ -22,7 +22,7 @@ function bg(ctx, w, h) { ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h); }
 function card(ctx, x, y, w, h) { ctx.save(); ctx.fillStyle = '#FBF8F0'; ctx.strokeStyle = '#D9D0BC'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(x, y, w, h, 24); ctx.fill(); ctx.stroke(); ctx.restore(); }
 
 async function xucxichSheet() {
-  const W = 1800, H = 2640, cv = createCanvas(W, H), ctx = cv.getContext('2d'); bg(ctx, W, H);
+  const W = 1800, H = 2960, cv = createCanvas(W, H), ctx = cv.getContext('2d'); bg(ctx, W, H);
   label(ctx, 'XÚC XÍCH  ·  chó lạp xưởng đốm  ·  bảng nhân vật', W / 2, 90, 58);
   card(ctx, 60, 140, 1000, 900);
   actor(ctx, 'xucxich', 480, 980, 1.7, 'stand', 'happy', {t: 0.35});
@@ -38,6 +38,8 @@ async function xucxichSheet() {
   label(ctx, 'TƯ THẾ', W / 2, 2300, 46);
   const poses = [['stand', 'Đứng', 'smug'], ['point', 'Chỉ tay', 'proud'], ['crossed', 'Khoanh tay', 'smug'], ['sit', 'Ngồi', 'calm']];
   poses.forEach(([k, n, e], i) => { const cx = 225 + i * 450, cy = 2330; card(ctx, cx - 210, cy, 420, 280); actor(ctx, 'xucxich', cx - 30, cy + 235, 0.5, k, e); label(ctx, n, cx, cy + 268, 26); });
+  const poses2 = [['lounge', 'Nằm lười', 'calm'], ['cheer', 'Reo', 'laugh'], ['think', 'Nghĩ', 'dazed'], ['plead', 'Van xin', 'sad']];
+  poses2.forEach(([k, n, e], i) => { const cx = 225 + i * 450, cy = 2630; card(ctx, cx - 210, cy, 420, 300); const pk = k; actor(ctx, 'xucxich', cx - 30, cy + 255, 0.5, pk, e, {t: 0.3}); label(ctx, n, cx, cy + 288, 26); });
   fs.writeFileSync(path.join(HERE, 'xuc-xich-sheet.png'), cv.toBuffer('image/png'));
 }
 
@@ -49,6 +51,11 @@ async function castSheet() {
   fs.writeFileSync(path.join(HERE, 'cast.png'), cv.toBuffer('image/png'));
 }
 
+async function poseCheck() { // every pose x 5 species (arm / face overlap check)
+  const names = Object.keys(POSES), cols = 8, rows = Math.ceil(names.length / cols), W = cols * 300, H = rows * 330 + 20, cv = createCanvas(W, H), ctx = cv.getContext('2d'); bg(ctx, W, H);
+  names.forEach((k, i) => { const cx = 150 + (i % cols) * 300, cy = 10 + Math.floor(i / cols) * 330; card(ctx, cx - 140, cy, 280, 320); actor(ctx, 'xucxich', cx - 18, cy + 270, 0.42, k, 'happy', {t: 0.3}); label(ctx, k, cx, cy + 308, 22); });
+  fs.writeFileSync(path.join(HERE, 'pose-check.png'), cv.toBuffer('image/png'));
+}
 async function extraSheet() { // supporting cast expression grids (for review)
   const W = 2000, H = 2300, cv = createCanvas(W, H), ctx = cv.getContext('2d'); bg(ctx, W, H);
   const ex = ['neutral', 'proud', 'scared', 'cry', 'laugh', 'dazed', 'angry'];
@@ -63,4 +70,5 @@ const which = process.argv[2] || 'all';
 if (which === 'all' || which === 'xx') await xucxichSheet();
 if (which === 'all' || which === 'cast') await castSheet();
 if (which === 'all' || which === 'extra') await extraSheet();
+if (which === 'all' || which === 'poses') await poseCheck();
 console.log('ok');

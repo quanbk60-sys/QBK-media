@@ -10,15 +10,15 @@ const D = {thigh: 44, shin: 40, upper: 54, fore: 48};
 const segp = (p, a, L) => [p[0] + L * Math.sin(a), p[1] + L * Math.cos(a)];
 
 export const SPECIES = {
-  xucxich: {name: 'Xúc Xích', head: 'dog', fur: '#B3B9C1', furShade: '#8A9099', dark: '#3E4249', tan: '#CB8B3C', tanShade: '#A86D2B', leg: '#CB8B3C', paw: '#D9A055',
+  xucxich: {hr: 118, name: 'Xúc Xích', head: 'dog', fur: '#B3B9C1', furShade: '#8A9099', dark: '#3E4249', tan: '#CB8B3C', tanShade: '#A86D2B', leg: '#CB8B3C', paw: '#D9A055',
     robe: '#E9F3F7', robeShade: '#B7D0DF', trim: '#6F93B3', sash: '#8FB0CC', bw: 1, hunch: 0, hy: 72, hx: 12},
-  meo: {name: 'Mèo Con', head: 'cat', fur: '#E9A24F', furShade: '#C98233', dark: '#B3681F', tan: '#F8E0B5', tanShade: '#E3C58F', leg: '#E9A24F', paw: '#F8E0B5',
+  meo: {hr: 104, name: 'Mèo Con', head: 'cat', fur: '#E9A24F', furShade: '#C98233', dark: '#B3681F', tan: '#F8E0B5', tanShade: '#E3C58F', leg: '#E9A24F', paw: '#F8E0B5',
     robe: '#B9A07E', robeShade: '#94805F', trim: '#7A6446', sash: '#8B6B4A', bw: 0.78, hunch: 0.04, hy: 66, hx: 8, patched: true},
-  ga: {name: 'Gà Thiếu Gia', head: 'rooster', fur: '#FBF4E6', furShade: '#E6D8BC', dark: '#C8372D', tan: '#F2A93B', tanShade: '#D98A1F', leg: '#F2A93B', paw: '#F2A93B',
+  ga: {hr: 98, name: 'Gà Thiếu Gia', head: 'rooster', fur: '#FBF4E6', furShade: '#E6D8BC', dark: '#C8372D', tan: '#F2A93B', tanShade: '#D98A1F', leg: '#F2A93B', paw: '#F2A93B',
     robe: '#7C4A8F', robeShade: '#5A3169', trim: '#E7B93A', sash: '#E7B93A', bw: 1.05, hunch: -0.04, hy: 66, hx: 6, brocade: true},
-  rua: {name: 'Rùa Trưởng Lão', head: 'turtle', fur: '#92BC74', furShade: '#6E9A56', dark: '#4F7A42', tan: '#D9E7B8', tanShade: '#B7C890', leg: '#92BC74', paw: '#92BC74',
+  rua: {hr: 100, name: 'Rùa Trưởng Lão', head: 'turtle', fur: '#92BC74', furShade: '#6E9A56', dark: '#4F7A42', tan: '#D9E7B8', tanShade: '#B7C890', leg: '#92BC74', paw: '#92BC74',
     robe: '#DCCBA0', robeShade: '#B8A57B', trim: '#8A6B3F', sash: '#9A7A4B', bw: 1.05, hunch: 0.1, hy: 60, hx: 26, shell: true, prop: 'staff'},
-  khi: {name: 'Khỉ Tạp Dịch', head: 'monkey', fur: '#9C6B3F', furShade: '#7A4F2B', dark: '#5B3A20', tan: '#EBCCA2', tanShade: '#D2AE80', leg: '#9C6B3F', paw: '#EBCCA2',
+  khi: {hr: 100, name: 'Khỉ Tạp Dịch', head: 'monkey', fur: '#9C6B3F', furShade: '#7A4F2B', dark: '#5B3A20', tan: '#EBCCA2', tanShade: '#D2AE80', leg: '#9C6B3F', paw: '#EBCCA2',
     robe: '#A7A198', robeShade: '#847E75', trim: '#6B665E', sash: '#C9A66B', bw: 0.92, hunch: 0.05, hy: 66, hx: 8, prop: 'broom'},
   cua: {name: 'Cua', crab: true, shell: '#D9503A', shellShade: '#B13A28', light: '#F08B6E', dark: '#8E2A1E'},
 };
@@ -346,26 +346,46 @@ export function drawAnimal(ctx, opts) {
   const leg = (a, b, cc, paw) => { stroke(ctx, [a, b, cc], 38); stroke(ctx, [a, b, cc], 27, sp.leg); ell(ctx, cc[0] + 11, cc[1] + 3, 26, 15, sp.paw, LW); stroke(ctx, [[cc[0] + 4, cc[1] - 4], [cc[0] + 4, cc[1] + 8]], 0); };
   leg(hipB, kB, fB); leg(hipF, kF, fF);
 
-  const SH = -118, shF = [54 * sp.bw, SH], shB = [-54 * sp.bw, SH];
-  const reach = a => 1 + 0.3 * Math.max(0, Math.sin(a)); // raised arms stretch a little so paws clear the big head
-  const eF = segp(shF, P.fu, D.upper * reach(P.fu)), hF = segp(eF, P.ff, D.fore * reach(P.ff)), eB = segp(shB, P.bu, D.upper * reach(P.bu)), hB = segp(eB, P.bf, D.fore * reach(P.bf));
-  const arm = (s, e, h, back) => { // wide flared sleeve + paw peeking out
-    const dir = [h[0] - e[0], h[1] - e[1]], L = Math.hypot(...dir) || 1, d = [dir[0] / L, dir[1] / L], n = [-d[1], d[0]];
-    const col = back ? sp.robeShade : sp.robe;
-    stroke(ctx, [s, e], 40); stroke(ctx, [s, e], 29, col);
-    const w0 = 20, w1 = 30 * (sp.bw > 0.85 ? 1 : 0.9), end = [h[0] + d[0] * 6, h[1] + d[1] * 6];
-    poly(ctx, [[e[0] + n[0] * w0, e[1] + n[1] * w0], [end[0] + n[0] * w1, end[1] + n[1] * w1], [end[0] - n[0] * w1, end[1] - n[1] * w1], [e[0] - n[0] * w0, e[1] - n[1] * w0]], col, LW);
-    ell(ctx, e[0], e[1], 18, 18, col, 0);
-    stroke(ctx, [[end[0] + n[0] * w1, end[1] + n[1] * w1], [end[0] - n[0] * w1, end[1] - n[1] * w1]], 11, sp.trim); // cuff trim
-    stroke(ctx, [[end[0] + n[0] * (w1 - 2), end[1] + n[1] * (w1 - 2)], [end[0] - n[0] * (w1 - 2), end[1] - n[1] * (w1 - 2)]], 0);
-    ell(ctx, h[0] + d[0] * 22, h[1] + d[1] * 22, 19, 17, sp.paw, LW);
-    if (sp.head === 'dog' || sp.head === 'cat') for (const k of [-1, 1]) stroke(ctx, [[h[0] + d[0] * 30 + n[0] * k * 6, h[1] + d[1] * 30 + n[1] * k * 6], [h[0] + d[0] * 38 + n[0] * k * 6, h[1] + d[1] * 38 + n[1] * k * 6]], 0);
+  const SH = -92, NECK_Y = -114, shF = [56 * sp.bw, SH], shB = [-56 * sp.bw, SH];
+  const reach = a => 1 + 0.3 * Math.max(0, Math.sin(a)) + 0.5 * Math.max(0, -Math.cos(a)); // raised arms stretch a little so paws clear the big head
+  const hang = a => clamp(1 - Math.abs(a) / 0.8);          // 1 = hanging straight down
+  const fu = P.fu + 0.22 * hang(P.fu), bu = P.bu - 0.22 * hang(P.bu); // hanging arms swing slightly outward
+  const crossedArms = P.ff < -1.2 && P.bf > 1.2;           // forearms cross in front of the belly
+  const eF = segp(shF, fu, D.upper * reach(fu)), hF = segp(eF, P.ff, D.fore * (crossedArms ? 1.55 : reach(P.ff)));
+  const eB = segp(shB, bu, D.upper * reach(bu)), hB = segp(eB, P.bf, D.fore * (crossedArms ? 1.55 : reach(P.bf)));
+  // soft jointed sleeve: capsule upper arm, forearm that widens toward the wrist, elliptical cuff opening, round paw
+  const arm = (s, e, h, back) => {
+    const dv = [h[0] - e[0], h[1] - e[1]], L = Math.hypot(...dv) || 1, d = [dv[0] / L, dv[1] / L], n = [-d[1], d[0]];
+    const col = back ? sp.robeShade : sp.robe, k = sp.bw > 0.85 ? 1 : 0.88, W = L + 2;
+    const at = (u, v) => [e[0] + d[0] * u + n[0] * v * k, e[1] + d[1] * u + n[1] * v * k];
+    stroke(ctx, [s, e], 38); stroke(ctx, [s, e], 27, col);
+    ctx.beginPath(); ctx.moveTo(...at(0, 15)); ctx.bezierCurveTo(...at(W * 0.35, 17), ...at(W * 0.72, 22), ...at(W, 30)); ctx.lineTo(...at(W, -30)); ctx.bezierCurveTo(...at(W * 0.72, -22), ...at(W * 0.35, -17), ...at(0, -15)); ctx.closePath();
+    ctx.fillStyle = col; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(...at(0, -15)); ctx.bezierCurveTo(...at(W * 0.35, -17), ...at(W * 0.72, -22), ...at(W, -30)); ctx.lineTo(...at(W, -12)); ctx.bezierCurveTo(...at(W * 0.7, -9), ...at(W * 0.35, -6), ...at(0, -5)); ctx.closePath();
+    ctx.save(); ctx.globalAlpha *= 0.5; ctx.fillStyle = sp.robeShade; ctx.fill(); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(...at(0, 15)); ctx.bezierCurveTo(...at(W * 0.35, 17), ...at(W * 0.72, 22), ...at(W, 30)); ctx.lineTo(...at(W, -30)); ctx.bezierCurveTo(...at(W * 0.72, -22), ...at(W * 0.35, -17), ...at(0, -15)); ctx.closePath();
+    ctx.lineWidth = LW; ctx.strokeStyle = INK; ctx.stroke();
+    ell(ctx, e[0], e[1], 15, 15, col, 0);
+    stroke(ctx, [at(W * 0.18, -2), at(W * 0.42, 6), at(W * 0.62, 4)], 2.8, sp.robeShade);
+    const wc = at(W, 0), rot = Math.atan2(n[1], n[0]);
+    // cuff opening: ellipse whose long axis lies along the normal (rotated frame)
+    ctx.save(); ctx.translate(wc[0], wc[1]); ctx.rotate(rot); ctx.beginPath(); ctx.ellipse(0, 0, 31 * k, 11, 0, 0, Math.PI * 2); ctx.fillStyle = sp.trim; ctx.fill(); ctx.lineWidth = LW; ctx.strokeStyle = INK; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0, 0, 22 * k, 6, 0, 0, Math.PI * 2); ctx.fillStyle = '#3B3238'; ctx.fill(); ctx.restore();
+    const pc = [wc[0] + d[0] * 9, wc[1] + d[1] * 9];
+    ell(ctx, pc[0], pc[1], 15, 15, sp.paw, LW);
+    if (sp.head === 'dog' || sp.head === 'cat' || sp.head === 'khi') for (const j of [-1, 1]) stroke(ctx, [[pc[0] + d[0] * 6 + n[0] * j * 5, pc[1] + d[1] * 6 + n[1] * j * 5], [pc[0] + d[0] * 13 + n[0] * j * 5, pc[1] + d[1] * 13 + n[1] * j * 5]], 3);
   };
+  // draw order: far arm behind the body (unless it crosses in front), near arm in front of the body but behind the chin
+  const headC = [4 + sp.hx, NECK_Y - sp.hy], inHead = h => Math.hypot(h[0] - headC[0], h[1] - headC[1]) < sp.hr * 0.95;
+  const thinkLike = P.ff < -2.4 && P.fu > 1.5 && P.fu < 2.2 && P.bu > 0;   // paw on chin: deliberate
+  const frontAfterHead = h => h[1] < -75 && (!inHead(h) || thinkLike || P.fu > 2.4);  // hands raised high go over the head
+  const backAfterHead = P.bu < -2.4 && hB[1] < -75;
+  const backInFront = hB[0] > -34 && hB[1] > -75 && !backAfterHead;
 
   ctx.save(); ctx.rotate(lean);
   const co = {t, wind, E, blink, c, swing: Math.sin(t * (2.5 + wind * 2)) * 0.05 * wind + (E.brow < -0.6 ? 0.1 : 0) + (E.proud ? -0.02 : 0)};
   backItems(ctx, sp, co);
-  arm(shB, eB, hB, true);
+  if (!backInFront && !backAfterHead) arm(shB, eB, hB, true);
   // robe body (A-line) with shading, hem trim, lapel, sash
   const bw = sp.bw;
   ctx.save(); ctx.scale(bw, 1);
@@ -394,9 +414,12 @@ export function drawAnimal(ctx, opts) {
   ell(ctx, 8 * bw, -22, 14, 12, sp.sash, 4.5);
   ctx.restore(); // end of robe (lean still applies below via save)
 
-  // -- head & front arm (lean + nod)
+  // -- arms in front of the robe, then head (lean + nod)
   ctx.save(); ctx.rotate(lean);
-  const neck = [4, SH + 4];
+  if (backInFront) arm(shB, eB, hB, true);
+  const prop = c.prop === undefined ? sp.prop : c.prop;
+  if (!frontAfterHead(hF)) { if (prop === 'staff' || prop === 'broom') drawPlanted(ctx, prop, hF, lean, lift, sp); arm(shF, eF, hF, false); if (prop === 'fan') drawFan(ctx, hF); }
+  const neck = [4, NECK_Y];
   ctx.save(); ctx.translate(neck[0], neck[1]); ctx.rotate(nod); ctx.translate(sp.hx, -sp.hy);
   const R = 118;
   // collar (dog): drawn on the neck before the head so the chin overlaps it
@@ -408,12 +431,8 @@ export function drawAnimal(ctx, opts) {
   if (sp.head === 'monkey') { /* head cloth */ ctx.save(); ctx.translate(neck[0], neck[1]); ctx.rotate(nod); ctx.translate(sp.hx, -sp.hy); const hc = '#B25A3F'; ctx.beginPath(); ctx.moveTo(-92, -42); ctx.quadraticCurveTo(0, -86, 96, -48); ctx.lineTo(96, -22); ctx.quadraticCurveTo(0, -62, -92, -18); ctx.closePath(); ctx.fillStyle = hc; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); poly(ctx, [[-90, -34], [-128, -12], [-112, 10]], hc, 4.5); ctx.restore(); }
   if (sp.head === 'cat') { /* headband strip of cloth */ }
   ctx.restore();
-  // props held in the front hand (drawn in lean frame, planted straight in the world)
-  ctx.save(); ctx.rotate(lean);
-  const prop = c.prop === undefined ? sp.prop : c.prop;
-  if (prop === 'staff' || prop === 'broom') drawPlanted(ctx, prop, hF, lean, lift, sp);
-  ctx.restore();
-  ctx.save(); ctx.rotate(lean); arm(shF, eF, hF, false); if (prop === 'fan') drawFan(ctx, hF); ctx.restore();
+  if (backAfterHead) arm(shB, eB, hB, true);
+  if (frontAfterHead(hF)) { if (prop === 'staff' || prop === 'broom') drawPlanted(ctx, prop, hF, lean, lift, sp); arm(shF, eF, hF, false); if (prop === 'fan') drawFan(ctx, hF); }
   ctx.restore();
   const handW = up(hF[0], hF[1]);
   return {hand: handW, head: up(neck[0] + sp.hx, neck[1] - sp.hy), contact: P.contact};
