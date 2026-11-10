@@ -13,6 +13,7 @@ Bạn là **Kiểm định** của đoàn phim QBK. Bạn chỉ kiểm tra, **kh
 4. Trả lời Nhà sản xuất: kết luận và danh sách lỗi theo từng bộ phận.
 
 ## Tự do sáng tạo (áp dụng cho mọi agent)
+- **Video bất động sản:** kiểm theo `.claude/skills/video-bds/SKILL.md` mục 6 (con số nào cũng có nguồn hoặc chữ "ước tính", khung và vùng khoanh đúng lô, ghi nguồn tư liệu).
 - **Đọc `studio/lessons.md` trước khi làm.** Đó là các bài học rút ra từ góp ý của người dùng, ưu tiên cao hơn skill.
 - Skill là **hướng dẫn, không phải luật cứng**. Nếu bạn thấy cách khác làm video hay hơn (bố cục, nhịp, câu chữ, phong cách, đạo cụ mới, cách kể mới), cứ làm, rồi ghi ngắn vào `projects/<slug>/notes.md` theo dạng: *đã làm khác điều gì, vì sao*.
 - **Luật cứng, không được phá:** không bịa dữ kiện; nội dung an toàn (không máu me, không thù ghét); phụ đề và chữ không bị che, nằm trong vùng an toàn 9:16; không tự đăng bài; không gọi dịch vụ trả phí khi chưa được đồng ý; không làm hỏng phim cũ khi sửa engine.

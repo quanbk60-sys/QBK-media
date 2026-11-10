@@ -6,10 +6,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {loadImage} from '@napi-rs/canvas';
+import {spawnSync} from 'node:child_process';
+import crypto from 'node:crypto';
 import {clamp, ease, backOut} from './math.mjs';
 import {GEO_TYPES, PAINT, F, WHITE, DARK, col, local, grow, fadeA, pos, rr, fitFont, project, mpp, merc, worldPx} from './geo.mjs';
 
-export const BDS_TYPES = ['overlay', 'frame', 'poi', 'project', 'rings', 'block', 'pcard', 'info', 'checklist', 'legend', 'chapter', 'cta'];
+export const BDS_TYPES = ['overlay', 'frame', 'clip', 'poi', 'project', 'rings', 'block', 'pcard', 'info', 'checklist', 'legend', 'chapter', 'cta'];
 // phần tử nằm trên mặt đất: khi shot nghiêng, vẽ vào lớp mặt đất rồi chiếu phối cảnh cùng ảnh vệ tinh
 export const GROUND_TYPES = new Set(['satmap', 'overlay', 'route', 'area', 'dots', 'rings']);
 
@@ -265,5 +267,51 @@ function frame(ctx, e, t, s) {
   ctx.restore();
 }
 
-Object.assign(PAINT, {overlay, frame, poi, project: projectPin, rings, block, pcard, info, checklist, legend, chapter, cta});
+// đoạn video người dùng gửi (flycam, quay thực tế): path, start (giây trong file gốc), speed (1), fit: 'cover' (mặc định, focus [fx,fy]) | 'band'
+// (giữ nguyên khung 16:9 ở giữa, nền là chính video phóng to làm mờ), zoom (1 → phóng dần, ví dụ 1.08), dim, credit (ghi nguồn), hold: true giữ khung cuối.
+// preloadClips cắt sẵn các khung cần dùng (ffmpeg) vào projects/<slug>/cache/ (không commit), mỗi khung đọc lại khi vẽ.
+const clips = new Map();
+export async function preloadClips(s) {
+  for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'clip') {
+    const dur = ((e.to ?? (sh.end - sh.start)) - (e.from ?? 0)) * (e.speed ?? 1) + 0.2, src = path.join(s.base, e.path);
+    const key = crypto.createHash('md5').update(`${src}|${e.start ?? 0}|${dur.toFixed(2)}|${s.fps}`).digest('hex').slice(0, 12);
+    if (clips.has(key)) { e._clip = key; continue; }
+    const dir = path.join(s.base, 'cache', `clip-${key}`);
+    if (!fs.existsSync(path.join(dir, 'done'))) {
+      fs.mkdirSync(dir, {recursive: true});
+      const r = spawnSync('ffmpeg', ['-v', 'error', '-y', '-ss', String(e.start ?? 0), '-t', dur.toFixed(2), '-i', src, '-vf', `fps=${s.fps / (e.speed ?? 1)},scale='min(1920,iw)':-2`, '-q:v', '3', path.join(dir, 'f%05d.jpg')]);
+      if (r.status !== 0) throw new Error(`clip ${e.path}: ffmpeg lỗi ${r.stderr}`);
+      fs.writeFileSync(path.join(dir, 'done'), '');
+    }
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.jpg')).sort();
+    clips.set(key, {dir, files, cache: new Map()}); e._clip = key;
+  }
+}
+// giải mã ảnh của napi-rs là bất đồng bộ: render.mjs gọi prepareClips(s, T) (await) trước mỗi khung để nạp sẵn khung video cần vẽ
+export async function prepareClips(s, T) {
+  const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1), t = T - sh.start;
+  for (const e of sh.elements || []) if (e.type === 'clip' && clips.has(e._clip) && t >= (e.from ?? 0)) {
+    const c = clips.get(e._clip), i = Math.max(0, Math.min(c.files.length - 1, Math.floor((t - (e.from ?? 0)) * s.fps)));
+    if (!c.cache.has(i)) { c.cache.set(i, await loadImage(path.join(c.dir, c.files[i]))); while (c.cache.size > 6) c.cache.delete(c.cache.keys().next().value); }
+  }
+}
+function clipFrame(c, i) {
+  i = Math.max(0, Math.min(c.files.length - 1, i)); if (c.cache.has(i)) return c.cache.get(i);
+  let best = null, bd = 1e9; for (const [j, im] of c.cache) if (Math.abs(j - i) < bd) { bd = Math.abs(j - i); best = im; } return best; // chưa nạp: dùng khung gần nhất
+}
+function clip(ctx, e, t, s) {
+  const c = clips.get(e._clip); if (!c || !c.files.length) return; const k = local(e, t), im = clipFrame(c, Math.floor(k * s.fps)), W = s.width, H = s.height; if (!im) return;
+  const dur = (e.to ?? (e._shotDur ?? 4)) - (e.from ?? 0), z = 1 + ((e.zoom ?? 1) - 1) * clamp(k / Math.max(0.5, dur));
+  ctx.save(); ctx.globalAlpha = fadeA({...e, enter: e.enter ?? 'fade', enterDur: e.enterDur ?? 0.3}, t);
+  const cover = (fx, fy, sc0) => { const sc = Math.max(W / im.width, H / im.height) * sc0, w = im.width * sc, h = im.height * sc; ctx.drawImage(im, (W - w) * fx, (H - h) * fy, w, h); };
+  if (e.fit === 'band') {
+    ctx.save(); ctx.filter = 'blur(28px) brightness(0.55)'; cover(0.5, 0.5, 1.15); ctx.restore();
+    const w = W * z, h = w * im.height / im.width, y = (e.y ?? H * 0.42) - h / 2; ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 30; ctx.drawImage(im, (W - w) / 2, y, w, h); ctx.shadowBlur = 0;
+  } else cover(e.focus?.[0] ?? 0.5, e.focus?.[1] ?? 0.5, z);
+  if (e.dim) { ctx.fillStyle = `rgba(0,0,0,${e.dim})`; ctx.fillRect(0, 0, W, H); }
+  ctx.restore();
+  if (e.credit) { ctx.save(); ctx.globalAlpha = 0.8; ctx.font = `20px ${F.bold}`; ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.strokeText(e.credit, 40, H - 330); ctx.fillText(e.credit, 40, H - 330); ctx.restore(); }
+}
+
+Object.assign(PAINT, {overlay, frame, clip, poi, project: projectPin, rings, block, pcard, info, checklist, legend, chapter, cta});
 for (const ty of BDS_TYPES) if (!GEO_TYPES.includes(ty)) GEO_TYPES.push(ty);

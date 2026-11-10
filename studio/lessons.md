@@ -26,6 +26,13 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Bản đăng: nén lại khoảng 1,65 Mbps và chuẩn hóa âm lượng về −14 LUFS (ảnh vệ tinh làm file gốc nặng 70MB). Không commit file gốc. *(Bạch Đằng ve-tinh)*
 - Mô tả đăng bài không được nói quá kịch bản (ví dụ "cả ba trận đều dùng cọc" là sai). *(Bạch Đằng ve-tinh)*
 
+## Bất động sản (`bds-tien-ich`, `bds`) (người dùng, 10/11/2026)
+- **Không dùng tiếng gió vút ("sẹt sẹt", sfx `whoosh`).** Chỉ `pop` khi ghim rơi, `tap`, `chime`. *(video mẫu BĐS)*
+- **Đoạn kết luôn zoom vào dự án hoặc lô đất và khoanh vùng diện tích** (vệ tinh z18, `area` phát sáng, nhãn diện tích). *(video mẫu BĐS)*
+- Ảnh vệ tinh Esri có thể cũ; tìm ảnh quy hoạch, flycam trên web và **đối chiếu** trước khi dựng (skill `doi-chieu-ve-tinh`). Lô A Cần Thơ ban đầu bị gọi nhầm là "nhà phố", đối chiếu flycam mới ra là chung cư nhà ở xã hội. *(bds-can-tho)*
+- Diện tích tự đo trên vệ tinh phải ghi "≈ … m²*, đo ước tính". Km, phút ghi "ước tính OSRM". *(bds-can-tho)*
+- Người dùng gửi thêm ảnh hoặc video: làm theo skill `video-bds` (phân loại, dùng đúng cảnh, làm lại đúng cảnh đó). *(người dùng, 10/11/2026)*
+
 ## Phong cách phải khác nhau thật (người dùng, 09/11/2026)
 - "Các phong cách giống hệt nhau, chỉ khác nền" là lỗi. Mỗi phong cách có ngữ pháp riêng (nét, cách tô, cách hiện hình, chuyển cảnh, phụ đề), xem SCENE_FORMAT.md, mục "Ngữ pháp phong cách". Đạo diễn còn phải đổi cả bố cục và nhịp cho hợp phong cách.
 - Học từ mẫu 3D thực tế thì dựng bằng `studio/engine3d/`, không thay bằng nét vẽ trên giấy. Video làm đá bản nét vẽ đã bị người dùng chê "khác hoàn toàn mẫu".
