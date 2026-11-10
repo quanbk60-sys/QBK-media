@@ -14,4 +14,5 @@
 | [BĐS: skill bản đồ hạ tầng](bds-ban-do-ha-tang/card.md) | `bds-tien-ich` (chương, tuyến nhiều màu, vòng km, chú giải, checklist) + `osrm.py`; skill `map-location-video` | Bất động sản: hạ tầng, kết nối | Chương 4–6 s | Đã làm · thiếu tự tìm hạ tầng (Overpass bị chặn) |
 | [Phong cảnh anime · đạp xe](phong-canh-anime/card.md) | `phong-canh-3d` (`engine3d/phong-canh.mjs`, phối cảnh giả 3D) | Thư giãn, chill | Camera bám sau đổ dốc liên tục, 2 cảnh, chuyển cảnh mờ | Đã làm · nét phẳng hơn tranh AI |
 | [Cách viết lệnh Omni](omni-prompt/card.md) | công cụ cho `anime-dong` (quay phim) | Mọi phim anime động | Clip 4–8 giây, ba nhịp có mốc giờ | Tài liệu tham khảo (MIT, rút từ Stickman Video Director) |
+| [Hoạt hình tu tiên vietsub](hoat-hinh-tu-tien-vietsub/card.md) | chưa có (đề xuất `tien-hiep` + đầu mặt meme) | Truyện hài "hệ thống", tu tiên, phim bộ | Cắt ghép ảnh tĩnh, cảnh 4 s, một giọng đọc suốt, phụ đề ngoặc kép | Ghi nhận · thiếu trang phục, bối cảnh, hiệu ứng |
 | Slide "Stickman Video Director" (ảnh, đầu cuộc trò chuyện) | 10 phong cách A1–B4 của skill gốc | Đa thể loại | | Tham khảo cho các gói phong cách |
