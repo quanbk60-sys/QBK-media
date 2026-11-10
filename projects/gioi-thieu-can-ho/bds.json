@@ -20,11 +20,11 @@
  ],
  "outroZoom": 14.6,
  "durations": {
-  "intro": 3.6,
+  "intro": 3.8,
   "descend": 3.4,
+  "photo": 4.4,
   "outro": 5
  },
- "outroCue": 31,
  "order": [
   "intro",
   "map",
@@ -35,7 +35,6 @@
  "photos": [
   {
    "path": "photos/p5-loi-vao.jpg",
-   "cue": 5,
    "mode": "cover",
    "focus": [
     0.5,
@@ -48,14 +47,13 @@
      3,
      -3
     ],
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   },
   {
    "path": "photos/p6-tu-chanh.jpg",
-   "cue": 9,
    "mode": "cover",
    "focus": [
     0.5,
@@ -64,14 +62,13 @@
    "cam": {
     "fwd": 0.34,
     "side": -0.1,
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   },
   {
    "path": "photos/p2-cong-vom-hanh-lang.jpg",
-   "cue": 13,
    "mode": "cover",
    "focus": [
     0.5,
@@ -84,14 +81,13 @@
      -18,
      14
     ],
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   },
   {
    "path": "photos/p4-sofa.jpg",
-   "cue": 15,
    "mode": "cover",
    "focus": [
     0.5,
@@ -104,14 +100,13 @@
      2,
      -2
     ],
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   },
   {
    "path": "photos/p7-tong-quan.jpg",
-   "cue": 19,
    "mode": "cover",
    "focus": [
     0.5,
@@ -124,14 +119,13 @@
      -16,
      16
     ],
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   },
   {
    "path": "photos/p3-bep-ban-an.jpg",
-   "cue": 24,
    "mode": "cover",
    "focus": [
     0.5,
@@ -140,14 +134,13 @@
    "cam": {
     "fwd": 0.45,
     "side": 0.08,
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   },
   {
    "path": "photos/p1-rem-cua-so-ke.jpg",
-   "cue": 27,
    "mode": "cover",
    "focus": [
     0.5,
@@ -160,9 +153,9 @@
      -12,
      15
     ],
-    "hand": 0.15,
+    "hand": 0,
     "bob": 0,
-    "ease": "linear"
+    "ease": "walk"
    }
   }
  ],
@@ -172,5 +165,13 @@
  "walk": {
   "xfade": 1.1
  },
- "sfx": false
+ "sfx": false,
+ "narration": false,
+ "music": {
+  "generate": true,
+  "mood": "chill",
+  "bpm": 76,
+  "seed": 3,
+  "gain": 0.85
+ }
 }

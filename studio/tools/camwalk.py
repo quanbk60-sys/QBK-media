@@ -50,13 +50,13 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('img'); ap.add_argument('out')
     ap.add_argument('--dur', type=float, default=5); ap.add_argument('--fps', type=int, default=30)
     ap.add_argument('--fwd', type=float, default=0.25); ap.add_argument('--side', type=float, default=0); ap.add_argument('--up', type=float, default=0)
-    ap.add_argument('--yaw', default='0,0'); ap.add_argument('--pitch', default='0,0'); ap.add_argument('--hand', type=float, default=1); ap.add_argument('--bob', type=float, default=None, help='nhún bước chân, mặc định = hand; gimbal: 0')
+    ap.add_argument('--yaw', default='0,0'); ap.add_argument('--pitch', default='0,0'); ap.add_argument('--hand', type=float, default=0); ap.add_argument('--bob', type=float, default=None, help='nhún bước chân, mặc định = hand; gimbal: 0')
     ap.add_argument('--zoom', type=float, default=1.1); ap.add_argument('--fov', type=float, default=70); ap.add_argument('--size', default='1080x1920')
     ap.add_argument('--focus', default='0.5,0.5', help='điểm giữa khung ra trên ảnh gốc (0..1), dùng cho ảnh ngang')
     ap.add_argument('--ease', default='walk', help='walk: đi đều, vào/ra mềm; linear')
     a = ap.parse_args()
     OW, OH = map(int, a.size.lower().split('x'))
-    sig = hashlib.md5(json.dumps({**vars(a), 'out': None, 'v': 5}, sort_keys=True).encode()).hexdigest()[:12]
+    sig = hashlib.md5(json.dumps({**vars(a), 'out': None, 'v': 6}, sort_keys=True).encode()).hexdigest()[:12]
     meta_f = os.path.join(a.out, 'clip.json')
     if os.path.exists(meta_f) and json.load(open(meta_f)).get('sig') == sig:
         print(json.dumps({'out': a.out, 'cached': True})); return
@@ -82,25 +82,24 @@ def main():
     y0, y1 = (max(-ym, min(ym, v)) for v in (y0, y1)); p0, p1 = (max(-pm, min(pm, v)) for v in (p0, p1))
     N = max(1, round(a.dur * a.fps)); dw, dh = OW // 2, OH // 2
     vv, uu = np.mgrid[0:OH, 0:OW].astype(np.float32)
+    Zsm = cv2.GaussianBlur(Z, (0, 0), max(W, H) / 220).astype(np.float32); Zm = float(np.median(Zsm))
     for i in range(N):
         tt = i / a.fps; u = i / max(1, N - 1)
         q = u if a.ease == 'linear' else (u * u * (3 - 2 * u) * 0.35 + u * 0.65)   # gần đều, đầu cuối mềm
         hand = a.hand; bob = a.hand if a.bob is None else a.bob
         C = np.array([a.side * q + hand * 0.006 * smooth_noise(tt, 1), a.up * q - bob * 0.006 * abs(math.sin(math.pi * 1.8 * tt)) + hand * 0.004 * smooth_noise(tt, 2), a.fwd * q])
         R = rot(base_yaw + y0 + (y1 - y0) * q + hand * 0.35 * smooth_noise(tt, 3), base_pitch + p0 + (p1 - p0) * q + hand * 0.25 * smooth_noise(tt, 4), hand * 0.3 * smooth_noise(tt, 5))
-        Pc = (P - C) @ R            # = R^T (P - C)
-        zc = Pc[:, 2]; ok = zc > 0.05
-        uo = Pc[ok, 0] / zc[ok] * (fo / 2) + dw / 2; vo = Pc[ok, 1] / zc[ok] * (fo / 2) + dh / 2
-        ui, vi = np.round(uo).astype(np.int32), np.round(vo).astype(np.int32); m = (ui >= 0) & (ui < dw) & (vi >= 0) & (vi < dh)
-        zb = np.full(dw * dh, np.inf, np.float32); np.minimum.at(zb, vi[m] * dw + ui[m], zc[ok][m]); zb = zb.reshape(dh, dw)
-        hole = ~np.isfinite(zb); zf = np.where(hole, 0, zb).astype(np.float32)
-        for _ in range(12):                                    # lỗ hổng: lấy chiều sâu nền (xa) quanh đó
-            if not hole.any(): break
-            d = cv2.dilate(zf, np.ones((3, 3), np.uint8)); zf = np.where(hole, d, zf); hole = zf <= 0
-        zf[zf <= 0] = Z.max(); zf = cv2.medianBlur(zf, 5)
-        zt = cv2.resize(zf, (OW, OH), interpolation=cv2.INTER_LINEAR)
-        Pt = np.stack([(uu - ocx) / fo * zt, (vv - ocy) / fo * zt, zt], -1) @ R.T + C   # về toạ độ ảnh gốc
-        mx = (Pt[..., 0] / Pt[..., 2] * f + cx).astype(np.float32); my = (Pt[..., 1] / Pt[..., 2] * f + cy).astype(np.float32)
+        # tia nhìn từ máy quay qua từng điểm ảnh khung ra; tìm giao với mặt chiều sâu (đã làm mượt) bằng lặp điểm bất động.
+        # Liên tục theo thông số máy quay nên khung sau liền khung trước (không nhấp nháy như cách chiếu điểm rời).
+        Dw = np.stack([(uu - ocx) / fo, (vv - ocy) / fo, np.ones_like(uu)], -1) @ R.T
+        lam = (Zm - C[2]) / Dw[..., 2]
+        for _ in range(7):
+            X = C[0] + lam * Dw[..., 0]; Y = C[1] + lam * Dw[..., 1]; Zr = C[2] + lam * Dw[..., 2]
+            mx = (X / Zr * f + cx).astype(np.float32); my = (Y / Zr * f + cy).astype(np.float32)
+            zs = cv2.remap(Zsm, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+            lam = 0.5 * lam + 0.5 * (zs - C[2]) / Dw[..., 2]
+        X = C[0] + lam * Dw[..., 0]; Y = C[1] + lam * Dw[..., 1]; Zr = C[2] + lam * Dw[..., 2]
+        mx = (X / Zr * f + cx).astype(np.float32); my = (Y / Zr * f + cy).astype(np.float32)
         fr = cv2.remap(img, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
         cv2.imwrite(os.path.join(a.out, f'f{i:04d}.jpg'), fr, [cv2.IMWRITE_JPEG_QUALITY, 90])
     json.dump({'sig': sig, 'frames': N, 'fps': a.fps, 'size': [OW, OH], 'src': a.img}, open(meta_f, 'w'))

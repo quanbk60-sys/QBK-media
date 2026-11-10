@@ -124,7 +124,7 @@ def main():
 
     # thời gian theo giọng đọc
     caps_f = os.path.join(root, 'captions-audio.json'); lead = cfg.get('lead', 0.15)
-    caps = json.load(open(caps_f)) if os.path.exists(caps_f) else []
+    caps = json.load(open(caps_f)) if os.path.exists(caps_f) and cfg.get('narration', True) else []
     narr = os.path.join(root, 'audio', 'narration.wav')
     narr_end = (caps[-1]['end'] + lead) if caps else 0
 
@@ -263,8 +263,14 @@ def main():
     scene = {'style': 'bds', 'satmap': 'sat/satmap.json', 'credit': '', 'shots': shots}
     if caps:
         scene['captions'] = {'path': 'captions-audio.json', 'lead': lead, 'y': CAP_Y, 'size': 54}
-    if os.path.exists(narr): scene['narration'] = {'path': 'audio/narration.wav', 'lead': lead}
-    if cfg.get('music'): scene['music'] = cfg['music']
+    if os.path.exists(narr) and cfg.get('narration', True): scene['narration'] = {'path': 'audio/narration.wav', 'lead': lead}
+    mu = cfg.get('music')
+    if isinstance(mu, dict) and mu.get('generate'):  # nhạc tự sáng tác bằng music.py, dài đúng bằng video
+        os.makedirs(os.path.join(root, 'audio'), exist_ok=True); mf = os.path.join(root, 'audio', 'music.wav')
+        subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'music.py'), mf, f"--dur={shots[-1]['end']}",
+                        f"--mood={mu.get('mood', 'chill')}", f"--bpm={mu.get('bpm', 78)}", f"--seed={mu.get('seed', 1)}"], check=True, stdout=subprocess.DEVNULL)
+        scene['music'] = {'path': 'audio/music.wav', 'gain': mu.get('gain', 0.85)}
+    elif mu: scene['music'] = mu
     json.dump(scene, open(os.path.join(root, 'scene.json'), 'w'), ensure_ascii=False, indent=1)
     print(json.dumps({'scene': os.path.join(root, 'scene.json'), 'seconds': shots[-1]['end'], 'shots': len(shots),
                       'routes': [{'name': p['name'], 'km': p['_r']['km'], 'min': p['_r']['min'], 'pts': len(p['_r']['path'])} for p in pois],
