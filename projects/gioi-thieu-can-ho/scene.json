@@ -5,7 +5,7 @@
  "shots": [
   {
    "start": 0.0,
-   "end": 3.6,
+   "end": 3.8,
    "view": [
     {
      "t": 0,
@@ -15,7 +15,7 @@
      "tilt": 15
     },
     {
-     "t": 3.6,
+     "t": 3.8,
      "lat": 9.99465,
      "lon": 105.78452,
      "zoom": 15.6,
@@ -59,8 +59,8 @@
    ]
   },
   {
-   "start": 3.6,
-   "end": 7.29,
+   "start": 3.8,
+   "end": 7.2,
    "view": [
     {
      "t": 0,
@@ -105,8 +105,8 @@
    ]
   },
   {
-   "start": 7.29,
-   "end": 13.42,
+   "start": 7.2,
+   "end": 11.6,
    "view": [
     {
      "t": 0,
@@ -148,15 +148,15 @@
    ]
   },
   {
-   "start": 13.42,
-   "end": 18.22,
+   "start": 11.6,
+   "end": 16.0,
    "elements": [
     {
      "type": "bdsClip",
      "dir": "clips/p5-loi-vao",
-     "from": -6.13,
+     "from": -4.3999999999999995,
      "to": 1.1,
-     "dur": 6.13,
+     "dur": 4.3999999999999995,
      "enterDur": 0,
      "overlay": false
     },
@@ -173,15 +173,15 @@
    ]
   },
   {
-   "start": 18.22,
-   "end": 22.41,
+   "start": 16.0,
+   "end": 20.4,
    "elements": [
     {
      "type": "bdsClip",
      "dir": "clips/p6-tu-chanh",
-     "from": -4.799999999999999,
+     "from": -4.4,
      "to": 1.1,
-     "dur": 4.799999999999999,
+     "dur": 4.4,
      "enterDur": 0,
      "overlay": false
     },
@@ -198,15 +198,15 @@
    ]
   },
   {
-   "start": 22.41,
-   "end": 26.04,
+   "start": 20.4,
+   "end": 24.8,
    "elements": [
     {
      "type": "bdsClip",
      "dir": "clips/p2-cong-vom-hanh-lang",
-     "from": -4.190000000000001,
+     "from": -4.399999999999999,
      "to": 1.1,
-     "dur": 4.190000000000001,
+     "dur": 4.399999999999999,
      "enterDur": 0,
      "overlay": false
     },
@@ -223,15 +223,15 @@
    ]
   },
   {
-   "start": 26.04,
-   "end": 31.88,
+   "start": 24.8,
+   "end": 29.2,
    "elements": [
     {
      "type": "bdsClip",
      "dir": "clips/p4-sofa",
-     "from": -3.629999999999999,
+     "from": -4.400000000000002,
      "to": 1.1,
-     "dur": 3.629999999999999,
+     "dur": 4.400000000000002,
      "enterDur": 0,
      "overlay": false
     },
@@ -248,15 +248,15 @@
    ]
   },
   {
-   "start": 31.88,
-   "end": 36.57,
+   "start": 29.2,
+   "end": 33.6,
    "elements": [
     {
      "type": "bdsClip",
      "dir": "clips/p7-tong-quan",
-     "from": -5.84,
+     "from": -4.399999999999999,
      "to": 1.1,
-     "dur": 5.84,
+     "dur": 4.399999999999999,
      "enterDur": 0,
      "overlay": false
     },
@@ -273,15 +273,15 @@
    ]
   },
   {
-   "start": 36.57,
-   "end": 42.21,
+   "start": 33.6,
+   "end": 38.0,
    "elements": [
     {
      "type": "bdsClip",
      "dir": "clips/p3-bep-ban-an",
-     "from": -4.690000000000001,
+     "from": -4.400000000000002,
      "to": 1.1,
-     "dur": 4.690000000000001,
+     "dur": 4.400000000000002,
      "enterDur": 0,
      "overlay": false
     },
@@ -298,8 +298,8 @@
    ]
   },
   {
-   "start": 42.21,
-   "end": 47.82,
+   "start": 38.0,
+   "end": 43.0,
    "view": [
     {
      "t": 0,
@@ -369,14 +369,8 @@
    "transitionDur": 0.35
   }
  ],
- "captions": {
-  "path": "captions-audio.json",
-  "lead": 0.15,
-  "y": 250,
-  "size": 54
- },
- "narration": {
-  "path": "audio/narration.wav",
-  "lead": 0.15
+ "music": {
+  "path": "audio/music.wav",
+  "gain": 0.85
  }
 }
