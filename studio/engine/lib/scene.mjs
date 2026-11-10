@@ -10,6 +10,7 @@ import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
+import {prepareBds} from './bds.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -195,7 +196,8 @@ export function makeRenderer(s) {
       } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
     return {drawing};
   }
-  return {cv, ctx, frame, events};
+  const prepare = T => prepareBds(s, T);
+  return {cv, ctx, frame, prepare, events};
 }
 
 // Split captions that would wrap into two timed halves at the space nearest the middle (proportional timing).

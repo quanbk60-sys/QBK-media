@@ -17,7 +17,7 @@ const s = loadScene(file); fitCaptions(s); await preloadImages(s);
 const R = makeRenderer(s), L = LAYOUT(s), step = Number(opt('--step', 0.2)), bad = [], modes = {};
 const ov = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
 for (let T = 0; T < s.duration; T += step) {
-  R.frame(T); const rs = s._rects || [], at = T.toFixed(1);
+  await R.prepare(T); R.frame(T); const rs = s._rects || [], at = T.toFixed(1);
   for (const r of rs) {
     if (r.kind !== 'body' && (r.x0 < L.M - 1 || r.x1 > s.width - L.M + 1)) bad.push(`NGANG t=${at} ${r.kind} ${r.x0.toFixed(0)}..${r.x1.toFixed(0)}`);
     if (r.kind === 'label') { modes[r.mode] = (modes[r.mode] || 0) + 1; if (r.y0 < L.TOP - 1) bad.push(`TREN t=${at} nhãn "${r.id}" y0=${r.y0.toFixed(0)} < ${L.TOP.toFixed(0)}`); }
@@ -36,8 +36,8 @@ if (sheetF) {
   const times = opt('--at') ? opt('--at').split(',').map(Number) : s.shots.map(sh => +(sh.start + Math.min(sh.end - sh.start - 0.15, (sh.end - sh.start) * 0.85)).toFixed(2));
   const cols = Math.min(5, times.length), rows = Math.ceil(times.length / cols), tw = 324, th = Math.round(tw * s.height / s.width);
   const sheet = createCanvas(cols * tw, rows * th), sc = sheet.getContext('2d');
-  times.forEach((T, i) => { R.frame(T); const ox = (i % cols) * tw, oy = Math.floor(i / cols) * th; sc.drawImage(R.cv, ox, oy, tw, th);
-    sc.save(); sc.strokeStyle = 'rgba(255,0,200,.85)'; sc.setLineDash([4, 3]); sc.strokeRect(ox + L.M * tw / s.width, oy + 2, (s.width - 2 * L.M) * tw / s.width, th - 4); sc.fillStyle = '#fff'; sc.font = '16px QBKBold'; sc.fillText(`${T}s`, ox + 6, oy + th - 8); sc.restore(); });
+  for (const [i, T] of times.entries()) { await R.prepare(T); R.frame(T); const ox = (i % cols) * tw, oy = Math.floor(i / cols) * th; sc.drawImage(R.cv, ox, oy, tw, th);
+    sc.save(); sc.strokeStyle = 'rgba(255,0,200,.85)'; sc.setLineDash([4, 3]); sc.strokeRect(ox + L.M * tw / s.width, oy + 2, (s.width - 2 * L.M) * tw / s.width, th - 4); sc.fillStyle = '#fff'; sc.font = '16px QBKBold'; sc.fillText(`${T}s`, ox + 6, oy + th - 8); sc.restore(); }
   fs.writeFileSync(sheetF, sheet.toBuffer('image/png')); out.sheet = sheetF; out.sheetTimes = times;
 }
 console.log(JSON.stringify(out, null, 1));

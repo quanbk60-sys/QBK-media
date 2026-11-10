@@ -9,3 +9,4 @@ studio/engine/examples/styles/out/
 studio/engine3d/node_modules/
 # Ảnh vệ tinh tải lại được bằng satmap.py / bds_build.py
 projects/*/sat/
+projects/*/clips/

@@ -5,11 +5,12 @@
 // Mọi kích thước viết theo khung 576 px của skill gốc rồi nhân K = width/576 (1080 → 1,875).
 // Mỗi khung, các nhãn/thẻ ghi hình chữ nhật vào s._rects để né nhau và để check_layout.mjs kiểm tra.
 import path from 'node:path';
-import {createCanvas, loadImage} from '@napi-rs/canvas';
+import fs from 'node:fs';
+import {createCanvas, loadImage, Image} from '@napi-rs/canvas';
 import {clamp, ease, backOut} from './math.mjs';
 import {project} from './geo.mjs';
 
-export const BDS_TYPES = ['bdsShade', 'bdsRoute', 'bdsPin', 'bdsCard', 'bdsBar', 'bdsHeadline', 'bdsOutro', 'bdsFooter', 'bdsPhoto', 'bdsCaption', 'bdsSpecs', 'bdsChips'];
+export const BDS_TYPES = ['bdsShade', 'bdsRoute', 'bdsPin', 'bdsCard', 'bdsBar', 'bdsHeadline', 'bdsOutro', 'bdsFooter', 'bdsPhoto', 'bdsCaption', 'bdsSpecs', 'bdsChips', 'bdsClip'];
 export const STY = {
   gold: {m: ['#fff7c9', '#ffd94f', '#d9a31c', '#85560a', '#f6cf63'], flat: '#ffc247', txt: '#2a1a00'},
   blue: {m: ['#eaf5ff', '#8fc6ff', '#3b7bdc', '#16367a', '#9bcaff'], flat: '#5fa8ff', txt: '#04122e'},
@@ -41,6 +42,7 @@ export async function preloadBds(s) {
 }
 export function validateBds(s, e, where, err) {
   if (e.type === 'bdsPhoto' && !e.path) err(`${where}: bdsPhoto cần path`);
+  if (e.type === 'bdsClip' && !fs.existsSync(path.join(s.base, e.dir || '', 'clip.json'))) err(`${where}: bdsClip thiếu ${e.dir}/clip.json (chạy camwalk.py / bds_build.py)`);
   if (e.type === 'bdsRoute' && !(e.path?.length >= 2)) err(`${where}: bdsRoute cần path [[lat,lon],...]`);
   if (e.type === 'bdsPin' && !e.geo) err(`${where}: bdsPin cần geo [lat, lon]`);
 }
@@ -313,4 +315,36 @@ function bdsChips(ctx, e, t, s) {
   ctx.restore(); rect(s, 'text', L.M, y0, maxX, y0 + rows * h + row * gap);
 }
 
-export const BDS_PAINT = {bdsShade, bdsRoute, bdsPin, bdsCard, bdsBar, bdsHeadline, bdsOutro, bdsFooter, bdsPhoto, bdsCaption, bdsSpecs, bdsChips};
+
+// bdsClip: cảnh quay dựng sẵn bằng studio/tools/camwalk.py (thư mục khung f0000.jpg…, clip.json). Đọc đúng khung theo thời gian.
+// dive/diveDur: phóng đều rồi thu về (lao vào từ bản đồ). enterDur, fadeOut, overlay như bdsPhoto.
+function bdsClip(ctx, e, t, s) {
+  const dir = path.join(s.base, e.dir); e._meta ||= JSON.parse(fs.readFileSync(path.join(dir, 'clip.json'), 'utf8'));
+  const W = s.width, H = s.height, tl = local(e, t), n = Math.max(0, Math.min(e._meta.frames - 1, Math.floor(tl * (e._meta.fps || 30) + 1e-6)));
+  const im = s._clipFrames?.get(path.join(dir, `f${String(n).padStart(4, '0')}.jpg`)); if (!im) throw new Error(`bdsClip: khung chưa nạp (gọi renderer.prepare(T) trước frame): ${e.dir} #${n}`);
+  const a = (e.enterDur === 0 ? 1 : clamp(tl / (e.enterDur ?? 0.35))) * (e.alpha ?? 1) * (e.fadeOut && e.to !== undefined ? 1 - ease(clamp((t - (e.to - e.fadeOut)) / e.fadeOut)) : 1);
+  const dz = e.dive ? 1 + (e.dive - 1) * (1 - ease(clamp(tl / (e.diveDur ?? 1.2)))) : 1;
+  ctx.save(); ctx.globalAlpha = a; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(im, W / 2 - W * dz / 2, H / 2 - H * dz / 2, W * dz, H * dz);
+  if (e.overlay !== false) {
+    if (e.dim !== 0) { ctx.fillStyle = `rgba(0,0,0,${e.dim ?? 0.08})`; ctx.fillRect(0, 0, W, H); }
+    let g = ctx.createLinearGradient(0, 0, 0, 420); g.addColorStop(0, 'rgba(3,6,16,.6)'); g.addColorStop(1, 'rgba(3,6,16,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, 420);
+    g = ctx.createLinearGradient(0, H * 0.7, 0, H); g.addColorStop(0, 'rgba(3,6,16,0)'); g.addColorStop(1, 'rgba(3,6,16,.6)'); ctx.fillStyle = g; ctx.fillRect(0, H * 0.7, W, H * 0.3);
+  }
+  ctx.restore();
+}
+
+export const BDS_PAINT = {bdsClip, bdsShade, bdsRoute, bdsPin, bdsCard, bdsBar, bdsHeadline, bdsOutro, bdsFooter, bdsPhoto, bdsCaption, bdsSpecs, bdsChips};
+
+// nạp trước các khung bdsClip cần cho thời điểm T (giải mã ảnh là bất đồng bộ)
+export async function prepareBds(s, T) {
+  const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1), t = T - sh.start, want = new Set();
+  for (const e of sh.elements || []) {
+    if (e.type !== 'bdsClip' || t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
+    const dir = path.join(s.base, e.dir); e._meta ||= JSON.parse(fs.readFileSync(path.join(dir, 'clip.json'), 'utf8'));
+    const n = Math.max(0, Math.min(e._meta.frames - 1, Math.floor((t - (e.from ?? 0)) * (e._meta.fps || 30) + 1e-6)));
+    want.add(path.join(dir, `f${String(n).padStart(4, '0')}.jpg`));
+  }
+  s._clipFrames ||= new Map();
+  for (const k of [...s._clipFrames.keys()]) if (!want.has(k)) s._clipFrames.delete(k);
+  for (const f of want) if (!s._clipFrames.has(f)) s._clipFrames.set(f, await loadImage(f));
+}

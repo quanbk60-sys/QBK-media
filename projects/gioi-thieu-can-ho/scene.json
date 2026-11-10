@@ -153,24 +153,10 @@
      "to": 1.3
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p5-loi-vao.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.3,
-      "vp": [
-       0.62,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6,
-      "dive": 2.2,
-      "diveDur": 1.3
-     },
+     "type": "bdsClip",
+     "dir": "clips/p5-loi-vao",
+     "dive": 2.2,
+     "diveDur": 1.3,
      "enterDur": 1.105
     },
     {
@@ -192,22 +178,8 @@
    "end": 18.22,
    "elements": [
     {
-     "type": "bdsPhoto",
-     "path": "photos/p5-loi-vao.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.3,
-      "vp": [
-       0.62,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p5-loi-vao",
      "from": -6.13,
      "to": 0.8,
      "dur": 6.13,
@@ -215,23 +187,8 @@
      "overlay": false
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p6-tu-chanh.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.24,
-      "pan": -0.06,
-      "vp": [
-       0.8,
-       0.45
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p6-tu-chanh",
      "enterDur": 0.8
     },
     {
@@ -253,23 +210,8 @@
    "end": 22.41,
    "elements": [
     {
-     "type": "bdsPhoto",
-     "path": "photos/p6-tu-chanh.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.24,
-      "pan": -0.06,
-      "vp": [
-       0.8,
-       0.45
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p6-tu-chanh",
      "from": -4.799999999999999,
      "to": 0.8,
      "dur": 4.799999999999999,
@@ -277,23 +219,8 @@
      "overlay": false
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p2-cong-vom-hanh-lang.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.16,
-      "pan": -0.55,
-      "vp": [
-       0.55,
-       0.45
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p2-cong-vom-hanh-lang",
      "enterDur": 0.8
     },
     {
@@ -315,23 +242,8 @@
    "end": 26.04,
    "elements": [
     {
-     "type": "bdsPhoto",
-     "path": "photos/p2-cong-vom-hanh-lang.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.16,
-      "pan": -0.55,
-      "vp": [
-       0.55,
-       0.45
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p2-cong-vom-hanh-lang",
      "from": -4.190000000000001,
      "to": 0.8,
      "dur": 4.190000000000001,
@@ -339,23 +251,8 @@
      "overlay": false
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p4-sofa.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.28,
-      "pan": 0.05,
-      "vp": [
-       0.45,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p4-sofa",
      "enterDur": 0.8
     },
     {
@@ -377,23 +274,8 @@
    "end": 31.88,
    "elements": [
     {
-     "type": "bdsPhoto",
-     "path": "photos/p4-sofa.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.28,
-      "pan": 0.05,
-      "vp": [
-       0.45,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p4-sofa",
      "from": -3.629999999999999,
      "to": 0.8,
      "dur": 3.629999999999999,
@@ -401,23 +283,8 @@
      "overlay": false
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p7-tong-quan.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.14,
-      "pan": -0.6,
-      "vp": [
-       0.55,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p7-tong-quan",
      "enterDur": 0.8
     },
     {
@@ -439,23 +306,8 @@
    "end": 36.57,
    "elements": [
     {
-     "type": "bdsPhoto",
-     "path": "photos/p7-tong-quan.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.14,
-      "pan": -0.6,
-      "vp": [
-       0.55,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p7-tong-quan",
      "from": -5.84,
      "to": 0.8,
      "dur": 5.84,
@@ -463,22 +315,8 @@
      "overlay": false
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p3-bep-ban-an.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.3,
-      "vp": [
-       0.55,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p3-bep-ban-an",
      "enterDur": 0.8
     },
     {
@@ -500,22 +338,8 @@
    "end": 42.21,
    "elements": [
     {
-     "type": "bdsPhoto",
-     "path": "photos/p3-bep-ban-an.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.3,
-      "vp": [
-       0.55,
-       0.42
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p3-bep-ban-an",
      "from": -4.690000000000001,
      "to": 0.8,
      "dur": 4.690000000000001,
@@ -523,23 +347,8 @@
      "overlay": false
     },
     {
-     "type": "bdsPhoto",
-     "path": "photos/p1-rem-cua-so-ke.jpg",
-     "mode": "cover",
-     "focus": [
-      0.5,
-      0.5
-     ],
-     "move": {
-      "push": 0.16,
-      "pan": -0.5,
-      "vp": [
-       0.7,
-       0.45
-      ],
-      "ease": "linear",
-      "shake": 0.6
-     },
+     "type": "bdsClip",
+     "dir": "clips/p1-rem-cua-so-ke",
      "enterDur": 0.8
     },
     {

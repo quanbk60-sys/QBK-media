@@ -174,23 +174,29 @@ def main():
             if 'y' in cap:  # ảnh ngang (khung) nằm gọn phía trên tiêu đề + thẻ
                 els[0]['bottom'] = round(cap['y'] - (150 if any(k in ph for k in ('kicker', 'title')) else 0) - 20, 1)
             if 'y' in ph: els[0]['y'] = ph['y']
+            if ph.get('cam'):  # cảnh quay cầm tay dựng từ chiều sâu ảnh (camwalk.py), khung dựng sau khi chốt thời lượng
+                stem = os.path.splitext(os.path.basename(ph['path']))[0]
+                els[0] = {'type': 'bdsClip', 'dir': f'clips/{stem}', '_cam': {**ph['cam'], 'path': ph['path']}}
             if any(k in ph for k in ('kicker', 'title', 'sub')): els.append(cap)
             els.append(footer)
             prev = plan[n - 1][0] if n else None
             walk = cfg.get('walk'); xf = (walk or {}).get('xfade', 0.7)
-            if prev in ('intro', 'descend', 'poi') and ph.get('move'):  # bay từ bản đồ lao vào phòng
+            moving = ph.get('move') or ph.get('cam')
+            if prev in ('intro', 'descend', 'poi') and moving:  # bay từ bản đồ lao vào phòng
                 zd = last_view['zoom']; dd = ph.get('diveDur', 1.3)
                 els = MAP[:1] + [{'type': 'bdsShade', 'to': dd}] + els
                 els[0] = {**els[0], 'to': dd}
-                els[2]['move'] = {**ph['move'], 'dive': ph.get('dive', 2.2), 'diveDur': dd}; els[2]['enterDur'] = dd * 0.85
+                if ph.get('move'): els[2]['move'] = {**ph['move'], 'dive': ph.get('dive', 2.2), 'diveDur': dd}
+                else: els[2].update(dive=ph.get('dive', 2.2), diveDur=dd)
+                els[2]['enterDur'] = dd * 0.85
                 sh.update(view=view((0, zd, last_view['tilt']), (dd, min(20.5, zd + 1.6), last_view['tilt'])), elements=els, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.4}])
-            elif walk and prev == 'photo' and ph.get('move'):  # đi liền một mạch: ảnh trước còn trôi tiếp rồi nhòa vào ảnh sau
+            elif walk and prev == 'photo' and moving:  # đi liền một mạch: ảnh trước còn trôi tiếp rồi nhòa vào ảnh sau
                 old = dict(shots[-1]['_photo']); pd = shots[-1]['end'] - shots[-1]['start']
                 old.update({'from': -pd, 'to': xf, 'dur': pd, 'enterDur': 0, 'overlay': False})
                 els[0]['enterDur'] = xf; sh.update(elements=[old] + els, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.12}])
             else:
                 sh.update(elements=els, transition='fade', transitionDur=0.35, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.22}])
-            sh['_photo'] = {k: v for k, v in [e for e in sh['elements'] if e['type'] == 'bdsPhoto'][-1].items() if k not in ('enterDur', 'from', 'to', 'dur', 'overlay')}
+            sh['_photo'] = {k: v for k, v in [e for e in sh['elements'] if e['type'] in ('bdsPhoto', 'bdsClip')][-1].items() if k not in ('enterDur', 'from', 'to', 'dur', 'overlay', 'dive', 'diveDur')}
             if 'move' in sh['_photo']: sh['_photo']['move'] = {k: v for k, v in sh['_photo']['move'].items() if k not in ('dive', 'diveDur')}
         elif kind == 'poi':
             i, p = it; r = p['_r']; z0 = last_view['zoom']
@@ -217,6 +223,16 @@ def main():
         shots.append(sh); t += d
     if caps and shots[-1]['end'] < narr_end + 0.8: shots[-1]['end'] = round(narr_end + 0.8, 2)
     for x in shots: x['start'], x['end'] = round(x['start'], 2), round(x['end'], 2); x.pop('_photo', None)
+    # dựng cảnh quay: mỗi ảnh có "cam" dài bằng cảnh + đoạn nhòa sang cảnh sau
+    xf = (cfg.get('walk') or {}).get('xfade', 0.7); tool = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'camwalk.py')
+    for sh in shots:
+        for e in sh['elements']:
+            cc = e.pop('_cam', None)
+            if not cc or e.get('from', 0) < 0: continue
+            dclip = round(sh['end'] - sh['start'] + xf + 0.3, 2); cc = dict(cc); src = cc.pop('path')
+            argv = [sys.executable, tool, os.path.join(root, src), os.path.join(root, e['dir']), f'--dur={dclip}']
+            for k, v in cc.items(): argv.append(f'--{k}=' + (','.join(map(str, v)) if isinstance(v, list) else str(v)))
+            print('  camwalk', e['dir'], dclip, 's'); subprocess.run(argv, check=True, stdout=subprocess.DEVNULL)
 
     # 4. ảnh vệ tinh: hợp các vùng khung nhìn theo mức zoom nguyên
     need = {}
