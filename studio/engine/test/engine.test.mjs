@@ -37,3 +37,22 @@ test('v2 props accept their parameters', () => {
     const R = new Recorder(); PROPS[n](R, p, 1.3); if (p.progress !== 0) assert.ok(R.ops.length > 0, n);
   }
 });
+
+test('bds elements draw with a tilted view and keep labels inside the frame', async () => {
+  const {createCanvas} = await import('@napi-rs/canvas');
+  const {BDS_PAINT, LAYOUT} = await import('../lib/bds.mjs');
+  const {sampleView, project} = await import('../lib/geo.mjs');
+  const s = {width: 1080, height: 1920, base: '.', captionStyle: {y: 250, size: 54}, _rects: []};
+  const v = sampleView([{t: 0, lat: 10.87, lon: 106.738, zoom: 14, tilt: 40}], 0), c = createCanvas(1080, 1920).getContext('2d');
+  const [x, y] = project(v, s, 10.87, 106.738); assert.ok(Math.abs(x - 540) < 1 && Math.abs(y - 960) < 1, 'view centre stays at frame centre');
+  const near = project(v, s, 10.86, 106.738), far = project(v, s, 10.88, 106.738); assert.ok(near[2] > 1 && far[2] < 1, 'perspective: near bigger, far smaller');
+  const els = [['bdsShade', {}], ['bdsRoute', {path: [[10.87, 106.738], [10.875, 106.75], [10.88, 106.76]], sty: 'ruby'}],
+    ['bdsPin', {geo: [10.87, 106.738], label: 'DỰ ÁN', project: true, pop: false, id: 'project'}], ['bdsPin', {geo: [10.8705, 106.7385], label: 'Một địa điểm rất dài tên', sty: 'blue', id: 'poi', from: -2}],
+    ['bdsCard', {cat: 'Y TẾ', name: 'Bệnh viện', km: 5.7, min: 6, index: 0, total: 4, from: -2}], ['bdsBar', {name: 'DỰ ÁN', area: 'KHU VỰC', colors: ['ruby', 'gold'], active: 1}],
+    ['bdsHeadline', {lines: ['A', 'B'], sub: 'c'}], ['bdsOutro', {name: 'N', cta: 'LIÊN HỆ', from: -2}], ['bdsFooter', {text: 'x', credit: 'y'}], ['bdsSpecs', {items: [{icon: 'area', label: 'Diện tích', value: '55 m²'}], from: -2}], ['bdsChips', {items: ['Hồ bơi', 'Gym'], from: -2}], ['bdsCaption', {kicker: 'k', title: 't', sub: 's', from: -2}]];
+  for (const [type, e] of els) BDS_PAINT[type](c, {type, ...e, _shotDur: 5}, 1, s, v);
+  const L = LAYOUT(s), labels = s._rects.filter(r => r.kind === 'label');
+  assert.equal(labels.length, 2);
+  for (const r of labels) assert.ok(r.x0 >= L.M - 1 && r.x1 <= 1080 - L.M + 1, `label ${r.id} inside margins`);
+  assert.ok(!(labels[0].x0 < labels[1].x1 && labels[0].x1 > labels[1].x0 && labels[0].y0 < labels[1].y1 && labels[0].y1 > labels[1].y0) || labels[1].mode === 'center*', 'labels avoid each other');
+});

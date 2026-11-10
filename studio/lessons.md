@@ -27,7 +27,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Mô tả đăng bài không được nói quá kịch bản (ví dụ "cả ba trận đều dùng cọc" là sai). *(Bạch Đằng ve-tinh)*
 
 ## Bất động sản (`bds-tien-ich`, `bds`) (người dùng, 10/11/2026)
-- **Không dùng tiếng gió vút ("sẹt sẹt", sfx `whoosh`).** Chỉ `pop` khi ghim rơi, `tap`, `chime`. *(video mẫu BĐS)*
+- **Không dùng tiếng hiệu ứng** (người dùng gọi là "sẹt sẹt", "rẹt rẹt": cả `whoosh` lẫn `pop`). Video BĐS mặc định không thuyết minh, chỉ **nhạc nền** (`studio/tools/music.py`, nhạc tự sáng tác). *(video mẫu BĐS + Giới thiệu căn hộ vòng 5, 6)*
 - **Đoạn kết luôn zoom vào dự án hoặc lô đất và khoanh vùng diện tích** (vệ tinh z18, `area` phát sáng, nhãn diện tích). *(video mẫu BĐS)*
 - Ảnh vệ tinh Esri có thể cũ; tìm ảnh quy hoạch, flycam trên web và **đối chiếu** trước khi dựng (skill `doi-chieu-ve-tinh`). Lô A Cần Thơ ban đầu bị gọi nhầm là "nhà phố", đối chiếu flycam mới ra là chung cư nhà ở xã hội. *(bds-can-tho)*
 - Diện tích tự đo trên vệ tinh phải ghi "≈ … m²*, đo ước tính". Km, phút ghi "ước tính OSRM". *(bds-can-tho)*
@@ -53,3 +53,11 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 ## Gấp giấy, cách làm (người dùng, 10/11/2026)
 - Video gấp giấy phải **mô phỏng gấp thật bằng code** (`studio/engine3d`, đồ vật `origami`), không dùng ảnh AI minh họa "bước gấp". Lời đọc phải khớp đúng từng nếp trên hình. Vòng 1 chim giấy dùng 5 ảnh AI, các bước gấp không có thật, nên bị yêu cầu làm lại.
 - Video dạy gấp: chèn khoảng lặng khoảng 1 giây sau mỗi bước (xem `projects/chim-giay-bay/pad_audio.py`), giọng 1,2x không kịp cho người xem nhìn nếp.
+
+## Bất động sản (`bds`, phiên Giới thiệu căn hộ)
+- (10/11/2026, Giới thiệu căn hộ) Video bất động sản: người dùng gửi tọa độ thì **phải có ảnh vệ tinh** (phong cách `bds`, mở đầu và kết trên bản đồ, ghim đúng tọa độ). Plus Code rút gọn (XQVM+VRH) phải giải mã theo ô gần thành phố đã nêu.
+- (10/11/2026, Giới thiệu căn hộ) Ảnh thật không được chỉ lia/phóng phẳng ("chỉ là ảnh"): dùng `move` của `bdsPhoto` để ra cảm giác cảnh quay (máy tiến vào phòng, vật gần trôi nhanh hơn, ảnh ngang lia hết bề ngang, rung tay nhẹ).
+- (10/11/2026, Giới thiệu căn hộ vòng 4) Cảnh trong nhà phải như **cầm máy quay đi trong nhà**, không phải lia/phóng ảnh, và **không được làm cong tường, cổng vòm**. Dùng `"cam"` (camwalk.py: chiều sâu MiDaS, máy quay ảo 3D), không dùng `move` cho ảnh nội thất.
+- (10/11/2026, Giới thiệu căn hộ vòng 5) Video BĐS **không dùng tiếng hiệu ứng** (whoosh, pop: người dùng gọi là "tiếng rẹt rẹt") → `"sfx": false` trong bds.json. Máy quay nội thất kiểu gimbal: êm, không rung, không nhún (`hand` 0,15, `bob` 0), đi cong.
+- (10/11/2026, Giới thiệu căn hộ vòng 6) Video căn hộ: người dùng muốn **không thuyết minh, chỉ nhạc nền** (`"narration": false`, `"music": {"generate": true}` → `studio/tools/music.py` tự sáng tác). Cảnh trong nhà phải **mượt, không rung**: camwalk mặc định `hand` 0.
+- (10/11/2026, Giới thiệu căn hộ vòng 7) Người dùng muốn đoàn phim **tự tìm tiện ích** (không hỏi lại). Khi Overpass hỏng: quét OSRM `nearest` lấy tên đường/cầu/cổng trường, rồi soi ảnh vệ tinh z17 để xác nhận. Cảnh tiện ích: `poiMode: zoom` (ghim → lao xuống nhìn 3D → kéo ra). Đừng làm nhiều vòng tốn hạn mức: hỏi rõ trước khi làm việc nặng.

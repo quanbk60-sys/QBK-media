@@ -1,0 +1,59 @@
+{
+ "video": "mau.mp4",
+ "duration_s": 82.53,
+ "size": "576x1024",
+ "fps": "30/1",
+ "crop": [
+  0,
+  0
+ ],
+ "cuts": 3,
+ "cut_times": [
+  26.73,
+  31.33,
+  55.53
+ ],
+ "avg_shot_s": 20.63,
+ "palette": [
+  {
+   "hex": "#484035",
+   "share": 0.21
+  },
+  {
+   "hex": "#A1ABAC",
+   "share": 0.189
+  },
+  {
+   "hex": "#747771",
+   "share": 0.163
+  },
+  {
+   "hex": "#C4B9AE",
+   "share": 0.157
+  },
+  {
+   "hex": "#98897B",
+   "share": 0.146
+  },
+  {
+   "hex": "#D6D5D2",
+   "share": 0.136
+  }
+ ],
+ "brightness": 0.55,
+ "colourfulness": 0.09,
+ "audio": {
+  "sound_ratio": 1.0,
+  "mean_db": -21.5,
+  "max_db": -6.0
+ },
+ "files": {
+  "contact": "contact.png",
+  "frames": [
+   "f00.png",
+   "f01.png",
+   "f02.png",
+   "f03.png"
+  ]
+ }
+}

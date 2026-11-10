@@ -1,0 +1,40 @@
+{
+ "_ghi_chu": "Mẫu bds.json cho studio/tools/bds_build.py. Các khóa bắt đầu bằng _ chỉ để giải thích, builder bỏ qua. Số liệu dưới đây là VÍ DỤ, vị trí dự án là điểm tạm.",
+ "name": "HAPPY ONE ELITE",
+ "intro": ["HAPPY ONE", "ELITE"],
+ "subtitle": "Xung quanh có gì?",
+ "area": "TAM BÌNH · THỦ ĐỨC",
+ "tagline": "Kết nối y tế · mua sắm · giao thông",
+ "cta": "LIÊN HỆ NHẬN THÔNG TIN",
+ "note": "Số liệu và vị trí mang tính tham khảo",
+ "footer": "Video được làm bởi Claude Code",
+ "_project": "Tọa độ THẬT của dự án (người dùng gửi). Đây là tâm camera, ghim vàng luôn ở giữa khung.",
+ "project": {"lat": 10.8705, "lon": 106.7380},
+ "_order": "Thứ tự phần: intro, photos, map, outro (bỏ phần nào thì xóa khỏi danh sách).",
+ "order": ["intro", "photos", "map", "outro"],
+ "_durations": "Giây mỗi cảnh khi không có cue. photo: ảnh thường; specs: ảnh có thẻ thông số; poi: mỗi địa điểm.",
+ "durations": {"intro": 3.5, "photo": 3.2, "specs": 4.5, "poi": 5.5, "outro": 4.0},
+ "_photos": "Ảnh dự án trong photos/. show: specs (thẻ thông số) | chips (tiện ích). mode: cover | card (mặc định ảnh ngang = card). focus/focusTo: điểm nhìn 0..1 để lia chậm. illustration: true nếu là phối cảnh/ảnh minh họa. cue: số thứ tự cụm phụ đề bắt đầu cảnh. dur: giây riêng. move: {push, pan, vp} để ảnh chuyển động như cảnh quay (nên dùng, kèm mode cover). introZoom/outroZoom: zoom mở đầu [xa, gần] và zoom cảnh kết khi không có địa điểm.",
+ "photos": [
+  {"path": "photos/phoi-canh.jpg", "kicker": "Phối cảnh", "title": "Happy One Elite", "sub": "Căn hộ cao cấp tại Thủ Đức", "focus": [0.5, 0.4], "focusTo": [0.5, 0.6], "illustration": true},
+  {"path": "photos/phong-khach.jpg", "kicker": "Tổng quan", "title": "Thông tin nổi bật", "show": "specs"},
+  {"path": "photos/tien-ich.jpg", "kicker": "Tiện ích nội khu", "title": "Sống trọn tiện nghi", "show": "chips"}
+ ],
+ "_specs": "icon: area, bed, bath, money, key, doc, building, compass, car, calendar, pool, pin, star. Tối đa khoảng 6 dòng.",
+ "specs": [
+  {"icon": "area", "label": "Diện tích", "value": "55 – 92 m²"},
+  {"icon": "bed", "label": "Loại căn", "value": "1PN · 2PN · 3PN"},
+  {"icon": "building", "label": "Quy mô", "value": "2 tháp · 25 tầng"},
+  {"icon": "key", "label": "Bàn giao", "value": "Hoàn thiện cơ bản"},
+  {"icon": "doc", "label": "Pháp lý", "value": "Sổ hồng lâu dài"}
+ ],
+ "amenities": ["Hồ bơi tràn", "Gym", "Công viên nội khu", "Khu BBQ", "Sân chơi trẻ em", "An ninh 24/7"],
+ "_pois": "3–6 địa điểm. sty: gold (mua sắm), blue (kết nối, giao thông), ruby (y tế), green (trường, công viên), violet. km/min: ghi đè số OSRM nếu có số chính xác hơn. path: tự cho tuyến nếu không muốn dùng OSRM. extra: chip thứ ba (ví dụ \"Metro số 1\").",
+ "pois": [
+  {"cat": "Y TẾ", "name": "BV Hoàn Mỹ Thủ Đức", "lat": 10.887522, "lon": 106.7736156, "sty": "ruby"},
+  {"cat": "MUA SẮM", "name": "Chợ đầu mối Thủ Đức", "lat": 10.8699458, "lon": 106.7280509, "sty": "gold"},
+  {"cat": "MUA SẮM", "name": "Vincom Plaza Thủ Đức", "lat": 10.8498657, "lon": 106.7651765, "sty": "gold"},
+  {"cat": "KẾT NỐI", "name": "Sân bay Tân Sơn Nhất", "lat": 10.8179793, "lon": 106.6562645, "sty": "blue"}
+ ],
+ "_tuy_chon": "Thêm nếu cần: music {path, gain}, lead (giây trễ giọng, mặc định 0.15), introCue/outroCue, grade (độ sáng, bão hòa, tương phản ảnh vệ tinh, mặc định \"0.95,0.92,1.06\")."
+}

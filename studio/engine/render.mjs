@@ -6,7 +6,6 @@ import path from 'node:path';
 import {spawn, spawnSync} from 'node:child_process';
 import {loadScene, makeRenderer, fitCaptions, preloadImages} from './lib/scene.mjs';
 import {mixTrack, writeWav, SR} from './lib/audio.mjs';
-import {prepareClips} from './lib/tienich.mjs';
 
 const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const file = args.find(a => a.endsWith('.json')); if (!file) { console.error('usage: node render.mjs scene.json [--from S] [--to S] [--out DIR] [--name NAME]'); process.exit(2); }
@@ -20,7 +19,7 @@ const R = makeRenderer(s), frames = Math.round((to - from) * s.fps), drawFlags =
 const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${s.width}x${s.height}`, '-r', `${s.fps}`, '-i', '-', ...(s.outHeight ? ['-vf', `split[a][b];[a]scale=${s.width}:${s.outHeight}:force_original_aspect_ratio=increase,crop=${s.width}:${s.outHeight},boxblur=60:2,eq=brightness=-0.08:saturation=0.9[bg];[bg][b]overlay=0:${(s.outHeight - s.height) / 2}`] : []), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'medium', tmpV], {stdio: ['pipe', 'inherit', 'inherit']});
 const t0 = Date.now();
 for (let i = 0; i < frames; i++) {
-  const T = from + i / s.fps; await prepareClips(s, T); const r = R.frame(T); drawFlags.push(r.drawing);
+  const T = from + i / s.fps; await R.prepare(T); const r = R.frame(T); drawFlags.push(r.drawing);
   if (!ff.stdin.write(R.cv.data())) await new Promise(res => ff.stdin.once('drain', res));
 }
 ff.stdin.end(); await new Promise(res => ff.on('close', res));

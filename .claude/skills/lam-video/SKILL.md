@@ -76,6 +76,16 @@ Mỗi tin nhắn, Claude đọc lại cả ngữ cảnh từ đầu, nên ngữ 
 ## Mẫu tham khảo
 Người dùng gửi mẫu thì giao `nghien-cuu-mau`. Đạo diễn và chỉ đạo mỹ thuật đọc thẻ trong `studio/references/` của phong cách định dùng.
 
+Phong cách `bds` (Giới thiệu bất động sản, người dùng gửi tọa độ + ảnh dự án): điền `bds.json`, chạy `studio/tools/bds_build.py`, xem mục "Video bất động sản" bên dưới. Mọi video BĐS (`bds`, `bds-tien-ich`) theo skill `video-bds`.
+
+## Video bất động sản (`bds`)
+Người dùng gửi **tọa độ dự án** (lat, lon hoặc link Google Maps), **ảnh dự án** và thông tin. Không có tọa độ thật thì hỏi, không tự tìm rồi đoán: geocoder hay ra dự án khác trùng tên.
+1. Tạo `projects/<slug>/`, chép ảnh vào `photos/`, viết `bds.json` theo `studio/references/vi-tri-ket-noi-bds/bds.example.json`. Tọa độ địa điểm lân cận: người dùng cho, hoặc tra web và đối chiếu tên (Photon bị chặn ở phiên cloud). Mọi số liệu dự án (diện tích, giá, pháp lý, tiện ích) phải do người dùng cung cấp hoặc có trong `sources.md`; không bịa.
+2. Biên kịch viết lời đọc theo thứ tự cảnh (mở đầu → ảnh → từng địa điểm → kết), mỗi địa điểm một câu có km/phút lấy từ `routes.json` (chạy builder một lần trước với `--no-fetch` để có số). Ghi "khoảng", vì phút OSRM là xe chạy lúc đường vắng.
+3. Lồng tiếng như thường. Ghi `"cue"` (số thứ tự cụm phụ đề) vào từng ảnh, địa điểm để cảnh đổi đúng câu.
+4. `python3 studio/tools/bds_build.py projects/<slug>` → `node studio/engine/check_layout.mjs projects/<slug>/scene.json --sheet projects/<slug>/output/check-sheet.png` (0 lỗi) → `node studio/engine/render.mjs projects/<slug>/scene.json`.
+5. Chân video luôn giữ dòng nguồn Esri, OpenStreetMap. Ảnh dự án không phải ảnh thật (phối cảnh, ảnh mẫu) thì đặt `"illustration": true`.
+
 ## App QBK Studio (điện thoại)
 App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/qbk-studio.html`). Người dùng giao việc và duyệt trong app; Nhà sản xuất đọc và ghi cơ sở dữ liệu của app bằng tool `ArtifactData`.
 

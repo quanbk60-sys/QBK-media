@@ -10,7 +10,8 @@ import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo, shade} from './geo.mjs';
-import {GROUND_TYPES, preloadOverlays, preloadClips} from './tienich.mjs';
+import {prepareBds} from './bds.mjs';
+import {GROUND_TYPES, preloadOverlays, preloadClips, prepareClips} from './tienich.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -165,7 +166,7 @@ export function makeRenderer(s) {
     const cam = sampleTrack(camKeys, t, ['zoom', 'x', 'y']);
     const z = cam.zoom ?? 1, cx = cam.x ?? s.width / 2, cy = cam.y ?? s.height / 2;
     ctx.setTransform(z, 0, 0, z, s.width / 2 - cx * z, s.height / 2 - cy * z);
-    let pen = null, drawing = false;
+    let pen = null, drawing = false; s._rects = [];
     const view = sampleView(sh.view, t);
     const tiltDeg = view && sh.tilt ? (typeof sh.tilt === 'number' ? sh.tilt : sampleTrack(sh.tilt, t, ['deg']).deg ?? 0) : 0;
     if (tiltDeg > 0.5) tiltGround(ctx, s, sh, view, t, tiltDeg); // lớp mặt đất chiếu phối cảnh, đặt s._tilt cho phần tử đứng
@@ -240,7 +241,8 @@ export function makeRenderer(s) {
       } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
     return {drawing};
   }
-  return {cv, ctx, frame, events};
+  const prepare = async T => { await prepareBds(s, T); await prepareClips(s, T); };
+  return {cv, ctx, frame, prepare, events};
 }
 
 // Split captions that would wrap into two timed halves at the space nearest the middle (proportional timing).

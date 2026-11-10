@@ -5,6 +5,8 @@ description: Quy trình làm video bất động sản (phong cách bds-tien-ich
 
 # Video bất động sản
 
+Hai phong cách: `bds-tien-ich` (bản đồ tiện ích kiểu CapCut, `lib/tienich.mjs`, mẫu `projects/bds-can-tho/`) và `bds` (giới thiệu dự án có ảnh thật, cảnh quay cầm tay từ ảnh, thẻ thông số, dựng bằng `studio/tools/bds_build.py`, mẫu `projects/gioi-thieu-can-ho/`). Chọn theo tư liệu: có nhiều ảnh căn hộ/nội thất thì `bds`; nặng về vị trí, tiện ích, lô đất thì `bds-tien-ich`; trộn phần tử của cả hai trong một scene được.
+
 Đọc kèm: `studio/lessons.md` (mục BĐS), `.claude/skills/doi-chieu-ve-tinh/SKILL.md`, `studio/engine/SCENE_FORMAT.md` (mục "Phong cách BĐS"). Mẫu đã làm: `projects/bds-can-tho/build_scene.py`.
 
 ## 1. Tinh thần làm việc
@@ -47,7 +49,7 @@ description: Quy trình làm video bất động sản (phong cách bds-tien-ich
 4. Kết nối: đường neon tới 3–4 tiện ích thật (OSRM), nhãn km và phút, `checklist`.
 5. **Kết (bắt buộc): zoom sát vào lô hoặc dự án** (vệ tinh z18, `tilt` 45–52°), **khoanh vùng** bằng `area` phát sáng (đa giác dò trên vệ tinh hoặc từ quy hoạch đã nắn), nhãn diện tích (số của người dùng, hoặc "≈ … m²*" đo ước tính), `cta`.
 - Mỗi cảnh 3–7 s. Chữ trong vùng an toàn (cách mép 40 px, phụ đề và thẻ trong y 1150–1600).
-- Âm thanh: **không dùng tiếng gió vút** (`whoosh`). Chỉ `pop` khi ghim rơi, `tap` khi khung hiện, `chime` ở nút kêu gọi. Nhạc nền chỉ khi có nhạc được phép dùng.
+- Âm thanh: **không dùng tiếng hiệu ứng** (`whoosh`, `pop`… người dùng gọi là "sẹt sẹt", "rẹt rẹt"); không thuyết minh trừ khi người dùng muốn. **Nhạc nền tự sáng tác** bằng `studio/tools/music.py` (xem cách dùng trong file), trộn vào bản dựng.
 
 ## 5. Ghi nguồn và bản quyền
 - `sources.md`: mọi chữ trên hình, mọi con số, mọi ảnh và video (ai giữ bản quyền, tải từ đâu, ngày).
