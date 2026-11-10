@@ -1,0 +1,7 @@
+{"project": {"name": "DỰ ÁN MẪU", "lat": 21.0262, "lon": 105.8490, "note": "vị trí minh họa, không phải dự án thật"},
+ "pois": [
+  {"name": "Nhà hát Lớn Hà Nội", "lat": 21.0242, "lon": 105.8575, "cat": "VĂN HÓA", "icon": "star", "color": "gold"},
+  {"name": "Bệnh viện Việt Đức", "lat": 21.0281, "lon": 105.8464, "cat": "Y TẾ", "icon": "hospital", "color": "ruby"},
+  {"name": "Ga Hà Nội", "lat": 21.0244, "lon": 105.8411, "cat": "KẾT NỐI", "icon": "train", "color": "blue"},
+  {"name": "Chợ Đồng Xuân", "lat": 21.0381, "lon": 105.8497, "cat": "MUA SẮM", "icon": "cart", "color": "green"}
+ ]}

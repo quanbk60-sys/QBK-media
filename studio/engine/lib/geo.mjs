@@ -9,12 +9,12 @@ import {clamp, ease, backOut, sampleTrack, rng} from './math.mjs';
 
 export const ORANGE = '#FF8A1F', WHITE = '#FFFFFF', DARK = '#111418';
 export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade'];
-const col = c => ({orange: ORANGE, white: WHITE, dark: DARK, blue: '#3FB6FF', red: '#E5484D', yellow: '#FFD23F', green: '#46C46B'}[c] || c || ORANGE);
-const F = {black: 'QBKBlack', italic: 'QBKItalic', bold: 'QBKBold'};
+export const col = c => ({orange: ORANGE, white: WHITE, dark: DARK, blue: '#3FB6FF', red: '#E5484D', yellow: '#FFD23F', green: '#46C46B'}[c] || c || ORANGE);
+export const F = {black: 'QBKBlack', italic: 'QBKItalic', bold: 'QBKBold'};
 
 // ---------- Web Mercator ----------
 export const merc = (lat, lon) => { const s = Math.sin(clamp(lat, -85.05, 85.05) * Math.PI / 180); return [(lon + 180) / 360, 0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)]; };
-const worldPx = z => 256 * 2 ** z;
+export const worldPx = z => 256 * 2 ** z;
 
 // view track: [{t, lat, lon, zoom, ease}] → {c:[mx,my], zoom, lat}
 // Zoom flights keep the destination (zoom-in) or origin (zoom-out) point moving smoothly on screen.
@@ -30,7 +30,12 @@ export function sampleView(keys, t) {
   else c = [a.m[0] + (b.m[0] - a.m[0]) * e, a.m[1] + (b.m[1] - a.m[1]) * e];
   return {c, zoom: Z, lat: a.lat + (b.lat - a.lat) * e};
 }
-export const project = (v, s, lat, lon) => { const m = merc(lat, lon), W = worldPx(v.zoom); return [s.width / 2 + (m[0] - v.c[0]) * W, s.height / 2 + (m[1] - v.c[1]) * W]; };
+// s._tilt = {th, D, cx, cy}: camera nghiêng (phong cách bds-tien-ich). Điểm mặt đất (gx, gy quanh tâm view) được chiếu phối cảnh lên màn hình.
+export const tiltPoint = (T, gx, gy) => { const d = T.D - gy * Math.sin(T.th), k = T.D / d; return [T.cx + gx * k, T.cy + gy * Math.cos(T.th) * k, k]; };
+export const project = (v, s, lat, lon) => { const m = merc(lat, lon), W = worldPx(v.zoom), gx = (m[0] - v.c[0]) * W, gy = (m[1] - v.c[1]) * W;
+  if (s._tilt) return tiltPoint(s._tilt, gx, gy); return [s.width / 2 + gx, s.height / 2 + gy]; };
+// mét trên mỗi pixel ở vĩ độ lat, mức zoom z (256 px/ô)
+export const mpp = (lat, z) => 156543.03392 * Math.cos(lat * Math.PI / 180) / 2 ** z;
 
 // ---------- assets ----------
 const cache = new Map();
@@ -44,7 +49,7 @@ async function loadSat(s) {
 export async function preloadGeo(s) {
   s._sat = await loadSat(s);
   s._photos = new Map();
-  for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'photo' && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
+  for (const sh of s.shots) for (const e of sh.elements || []) if ((e.type === 'photo' || (e.type === 'pcard' && e.path)) && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
   if (s.shots.some(sh => (sh.elements || []).some(e => e.type === 'globe'))) {
     const w = s._sat?.levels.filter(l => l.world).at(-1); if (!w) throw new Error('globe cần một mức "world" trong satmap.json (satmap.py --level 4:world)');
     const cv = createCanvas(w.w, w.h), c = cv.getContext('2d'); c.drawImage(w.img, 0, 0);
@@ -54,22 +59,22 @@ export async function preloadGeo(s) {
 export function validateGeo(s, e, where, err) {
   if (!GEO_TYPES.includes(e.type)) return false;
   if (['satmap', 'globe'].includes(e.type) && !s.satmap) err(`${where}: scene cần "satmap": "đường/dẫn/satmap.json"`);
-  if (e.type === 'photo' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
+  if ((e.type === 'photo' || (e.type === 'pcard' && e.path)) && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
   if (e.type === 'route' && !(e.path?.length >= 2)) err(`${where}: route cần path [[lat,lon],...]`);
   return true;
 }
 
 // ---------- helpers ----------
-const local = (e, t) => t - (e.from ?? 0);
-function grow(e, t) { const g = e.grow; if (!g) return 1; return clamp((local(e, t) - (g.at ?? 0)) / (g.dur ?? 1)); }
-function fadeA(e, t) { let a = e.alpha ?? 1; const k = local(e, t); if (e.enter !== 'none') a *= clamp(k / (e.enterDur ?? 0.35)); if (e.to !== undefined && e.exit !== 'none') a *= clamp((e.to - t) / 0.3); const tr = sampleTrack(e.track, t, ['alpha']); if (tr.alpha !== undefined) a *= tr.alpha; return a; }
-function pos(e, t, s, v) {
+export const local = (e, t) => t - (e.from ?? 0);
+export function grow(e, t) { const g = e.grow; if (!g) return 1; return clamp((local(e, t) - (g.at ?? 0)) / (g.dur ?? 1)); }
+export function fadeA(e, t) { let a = e.alpha ?? 1; const k = local(e, t); if (e.enter !== 'none') a *= clamp(k / (e.enterDur ?? 0.35)); if (e.to !== undefined && e.exit !== 'none') a *= clamp((e.to - t) / 0.3); const tr = sampleTrack(e.track, t, ['alpha']); if (tr.alpha !== undefined) a *= tr.alpha; return a; }
+export function pos(e, t, s, v) {
   const tr = sampleTrack(e.track, t, ['x', 'y']);
   if (e.geo && v) { const [x, y] = project(v, s, e.geo[0], e.geo[1]); return [x + (e.dx || 0), y + (e.dy || 0)]; }
   return [tr.x ?? e.x ?? s.width / 2, tr.y ?? e.y ?? s.height / 2];
 }
-function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
-function fitFont(ctx, text, family, size, maxW) { let sz = size; do { ctx.font = `${sz}px ${family}`; if (ctx.measureText(text).width <= maxW) break; sz -= 2; } while (sz > 20); return sz; }
+export function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+export function fitFont(ctx, text, family, size, maxW) { let sz = size; do { ctx.font = `${sz}px ${family}`; if (ctx.measureText(text).width <= maxW) break; sz -= 2; } while (sz > 20); return sz; }
 
 // ---------- painters ----------
 function satmap(ctx, e, t, s, v) {
@@ -92,7 +97,7 @@ function satmap(ctx, e, t, s, v) {
   ctx.restore();
   if (e.shade !== false) shade(ctx, {}, t, s);
 }
-function shade(ctx, e, t, s) {
+export function shade(ctx, e, t, s) {
   const H = s.height, W = s.width;
   let g = ctx.createLinearGradient(0, 0, 0, 520); g.addColorStop(0, `rgba(0,0,0,${e.top ?? 0.55})`); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, 520);
   g = ctx.createLinearGradient(0, H * 0.55, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.55, `rgba(0,0,0,${(e.bottom ?? 0.7) * 0.75})`); g.addColorStop(1, `rgba(0,0,0,${e.bottom ?? 0.7})`); ctx.fillStyle = g; ctx.fillRect(0, H * 0.55, W, H * 0.45);
@@ -124,12 +129,12 @@ function globe(ctx, e, t, s, v) {
   }
   ctx.putImageData(img, x0, y0);
 }
-function pinShape(ctx, x, y, size, fill) {
+export function pinShape(ctx, x, y, size, fill) {
   const r = 15 * size; ctx.save(); ctx.translate(x, y); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 10;
   ctx.fillStyle = fill; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-r * 0.4, -r * 1.2, -r * 1.25, -r * 1.55, -r * 1.25, -r * 2.35); ctx.arc(0, -r * 2.35, r * 1.25, Math.PI, 0); ctx.bezierCurveTo(r * 1.25, -r * 1.55, r * 0.4, -r * 1.2, 0, 0); ctx.fill();
   ctx.shadowBlur = 0; ctx.fillStyle = DARK; ctx.beginPath(); ctx.arc(0, -r * 2.35, r * 0.48, 0, Math.PI * 2); ctx.fill(); ctx.restore();
 }
-function tagBox(ctx, x, y, text, o = {}) {
+export function tagBox(ctx, x, y, text, o = {}) {
   const size = o.size ?? 30; ctx.font = `${size}px ${F.black}`; const tw = ctx.measureText(text).width, padX = size * 0.45, ic = o.icon ? size * 0.9 : 0, w = tw + padX * 2 + ic, h = size * 1.55;
   const bx = Math.max(24, Math.min(1080 - 24 - w, o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2)), by = y - h / 2;
   ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 12; ctx.fillStyle = o.bg ? col(o.bg) : WHITE; rr(ctx, bx, by, w, h, 6); ctx.fill(); ctx.shadowBlur = 0;
@@ -146,8 +151,8 @@ function marker(ctx, e, t, s, v) {
   ctx.restore();
 }
 function tag(ctx, e, t, s, v) { const [x, y] = pos(e, t, s, v); ctx.save(); ctx.globalAlpha = fadeA(e, t); const k = backOut(clamp(local(e, t) / 0.4)); ctx.translate(x, y); ctx.scale(0.7 + 0.3 * k, 0.7 + 0.3 * k); ctx.translate(-x, -y); tagBox(ctx, x, y, e.text, {size: e.size, icon: e.icon, bg: e.bg, color: e.color, align: e.align}); ctx.restore(); }
-function polyline(e, s, v) { return e.path.map(p => project(v, s, p[0], p[1])); }
-function partial(pts, p) {
+export function polyline(e, s, v) { return e.path.map(p => project(v, s, p[0], p[1])); }
+export function partial(pts, p) {
   const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
   const target = L.at(-1) * p, out = [pts[0]]; let ang = 0;
   for (let i = 1; i < pts.length; i++) { if (L[i] <= target) { out.push(pts[i]); ang = Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]); continue; }
@@ -159,16 +164,34 @@ function route(ctx, e, t, s, v) {
   const p = grow(e, t); if (p <= 0) return; const {pts: P, ang} = partial(pts, p), c = col(e.color), w = e.width ?? 9;
   ctx.save(); ctx.globalAlpha = fadeA({...e, enter: e.enter ?? 'none'}, t); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   if (e.dashed) ctx.setLineDash([w * 2.2, w * 1.6]);
-  if (e.glow !== false) { ctx.strokeStyle = c; ctx.globalAlpha *= 0.35; ctx.lineWidth = w * 2.6; ctx.shadowColor = c; ctx.shadowBlur = 18; line(ctx, P); ctx.globalAlpha /= 0.35; ctx.shadowBlur = 0; }
-  ctx.strokeStyle = c; ctx.lineWidth = w; line(ctx, P); ctx.setLineDash([]);
+  if (e.neon) { // đường neon kiểu video BĐS: quầng rộng, thân màu, lõi trắng, vệt sáng chạy dọc
+    const a0 = ctx.globalAlpha; ctx.strokeStyle = c; ctx.shadowColor = c;
+    ctx.globalAlpha = a0 * 0.22; ctx.lineWidth = w * 4.2; ctx.shadowBlur = 40; line(ctx, P);
+    ctx.globalAlpha = a0 * 0.5; ctx.lineWidth = w * 2.2; ctx.shadowBlur = 22; line(ctx, P);
+    ctx.globalAlpha = a0; ctx.lineWidth = w; ctx.shadowBlur = 12; line(ctx, P); ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = Math.max(2, w * 0.32); line(ctx, P);
+    if (e.flow !== false && !e.dashed) { const L = P.reduce((s2, q, i) => i ? s2 + Math.hypot(q[0] - P[i - 1][0], q[1] - P[i - 1][1]) : 0, 0), seg = Math.max(60, L * 0.12);
+      ctx.setLineDash([seg, Math.max(seg * 3, L)]); ctx.lineDashOffset = -((local(e, t) * (e.flowSpeed ?? 420)) % (seg + Math.max(seg * 3, L)));
+      ctx.strokeStyle = '#FFFFFF'; ctx.globalAlpha = a0 * 0.9; ctx.lineWidth = w * 0.9; ctx.shadowColor = '#FFFFFF'; ctx.shadowBlur = 16; line(ctx, P); ctx.shadowBlur = 0; ctx.globalAlpha = a0; }
+  } else {
+    if (e.glow !== false) { ctx.strokeStyle = c; ctx.globalAlpha *= 0.35; ctx.lineWidth = w * 2.6; ctx.shadowColor = c; ctx.shadowBlur = 18; line(ctx, P); ctx.globalAlpha /= 0.35; ctx.shadowBlur = 0; }
+    ctx.strokeStyle = c; ctx.lineWidth = w; line(ctx, P);
+  }
+  ctx.setLineDash([]);
   const [hx, hy] = P.at(-1);
   if (e.head === 'arrow' && p > 0.02) { ctx.fillStyle = c; ctx.translate(hx, hy); ctx.rotate(ang); ctx.beginPath(); ctx.moveTo(w * 2.6, 0); ctx.lineTo(-w * 1.4, -w * 2); ctx.lineTo(-w * 0.6, 0); ctx.lineTo(-w * 1.4, w * 2); ctx.closePath(); ctx.fill(); }
   else if (e.head === 'dot' && p > 0.02) { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(hx, hy, w * 1.1, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(hx, hy, w * 0.65, 0, Math.PI * 2); ctx.fill(); }
   ctx.restore();
+  if (e.name && p > 0.5) { // tên đường viết dọc theo đường (như sơn trên mặt đường)
+    const i = Math.max(1, Math.min(pts.length - 2, Math.floor(pts.length * (e.nameAt ?? 0.5)))), q0 = pts[i - 1], q1 = pts[i + 1];
+    let ang = Math.atan2(q1[1] - q0[1], q1[0] - q0[0]); if (ang > Math.PI / 2) ang -= Math.PI; if (ang < -Math.PI / 2) ang += Math.PI;
+    ctx.save(); ctx.globalAlpha = clamp((p - 0.5) / 0.3) * fadeA(e, t); ctx.translate(pts[i][0], pts[i][1]); ctx.rotate(ang); ctx.translate(0, -(e.nameOffset ?? w * 2.6));
+    const txt = e.name.toUpperCase(); ctx.font = `${e.nameSize ?? 38}px ${F.black}`; ctx.letterSpacing = '3px'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round'; ctx.lineWidth = 8; ctx.strokeStyle = 'rgba(0,0,0,.65)'; ctx.strokeText(txt, 0, 0); ctx.shadowColor = c; ctx.shadowBlur = 14; ctx.fillStyle = e.nameColor ? col(e.nameColor) : WHITE; ctx.fillText(txt, 0, 0); ctx.restore(); }
   if (e.label && p > 0.6) { ctx.save(); ctx.globalAlpha = clamp((p - 0.6) / 0.25) * fadeA(e, t); const m = pts[Math.floor(pts.length * (e.labelAt ?? 0.5))]; tagBox(ctx, m[0] + (e.labelDx ?? 0), m[1] + (e.labelDy ?? 0), e.label, {size: e.labelSize ?? 26, bg: e.labelBg ?? e.color, color: e.labelColor ?? (e.color === 'white' ? 'dark' : 'white')}); ctx.restore(); }
 }
-function line(ctx, P) { ctx.beginPath(); P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.stroke(); }
-function chaikin(P) { if (P.length < 3) return P; const o = [P[0]]; for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1]; o.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25], [a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]); } o.push(P.at(-1)); return o; }
+export function line(ctx, P) { ctx.beginPath(); P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.stroke(); }
+export function chaikin(P) { if (P.length < 3) return P; const o = [P[0]]; for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1]; o.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25], [a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]); } o.push(P.at(-1)); return o; }
 function area(ctx, e, t, s, v) {
   if (!v) return; const P = chaikin(polyline(e, s, v)), c = col(e.color), a = fadeA(e, t), pulse = e.pulse ? 0.75 + 0.25 * Math.sin(local(e, t) * 4) : 1;
   ctx.save(); ctx.globalAlpha = a * (e.fillAlpha ?? 0.28) * pulse; ctx.fillStyle = c; ctx.beginPath(); P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fill();
@@ -210,7 +233,7 @@ function photo(ctx, e, t, s) {
   if (e.caption) { ctx.restore(); ctx.save(); ctx.globalAlpha = a * clamp((k - 0.35) / 0.3); tagBox(ctx, x - W / 2 + (e.captionDx ?? 0), y + H / 2 - 30, e.caption, {align: 'left', size: 26}); }
   ctx.restore();
 }
-const ICONS = {
+export const ICONS = {
   calendar: c => { c.strokeRect(-14, -11, 28, 25); c.beginPath(); c.moveTo(-14, -3); c.lineTo(14, -3); c.moveTo(-7, -16); c.lineTo(-7, -8); c.moveTo(7, -16); c.lineTo(7, -8); c.stroke(); },
   ship: c => { c.beginPath(); c.moveTo(-17, 4); c.lineTo(17, 4); c.lineTo(11, 13); c.lineTo(-11, 13); c.closePath(); c.fill(); c.beginPath(); c.moveTo(0, 2); c.lineTo(0, -17); c.lineTo(12, 0); c.closePath(); c.fill(); },
   stake: c => { for (const dx of [-11, 0, 11]) { c.beginPath(); c.moveTo(dx - 4, 14); c.lineTo(dx - 4, -6); c.lineTo(dx, -16); c.lineTo(dx + 4, -6); c.lineTo(dx + 4, 14); c.closePath(); c.fill(); } },
@@ -252,5 +275,5 @@ function clouds(ctx, e, t, s) {
 function note(ctx, e, t, s) { ctx.save(); ctx.globalAlpha = fadeA(e, t) * 0.85; ctx.font = `${e.size ?? 22}px ${F.bold}`; ctx.fillStyle = '#D5D9DF'; ctx.textAlign = e.align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(e.text, e.x ?? 66, e.y ?? 1330); ctx.restore(); }
 export function credit(ctx, s, text, y = 120, align = 'right') { ctx.save(); ctx.font = `18px ${F.bold}`; ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(text, align === 'right' ? s.width - 40 : 40, y); ctx.restore(); }
 
-const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade};
+export const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade};
 export function drawGeo(ctx, e, t, s, v, shotDur) { e._shotDur = shotDur; PAINT[e.type](ctx, e, t, s, v); }

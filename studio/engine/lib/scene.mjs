@@ -9,7 +9,8 @@ import {PROPS} from './props.mjs';
 import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
-import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
+import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo, shade} from './geo.mjs';
+import {GROUND_TYPES} from './tienich.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -111,6 +112,46 @@ function recordElement(s, e, t, sceneT) {
   return R;
 }
 
+// Camera nghiêng (phong cách bds-tien-ich, học từ skill map-location-video): vẽ phần tử mặt đất lên canvas phụ lớn hơn khung,
+// rồi chiếu phối cảnh từng dải ngang. Phần tử đứng (ghim, nhãn, khối 3D) dùng s._tilt trong project() để bám đúng chỗ.
+const groundCanvases = new Map();
+function tiltGround(ctx, s, sh, view, t, deg) {
+  const W = s.width, H = s.height, th = deg * Math.PI / 180, sn = Math.sin(th), cs = Math.cos(th), D = s.tiltDistance ?? H * 1.6, cx = W / 2, cy = sh.tiltY ?? H * 0.5;
+  const f = yp => yp * D / (cs * D + yp * sn), gyTop = f(-cy), gyBot = f(H - cy), scTop = D / (D - gyTop * sn);
+  const SW = Math.ceil(W / scTop / 64) * 64 + 64, SH = Math.ceil(Math.max(-gyTop, gyBot) / 32) * 64 + 64, key = `${SW}x${SH}`;
+  if (!groundCanvases.has(key)) { if (groundCanvases.size > 6) groundCanvases.clear(); const c = createCanvas(SW, SH); groundCanvases.set(key, c); }
+  const gcv = groundCanvases.get(key), g = gcv.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#05080C'; g.fillRect(0, 0, SW, SH);
+  const sG = Object.create(s); sG.width = SW; sG.height = SH; sG._tilt = null;
+  let shadeTop = false;
+  for (const e of sh.elements || []) {
+    if (!GROUND_TYPES.has(e.type) || t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
+    const e2 = e.type === 'satmap' ? (shadeTop = e.shade !== false, {...e, shade: false}) : e;
+    g.save(); drawGeo(g, e2, t, sG, view, sh.end - sh.start); g.restore();
+  }
+  // chiếu từng hàng điểm ảnh (nội suy song tuyến); drawImage từ canvas phụ trong napi-rs quá chậm
+  const src = g.getImageData(0, 0, SW, SH).data;
+  if (!s._tiltOut || s._tiltOut.width !== W || s._tiltOut.height !== H) s._tiltOut = ctx.createImageData(W, H);
+  const out = s._tiltOut, o = out.data;
+  for (let y = 0; y < H; y++) {
+    const gy = f(y + 0.5 - cy), sc = D / (D - gy * sn), fy = Math.min(SH - 1.001, Math.max(0, SH / 2 + gy - 0.5)), y0 = fy | 0, wy = fy - y0, r0 = y0 * SW, r1 = (y0 + 1) * SW;
+    for (let x = 0, q = y * W * 4; x < W; x++, q += 4) {
+      const fx = Math.min(SW - 1.001, Math.max(0, SW / 2 + (x + 0.5 - cx) / sc - 0.5)), x0 = fx | 0, wx = fx - x0;
+      const p00 = (r0 + x0) * 4, p01 = p00 + 4, p10 = (r1 + x0) * 4, p11 = p10 + 4;
+      const w00 = (1 - wx) * (1 - wy), w01 = wx * (1 - wy), w10 = (1 - wx) * wy, w11 = wx * wy;
+      o[q] = src[p00] * w00 + src[p01] * w01 + src[p10] * w10 + src[p11] * w11;
+      o[q + 1] = src[p00 + 1] * w00 + src[p01 + 1] * w01 + src[p10 + 1] * w10 + src[p11 + 1] * w11;
+      o[q + 2] = src[p00 + 2] * w00 + src[p01 + 2] * w01 + src[p10 + 2] * w10 + src[p11 + 2] * w11;
+      o[q + 3] = 255;
+    }
+  }
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.putImageData(out, 0, 0);
+  // sương mù phía chân trời cho chiều sâu
+  const k = Math.min(1, deg / 40), hz = ctx.createLinearGradient(0, 0, 0, H * 0.32); hz.addColorStop(0, `rgba(185,210,235,${0.42 * k})`); hz.addColorStop(1, 'rgba(185,210,235,0)'); ctx.fillStyle = hz; ctx.fillRect(0, 0, W, H * 0.32);
+  ctx.restore();
+  if (shadeTop) shade(ctx, {top: 0.35}, t, s);
+  s._tilt = {th, D, cx, cy};
+}
+
 export function makeRenderer(s) {
   const cv = createCanvas(s.width, s.height), ctx = cv.getContext('2d');
   const events = []; let lastContact = new Map();
@@ -126,8 +167,11 @@ export function makeRenderer(s) {
     ctx.setTransform(z, 0, 0, z, s.width / 2 - cx * z, s.height / 2 - cy * z);
     let pen = null, drawing = false;
     const view = sampleView(sh.view, t);
+    const tiltDeg = view && sh.tilt ? (typeof sh.tilt === 'number' ? sh.tilt : sampleTrack(sh.tilt, t, ['deg']).deg ?? 0) : 0;
+    if (tiltDeg > 0.5) tiltGround(ctx, s, sh, view, t, tiltDeg); // lớp mặt đất chiếu phối cảnh, đặt s._tilt cho phần tử đứng
     for (const [idx, e] of (sh.elements || []).entries()) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
+      if (s._tilt && GROUND_TYPES.has(e.type)) continue;
       if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
       if (e.geo) { e._view = view; e._s = s; }
       if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
@@ -150,6 +194,7 @@ export function makeRenderer(s) {
       if (['walk', 'run', 'crawl', 'sprint'].includes(R._cycle)) { const c = Math.sign(R._contact || 0), p = lastContact.get(key); if (p !== undefined && c !== p && c !== 0) events.push({t: T, kind: 'step', gain: R._cycle === 'crawl' ? 0.25 : 0.35}); lastContact.set(key, c); }
       if (R._cycle === 'hammer') { const c = Math.sign(R._impact || 0), p = lastContact.get(key); if (p === 1 && c === -1) events.push({t: T, kind: 'hammer', gain: 0.4}); lastContact.set(key, c); }
     }
+    s._tilt = null;
     if (pen) { const [px, py] = ctx.getTransform().transformPoint ? [ctx.getTransform().a * pen[0] + ctx.getTransform().e, ctx.getTransform().d * pen[1] + ctx.getTransform().f] : pen; drawHand(ctx, pen[0], pen[1], T, 1, py > s.captionStyle.y - 470); }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     paintOverlay(ctx, ST, s.width, s.height, fno);

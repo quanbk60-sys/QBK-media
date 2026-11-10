@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `bds-tien-ich` (bất động sản: vệ tinh nghiêng 3D, ghim kim loại có icon, đường neon, khối 3D lô đất; mục "Phong cách BĐS") | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -171,6 +171,29 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
+
+## Phong cách BĐS bản đồ tiện ích (`bds-tien-ich`, `lib/tienich.mjs` + `lib/geo.mjs`)
+Bản đồ vị trí và tiện ích dự án trên ảnh vệ tinh. Dùng được **mọi phần tử của `ve-tinh`** (satmap, view, route, title, photo…) cộng các phần tử dưới đây (các phần tử này cũng dùng được trong `ve-tinh`). Thẻ: `studio/references/bds-ban-do-tien-ich/card.md`, `bds-ban-do-ha-tang/card.md`. Demo: `projects/_mau-bds-tien-ich/` (`build_scene.py`).
+
+- Tuyến đường thật: `python3 studio/tools/osrm.py pois.json routes.json` → mỗi địa điểm có `km`, `min`, `path` (dán vào `route`). Ghi "ước tính" và "© OpenStreetMap".
+- **Camera nghiêng 3D:** shot có `"tilt": 40` hoặc `"tilt": [{"t": 0, "deg": 10}, {"t": 3, "deg": 40}]`, `tiltY` (hàng điểm trục, mặc định giữa khung). Ảnh vệ tinh, `route`, `area`, `dots`, `rings` nằm trên mặt đất và được chiếu phối cảnh; ghim, nhãn, khối 3D đứng thẳng và bám đúng chỗ. Có sương chân trời. Ảnh vệ tinh phải phủ rộng hơn khung: ở 40°, mức Z phủ được view zoom z khi cao ≥ 3400·2^(Z−z) và rộng ≥ 1500·2^(Z−z) px (xem `projects/_mau-bds-tien-ich/fetch_sat.sh`). Khoảng 0,7 s máy cho mỗi khung.
+
+| Phần tử (`type`) | Thuộc tính |
+|---|---|
+| `route` (thêm) | `neon: true` (quầng + lõi trắng + vệt sáng chạy, `flow: false` tắt, `flowSpeed`), `name` (tên đường viết dọc theo đường), `nameAt` 0..1, `nameSize`, `nameColor`, `nameOffset` |
+| `poi` | ghim kim loại có icon: `geo`, `icon`, `color` (gold, blue, ruby, green, purple, teal, orange, silver), `label`, `sub` (dòng phụ trắng, ví dụ "cách dự án 0,5 km"), `side` (0 trên, 1 phải, -1 trái, `"below"` dưới chân ghim), `size`, `labelSize`, `labelColor`, `pulse: false`, `instant: true` (hiện sẵn, không rơi) |
+| `project` | ghim dự án + vòng radar + hộp tên trắng chữ xanh than: `geo`, `label`, `sub`, `icon` (home), `color` (gold), `size` |
+| `rings` | vòng bán kính nét đứt theo km thật: `geo`, `km` [1, 3, 5], `color`, `stagger`, `labelAngle` |
+| `block` | khối 3D lô đất/tòa nhà: `path` [[lat,lon]…] hoặc `geo` + `size` [rộng m, sâu m] + `rot` (độ); `height` (px), `color` (blue), `label` ("200 m²"), `dims` (chữ vạch kích thước cạnh trước), `grow` |
+| `pcard` | thẻ ảnh nhỏ có dải tên + đường nét đứt về điểm: `geo` (điểm neo), `path` (ảnh, cần `credit`) hoặc `icon`, `label`, `color`, `w`, `ratio`, `cdx`, `cdy` (vị trí đáy thẻ so với điểm, mặc định 0, −110) |
+| `info` | thẻ dưới: `cat` (chip), `name`, `km`, `min`, `icon`, `color`, `y` |
+| `checklist` | tiêu đề viên thuốc đỏ cam + dòng trắng tích xanh: `title`, `items` [chuỗi], `x`, `y`, `w`, `stagger` |
+| `legend` | chú giải: `items` [{`color`, `text`}], `cols` (2), `y`, `w` |
+| `chapter` | tiêu đề chương chữ vàng kim viền tối: `text`, `sub`, `y` (290), `size` (86), `color` |
+| `cta` | nút kêu gọi: `text` ("BÌNH LUẬN:"), `key` (viên đỏ, ví dụ "SKILL"), `y` |
+
+Icon (`poi`, `info`, `pcard`): home, school, cart, hospital, food, plane, train, bus, park, mall, bank, building, coffee, bridge, road, water, stadium, star, gov, clock.
+Vùng an toàn: chữ và nhãn cách mép trái phải 40 px (tự né). Phụ đề nên đặt `captions.y` = 1500; giữ thẻ `info`, `checklist`, `cta` trong khoảng y 1180–1440.
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).
