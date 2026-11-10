@@ -208,8 +208,9 @@ function bdsFooter(ctx, e, t, s) {
 // move: {push, pan, tilt, vp:[x,y], shake}. Không có bản đồ chiều sâu thật: coi điểm tụ vp (cửa, cuối phòng) là xa nhất,
 // càng ra mép càng gần. Máy tiến (push) thì vật gần phóng to nhanh hơn vật xa; lia (pan/tilt) thì vật gần trôi nhiều hơn.
 // Ánh xạ ngược từng điểm ảnh, không gập ảnh khi push ≤ 0,35. Ảnh nguồn cắt sẵn rộng hơn khung để lia không lộ mép.
-function cameraShot(e, A, W, H, u, tl) {
+function cameraShot(e, A, W, H, u, tl, s) {
   const m = e.move, push = m.push ?? 0.18, pan = m.pan ?? 0, tilt = m.tilt ?? 0, vp = m.vp || e.focus || [0.5, 0.45];
+  const key = [e.path, push, pan, tilt, vp, e.focus].join('|'); s._camCache ||= new Map(); if (!e._cam && s._camCache.has(key)) e._cam = s._camCache.get(key);
   if (!e._cam) {
     const im = A.im, need = 1 + Math.abs(pan) + 0.06, needV = 1 + Math.abs(tilt) + 0.06;
     const sc = Math.max(W * need / im.width, H * needV / im.height), sw = Math.round(Math.min(im.width * sc, W * Math.max(need, needV) * 2.2)), sh = Math.round(Math.min(im.height * sc, H * Math.max(need, needV) * 2.2));
@@ -217,14 +218,14 @@ function cameraShot(e, A, W, H, u, tl) {
     const f = e.focus || [0.5, 0.5], dw = im.width * sc, dh = im.height * sc; x.drawImage(im, (sw - dw) * f[0], (sh - dh) * f[1], dw, dh);
     const near = new Float32Array(W * H), vx = vp[0] * W, vy = vp[1] * H, R = Math.hypot(Math.max(vx, W - vx), Math.max(vy, H - vy));
     for (let y = 0; y < H; y++) for (let xx = 0; xx < W; xx++) near[y * W + xx] = Math.pow(Math.min(1, Math.hypot(xx - vx, (y - vy) * 0.8) / R), 1.15);
-    e._cam = {src: x.getImageData(0, 0, sw, sh).data, sw, sh, near, out: createCanvas(W, H)};
+    e._cam = {src: x.getImageData(0, 0, sw, sh).data, sw, sh, near, out: createCanvas(W, H)}; s._camCache.set(key, e._cam);
   }
   const C = e._cam, ctx = C.out.getContext('2d'), img = ctx.createImageData(W, H), o = img.data, S = C.src, sw = C.sw, sh = C.sh;
-  const q = ease(u), a = push * q, base = Math.min(sw / (W * (1 + Math.abs(pan) + 0.06)), sh / (H * (1 + Math.abs(tilt) + 0.06))), vx = vp[0] * W, vy = vp[1] * H;
+  const q = m.ease === 'linear' ? Math.min(u, 1.3) : ease(clamp(u)), dz = m.dive ? 1 + (m.dive - 1) * (1 - ease(clamp(tl / (m.diveDur ?? 1.2)))) : 1, a = push * q, base = Math.min(sw / (W * (1 + Math.abs(pan) + 0.06)), sh / (H * (1 + Math.abs(tilt) + 0.06))), vx = vp[0] * W, vy = vp[1] * H;
   const shk = m.shake ?? 1, jx = shk * (Math.sin(tl * 1.7) * 2.2 + Math.sin(tl * 3.1 + 1) * 1.1), jy = shk * (Math.sin(tl * 1.3 + 2) * 1.8 + Math.sin(tl * 2.7) * 0.9);
   const px = pan * (q - 0.5) * W, py = tilt * (q - 0.5) * H, cx = sw / 2, cy = sh / 2;
   for (let y = 0, q4 = 0; y < H; y++) for (let x = 0; x < W; x++, q4 += 4) {
-    const n = C.near[y * W + x], z = 1 + a * (0.3 + 0.7 * n), par = 0.35 + 0.65 * n;
+    const n = C.near[y * W + x], z = (1 + a * (0.3 + 0.7 * n)) * dz, par = 0.35 + 0.65 * n;
     const dx = vx + (x - vx) / z - px * par + jx, dy = vy + (y - vy) / z - py * par + jy;
     let fx = cx + (dx - W / 2) * base, fy = cy + (dy - H / 2) * base;
     fx = fx < 0 ? 0 : fx > sw - 1.001 ? sw - 1.001 : fx; fy = fy < 0 ? 0 : fy > sh - 1.001 ? sh - 1.001 : fy;
@@ -242,11 +243,11 @@ function cameraShot(e, A, W, H, u, tl) {
 function bdsPhoto(ctx, e, t, s) {
   const A = s._bdsImg?.get(e.path); if (!A) return; const {im, blur} = A, W = s.width, H = s.height, k = K(s), dur = e.to ?? e._shotDur ?? 4, u = clamp(local(e, t) / Math.max(0.1, dur));
   const z = (e.zoom?.[0] ?? 1) + ((e.zoom?.[1] ?? 1.1) - (e.zoom?.[0] ?? 1)) * u, f0 = e.focus || [0.5, 0.5], f1 = e.focusTo || f0, fx = f0[0] + (f1[0] - f0[0]) * u, fy = f0[1] + (f1[1] - f0[1]) * u;
-  const a = clamp(local(e, t) / (e.enterDur ?? 0.35)) * (e.alpha ?? 1);
+  const a = (e.enterDur === 0 ? 1 : clamp(local(e, t) / (e.enterDur ?? 0.35))) * (e.alpha ?? 1) * (e.fadeOut && e.to !== undefined ? 1 - ease(clamp((t - (e.to - e.fadeOut)) / e.fadeOut)) : 1);
   ctx.save(); ctx.globalAlpha = a; ctx.imageSmoothingQuality = 'high';
   const cover = (img, bx, by, bw, bh, zz) => { const sc = Math.max(bw / img.width, bh / img.height) * zz, w = img.width * sc, h = img.height * sc; ctx.drawImage(img, bx + (bw - w) * fx, by + (bh - h) * fy, w, h); };
   const mode = e.mode || (im.width > im.height * 1.05 ? 'card' : 'cover');
-  if (mode === 'cover' && e.move) ctx.drawImage(cameraShot(e, A, W, H, u, local(e, t)), 0, 0);
+  if (mode === 'cover' && e.move) ctx.drawImage(cameraShot(e, A, W, H, local(e, t) / Math.max(0.1, e.dur ?? dur), local(e, t), s), 0, 0);
   else if (mode === 'cover') cover(im, 0, 0, W, H, z);
   else {
     cover(blur, 0, 0, W, H, 1.15); ctx.fillStyle = 'rgba(5,9,20,.45)'; ctx.fillRect(0, 0, W, H);
@@ -255,6 +256,7 @@ function bdsPhoto(ctx, e, t, s) {
     ctx.save(); ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 22); ctx.clip(); cover(im, bx, by, bw, bh, z); ctx.restore();
     ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 22); ctx.strokeStyle = mg(ctx, 'gold', by, by + bh); ctx.lineWidth = 4; ctx.stroke();
   }
+  if (e.overlay === false) { ctx.restore(); return; }
   if (e.dim !== 0) { ctx.fillStyle = `rgba(0,0,0,${e.dim ?? 0.12})`; ctx.fillRect(0, 0, W, H); }
   let g = ctx.createLinearGradient(0, 0, 0, 420); g.addColorStop(0, 'rgba(3,6,16,.75)'); g.addColorStop(1, 'rgba(3,6,16,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, 420);
   g = ctx.createLinearGradient(0, H * 0.55, 0, H); g.addColorStop(0, 'rgba(3,6,16,0)'); g.addColorStop(1, 'rgba(3,6,16,.88)'); ctx.fillStyle = g; ctx.fillRect(0, H * 0.55, W, H * 0.45);

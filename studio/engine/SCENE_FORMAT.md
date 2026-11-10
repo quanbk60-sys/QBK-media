@@ -174,7 +174,7 @@ Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 
 
 ## Phong cách BĐS (`bds`, `lib/bds.mjs`)
 Video giới thiệu bất động sản: mở đầu trên ảnh vệ tinh → ảnh thật của dự án (thông số, tiện ích) → từng địa điểm lân cận có tuyến đường, km, phút → thẻ kêu gọi. Phần vị trí học từ skill `map-location-video` (thẻ `studio/references/vi-tri-ket-noi-bds/card.md`).
-**Không viết tay scene này**: điền `projects/<slug>/bds.json` (mẫu `studio/references/vi-tri-ket-noi-bds/bds.example.json`) rồi chạy `python3 studio/tools/bds_build.py projects/<slug>`. Builder lấy tuyến OSRM, tính zoom, tải ảnh vệ tinh, viết `scene.json`. Kiểm tra: `node studio/engine/check_layout.mjs scene.json --sheet sheet.png` (phải 0 lỗi).
+Builder: `order` thêm `descend` (bay xuống sát mái tòa nhà: `descendZoom`, `descendTilt`); ảnh đầu sau bản đồ tự lao vào; `"walk": {"xfade": 0.8}` nối các ảnh liền một mạch. **Không viết tay scene này**: điền `projects/<slug>/bds.json` (mẫu `studio/references/vi-tri-ket-noi-bds/bds.example.json`) rồi chạy `python3 studio/tools/bds_build.py projects/<slug>`. Builder lấy tuyến OSRM, tính zoom, tải ảnh vệ tinh, viết `scene.json`. Kiểm tra: `node studio/engine/check_layout.mjs scene.json --sheet sheet.png` (phải 0 lỗi).
 
 - `view` nhận thêm `tilt` (độ, 0 = nhìn thẳng). Có `tilt` thì `satmap` nghiêng 3D (tâm khung luôn là tâm view) và mọi phần tử `geo` chiếu theo phối cảnh. Dùng được cho cả `ve-tinh`.
 - Scene đặt `"credit": ""` để tắt dòng Esri góc trên; nguồn nằm trong `bdsFooter`.
@@ -190,7 +190,7 @@ Video giới thiệu bất động sản: mở đầu trên ảnh vệ tinh → 
 | `bdsHeadline` | chữ mở đầu: `lines` [dòng trắng, dòng vàng], `sub`, `y` |
 | `bdsOutro` | thẻ kết: `name`, `tagline`, `cta` (nút vàng), `note` |
 | `bdsFooter` | chân: `text`, `credit` |
-| `bdsPhoto` | ảnh dự án: `path`, `mode` (`cover` phủ kín; `card` ảnh nguyên trong khung viền vàng trên nền mờ; mặc định ảnh ngang → `card`), `zoom` [1, 1.1], `focus`, `focusTo`, `dim`, `bottom` (đáy khung `card`), `illustration` (true hoặc chữ: ghi "Ảnh minh họa"), `move` {`push` 0..0,35 (máy tiến), `pan`/`tilt` (lia, tỉ lệ khung), `vp` [x,y] điểm tụ xa nhất, `shake`}: biến ảnh tĩnh thành cảnh quay (vật gần trôi nhanh hơn vật xa), chỉ ở `mode: cover` |
+| `bdsPhoto` | ảnh dự án: `path`, `mode` (`cover` phủ kín; `card` ảnh nguyên trong khung viền vàng trên nền mờ; mặc định ảnh ngang → `card`), `zoom` [1, 1.1], `focus`, `focusTo`, `dim`, `bottom` (đáy khung `card`), `illustration` (true hoặc chữ: ghi "Ảnh minh họa"), `move` {`push` 0..0,35 (máy tiến), `pan`/`tilt` (lia, tỉ lệ khung), `vp` [x,y] điểm tụ xa nhất, `shake`, `ease: "linear"` (đi đều như đi bộ), `dive`/`diveDur` (lao vào từ bản đồ)}: biến ảnh tĩnh thành cảnh quay (vật gần trôi nhanh hơn vật xa), chỉ ở `mode: cover` |
 | `bdsCaption` | `kicker` (nhãn kim loại), `title`, `sub`, `sty`, `y` (neo đáy) |
 | `bdsSpecs` | thẻ thông số: `title`, `items` [{`icon`, `label`, `value`}], `y` (đáy). Icon: area, bed, bath, money, key, doc, building, compass, car, calendar, pool, pin, star |
 | `bdsChips` | chip tiện ích: `items` [chữ…], `y` (đáy), `sty` |

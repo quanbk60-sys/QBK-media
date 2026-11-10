@@ -28,7 +28,7 @@ OUT_TOP = CARD_B - 176 * K
 TILT = 40
 CREDIT = 'Ảnh vệ tinh: Esri, Maxar · Đường: © OpenStreetMap · Số liệu ước tính'
 UA = 'QBKStudio/1.0'
-DEF_DUR = {'intro': 3.5, 'photo': 3.2, 'specs': 4.5, 'poi': 5.5, 'outro': 4.0}
+DEF_DUR = {'intro': 3.5, 'photo': 3.2, 'specs': 4.5, 'poi': 5.5, 'outro': 4.0, 'descend': 3.5}
 
 
 def merc(lat, lon):
@@ -141,6 +141,7 @@ def main():
         elif sec == 'photos': plan += [('photo', ph) for ph in photos]
         elif sec == 'map': plan += [('poi', (i, p)) for i, p in enumerate(pois)]
         elif sec == 'outro': plan.append(('outro', cfg))
+        elif sec == 'descend': plan.append(('descend', cfg))
     shots, t, last_view = [], 0.0, {'zoom': z_intro[1], 'tilt': TILT}
     view = lambda *keys: [{'t': round(k[0], 2), 'lat': P['lat'], 'lon': P['lon'], 'zoom': k[1], 'tilt': k[2]} for k in keys]
     for n, (kind, it) in enumerate(plan):
@@ -175,7 +176,22 @@ def main():
             if 'y' in ph: els[0]['y'] = ph['y']
             if any(k in ph for k in ('kicker', 'title', 'sub')): els.append(cap)
             els.append(footer)
-            sh.update(elements=els, transition='fade', transitionDur=0.35, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.22}])
+            prev = plan[n - 1][0] if n else None
+            walk = cfg.get('walk'); xf = (walk or {}).get('xfade', 0.7)
+            if prev in ('intro', 'descend', 'poi') and ph.get('move'):  # bay từ bản đồ lao vào phòng
+                zd = last_view['zoom']; dd = ph.get('diveDur', 1.3)
+                els = MAP[:1] + [{'type': 'bdsShade', 'to': dd}] + els
+                els[0] = {**els[0], 'to': dd}
+                els[2]['move'] = {**ph['move'], 'dive': ph.get('dive', 2.2), 'diveDur': dd}; els[2]['enterDur'] = dd * 0.85
+                sh.update(view=view((0, zd, last_view['tilt']), (dd, min(20.5, zd + 1.6), last_view['tilt'])), elements=els, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.4}])
+            elif walk and prev == 'photo' and ph.get('move'):  # đi liền một mạch: ảnh trước còn trôi tiếp rồi nhòa vào ảnh sau
+                old = dict(shots[-1]['_photo']); pd = shots[-1]['end'] - shots[-1]['start']
+                old.update({'from': -pd, 'to': xf, 'dur': pd, 'enterDur': 0, 'overlay': False})
+                els[0]['enterDur'] = xf; sh.update(elements=[old] + els, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.12}])
+            else:
+                sh.update(elements=els, transition='fade', transitionDur=0.35, sfx=[{'t': 0.02, 'kind': 'whoosh', 'gain': 0.22}])
+            sh['_photo'] = {k: v for k, v in [e for e in sh['elements'] if e['type'] == 'bdsPhoto'][-1].items() if k not in ('enterDur', 'from', 'to', 'dur', 'overlay')}
+            if 'move' in sh['_photo']: sh['_photo']['move'] = {k: v for k, v in sh['_photo']['move'].items() if k not in ('dive', 'diveDur')}
         elif kind == 'poi':
             i, p = it; r = p['_r']; z0 = last_view['zoom']
             sh.update(view=view((0, z0, TILT), (1.4 * f, fits[i], TILT), (d, fits[i], TILT)),
@@ -187,6 +203,10 @@ def main():
                       sfx=[{'t': 0.9 * f, 'kind': 'whoosh', 'gain': 0.18}, {'t': 3.4 * f, 'kind': 'pop', 'gain': 0.35}])
             if n > 0 and plan[n - 1][0] == 'photo': sh.update(transition='fade', transitionDur=0.35)
             last_view = {'zoom': fits[i], 'tilt': TILT}
+        elif kind == 'descend':
+            z0 = last_view['zoom']; zt = cfg.get('descendZoom', 18.5); tl = cfg.get('descendTilt', 48)
+            sh.update(view=view((0, z0, TILT), (d, zt, tl)), elements=MAP + [proj_pin(), footer], sfx=[{'t': 0.1, 'kind': 'whoosh', 'gain': 0.25}])
+            last_view = {'zoom': zt, 'tilt': tl}
         elif kind == 'outro':
             z0 = last_view['zoom']; ob = OUT_TOP - 14 * K
             els = MAP + [{'type': 'bdsRoute', 'path': p['_r']['path'], 'sty': p.get('sty', 'gold'), 'alpha': 0.6, 'head': False} for p in pois]
@@ -196,7 +216,7 @@ def main():
             if n > 0 and plan[n - 1][0] == 'photo': sh.update(transition='fade', transitionDur=0.35)
         shots.append(sh); t += d
     if caps and shots[-1]['end'] < narr_end + 0.8: shots[-1]['end'] = round(narr_end + 0.8, 2)
-    for x in shots: x['start'], x['end'] = round(x['start'], 2), round(x['end'], 2)
+    for x in shots: x['start'], x['end'] = round(x['start'], 2), round(x['end'], 2); x.pop('_photo', None)
 
     # 4. ảnh vệ tinh: hợp các vùng khung nhìn theo mức zoom nguyên
     need = {}
@@ -210,7 +230,7 @@ def main():
             else:
                 A, B = V[i - 1], V[i]; u = (tt - A['t']) / (B['t'] - A['t']); e = u * u * (3 - 2 * u)
                 zv, tl = A['zoom'] + (B['zoom'] - A['zoom']) * e, A['tilt'] + (B['tilt'] - A['tilt']) * e
-            Z = min(17, math.ceil(zv - 0.05)); x0, x1, y0, y1 = tilt_rect(tl); s = 2 ** (Z - zv)
+            Z = min(cfg.get('maxZ', 19), math.ceil(zv - 0.05)); x0, x1, y0, y1 = tilt_rect(tl); s = 2 ** (Z - zv)
             r = need.setdefault(Z, [1e18, 1e18, -1e18, -1e18])
             r[0] = min(r[0], x0 * s); r[1] = min(r[1], y0 * s); r[2] = max(r[2], x1 * s); r[3] = max(r[3], y1 * s)
     levels = []

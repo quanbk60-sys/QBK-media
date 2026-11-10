@@ -7,5 +7,6 @@
 | [Phác thảo điện ảnh sepia](phac-thao-sepia/card.md) | `phac-thao` (+ cần nội thất, tư thế ngồi và nằm) | Tâm lý, đời sống | Cảnh dài khoảng 6,6s, camera đẩy chậm | Ghi nhận · có tông màu, thiếu bối cảnh |
 | [Vệ tinh ảnh thật](ve-tinh-anh-that/card.md) | `ve-tinh` (ảnh vệ tinh Esri + ảnh Wikimedia) | Địa lý, lịch sử chiến trận, công trình, dự án | Zoom liền mạch từ địa cầu, cảnh 2–4 s, chữ gõ, thẻ ảnh bay lên | Đã làm · thiếu khối 3D |
 | [Vị trí & kết nối dự án](vi-tri-ket-noi-bds/card.md) | `bds` (vệ tinh nghiêng 3D, tuyến OSRM, thẻ km/phút, nhãn tự né, ảnh dự án) | Bất động sản, giới thiệu địa điểm | Mở 3,5 s, ảnh 3–4,5 s, mỗi địa điểm 5,5 s, kết 4 s | Đã làm · `bds_build.py` |
+| [Quay căn hộ một mạch](quay-can-ho-tiktok/card.md) | `bds` (ảnh căn hộ: `move` linear + `walk`, bay từ vệ tinh vào phòng) | Bất động sản, căn hộ | Gần như không cắt, đi bộ liền một mạch | Đã làm · từ ảnh tĩnh |
 | [Thí nghiệm cổ](thi-nghiem-co/card.md) | `thi-nghiem` (khung 16:9 giữa + nền mờ, chữ 2–3 từ có từ khóa vàng) | Khoa học đời thường, cách làm, mẹo dân gian | Cảnh 8–9 s, camera đẩy chậm | Đã làm bố cục · thiếu 3D thật |
 | Slide "Stickman Video Director" (ảnh, đầu cuộc trò chuyện) | 10 phong cách A1–B4 của skill gốc | Đa thể loại | | Tham khảo cho các gói phong cách |

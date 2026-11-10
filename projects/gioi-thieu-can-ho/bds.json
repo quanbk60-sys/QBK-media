@@ -1,26 +1,174 @@
 {
  "name": "CĂN HỘ NAM LONG 2",
- "intro": ["CĂN HỘ", "NAM LONG 2"],
+ "intro": [
+  "CĂN HỘ",
+  "NAM LONG 2"
+ ],
  "subtitle": "Cái Răng · Cần Thơ",
  "area": "CÁI RĂNG · CẦN THƠ",
  "tagline": "Nhỏ xinh · ấm áp · nhiều ánh sáng",
  "cta": "LIÊN HỆ HẸN XEM NHÀ",
  "note": "Vị trí theo tọa độ chủ nhà cung cấp",
  "footer": "",
- "project": {"lat": 9.99465, "lon": 105.78452},
- "introZoom": [11.6, 16.2],
- "outroZoom": 14.6,
- "durations": {"intro": 6, "outro": 5},
- "outroCue": 31,
- "order": ["intro", "photos", "map", "outro"],
- "photos": [
-  {"path": "photos/p5-loi-vao.jpg", "kicker": "Lối vào", "cue": 5, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.22, "vp": [0.62, 0.42]}},
-  {"path": "photos/p6-tu-chanh.jpg", "kicker": "Góc tủ", "cue": 9, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.16, "pan": -0.08, "vp": [0.8, 0.45]}},
-  {"path": "photos/p2-cong-vom-hanh-lang.jpg", "kicker": "Cổng vòm", "cue": 13, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.12, "pan": -0.55, "vp": [0.55, 0.45]}},
-  {"path": "photos/p4-sofa.jpg", "kicker": "Phòng khách", "cue": 15, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.2, "pan": 0.06, "vp": [0.45, 0.42]}},
-  {"path": "photos/p7-tong-quan.jpg", "kicker": "Góc ăn uống", "cue": 19, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.1, "pan": -0.6, "vp": [0.55, 0.42]}},
-  {"path": "photos/p3-bep-ban-an.jpg", "kicker": "Bếp chữ L", "cue": 24, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.22, "vp": [0.55, 0.42]}},
-  {"path": "photos/p1-rem-cua-so-ke.jpg", "kicker": "Góc cửa sổ", "cue": 27, "mode": "cover", "focus": [0.5, 0.5], "move": {"push": 0.12, "pan": -0.5, "vp": [0.7, 0.45]}}
+ "project": {
+  "lat": 9.99465,
+  "lon": 105.78452
+ },
+ "introZoom": [
+  11.6,
+  15.6
  ],
- "pois": []
+ "outroZoom": 14.6,
+ "durations": {
+  "intro": 3.6,
+  "descend": 3.4,
+  "outro": 5
+ },
+ "outroCue": 31,
+ "order": [
+  "intro",
+  "map",
+  "descend",
+  "photos",
+  "outro"
+ ],
+ "photos": [
+  {
+   "path": "photos/p5-loi-vao.jpg",
+   "cue": 5,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.3,
+    "vp": [
+     0.62,
+     0.42
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  },
+  {
+   "path": "photos/p6-tu-chanh.jpg",
+   "cue": 9,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.24,
+    "pan": -0.06,
+    "vp": [
+     0.8,
+     0.45
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  },
+  {
+   "path": "photos/p2-cong-vom-hanh-lang.jpg",
+   "cue": 13,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.16,
+    "pan": -0.55,
+    "vp": [
+     0.55,
+     0.45
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  },
+  {
+   "path": "photos/p4-sofa.jpg",
+   "cue": 15,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.28,
+    "pan": 0.05,
+    "vp": [
+     0.45,
+     0.42
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  },
+  {
+   "path": "photos/p7-tong-quan.jpg",
+   "cue": 19,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.14,
+    "pan": -0.6,
+    "vp": [
+     0.55,
+     0.42
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  },
+  {
+   "path": "photos/p3-bep-ban-an.jpg",
+   "cue": 24,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.3,
+    "vp": [
+     0.55,
+     0.42
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  },
+  {
+   "path": "photos/p1-rem-cua-so-ke.jpg",
+   "cue": 27,
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "move": {
+    "push": 0.16,
+    "pan": -0.5,
+    "vp": [
+     0.7,
+     0.45
+    ],
+    "ease": "linear",
+    "shake": 0.6
+   }
+  }
+ ],
+ "pois": [],
+ "descendZoom": 18.6,
+ "descendTilt": 50,
+ "walk": {
+  "xfade": 0.8
+ }
 }
