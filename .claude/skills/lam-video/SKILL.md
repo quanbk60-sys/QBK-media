@@ -18,6 +18,7 @@ Bạn là **Nhà sản xuất**. Đọc yêu cầu, **chọn một dây chuyền
 | id | Tên trong app | Hình làm bằng | Hợp với |
 |---|---|---|---|
 | `storyboard` | Storyboard · ảnh của bạn | **Ảnh người dùng gửi** (`requests.storyboard`), chuyển động nhẹ bằng code (đẩy, lùi, lia), ghép `assemble.py` | Mọi chủ đề người dùng đã tự lên storyboard |
+| `ve-tay` | Vẽ tay · storyboard | **Ảnh từng cảnh người dùng gửi** (ô `storyboard`) + trang storyboard tổng (ô `trang-sb`, không bắt buộc). Mỗi cảnh hiện ra như đang được vẽ tay (`drawon.py`), khung cuối là ảnh gốc. **Quy trình:** biên kịch viết mỗi cảnh một đoạn lời theo chú thích trên trang storyboard và `brief` (truyện hư cấu, không cần nguồn) → ghi `vetay.json` (ảnh, lời, `move` theo ghi chú máy quay: Zoom in = push, Zoom out = pull, Pan = panL/panR) → `python3 studio/tools/vetay_build.py projects/<slug>` (lồng tiếng từng cảnh nên hình đổi đúng lúc lời đổi, phụ đề, nhạc, ghép). Mẫu: `projects/ve-tay-scene04/` | Truyện, phim ngắn người dùng đã lên storyboard |
 | `anime-tinh`, `giay-gap` | Anime · ảnh tĩnh, Bản tin giấy gấp | Như `storyboard` (`userImages: true` trong `app/styles`): ảnh người dùng gửi + khung, chữ, nhịp riêng của phong cách | Kể chuyện nhẹ; động vật, tin vui |
 | `ve-tinh` | Vệ tinh · địa lý | Ảnh vệ tinh Esri + ảnh Wikimedia, engine 2D (`lib/geo.mjs`) | Địa lý, trận đánh có địa điểm, công trình |
 | `thi-nghiem` | Thí nghiệm 3D · khoa học | 3D thực tế `studio/engine3d/render3d.mjs` | Khoa học đời thường, cách làm, mẹo dân gian |

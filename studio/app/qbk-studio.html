@@ -426,10 +426,13 @@ a.link{color:var(--navy)}
     "anh-3d": { label: "Ảnh 3D, đồ vật mẫu", hint: "Ảnh đồ vật, mô hình hoặc cảnh 3D muốn đoàn phim dựng theo.", accept: "image/*", ph: "Đồ vật gì, dùng ở cảnh nào" },
     anh: { label: "Ảnh tư liệu", hint: "Ảnh thật: địa điểm, dự án, sự kiện.", accept: "image/*", ph: "Ảnh gì, dùng ở cảnh nào" },
     video: { label: "Video", hint: "Clip quay sẵn, flycam hoặc video mẫu.", accept: "video/*", ph: "Dùng đoạn nào, ở cảnh nào" },
+    "trang-sb": { label: "Trang storyboard tổng", hint: "Trang có chú thích từng cảnh và ghi chú máy quay (Pan, Zoom in…). Đoàn phim đọc để viết lời và chọn chuyển động.", accept: "image/*", ph: "Ví dụ: Scene 04, shot 1 đến 6" },
     "toa-do": { label: "Tọa độ hoặc link Google Maps", hint: "Vị trí chính xác của địa điểm, dự án.", text: true, ph: "Ví dụ: 10.0452, 105.7469 hoặc link maps.app.goo.gl/…" }
   };
   const STYLE_INPUTS = {
-    storyboard: [["storyboard", 1]], "anime-tinh": [["storyboard", 1], ["nhan-vat", 0]], "giay-gap": [["storyboard", 1]],
+    storyboard: [["storyboard", 1]],
+    "ve-tay": [{ key: "storyboard", required: true, label: "Ảnh từng cảnh", hint: "Tải từng cảnh theo thứ tự. Mỗi cảnh hiện ra như đang được vẽ tay, đúng lúc lời đọc của cảnh đó bắt đầu. Khung cuối giữ nguyên ảnh của bạn." }, ["trang-sb", 0]],
+    "anime-tinh": [["storyboard", 1], ["nhan-vat", 0]], "giay-gap": [["storyboard", 1]],
     "ve-tinh": [["toa-do", 0], ["anh", 0], ["video", 0]], "thi-nghiem": [["anh-3d", 0]],
     bds: [["toa-do", 1], ["anh", 1], ["video", 0]], "bds-tien-ich": [["toa-do", 1], ["anh", 0], ["video", 0]],
     "kien-thuc-dong-vat": [["nhan-vat", 0]], _: [["anh", 0], ["video", 0]] };

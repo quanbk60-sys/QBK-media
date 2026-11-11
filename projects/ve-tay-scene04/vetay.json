@@ -1,0 +1,9 @@
+{"voice": "Bodi", "tempo": 1.15, "aspect": "9:16", "fit": "pad", "music": "chill", "musicGain": 0.14,
+ "scenes": [
+  {"image": "board/01.png", "move": "push", "text": "An đứng lặng trước gương, hai tay giấu sau lưng. Cô suy nghĩ rất lâu về cuộc hẹn tối nay."},
+  {"image": "board/02.png", "move": "push", "text": "Bỗng có tiếng động ngoài cửa. An khựng lại, tay khẽ chạm lên sợi dây chuyền."},
+  {"image": "board/03.png", "move": "panR", "text": "Cô mở cửa, bước ra hành lang khách sạn sang trọng. Ngoài sảnh, có người đang chờ."},
+  {"image": "board/04.png", "move": "pull", "text": "An đi thật nhanh, tay nắm chặt chiếc ví nhỏ. Thỉnh thoảng, cô lại dè chừng nhìn về phía sau."},
+  {"image": "board/05.png", "move": "push", "text": "Ở sảnh thang máy đông người qua lại, cuộc trò chuyện diễn ra rất khẽ, đầy lo lắng."},
+  {"image": "board/06.png", "move": "pull", "text": "Rồi An quay đi, bước thật vội, như sợ có ai đó nhận ra mình."}
+ ]}

@@ -26,6 +26,11 @@ def dur_of(f): return float(subprocess.run(['ffprobe', '-v', 'error', '-show_ent
 tmp = tempfile.mkdtemp(prefix='asm_'); parts = []
 for i, c in enumerate(C['clips']):
     src = P(c.get('key') if animatic and c.get('key') else c['file']); o = os.path.join(tmp, f'p{i:02d}.mp4')
+    if src.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')) and c.get('draw') and not animatic:
+        # tranh hiện dần như đang vẽ tay (studio/tools/drawon.py), khung cuối là ảnh gốc
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import drawon
+        drawon.build(src, o, c.get('dur', 4), W, H, c.get('move', 'push'), c.get('fit', C.get('fit', 'pad')), c.get('drawPart', 0.55), i + 1, FPS)
+        parts.append((o, dur_of(o))); continue
     if src.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
         d = c.get('dur', c.get('out', 4) - c.get('in', 0)); n = int(d * FPS); mv = c.get('move', 'push')
         z = {'push': f"1+0.06*on/{n}", 'pull': f"1.06-0.06*on/{n}"}.get(mv, "1.06")
