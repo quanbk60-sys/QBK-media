@@ -36,6 +36,20 @@ export const STYLES = {
   'thi-nghiem': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'cut',label: 'Thí nghiệm cổ', genres: 'khoa học đời thường, cách làm, mẹo dân gian, đồ vật (khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng)', bg: '#E9E6E0', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
                  layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
+  // "Hoạt hình giải thích": khung hoạt hình 16:9 (1080×608) đặt giữa trang 1080×1920, tiêu đề 2 dòng đứng yên, phụ đề karaoke 2–3 chữ, cắt cứng.
+  // imagePrompt: prompt cho ảnh AI nếu người dùng đồng ý dùng ảnh tạo sinh (trả phí); mặc định vẽ bằng code theo đúng bảng màu này.
+  'giai-thich-kraft': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'cut', label: 'Hoạt hình giải thích · Kraft', genres: 'giải thích, "vì sao", động vật, khoa học vui (biến thể A: giấy kraft, nét nâu mảnh, màu phấn dịu)',
+                 bg: '#CDE3E6', deco: 'savanna', ink: '#4A3022', body: '#FFF8EC', lineScale: 0.62,
+                 palette: {red: '#D9817A', navy: '#7C9CB8', gold: '#F2C879', green: '#A9C48E', wood: '#B98F68', water: '#A8CFD8', waterDeep: '#86B4C2', skin: '#F2D3B5', sky: '#CDE3E6', paper: '#FFF8EC', ground: '#E9D6A4', groundDark: '#D8BF86', grass: '#B9C98E'},
+                 layout: 'explainer', page: 'kraft', animalTone: 'soft', titleBox: 'label', titleUpper: true, titleFace: 'Serif', title1Size: 62, title2Size: 70, titleColor: '#FFFFFF', titleStroke: '#2B2017', title2Color: '#7A1F2B', title2Bg: '#FFFFFF', frameBorder: '#4A3022', frameBorderW: 5,
+                 captionPlace: 'below', karaoke: true, captionHighlight: '#FFD81F', caption: {color: '#FFFFFF', stroke: '#111111'}, captionFont: '{size}px QBKBlack', captionStrokeW: 12, titleFont: 'Sans',
+                 imagePrompt: 'flat 2D cartoon, thin dark-brown outlines, soft muted pastel colors, savanna, goofy expressive animal, big eyes, lazy half-closed eyelids, 16:9, no text'},
+  'giai-thich-hong': { stroke: 'clean', fill: 'drop', drawMode: 'pop', hand: false, transition: 'cut', label: 'Hoạt hình giải thích · Hồng', genres: 'giải thích, "vì sao", động vật, chuyện hài (biến thể B: nền hồng, nét đen dày, màu rực kiểu hoạt hình TV)',
+                 bg: '#1F4FD6', deco: 'savanna', ink: '#111111', body: '#FFFFFF', lineScale: 1.5,
+                 palette: {red: '#F2252E', navy: '#1F4FD6', gold: '#FFC400', green: '#2DB84B', wood: '#8A4B1E', water: '#2FA8FF', waterDeep: '#1570D6', skin: '#FFC99A', sky: '#1F4FD6', paper: '#FFFFFF', ground: '#FFA51F', groundDark: '#E8790C', grass: '#3CC24F'},
+                 layout: 'explainer', page: 'pink', animalTone: 'vivid', animalEyes: 'bulge', titleBox: 'block', titleUpper: true, titleColor: '#FFFFFF', titleStroke: '#111111', title2Color: '#111111', title2Bg: '#FFF200', frameBorder: '#111111', frameBorderW: 10,
+                 captionPlace: 'overlay', karaoke: true, captionUpper: true, captionHighlight: '#FFE600', caption: {color: '#FFFFFF', stroke: '#000000'}, captionFont: '{size}px QBKBlack', captionStrokeW: 13, titleFont: 'Sans',
+                 imagePrompt: 'classic TV cartoon, thick black outlines, highly saturated colors, cobalt sky, orange-yellow ground, exaggerated expressions, bulging eyes, 16:9, no text'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 
@@ -61,6 +75,14 @@ export function paintBackground(ctx, st, W, H, frameNo) {
     case 'burst': ctx.save(); ctx.translate(W / 2, H * 0.42); for (let i = 0; i < 18; i++) { ctx.rotate(Math.PI / 9); if (i % 2) continue; ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(H, -150); ctx.lineTo(H, 150); ctx.closePath(); ctx.fill(); } ctx.restore(); break;
     case 'frame': ctx.lineWidth = 14; ctx.strokeStyle = '#B23A2E'; ctx.strokeRect(24, 24, W - 48, H - 48); ctx.lineWidth = 4; ctx.strokeStyle = '#3B2414'; ctx.strokeRect(46, 46, W - 92, H - 92);
       for (let i = 0; i < 900; i++) { ctx.fillStyle = `rgba(90,60,30,${(r() * 0.05).toFixed(3)})`; ctx.fillRect(r() * W, r() * H, 2, 2); } break;
+    case 'savanna': { // sky + rolling horizon + ground with tufts (16:9 explainer frame)
+      const P = st.palette, gy = H * 0.66, lw = Math.max(2, 4 * st.lineScale);
+      ctx.fillStyle = P.ground; ctx.strokeStyle = st.ink; ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(-10, gy + 18);
+      for (let x = 0; x <= W + 40; x += 40) ctx.lineTo(x, gy + Math.sin(x / 170) * 14 + Math.sin(x / 61) * 4);
+      ctx.lineTo(W + 10, H + 10); ctx.lineTo(-10, H + 10); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = P.groundDark; for (let i = 0; i < 26; i++) { const x = r() * W, y = gy + 40 + r() * (H - gy - 50); ctx.beginPath(); ctx.ellipse(x, y, 18 + r() * 40, 4 + r() * 5, 0, 0, Math.PI * 2); ctx.fill(); }
+      ctx.strokeStyle = P.grass; ctx.lineWidth = Math.max(2, 3 * st.lineScale); for (let i = 0; i < 34; i++) { const x = r() * W, y = gy + 30 + r() * (H - gy - 40); ctx.beginPath(); for (let k = -1; k <= 1; k++) { ctx.moveTo(x + k * 5, y); ctx.lineTo(x + k * 9, y - 12 - r() * 8); } ctx.stroke(); }
+      break; }
     case 'vignette': { const g = ctx.createRadialGradient(W / 2, H * 0.45, H * 0.2, W / 2, H * 0.45, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); break; }
   }
 }

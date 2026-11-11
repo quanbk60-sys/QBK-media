@@ -1,0 +1,177 @@
+{
+ "style": "giai-thich-hong",
+ "title": [
+  "Bản xem thử phong cách",
+  "Hoạt hình giải thích"
+ ],
+ "fps": 30,
+ "narration": {
+  "path": "audio/narration.wav",
+  "lead": 0.15
+ },
+ "captions": {
+  "path": "captions-audio.json",
+  "lead": 0.15
+ },
+ "duration": 11.6,
+ "cast": {},
+ "shots": [
+  {
+   "start": 0,
+   "end": 2.78,
+   "elements": [
+    {
+     "type": "prop",
+     "name": "acacia",
+     "x": 190,
+     "y": 470,
+     "scale": 0.85,
+     "params": {}
+    },
+    {
+     "type": "prop",
+     "name": "acacia",
+     "x": 930,
+     "y": 430,
+     "scale": 0.5,
+     "params": {}
+    },
+    {
+     "type": "prop",
+     "name": "lion",
+     "x": 600,
+     "y": 575,
+     "scale": 0.75,
+     "params": {
+      "expr": "sleepy",
+      "pose": "lie"
+     }
+    }
+   ],
+   "sfx": []
+  },
+  {
+   "start": 2.78,
+   "end": 5.04,
+   "elements": [
+    {
+     "type": "prop",
+     "name": "acacia",
+     "x": 900,
+     "y": 470,
+     "scale": 0.7,
+     "params": {}
+    },
+    {
+     "type": "prop",
+     "name": "lion",
+     "x": 360,
+     "y": 1010,
+     "scale": 1.7,
+     "params": {
+      "expr": "surprised",
+      "look": 0.6
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 5.04,
+   "end": 8.63,
+   "elements": [
+    {
+     "type": "prop",
+     "name": "acacia",
+     "x": 120,
+     "y": 450,
+     "scale": 0.7,
+     "params": {}
+    },
+    {
+     "type": "prop",
+     "name": "ostrich",
+     "x": 330,
+     "y": 580,
+     "scale": 0.82,
+     "params": {
+      "expr": "lazy",
+      "talk": true
+     }
+    },
+    {
+     "type": "prop",
+     "name": "zebra",
+     "x": 820,
+     "y": 585,
+     "scale": 0.85,
+     "params": {
+      "expr": "happy",
+      "facing": -1
+     }
+    }
+   ],
+   "sfx": []
+  },
+  {
+   "start": 8.63,
+   "end": 11.6,
+   "elements": [
+    {
+     "type": "prop",
+     "name": "acacia",
+     "x": 540,
+     "y": 430,
+     "scale": 0.6,
+     "params": {}
+    },
+    {
+     "type": "prop",
+     "name": "tiger",
+     "x": 880,
+     "y": 585,
+     "scale": 0.8,
+     "params": {
+      "expr": "surprised",
+      "facing": -1
+     }
+    },
+    {
+     "type": "prop",
+     "name": "hyena",
+     "x": -200,
+     "y": 590,
+     "scale": 0.8,
+     "track": [
+      {
+       "t": 0,
+       "x": -200
+      },
+      {
+       "t": 2.2,
+       "x": 420,
+       "ease": "linear"
+      }
+     ],
+     "params": {
+      "expr": "smug",
+      "walk": true
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.3
+    }
+   ]
+  }
+ ]
+}

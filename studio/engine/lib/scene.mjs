@@ -9,6 +9,7 @@ import {PROPS} from './props.mjs';
 import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
+import {setupExplainer, paintPage, composeFrame, karaokeChunks} from './explainer.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
@@ -17,6 +18,7 @@ GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/NotoSans.ttf'), 'Sans');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-Black.otf'), 'QBKBlack');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-ExtraBoldItalic.otf'), 'QBKItalic');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Inter-Bold.otf'), 'QBKBold');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/LiberationSerif-Bold.ttf'), 'Serif');
 
 export function loadScene(file) {
   const base = path.dirname(path.resolve(file));
@@ -31,6 +33,7 @@ export function loadScene(file) {
   // blurband layout: draw a 16:9 band; render.mjs places it in the middle of the 9:16 frame over a blurred enlarged copy
   if (s.styleDef.layout === 'blurband') { s.outHeight = s.height; s.height = Math.round(s.width * 9 / 16 / 2) * 2; }
   s.captionStyle = {y: cap.y ?? (s.outHeight ? s.height - 62 : Math.round(s.height * 0.73)), size: cap.size ?? (s.outHeight ? 46 : 58), color: cap.color || '#2A2723', maxWidth: s.width - 120};
+  if (s.styleDef.layout === 'explainer') { s.height = Math.round(s.width * 9 / 16 / 2) * 2; setupExplainer(s); }
   s.captionItems = items.map(c => ({start: c.start + lead, end: c.end + lead, text: c.text}));
   if (!s.duration) s.duration = Math.max(...s.shots.map(x => x.end), ...s.captionItems.map(c => c.end + 0.4), 1);
   validate(s);
@@ -103,7 +106,7 @@ function recordElement(s, e, t, sceneT) {
     R._contact = A.pose.contact; R._cycle = A.cycle; R._impact = A.pose.impact;
   } else if (e.type === 'prop') {
     const params = {...(e.params || {}), ...sampleTrack(e.ptrack, t, Object.keys(Object.assign({}, ...(e.ptrack || [{}]))).filter(k => k !== 't' && k !== 'ease'))};
-    PROPS[e.name](R, params, sceneT);
+    PROPS[e.name](R, {...params, _st: s.styleDef}, sceneT);
   } else if (e.type === 'text') {
     const sans = e.font ? e.font === 'sans' : s.styleDef.titleFont === 'Sans';
     R.font = `${e.bold || sans ? 'bold ' : ''}${Math.round((e.size || 120) * (sans && !e.font ? 0.82 : 1))}px ${sans ? 'Sans' : 'Hand'}`; R.textAlign = e.align || 'center'; R.textBaseline = 'middle'; R.fillStyle = color(e.color || 'ink'); R.fillText(e.text, 0, 0);
@@ -114,6 +117,7 @@ function recordElement(s, e, t, sceneT) {
 export function makeRenderer(s) {
   const cv = createCanvas(s.width, s.height), ctx = cv.getContext('2d');
   const events = []; let lastContact = new Map();
+  const EX = s.styleDef.layout === 'explainer', out = EX ? createCanvas(s.page.w, s.page.h) : cv, page = EX ? paintPage(s) : null;
   function frame(T) {
     const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1);
     const t = T - sh.start;
@@ -167,6 +171,7 @@ export function makeRenderer(s) {
       else if (tr === 'smudge') { const r = rng(fno); ctx.globalAlpha = 1 - k; ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = (1 - k) * 0.5; ctx.fillStyle = ST.ink; for (let i = 0; i < 40; i++) ctx.fillRect(r() * W, r() * H, 80 + r() * 200, 3); }
       ctx.restore();
     }
+    if (EX) { composeFrame(s, out, page, cv, T); return {drawing}; }
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
     if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
@@ -195,7 +200,7 @@ export function makeRenderer(s) {
       } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
     return {drawing};
   }
-  return {cv, ctx, frame, events};
+  return {cv: out, ctx, frame, events};
 }
 
 // Split captions that would wrap into two timed halves at the space nearest the middle (proportional timing).
@@ -210,6 +215,7 @@ export function fitCaptions(s) {
     push({start: c.start, end: split, text: a}); push({start: split, end: c.end, text: b});
   };
   let items = s.captionItems;
+  if (s.styleDef.karaoke) { s.captionItems = karaokeChunks(items); return; }
   const N = s.styleDef.captionWords;
   if (N) items = items.flatMap(c => { const w = c.text.split(' '), parts = []; for (let i = 0; i < w.length; i += N) parts.push(w.slice(i, i + N).join(' '));
     const tot = parts.reduce((a, p) => a + p.length, 0); let t = c.start; return parts.map(p => { const d = (c.end - c.start) * p.length / tot, r = {start: t, end: t + d, text: p}; t += d; return r; }); });

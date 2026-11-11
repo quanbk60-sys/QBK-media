@@ -1,6 +1,7 @@
 // Procedural props. Each draws with origin at its anchor (ground-centre for objects, centre for icons).
 // Signature: (ctx, p = params, t = seconds) — must only use the Recorder-compatible Canvas API.
 import {color} from './math.mjs';
+import {ANIMALS} from './animals.mjs';
 
 const INK = '#2A2723';
 function poly(ctx, pts, fill, w = 5, stroke = INK) { ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); if (fill) { ctx.fillStyle = color(fill); ctx.fill(); } if (w) { ctx.lineWidth = w; ctx.strokeStyle = stroke; ctx.stroke(); } }
@@ -339,4 +340,5 @@ const saP = (lon, lat) => Array.isArray(lon) ? saP(lon[0], lon[1]) : [(lon + 58)
 const SA_COAST = [[-77, 8.5], [-75.5, 10.8], [-72, 12], [-71.5, 10.5], [-68, 10.7], [-64, 10.6], [-61, 10.5], [-60, 8.5], [-57, 6], [-52, 5], [-50, 1.5], [-50, 0], [-47, -1], [-44, -2.5], [-40, -3], [-37, -5], [-35, -7], [-35, -9], [-37.5, -12], [-39, -15], [-39.5, -18], [-41, -22], [-44, -23], [-48, -26], [-48.7, -28.5], [-51, -31], [-53, -34], [-56, -34.8], [-58, -34.5], [-57, -36.5], [-62, -39], [-65, -41], [-64.5, -43], [-67, -46], [-66, -48], [-69, -51], [-68.5, -53], [-66, -55], [-70, -55], [-73, -53], [-75, -50], [-74, -46], [-73.5, -42], [-73.5, -37], [-71.5, -32], [-71.5, -28], [-70.5, -23], [-70.3, -18], [-76, -14], [-78, -10], [-81, -6], [-80, -3], [-80.5, -1], [-79.5, 2], [-77.5, 4]];
 const SA_AMAZON = [[-77, 1], [-73, 3], [-67, 4.5], [-61, 5.5], [-56, 3], [-51, 1.5], [-49.5, -1.5], [-49, -5], [-52, -8], [-56, -10.5], [-61, -12.5], [-66, -12], [-70, -11.5], [-74, -9.5], [-77, -5], [-78, -1.5]];
 const SA_LOST_E = [[-49, -5], [-52, -8], [-56, -10.5], [-61, -12.5], [-66, -12]], SA_LOST_I = [[-53, -3.5], [-55, -6], [-58, -8], [-62, -9], [-66, -8.5]];
+Object.assign(PROPS, ANIMALS);
 export const PROP_NAMES = Object.keys(PROPS);
