@@ -111,6 +111,14 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 6. **Không còn cổng animatic và cổng chi phí** (bỏ 11/11/2026). Video cũ còn `animaticStatus` hay `estimate` thì bỏ qua, làm tiếp theo dây chuyền mới.
 7. Người dùng có thể **xóa video** trong app (doc `videos/<slug>` biến mất, video và ảnh bìa bị xóa). Đang làm mà thấy doc đã mất thì dừng video đó, không tạo lại doc. Giữ thư mục `projects/<slug>` trong repo.
 
+### Phiếu yêu cầu v3 (từ 11/11/2026)
+App hỏi theo thứ tự: **phong cách → tư liệu phong cách đó cần → chủ đề → kịch bản → âm thanh → độ dài → khung hình**. Request `v: 3` có thêm:
+- `inputs: {<key>: {label, required, auto, files: [{id, name, type, size, note}], text}}`. Key: `storyboard` (ảnh từng cảnh, đúng thứ tự), `nhan-vat` (ảnh nhân vật: giữ đúng mặt, trang phục), `anh-3d` (ảnh đồ vật hoặc cảnh 3D mẫu cho `thi-nghiem`), `anh` (ảnh tư liệu thật), `video` (clip quay sẵn, flycam, video mẫu), `toa-do` (`text`: tọa độ hoặc link Google Maps). `auto: true` nghĩa là người dùng **để đoàn phim tự chọn** (tìm ảnh Wikimedia, tự dựng bằng code, tự chọn vị trí theo chủ đề...); `auto: false` thì phải dùng đúng tệp người dùng gửi. Tải tệp bằng `Artifact` `action: "read"`, `path: <id>`, vào `projects/<slug>/inputs/<key>/`.
+- Ô tư liệu của từng phong cách khai báo trong app (`STYLE_INPUTS`); muốn đổi cho một phong cách thì ghi `app/styles.list[].inputs: [{key, required, label?, hint?}]`, không cần đăng lại app.
+- `script`: kịch bản người dùng gửi sẵn (không bắt buộc). Có thì biên kịch **giữ nguyên lời**, chỉ sửa lỗi dữ kiện, chính tả, cách đọc số và chia đoạn theo cảnh; không có thì viết theo `brief`.
+- `audio: {narration, voice, music, musicNote}`: `music` = `auto` (đoàn phim chọn), `none` (không nhạc), `mo-ta` (theo `musicNote`). `narration`, `voice` vẫn có ở cấp ngoài.
+- `length` = `null` và `lengthAuto: true` khi người dùng để đoàn phim chọn: chọn độ dài vừa nội dung (storyboard: khoảng 3–6 giây mỗi ảnh theo lời), trong giới hạn khung (9:16 tối đa 90 giây, 16:9 tối đa 300 giây).
+
 ### Phiếu yêu cầu từ app (`requests` v2)
 Mục tiêu: hiểu đúng ý người dùng **trước** khi viết, để kịch bản không lệch đề. Yêu cầu cũ không có `v` thì chỉ có `topic`, làm như trước.
 
