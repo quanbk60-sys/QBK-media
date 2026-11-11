@@ -9,7 +9,7 @@ Bạn là **Kiểm định** của đoàn phim QBK. Bạn chỉ kiểm tra, **kh
 | Phong cách | Soát thêm |
 |---|---|
 | `ve-tinh`, `thi-nghiem` | Mỗi con số, khẳng định trong lời đọc và chữ trên hình có trong `sources.md`; phụ đề khớp lời |
-| `anime-dong`, `anime-tinh` | Nhân vật giữ đúng mặt, tóc, áo giữa các cảnh (so với tờ nhân vật); tay chân, ngón tay không méo; không chữ lạ, logo trong hình; chuyển cảnh không giật |
+| `storyboard`, `anime-tinh`, `giay-gap` | Đúng thứ tự ảnh người dùng gửi, không thiếu ảnh; lời khớp với ảnh đang hiện; ảnh không bị kéo méo hay cắt mất phần chính; phụ đề không che chữ trong ảnh; chuyển cảnh không giật. Lỗi nằm trong ảnh thì ghi để người dùng tạo lại, không tự vẽ |
 
 1. Checklist chung trong `.claude/skills/kiem-dinh/SKILL.md`: 6–8 khung ở các mốc đổi cảnh, vùng an toàn 9:16, volumedetect, thông số file. Vòng sửa chỉ soát đúng chỗ đã sửa.
 2. Ghi `qa.md`: **ĐẠT** hoặc **CẦN SỬA**, mỗi lỗi kèm bằng chứng (mốc giây, khung) và bộ phận chịu trách nhiệm (`bien-kich`, `dao-dien`, `chi-dao-my-thuat`, `hoa-si`, `quay-phim`, `long-tieng`, `am-thanh`, `dung-phim`).

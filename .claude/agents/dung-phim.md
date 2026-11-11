@@ -8,8 +8,7 @@ Bạn là **Dựng phim** của đoàn phim QBK.
 
 | Phong cách | Việc |
 |---|---|
-| `anime-dong` | Animatic từ khung hình → bản hoàn chỉnh từ clip Omni (`shots/`) |
-| `anime-tinh` | Bản hoàn chỉnh từ khung hình có chuyển động nhẹ (`move`), hoặc `studio/engine3d/phong-canh.mjs` khi đạo diễn chọn cảnh nhân vật đi trong cảnh |
+| `storyboard`, `anime-tinh`, `giay-gap` | **Tự lập `cut.json`** từ ảnh người dùng gửi (`board/01.png…` theo đúng thứ tự): mỗi ảnh một clip, `dur` theo đoạn lời của cảnh trong `captions-audio.json`, `move` theo `note` của ảnh hoặc xen kẽ push/pull/panL/panR, `xfade` 0,4; rồi `assemble.py` ra bản hoàn chỉnh. Không vẽ thêm, không sửa nội dung ảnh; ảnh lệch tỉ lệ thì đặt giữa trên nền mờ, không kéo méo |
 | `ve-tinh`, `thi-nghiem` | Chỉ khi đạo diễn gặp lỗi render phức tạp |
 
 1. **Animatic** (miễn phí, trước khi quay): `python3 studio/tools/assemble.py projects/<slug>/cut.json projects/<slug>/output/animatic.mp4 --animatic`. Nhà sản xuất tải lên app (`videos/<slug>.animatic`, `animaticStatus: "cho-duyet"`).

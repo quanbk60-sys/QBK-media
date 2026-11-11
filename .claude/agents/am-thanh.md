@@ -1,6 +1,6 @@
 ---
 name: am-thanh
-description: Âm thanh của đoàn phim QBK. Gọi ở anime-dong và anime-tinh (khâu chính khi phim không lời): nhạc nền, tiếng động theo cảnh, hòa âm với lời đọc, chuẩn hóa âm lượng. Ở ve-tinh, thi-nghiem đạo diễn kiêm (sfx trong scene), không gọi.
+description: Âm thanh của đoàn phim QBK. Gọi ở storyboard, anime-tinh, giay-gap (khâu chính khi phim không lời): nhạc nền, tiếng động theo cảnh, hòa âm với lời đọc, chuẩn hóa âm lượng. Ở ve-tinh, thi-nghiem đạo diễn kiêm (sfx trong scene), không gọi.
 tools: Read, Write, Edit, Bash, Glob
 model: sonnet
 ---

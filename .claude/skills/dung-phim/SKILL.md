@@ -8,7 +8,7 @@ description: Dựng phim. Ghép phim theo phong cách: anime (assemble.py: anima
 ## Lệnh theo phong cách
 | Phong cách | Bản thử | Bản hoàn chỉnh |
 |---|---|---|
-| `anime-dong`, `anime-tinh` | `python3 studio/tools/assemble.py projects/<slug>/cut.json projects/<slug>/output/animatic.mp4 --animatic` | `python3 studio/tools/assemble.py projects/<slug>/cut.json projects/<slug>/output/final.mp4` |
+| `storyboard`, `anime-tinh`, `giay-gap` (ảnh người dùng gửi) | không cần (ảnh đã do người dùng duyệt) | `python3 studio/tools/assemble.py projects/<slug>/cut.json projects/<slug>/output/final.mp4` |
 | `anime-tinh` có nhân vật đi trong cảnh | `node studio/engine3d/phong-canh.mjs projects/<slug>/phongcanh.json --still 2,10` | `node studio/engine3d/phong-canh.mjs projects/<slug>/phongcanh.json` |
 | `ve-tinh` | `cd studio/engine && node render.mjs ../../projects/<slug>/scene.json --to 20` | `cd studio/engine && node render.mjs ../../projects/<slug>/scene.json` |
 | `thi-nghiem` | `cd studio/engine3d && node render3d.mjs ../../projects/<slug>/scene3d.json --fps 2 --name sketch` | `cd studio/engine3d && node render3d.mjs ../../projects/<slug>/scene3d.json` |

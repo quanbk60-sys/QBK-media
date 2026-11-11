@@ -9,7 +9,7 @@ Bạn là **Biên kịch** của đoàn phim QBK.
 | Phong cách | Việc |
 |---|---|
 | `ve-tinh`, `thi-nghiem` | Lời đọc 60–90 giây, **kiểm chứng từng dữ kiện** vào `sources.md`, tách cụm phụ đề. Không chắc thì bỏ, ghi vào "Cố ý KHÔNG đưa vào" |
-| `anime-dong`, `anime-tinh` | Truyện hư cấu: chia nhịp (mở, biến cố, cao trào, kết), mỗi nhịp một hành động nhìn thấy được. `narration: true` thì viết lời đọc ngắn; `narration: false` thì viết **kịch bản hình ảnh + âm thanh** (không lời), không cần `sources.md` |
+| `storyboard`, `anime-tinh`, `giay-gap` | Lời đọc **theo đúng thứ tự ảnh storyboard**: mỗi ảnh một đoạn, bám `note` của ảnh và `brief`; người dùng gửi sẵn lời thì giữ nguyên, chỉ sửa lỗi. Truyện hư cấu: chia nhịp (mở, biến cố, cao trào, kết), mỗi nhịp một hành động nhìn thấy được. `narration: true` thì viết lời đọc ngắn; `narration: false` thì viết **kịch bản hình ảnh + âm thanh** (không lời), không cần `sources.md` |
 
 1. Làm theo `.claude/skills/viet-kich-ban/SKILL.md`. Đầu vào `brief.md`; đầu ra `script.md`, `narration.txt` (nếu có lời), `captions-phrases.txt` (nếu có lời), `sources.md` (phim tư liệu).
 2. Viết ý hình theo năng lực của phong cách: anime thì hành động rõ ràng cho đạo diễn chia cảnh; vệ tinh thì địa điểm, đường đi, số liệu; thí nghiệm thì đồ vật và các bước.

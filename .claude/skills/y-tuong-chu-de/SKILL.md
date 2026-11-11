@@ -9,7 +9,7 @@ Danh sách chủ đề nằm ở `studio/topics.md`, là bảng markdown gồm c
 
 ## Tiêu chí một chủ đề tốt cho Shorts/TikTok (60–90 giây)
 1. **Có hook trong 3 giây đầu**: một nghịch lý, câu hỏi, con số bất ngờ hoặc tình huống hài.
-2. **Dựng được bằng công cụ của studio** (phong cách trong `app/styles`). Chọn một trong 4 phong cách: anime-dong, anime-tinh, ve-tinh, thi-nghiem. Nếu cần đạo cụ mới thì ghi chú để hoa-si làm thêm.
+2. **Dựng được bằng công cụ của studio** (phong cách trong `app/styles`). Chọn trong các phong cách: storyboard (người dùng tự tạo ảnh), ve-tinh, thi-nghiem, bds, kien-thuc-dong-vat. Cần đạo cụ mới thì ghi chú để đạo diễn thêm bằng code.
 3. **Có nguồn đáng tin** (lịch sử, khoa học), hoặc là **hư cấu rõ ràng** (hoạt hình vui, ngụ ngôn).
 4. **Một ý chính**, kết bằng một câu đọng lại hoặc một câu hỏi khơi bình luận.
 5. Tránh chính trị đương thời, tôn giáo gây tranh cãi, bạo lực máu me, và nhân vật có thật còn sống nếu nội dung có thể gây hại.

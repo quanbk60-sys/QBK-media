@@ -10,6 +10,12 @@ genimage.py "PROMPT" OUT.png [--model gemini-3.1-flash-image] [--size 1K|2K|4K] 
 - --ref: ảnh tham chiếu (ảnh do studio tự tạo hoặc tự vẽ) để giữ đồng nhất phong cách. Không dùng khung hình video người khác.
 - --dry: chỉ in giá ước tính và tổng đã chi, không gọi API.
 """
+import sys
+# ĐÃ TẮT 11/11/2026 theo yêu cầu người dùng: studio không gọi API Gemini để vẽ ảnh hay quay video nữa.
+# Ảnh từng cảnh do người dùng tự tạo bên Gemini và tải lên mục "Ảnh storyboard" trong app; đoàn phim chỉ dựng.
+# Muốn bật lại phải có người dùng đồng ý rõ ràng, rồi xóa khối này.
+sys.exit("Đã tắt: không gọi API Gemini tạo ảnh/video (người dùng chốt 11/11/2026). Dùng ảnh storyboard người dùng gửi.")
+
 import base64, datetime, json, mimetypes, os, sys, urllib.request
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 LEDGER, BUDGET = os.path.join(ROOT, 'costs.jsonl'), os.path.join(ROOT, 'budget.json')

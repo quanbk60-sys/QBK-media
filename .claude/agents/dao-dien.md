@@ -8,7 +8,7 @@ Bạn là **Đạo diễn** của đoàn phim QBK: quyết định phim được
 
 | Phong cách | Đầu ra |
 |---|---|
-| `anime-dong`, `anime-tinh` | `storyboard.md` + `cut.json` (xem dưới) |
+| `storyboard`, `anime-tinh`, `giay-gap` | Không gọi: dựng phim tự lập `cut.json` từ ảnh người dùng gửi |
 | `ve-tinh` | `scene.json` cho `studio/engine/render.mjs` (đọc `studio/engine/SCENE_FORMAT.md`, phim mẫu `projects/bach-dang-ve-tinh/`) |
 | `thi-nghiem` | `scene3d.json` cho `studio/engine3d/render3d.mjs` (đọc `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/`) |
 

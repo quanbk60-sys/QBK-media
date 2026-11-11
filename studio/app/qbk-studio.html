@@ -53,9 +53,9 @@ h2{font:700 12.5px var(--body);letter-spacing:.07em;text-transform:uppercase;col
 .chip{min-height:36px;padding:0 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:13px var(--body);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:600}
 .thumb{width:74px;aspect-ratio:9/16;object-fit:cover;border-radius:10px;border:1.5px solid var(--ink);flex-shrink:0;background:var(--soft)}
-.steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
 .steps i{height:6px;border-radius:3px;background:var(--line)} .steps i.done{background:var(--green)} .steps i.now{background:var(--gold)}
-.steplab{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;font-size:10px;color:var(--muted)}
+.steplab{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;font-size:10px;color:var(--muted)}
 .steplab .now{color:var(--ink);font-weight:600}
 label.f{font-size:13px;font-weight:700}
 input[type=text],input[type=url],textarea,select{width:100%;font:16px var(--body);padding:11px 12px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink)}
@@ -84,7 +84,7 @@ video{width:160px;aspect-ratio:9/16;border-radius:14px;border:2px solid var(--in
 .bars{display:flex;align-items:flex-end;gap:8px;height:110px;border-bottom:1.5px solid var(--ink);padding:0 4px}
 .bars span{flex:1;border-radius:6px 6px 0 0;background:var(--red);min-height:2px}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1.5px solid var(--line);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .tab{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--muted);font-size:10.5px;font-weight:600;min-height:48px;justify-content:center;border-radius:10px;position:relative}
 .tab[aria-current="page"]{color:var(--red);font-weight:700}
 .tab .badge{position:absolute;top:2px;right:calc(50% - 20px);min-width:16px;height:16px;border-radius:8px;background:var(--red);color:var(--on-accent);font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 4px}
@@ -116,19 +116,6 @@ details.card>summary{cursor:pointer;font-weight:700;font-size:14px;min-height:32
 .back{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);border-radius:10px;text-decoration:none}
 .small{font-size:12px;color:var(--muted)}
 a.link{color:var(--navy)}
-/* Xưởng AI: 3 khâu Họa Sĩ (ChatGPT) → Quay Phim (Gemini) → Dựng Phim (Claude) */
-.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.flow button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:8px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:12px var(--body);cursor:pointer;text-align:left;min-height:56px}
-.flow button b{font-size:14px}
-.flow button[aria-current="step"]{border:2.5px solid var(--red)}
-.flow button.done b::after{content:" ✓";color:var(--green-ink)}
-.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.gi{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0}
-.gi img,.gi video{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;border:1.5px solid var(--line);background:var(--soft)}
-.gi.on img{border:3px solid var(--green)}
-.gi .tools{display:flex;gap:4px;flex-wrap:wrap}
-.gi .tools .btn{min-height:32px;padding:0 8px;font-size:12px;flex:1}
-.who{font-size:11px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--soft);color:var(--muted)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 
@@ -142,16 +129,17 @@ a.link{color:var(--navy)}
 <script>
 (() => {
   const BASE_STYLES = [
-    ["anime-dong","Anime · hoạt hình động","linear-gradient(#3a86d6,#3f9a45)",null,"omni"],["anime-tinh","Anime · ảnh tĩnh","linear-gradient(#1b2a4a,#e9a95b)",null,"2d"],
+    ["storyboard","Storyboard · ảnh của bạn","linear-gradient(135deg,#22306B,#D9442E)",null,"anh"],
     ["ve-tinh","Vệ tinh · địa lý","linear-gradient(135deg,#1d3b2a,#0b1118 55%,#FF8A1F)",null,"ve-tinh"],["thi-nghiem","Thí nghiệm 3D · khoa học","#d9d5ce",null,"3d"]];
   // Phong cách đoàn phim học thêm được ghi vào db (app/styles.list) và tự hiện ở đây, không cần đăng lại app.
   // app/styles.full = true: the db list is the whole catalogue (order, name, preview image, note); otherwise built-ins + learned ones
-  const dbStyles = () => ((S.stylesDoc?.list) || []).filter(x => x?.id);
+  // Không còn video AI (Omni) và không gọi Gemini vẽ ảnh: ẩn phong cách engine "omni" dù db còn ghi.
+  const dbStyles = () => ((S.stylesDoc?.list) || []).filter(x => x?.id && x.engine !== "omni");
   const styles = () => S.stylesDoc?.full ? dbStyles().map(x => [x.id, x.name || x.id, x.color || "#8A8A8A", x.thumb, x.engine])
     : [...BASE_STYLES, ...dbStyles().filter(x => !BASE_STYLES.some(b => b[0] === x.id)).map(x => [x.id, x.name || x.id, x.color || "#8A8A8A", x.thumb, x.engine])];
   const styleNote = id => dbStyles().find(x => x.id === id)?.note || STYLE_NOTE[id] || "";
-  const STYLE_NOTE = {"ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
-  const STEPS = ["Kịch bản","Dự toán","Mỹ thuật","Quay","Dựng","Kiểm định"];
+  const STYLE_NOTE = {"storyboard":"Dùng nguyên ảnh bạn tạo sẵn, đoàn phim chỉ dựng. Miễn phí.","ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
+  const STEPS = ["Kịch bản","Giọng","Dựng","Kiểm định"];
   const STATUS = {
     "dang-lam": ["Đang làm","p-work"], "cho-duyet": ["Chờ duyệt","p-wait"], "dang-sua": ["Đang sửa","p-work"],
     "da-duyet": ["Đã duyệt · chờ đăng","p-ok"], "da-dang": ["Đã đăng","p-navy"], "tam-dung": ["Tạm dừng","p-mute"]};
@@ -162,12 +150,12 @@ a.link{color:var(--navy)}
     catch (e) { console.warn("fire_trigger", e?.code); return false; }
   }
   const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
-    sel: null, draftFb: [], form: null, voicesDoc: null, playing: null, answers: {}, pipes: [], pipeSel: null, pend: {} };
+    sel: null, draftFb: [], form: null, voicesDoc: null, playing: null, answers: {} };
   // Phiếu yêu cầu (thay ô "Chủ đề" một dòng): lời dặn tự do + tệp đính kèm + bắt buộc có / không được có / nguồn + cho phép hỏi lại
-  const newForm = () => ({ brief: "", must: "", avoid: "", links: "", files: [], clarify: true, style: "anime-dong", length: 45, gate: true, gateA: true, narration: true, voice: "", platform: "tiktok" });
+  const newForm = () => ({ brief: "", must: "", avoid: "", links: "", files: [], board: [], clarify: true, style: "storyboard", length: 45, gate: true, narration: true, voice: "", platform: "tiktok" });
   const DRAFT_KEY = "qbk-draft-v2";
-  const loadDraft = () => { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); if (d) return { ...newForm(), ...d, files: (d.files || []).filter(x => x.id) }; } catch {} return newForm(); };
-  const saveDraft = () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...S.form, files: S.form.files.filter(x => x.id).map(({ url, ...x }) => x) })); } catch {} };
+  const loadDraft = () => { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); if (d) { const f = { ...newForm(), ...d, files: (d.files || []).filter(x => x.id), board: (d.board || []).filter(x => x.id) }; if (/^anime-dong$/.test(f.style)) f.style = "storyboard"; return f; } } catch {} return newForm(); };
+  const saveDraft = () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...S.form, files: S.form.files.filter(x => x.id).map(({ url, ...x }) => x), board: S.form.board.filter(x => x.id).map(({ url, ...x }) => x) })); } catch {} };
   const ROLES = [["dung", "Đưa vào video"], ["mau", "Mẫu phong cách"], ["tu-lieu", "Tư liệu nội dung"]];
   const kindOf = t => t.startsWith("image/") ? "image" : t.startsWith("video/") ? "video" : "doc";
   const HINTS = ["Mở đầu gây tò mò", "Kết bằng một bài học", "Giọng hài hước", "Có số liệu cụ thể", "Có nhân vật đối thoại", "Kết bằng câu hỏi cho người xem"];
@@ -177,7 +165,8 @@ a.link{color:var(--navy)}
   const platOf = id => PLATFORMS.find(p => p[0] === id) || PLATFORMS[0];
   const maxLen = f => platOf(f.platform)[2] === "16:9" ? 300 : 90;
   S.form = loadDraft();
-  const isAnime = id => /^anime/.test(id || "");
+  // Phong cách dùng ảnh người dùng tự tạo (storyboard): bắt buộc tải ảnh từng cảnh, đoàn phim chỉ dựng
+  const needBoard = id => id === "storyboard" || !!dbStyles().find(x => x.id === id)?.userImages;
   const fmtLen = n => n >= 60 ? Math.floor(n / 60) + " phút" + (n % 60 ? " " + (n % 60) + " giây" : "") : n + " giây";
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -195,13 +184,12 @@ a.link{color:var(--navy)}
     new: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/>',
     report: '<path d="M5 20V10M12 20V4M19 20v-7"/>',
     crew: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 20c0-2.2 1.3-4 3.5-4S21 17.8 21 20"/>',
-    xuong: '<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
     back: '<path d="M15 5l-7 7 7 7"/>'
   };
   const svg = (k, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
-  const TABS = [["home","Trang chủ"],["new","Làm video"],["xuong","Xưởng AI"],["report","Báo cáo"],["crew","Đoàn phim"]];
+  const TABS = [["home","Trang chủ"],["new","Làm video"],["report","Báo cáo"],["crew","Đoàn phim"]];
 
-  function route() { const h = (location.hash || "#home").slice(1); return ["home","new","xuong","learn","review","post","report","crew"].includes(h) ? h : "home"; }
+  function route() { const h = (location.hash || "#home").slice(1); return ["home","new","learn","review","post","report","crew"].includes(h) ? h : "home"; }
   function go(h) { if (location.hash !== "#" + h) location.hash = h; else render(); }
   window.addEventListener("hashchange", render);
 
@@ -237,8 +225,8 @@ a.link{color:var(--navy)}
       <div class="tiles two"><button class="btn" data-animfb="${esc(v.id)}">Gửi góp ý</button><button class="btn ok" data-animok="${esc(v.id)}">Duyệt, bắt đầu quay</button></div></details>`;
   // Dự toán thời gian: số phút của từng bước STEPS theo phong cách, ước lượng từ các video đã làm (mốc 45 giây).
   // Đoàn phim có thể ghi đè bảng bằng app/stats.etaMinutes[style]; ghi videos/<id>.stageStartedAt (lúc bắt đầu bước hiện tại) và .eta (giờ dự kiến xong, ISO) thì app dùng số đó.
-  const ETA_MIN = { "anime-dong": [10, 5, 25, 35, 10, 5], "anime-tinh": [10, 3, 20, 0, 10, 5], "ve-tinh": [8, 2, 10, 12, 8, 5], "thi-nghiem": [8, 2, 12, 15, 8, 5], _: [8, 2, 12, 12, 8, 5] };
-  const ETA_SCALE = [0, 0, 1, 1, 0.5, 0]; // bước nào dài ra theo độ dài phim
+  const ETA_MIN = { storyboard: [8, 4, 10, 5], "ve-tinh": [8, 4, 20, 5], "thi-nghiem": [8, 4, 25, 5], _: [8, 4, 15, 5] };
+  const ETA_SCALE = [0, 0.5, 1, 0]; // bước nào dài ra theo độ dài phim
   const etaTable = (style, len) => { const base = S.stats?.etaMinutes?.[style] || ETA_MIN[style] || ETA_MIN._, k = (+len || 45) / 45;
     return STEPS.map((_, i) => Math.round((base[i] || 0) * (1 + (k - 1) * ETA_SCALE[i]))); };
   const etaTotal = (style, len) => etaTable(style, len).reduce((a, b) => a + b, 0);
@@ -250,7 +238,7 @@ a.link{color:var(--navy)}
     if (!(v.status === "dang-lam" || v.status === "dang-sua")) return null;
     if (waitingUser(v)) return { wait: true };
     const tbl = etaTable(v.style, v.duration || v.length);
-    let idx = STEPS.indexOf(v.stage); if (idx < 0) idx = v.status === "dang-sua" ? 2 : 0;
+    let idx = STEPS.indexOf(v.stage); if (idx < 0) idx = v.status === "dang-sua" ? 2 : 0; idx = Math.min(idx, STEPS.length - 1);
     const cur = tbl[idx] || 3, since = minsSince(v.stageStartedAt || v.updatedAt) ?? 0;
     let left = Math.max(2, cur - since) + tbl.slice(idx + 1).reduce((a, b) => a + b, 0);
     if (v.status === "dang-sua") left *= 0.6; // sửa theo góp ý: chỉ làm lại cảnh bị góp ý
@@ -356,7 +344,7 @@ a.link{color:var(--navy)}
     const pending = S.requests.filter(r => r.status === "moi" || r.status === "tra-loi");
     const asks = S.requests.filter(r => r.status === "can-hoi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
-    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng phim ngắn: anime, vệ tinh, thí nghiệm 3D</p></div></div>
+    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng phim ngắn: ảnh storyboard của bạn, vệ tinh, thí nghiệm 3D</p></div></div>
       <a class="btn primary big" href="#new">Làm video mới</a>
       <div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
@@ -413,6 +401,54 @@ a.link{color:var(--navy)}
       if (x.id && S.assets) { try { await S.assets.delete(x.id); } catch {} } });
   }
 
+  // ===== Ảnh storyboard: bạn tạo ảnh từng cảnh bên Gemini, tải lên theo thứ tự; đoàn phim chỉ dựng (không vẽ, không gọi API) =====
+  // requests.storyboard = [{id, name, type, size, note}] theo đúng thứ tự cảnh; note = lời hoặc ý của cảnh, chuyển động muốn có
+  function boardSection() {
+    const f = S.form, n = f.board.length;
+    return `<div class="card col" style="gap:10px;border-color:var(--navy)">
+      <div class="row between"><b style="font-size:14px">Ảnh storyboard${n ? ` (${n} cảnh)` : ""}</b>${needBoard(f.style) ? '<span class="pill p-wait">Bắt buộc</span>' : ""}</div>
+      <span class="small">Tạo ảnh từng cảnh bên Gemini theo storyboard của bạn, rồi tải lên <b>theo thứ tự cảnh</b>. Đoàn phim giữ nguyên ảnh, chỉ dựng: chuyển động máy nhẹ, lời đọc, phụ đề, nhạc, chuyển cảnh. Ghi dưới mỗi ảnh lời hoặc ý của cảnh đó (không bắt buộc).</span>
+      ${S.assets ? `<label class="drop"><input id="bpick" type="file" multiple accept="image/*">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>
+        Thêm ảnh cảnh<span class="small" style="font-weight:400">Chọn nhiều ảnh một lúc, xếp lại thứ tự bằng nút ↑ ↓</span></label>`
+        : `<div class="empty">Chỉ tải ảnh được khi mở app bằng tài khoản chủ app.</div>`}
+      <div id="blist" class="col">${boardList()}</div></div>`;
+  }
+  function boardList() {
+    const b = S.form.board;
+    return b.map((x, i) => `<div class="att">
+      ${x.url || x.id ? `<img class="pv" src="${esc(x.url || blob(x.id))}" alt="Cảnh ${i + 1}">` : `<span class="pv">…</span>`}
+      <div class="grow"><div class="row between" style="gap:6px"><b style="font-size:13px">Cảnh ${i + 1}</b>
+        <span class="pill ${x.status === "ok" ? "p-ok" : x.status === "err" ? "p-wait" : "p-work"}">${x.status === "ok" ? "Đã tải" : x.status === "err" ? "Lỗi" : "Đang tải…"}</span></div>
+        <span class="nm small">${esc(x.name)}</span>
+        <input type="text" data-bnote="${i}" value="${esc(x.note || "")}" aria-label="Ghi chú cảnh ${i + 1}" placeholder="Ví dụ: Rùa bắt đầu bò, máy đẩy chậm vào mặt"></div>
+      <div class="col" style="gap:4px"><button type="button" class="xbtn" data-bmv="${i}|-1" aria-label="Đưa cảnh ${i + 1} lên" ${i ? "" : "disabled"}>↑</button>
+        <button type="button" class="xbtn" data-bmv="${i}|1" aria-label="Đưa cảnh ${i + 1} xuống" ${i < b.length - 1 ? "" : "disabled"}>↓</button>
+        <button type="button" class="xbtn" data-brm="${i}" aria-label="Bỏ cảnh ${i + 1}">×</button></div></div>`).join("");
+  }
+  function refreshBoard() { const el = $("#blist"); if (el) { el.innerHTML = boardList(); bindBoard(); } saveDraft(); }
+  async function addBoard(list) {
+    const imgs = [...list].filter(f => (f.type || "").startsWith("image/")).sort((a, b) => a.name.localeCompare(b.name, "vi", { numeric: true }));
+    if (imgs.length < list.length) toast("Chỉ nhận ảnh ở mục storyboard. Video, tài liệu thêm ở mục bên trên.");
+    const items = imgs.map(file => ({ file, x: { name: file.name, type: file.type, size: file.size, note: "", status: file.size > MAX_MB * 1048576 ? "err" : "up" } }));
+    for (const { x } of items) S.form.board.push(x);
+    refreshBoard(); if (render.last === "new") render();
+    for (const { file, x } of items) {
+      if (x.status === "err") { toast(`"${file.name}" lớn hơn ${MAX_MB}MB.`); continue; }
+      try { const res = await S.assets.upload(file); Object.assign(x, { id: res.id, url: res.url, status: "ok" }); }
+      catch (e) { x.status = "err"; toast(`Chưa tải được "${file.name}": ` + (e?.code === "quota_exceeded" ? "kho tệp của app đã đầy." : "thử lại sau.")); }
+      refreshBoard();
+    }
+  }
+  function bindBoard() {
+    const b = S.form.board;
+    document.querySelectorAll("[data-bnote]").forEach(inp => inp.oninput = () => { const x = b[+inp.dataset.bnote]; if (x) { x.note = inp.value; saveDraft(); } });
+    document.querySelectorAll("[data-bmv]").forEach(btn => btn.onclick = () => { const [i, d] = btn.dataset.bmv.split("|").map(Number), j = i + d;
+      if (j < 0 || j >= b.length) return; [b[i], b[j]] = [b[j], b[i]]; refreshBoard(); });
+    document.querySelectorAll("[data-brm]").forEach(btn => btn.onclick = async () => { const i = +btn.dataset.brm, x = b[i]; if (!x) return;
+      b.splice(i, 1); refreshBoard(); if (x.id && S.assets) { try { await S.assets.delete(x.id); } catch {} } });
+  }
+
   V.new = () => {
     const f = S.form;
     return `<div class="row"><a class="back" href="#home" aria-label="Quay lại">${svg("back")}</a><h1>Làm video mới</h1></div>
@@ -438,10 +474,11 @@ a.link{color:var(--navy)}
         </div></details>
       <div class="col"><span style="font-size:13px;font-weight:700">Nền tảng · khung hình</span>
         <div class="chips">${PLATFORMS.map(([id, n, ar]) => `<button type="button" class="chip" data-plat="${id}" aria-pressed="${f.platform === id}">${n} <span class="small" style="color:inherit;opacity:.75">${ar === "16:9" ? "ngang 16:9" : "dọc 9:16"}</span></button>`).join("")}</div>
-        ${platOf(f.platform)[2] === "16:9" ? `<span class="small">Khung ngang 16:9, dài tối đa 5 phút. Phim dài hơn thì chi phí cao hơn, đoàn phim sẽ dự toán trước.</span>` : ""}</div>
+        ${platOf(f.platform)[2] === "16:9" ? `<span class="small">Khung ngang 16:9, dài tối đa 5 phút.</span>` : ""}</div>
       <div class="col"><div class="row between"><span style="font-size:13px;font-weight:700">Phong cách</span></div>
-        <div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : eng === "omni" ? ' <span class="pill p-wait">Động</span>' : ""}</span></button>`).join("")}<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a></div>
+        <div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : eng === "anh" ? ' <span class="pill p-ok">Ảnh của bạn</span>' : ""}</span></button>`).join("")}<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a></div>
         ${styleNote(f.style) ? `<span class="small">${esc(styleNote(f.style))}</span>` : ""}</div>
+      ${needBoard(f.style) || f.board.length ? boardSection() : ""}
       <div class="card col">
         <div class="row between"><label for="len" style="font-size:14px">Độ dài</label><b id="lenv" style="font-variant-numeric:tabular-nums">${fmtLen(Math.min(f.length, maxLen(f)))}</b></div>
         <input id="len" type="range" min="15" max="${maxLen(f)}" step="${maxLen(f) > 90 ? 15 : 5}" value="${Math.min(f.length, maxLen(f))}" style="width:100%;accent-color:var(--red)">
@@ -453,9 +490,8 @@ a.link{color:var(--navy)}
           <span class="small">Bấm ▶ để nghe thử câu mẫu, bấm vào dòng để chọn giọng.</span>` : `<span class="small">Đang tải danh sách giọng…</span>`}</div>` : `<span class="small">Không lời: chỉ nhạc và tiếng động.</span>`}
         <div class="row between"><label for="clarify" style="font-size:14px">Hỏi lại mình nếu yêu cầu chưa rõ<br><span class="small">Câu hỏi hiện ở Trang chủ</span></label><input id="clarify" type="checkbox" ${f.clarify ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red);flex-shrink:0"></div>
         <div class="row between"><label for="gate" style="font-size:14px">Cho mình duyệt kịch bản trước</label><input id="gate" type="checkbox" ${f.gate ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
-        ${isAnime(f.style) ? `<div class="row between"><label for="gateA" style="font-size:14px">Duyệt ${f.style === "anime-dong" ? "animatic (bản dựng thô) trước khi quay" : "khung hình trước khi dựng"}</label><input id="gateA" type="checkbox" ${f.gateA ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>` : ""}
       </div>
-      <p class="small" style="text-align:center;margin:0">Có kịch bản xong, đoàn phim <b>dự toán chi phí</b> cho cả video. Vượt trần thì dừng chờ bạn duyệt. Làm xong sẽ gửi video về mục "Cần bạn duyệt".</p>
+      <p class="small" style="text-align:center;margin:0">Đoàn phim không gọi dịch vụ trả phí nào: không vẽ ảnh AI, không quay video AI. Làm xong sẽ gửi video về mục "Cần bạn duyệt".</p>
       <p class="small" style="text-align:center;margin:0">Thời gian làm ước tính: <b id="etav">khoảng ${dur(etaTotal(f.style, Math.min(f.length, maxLen(f))))}</b>, chưa tính lúc chờ bạn duyệt.</p>
       <button class="btn primary big" type="submit" ${S.db ? "" : "disabled"}>Giao cho đoàn phim</button>
       ${S.db ? "" : `<p class="small">Không kết nối được cơ sở dữ liệu của app, nên chưa gửi được yêu cầu.</p>`}
@@ -554,272 +590,6 @@ a.link{color:var(--navy)}
       <p class="small">Muốn đoàn phim học phong cách mới: vào "Làm video", chọn "+ Học phong cách mới".</p>`;
   };
 
-  // ===== Xưởng AI: Họa Sĩ (ChatGPT tạo ảnh) → Quay Phim (Gemini tạo video) → Dựng Phim (đoàn phim Claude ghép) =====
-  // Không gọi API: app giữ tệp, viết câu lệnh, chép sẵn và mở app ChatGPT/Gemini; bạn tạo bằng gói của mình rồi bấm "Nhận" để đưa kết quả về.
-  // db: pipelines/<id> = {title, idea, look, src:{id,name}, imgPrompt, imgEdited, images:[{id,name,pick}], motion, vidPrompt, vidEdited, clips:[{id,name}],
-  //   edit:{narration, script, captions, music, note}, stage: hoa-si|quay-phim|dung-phim, status: dang-lam|cho-dung|dang-dung|xong|loi, result, video, videoId}
-  const PSTEPS = [["hoa-si", "Họa Sĩ", "ChatGPT · tạo ảnh"], ["quay-phim", "Quay Phim", "Gemini, Seedance… · video"], ["dung-phim", "Dựng Phim", "Claude · ghép"]];
-  const LOOKS = [["nguoi-que", "Người que nét mực", "người que nét mực đen vẽ tay trên nền giấy ấm, nét đơn giản"],
-    ["anime", "Anime", "tranh anime, nét sạch, tô bóng mềm, màu tươi"], ["hoat-hinh-3d", "Hoạt hình 3D", "phim hoạt hình 3D, ánh sáng mềm, nhân vật dễ thương"],
-    ["dien-anh", "Ảnh thật điện ảnh", "ảnh chân thực kiểu điện ảnh, ánh sáng tự nhiên, xóa phông nhẹ"], ["mau-nuoc", "Màu nước", "tranh màu nước, loang mềm, vân giấy"]];
-  const MOVES = ["Nhảy theo trend vui nhộn", "Máy quay tiến chậm vào nhân vật", "Nhân vật bước đi", "Gió thổi nhẹ, tóc và lá bay", "Máy quay xoay quanh nhân vật", "Nhân vật quay đầu nhìn máy", "Ánh sáng chuyển từ ngày sang tối"];
-  const PST = { "dang-lam": ["Đang làm", "p-work"], "cho-dung": ["Chờ đoàn phim dựng", "p-wait"], "dang-dung": ["Đoàn phim đang dựng", "p-work"], "xong": ["Đã dựng xong", "p-ok"], "loi": ["Cần bạn xem", "p-wait"] };
-  const GPT_URL = "https://chatgpt.com/";
-  // Công cụ tạo video: nút mở đúng trang, và Claude viết câu lệnh theo cách công cụ đó hiểu tốt nhất
-  const VTOOLS = [["gemini", "Gemini Veo", "https://gemini.google.com/app"], ["seedance", "Seedance", "https://dreamina.capcut.com/"],
-    ["kling", "Kling", "https://klingai.com/"], ["openart", "OpenArt", "https://openart.ai/"]];
-  const vtoolOf = id => VTOOLS.find(t => t[0] === id) || VTOOLS[0];
-  const VGUIDE = {
-    gemini: "Target: Google Veo (inside the Gemini app), image-to-video, 8 seconds, vertical 9:16. Write one flowing natural-language paragraph: subject (precise identity details from the image), the action as a short timed sequence (0-3s, 3-6s, 6-8s), camera (shot size, angle, movement), lighting and mood, then an 'Audio:' sentence (ambience, sound effects or music feel; no dialogue unless asked).",
-    seedance: "Target: ByteDance Seedance, image-to-video, 5-10 seconds, vertical 9:16. Start with 'The uploaded image is the first frame.' Then: keep-identity sentence, 3-5 clear action beats in order (use 'then'), one explicit camera instruction (e.g. 'fixed camera', 'slow push-in', 'orbit left'), motion quality (smooth, natural, rhythmic), lighting. Keep it concise; too many actions cause artifacts.",
-    kling: "Target: Kling AI, image-to-video, 5-10 seconds, vertical 9:16. Structure: subject + motion + scene + camera movement + atmosphere, in 2-4 compact sentences. Put things to avoid only in the negative prompt.",
-    openart: "Target: OpenArt video (model chosen there, e.g. Kling/Veo/Seedance), image-to-video, vertical 9:16. Write a model-agnostic prompt: keep-identity sentence, 3-5 action beats in order, one camera instruction, lighting and mood, motion quality."
-  };
-  const PROMPT_RULES = `Rules:
-- Do NOT copy the user's words literally. Understand the intent, translate from Vietnamese, and expand it into a professional prompt with concrete visual detail.
-- If a reference image is attached, study it and describe what must stay the same (face, hairstyle, outfit, accessories, colours, setting) precisely, so the result keeps the same person or character.
-- Write the prompt in English. Be specific and visual; no filler words like "masterpiece".
-- Keep it tasteful and platform-safe for TikTok/YouTube: no nudity or sexualised framing, no gore, no real-world brand logos or on-screen text unless the user asks.
-- If the idea is empty, infer a fitting, engaging idea from the image.`;
-  const imgAsk = p => `You are an expert prompt writer for ChatGPT image generation.
-Task: write one prompt that makes a vertical 9:16 image.
-User idea (Vietnamese): "${(p.idea || "").trim() || "(none)"}"
-Visual style: ${lookOf(p.look)[1]} — ${lookOf(p.look)[2]}
-${p.src ? "A reference image is attached: begin the prompt with 'Using the attached image as reference,' and keep the same subject." : "No reference image."}
-${PROMPT_RULES}
-Structure: subject and identity details, pose/action, setting, composition and framing (vertical 9:16), lighting, colour palette, style.
-Reply with only JSON: {"prompt": "...", "note_vi": "one short Vietnamese sentence describing what the image will show"}`;
-  const vidAsk = (p, nImg) => `You are an expert prompt writer for AI image-to-video tools.
-${VGUIDE[p.vtool || "gemini"]}
-User idea (Vietnamese): "${(p.idea || "").trim() || "(none)"}"
-Desired motion (Vietnamese): "${(p.motion || "").trim() || "(none — choose motion that fits the image and idea)"}"
-${nImg ? `${nImg} image(s) attached: they are the starting frame(s). Describe the subject so identity, outfit and setting stay consistent.` : "No image attached."}
-${PROMPT_RULES}
-- If the user wants a dance or trend, describe a concrete, beat-synced choreography (named moves in order), energetic but not sexualised; say music will be added later in the app, so describe tempo (e.g. 120 BPM) rather than a song.
-Reply with only JSON: {"prompt": "...", "negative": "comma-separated things to avoid (identity drift, distorted hands, extra limbs, flicker, text, watermark, ...)", "note_vi": "one short Vietnamese sentence describing the video"}`;
-  const SAMPLE_ERR = { not_granted: "Bạn chưa cho phép app nhờ Claude. Mở lại app và bấm Cho phép.", rate_limited: "Claude đang bận, chờ một phút rồi thử lại.",
-    refused: "Claude từ chối ý tưởng này, thử viết ý tưởng khác.", image_rejected: "Ảnh quá lớn hoặc không đọc được.", images_unavailable: "Thiết bị này chưa gửi ảnh cho Claude được.",
-    invalid_json: "Claude trả lời chưa đúng dạng, bấm lại một lần nữa.", cancelled: "Đã dừng." };
-  async function askClaude(kind, btn) {
-    const p = curPipe(); if (!p || !S.sample) return;
-    const old = btn.innerHTML; btn.disabled = true; btn.textContent = "Claude đang xem ảnh và viết…";
-    try {
-      const ids = kind === "img" ? (p.src ? [p.src.id] : []) : (pickedImgs(p).length ? pickedImgs(p).slice(0, 3).map(x => x.id) : p.src ? [p.src.id] : []);
-      const lim = await S.sample.limits().catch(() => ({}));
-      const use = lim.images ? ids.slice(0, lim.images.maxCount || 1) : [];
-      const images = await Promise.all(use.map(id => fetch(blob(id)).then(r => r.blob())));
-      const out = await S.sample.json(kind === "img" ? imgAsk(p) : vidAsk(p, images.length), images.length ? { images } : {});
-      if (!out || typeof out.prompt !== "string" || !out.prompt.trim()) throw { code: "invalid_json" };
-      const patch = kind === "img" ? { imgPrompt: out.prompt.trim(), imgEdited: true, imgNote: String(out.note_vi || ""), imgBy: "claude" }
-        : { vidPrompt: out.prompt.trim(), vidEdited: true, vidNeg: String(out.negative || ""), vidNote: String(out.note_vi || ""), vidBy: "claude" };
-      await savePipe(p.id, patch, true); render(); toast("Claude đã viết xong câu lệnh");
-    } catch (e) { btn.disabled = false; btn.innerHTML = old; toast(SAMPLE_ERR[e?.code] || "Chưa nhờ Claude được, thử lại sau."); }
-  }
-  const claudeBtn = kind => S.sample ? `<button type="button" class="btn dark" data-pclaude="${kind}">✨ Claude viết câu lệnh chuẩn</button>` : "";
-  const lookOf = id => LOOKS.find(l => l[0] === id) || LOOKS[0];
-  const buildImg = p => `Vẽ cho mình một ảnh khung dọc 9:16${p.src ? ", dựa trên ảnh mình gửi kèm (giữ nguyên nhân vật, gương mặt và bố cục chính)" : ""}.
-Nội dung: ${(p.idea || "").trim() || "(mô tả cảnh)"}.
-Phong cách: ${lookOf(p.look)[2]}.
-Không chèn chữ hay logo vào ảnh.`;
-  const buildVid = p => `Tạo video khung dọc 9:16, dài 8 giây, từ ảnh mình gửi kèm. Giữ nguyên nhân vật, màu sắc và phong cách của ảnh.
-Chuyển động: ${(p.motion || "").trim() || "máy quay tiến chậm, chuyển động nhẹ nhàng, tự nhiên"}.
-${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không chèn chữ, không phụ đề, không logo.`;
-  // Bản trên db + phần bạn vừa gõ mà chưa lưu (lưu sau 0,7 giây)
-  const curPipe = () => { const p = S.pipes.find(x => x.id === S.pipeSel); return p ? { ...p, ...(S.pend[p.id] || {}) } : null; };
-  const pipeTimers = {};
-  function savePipe(id, patch, now) {
-    S.pend[id] = { ...(S.pend[id] || {}), ...patch };
-    clearTimeout(pipeTimers[id]);
-    const flush = async () => { const data = S.pend[id]; if (!data || !S.db) return; delete S.pend[id];
-      const loc = S.pipes.find(x => x.id === id); if (loc) Object.assign(loc, data); // giữ bản trong máy mới nhất trong lúc chờ db báo về
-      try { await S.db.doc("pipelines/" + id).update({ ...data, updatedAt: nowISO() }); }
-      catch { S.pend[id] = { ...data, ...(S.pend[id] || {}) }; toast("Chưa lưu được, thử lại sau."); } };
-    if (now) return flush(); pipeTimers[id] = setTimeout(flush, 700);
-  }
-  const pickedImgs = p => (p.images || []).filter(x => x.pick);
-  const stepDone = (p, k) => k === "hoa-si" ? pickedImgs(p).length > 0 : k === "quay-phim" ? (p.clips || []).length > 0 : p.status === "xong";
-
-  function pipeList() {
-    return `<div><h1>Xưởng <em>AI</em></h1><p class="sub">Ảnh từ ChatGPT, video từ Gemini, đoàn phim Claude ghép. Dùng gói bạn đã mua, không cần API.</p></div>
-      <div class="flow" aria-hidden="true">${PSTEPS.map(([, n, d], i) => `<button type="button" tabindex="-1"><b>${i + 1}. ${n}</b><span class="small">${d}</span></button>`).join("")}</div>
-      <button class="btn primary big" id="pnew" ${S.db ? "" : "disabled"}>Dự án mới</button>
-      ${S.pipes.length ? `<h2>Dự án</h2><div class="list">${S.pipes.map(p => { const st = PST[p.status] || PST["dang-lam"], th = pickedImgs(p)[0] || (p.src && { id: p.src.id });
-        return `<button class="li" data-popen="${esc(p.id)}" style="width:100%;border-left:0;border-right:0;border-bottom:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer">
-          ${th ? `<img src="${blob(th.id)}" alt="" style="width:40px;aspect-ratio:9/16;object-fit:cover;border-radius:6px;border:1px solid var(--line)">` : `<span style="width:40px;aspect-ratio:9/16;border-radius:6px;background:var(--soft)"></span>`}
-          <span class="grow"><b style="font-weight:600">${esc(p.title || "Dự án")}</b><span class="small" style="display:block">${esc((PSTEPS.find(s => s[0] === p.stage) || PSTEPS[0])[1])} · ${(p.images || []).length} ảnh · ${(p.clips || []).length} clip</span></span>
-          <span class="pill ${st[1]}">${st[0]}</span></button>`; }).join("")}</div>`
-        : S.ready ? `<div class="empty">Chưa có dự án. Bấm "Dự án mới", đưa ảnh vào, rồi đi lần lượt 3 khâu.</div>` : `<div class="empty">Đang tải…</div>`}
-      ${S.db ? "" : `<p class="small">Không kết nối được cơ sở dữ liệu của app.</p>`}`;
-  }
-  const upBox = (id, label, hint, accept, multi) => S.assets ? `<label class="drop"><input id="${id}" type="file" accept="${accept}" ${multi ? "multiple" : ""}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-      ${label}<span class="small" style="font-weight:400">${hint}</span></label>` : `<div class="empty">Chỉ tải tệp được khi mở app bằng tài khoản chủ app.</div>`;
-  const clipList = p => (p.clips || []).length ? `<div class="gal">${p.clips.map((c, i) => `<div class="gi"><video src="${blob(c.id)}#t=0.3" muted playsinline preload="metadata" controls></video>
-      <span class="small">Clip ${i + 1}</span><div class="tools">${i ? `<button class="btn sm" data-pmv="${i}|-1" aria-label="Đưa clip ${i + 1} lên trước">↑</button>` : ""}${i < p.clips.length - 1 ? `<button class="btn sm" data-pmv="${i}|1" aria-label="Đưa clip ${i + 1} ra sau">↓</button>` : ""}<button class="btn sm" data-prm="clips|${i}" aria-label="Bỏ clip ${i + 1}">×</button></div></div>`).join("")}</div>` : "";
-
-  function pipeHoaSi(p) {
-    const imgs = p.images || [];
-    return `<div class="card col" style="gap:12px">
-      <div class="row between"><b>1. Họa Sĩ</b><span class="who">dùng ChatGPT</span></div>
-      <div class="col" style="gap:6px"><span class="f" style="font-size:13px;font-weight:700">Ảnh gốc <span class="small" style="font-weight:400">không bắt buộc</span></span>
-        ${p.src ? `<div class="att"><img class="pv" src="${blob(p.src.id)}" alt=""><div class="grow"><span class="nm">${esc(p.src.name || "Ảnh gốc")}</span><span class="small">Nhớ đính kèm ảnh này khi gửi cho Họa Sĩ.</span></div><button type="button" class="xbtn" id="psrcx" aria-label="Bỏ ảnh gốc">×</button></div>`
-          : upBox("psrc", "Chọn ảnh gốc", "Ảnh nhân vật, ảnh chụp, phác thảo…", "image/*", false)}</div>
-      <div class="col" style="gap:4px"><label class="f" for="pidea">Ý tưởng</label>
-        <textarea id="pidea" rows="3" placeholder="Ví dụ: cậu bé người que đứng trên đỉnh núi lúc bình minh, tay giơ lá cờ">${esc(p.idea || "")}</textarea></div>
-      <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Phong cách ảnh</span>
-        <div class="chips sm">${LOOKS.map(([id, n]) => `<button type="button" class="chip" data-plook="${id}" aria-pressed="${(p.look || "nguoi-que") === id}">${n}</button>`).join("")}</div></div>
-      ${claudeBtn("img")}
-      <div class="col" style="gap:4px"><div class="row between"><label class="f" for="pimg">Câu lệnh gửi Họa Sĩ${p.imgBy === "claude" ? ' <span class="pill p-ok">Claude viết</span>' : ""}</label>${p.imgEdited ? `<button type="button" class="del" id="pimgreset" style="padding:0">Về mẫu đơn giản</button>` : ""}</div>
-        ${p.imgNote && p.imgBy === "claude" ? `<span class="small"><b>Ảnh sẽ ra:</b> ${esc(p.imgNote)}</span>` : ""}
-        <textarea id="pimg" rows="${p.imgBy === "claude" ? 8 : 5}">${esc(p.imgEdited ? p.imgPrompt : buildImg(p))}</textarea>
-        ${S.sample && p.imgBy !== "claude" ? `<span class="small">Đây là mẫu đơn giản. Bấm "✨ Claude viết câu lệnh chuẩn" để có câu lệnh chuẩn, chi tiết hơn.</span>` : ""}</div>
-      <a class="btn primary big" href="${GPT_URL}" target="_blank" rel="noopener" data-popenapp="img">Chép câu lệnh và mở Họa Sĩ</a>
-      <span class="small">Trong ChatGPT: ${p.src ? "đính kèm ảnh gốc, " : ""}dán câu lệnh rồi gửi. Lưu ảnh vẽ xong về máy, quay lại đây bấm "Nhận ảnh". Muốn thêm ảnh khác thì làm lại.</span>
-      <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Ảnh Họa Sĩ đã vẽ (${imgs.length})</span>
-        ${imgs.length ? `<div class="gal">${imgs.map((x, i) => `<div class="gi ${x.pick ? "on" : ""}"><img src="${blob(x.id)}" alt="Ảnh ${i + 1}">
-          <div class="tools"><button class="btn sm" data-ppick="${i}" aria-pressed="${!!x.pick}">${x.pick ? "✓ Dùng" : "Dùng"}</button><button class="btn sm" data-prm="images|${i}" aria-label="Bỏ ảnh ${i + 1}">×</button></div></div>`).join("")}</div>
-          <span class="small">Ảnh có viền xanh sẽ được chuyển sang Quay Phim.</span>` : ""}
-        ${upBox("pimgs", "Nhận ảnh", "Chọn ảnh vừa lưu từ ChatGPT (chọn nhiều được)", "image/*", true)}</div>
-      <button class="btn ok big" data-pgo="quay-phim" ${pickedImgs(p).length ? "" : "disabled"}>Chuyển ${pickedImgs(p).length || ""} ảnh sang Quay Phim →</button>
-      <button class="del" data-pgo="quay-phim">Bỏ qua, mình đã có sẵn video</button></div>`;
-  }
-  function pipeQuayPhim(p) {
-    const imgs = pickedImgs(p);
-    return `<div class="card col" style="gap:12px">
-      <div class="row between"><b>2. Quay Phim</b><span class="who">dùng ${esc(vtoolOf(p.vtool)[1])}</span></div>
-      ${imgs.length ? `<div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Ảnh từ Họa Sĩ (${imgs.length})</span>
-        <div class="gal">${imgs.map((x, i) => `<div class="gi"><img src="${blob(x.id)}" alt="Ảnh ${i + 1}">${S.dl ? `<div class="tools"><button class="btn sm" data-psave="${esc(x.id)}">Lưu về máy</button></div>` : ""}</div>`).join("")}</div>
-        <span class="small">Mỗi ảnh làm một clip. Gửi từng ảnh cùng câu lệnh bên dưới.</span></div>`
-        : p.src ? `<div class="att"><img class="pv" src="${blob(p.src.id)}" alt=""><div class="grow"><span class="nm">${esc(p.src.name || "Ảnh đầu vào")}</span><span class="small">Ảnh đầu vào cho video. Nhớ đính kèm khi gửi.</span></div><button type="button" class="xbtn" id="psrcx" aria-label="Bỏ ảnh">×</button></div>`
-        : `<div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Ảnh đầu vào</span>${upBox("psrc", "Chọn ảnh làm video", "Ảnh sẽ được Claude xem để viết câu lệnh", "image/*", false)}</div>`}
-      <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Công cụ tạo video</span>
-        <div class="chips sm">${VTOOLS.map(([id, n]) => `<button type="button" class="chip" data-pvtool="${id}" aria-pressed="${(p.vtool || "gemini") === id}">${n}</button>`).join("")}</div></div>
-      <div class="col" style="gap:4px"><label class="f" for="pidea2">Ý tưởng video</label>
-        <textarea id="pidea2" rows="2" placeholder="Ví dụ: cô gái nhảy theo trend K-pop vui nhộn">${esc(p.idea || "")}</textarea></div>
-      <div class="col" style="gap:6px"><label class="f" for="pmotion">Chuyển động trong video</label>
-        <div class="chips sm">${MOVES.map(m => `<button type="button" class="chip" data-pmove="${esc(m)}">+ ${esc(m)}</button>`).join("")}</div>
-        <textarea id="pmotion" rows="2" placeholder="Ví dụ: lá cờ bay trong gió, máy quay lùi dần ra xa">${esc(p.motion || "")}</textarea></div>
-      ${claudeBtn("vid")}
-      <div class="col" style="gap:4px"><div class="row between"><label class="f" for="pvid">Câu lệnh cho ${esc(vtoolOf(p.vtool)[1])}${p.vidBy === "claude" ? ' <span class="pill p-ok">Claude viết</span>' : ""}</label>${p.vidEdited ? `<button type="button" class="del" id="pvidreset" style="padding:0">Về mẫu đơn giản</button>` : ""}</div>
-        ${p.vidNote && p.vidBy === "claude" ? `<span class="small"><b>Video sẽ ra:</b> ${esc(p.vidNote)}</span>` : ""}
-        <textarea id="pvid" rows="${p.vidBy === "claude" ? 9 : 5}">${esc(p.vidEdited ? p.vidPrompt : buildVid(p))}</textarea>
-        ${S.sample && p.vidBy !== "claude" ? `<span class="small">Đây là mẫu đơn giản. Bấm "✨ Claude viết câu lệnh chuẩn" để có câu lệnh chuẩn theo ${esc(vtoolOf(p.vtool)[1])}.</span>` : ""}</div>
-      ${p.vidNeg && p.vidBy === "claude" ? `<div class="col" style="gap:4px"><div class="row between"><label class="f" for="pneg">Không muốn có (negative prompt)</label><button type="button" class="btn sm" id="pnegcopy">Sao chép</button></div>
-        <textarea id="pneg" rows="2">${esc(p.vidNeg)}</textarea><span class="small">Dán vào ô "Negative prompt" nếu công cụ có ô đó. Gemini không có thì bỏ qua.</span></div>` : ""}
-      <a class="btn primary big" href="${vtoolOf(p.vtool)[2]}" target="_blank" rel="noopener" data-popenapp="vid">Chép câu lệnh và mở ${esc(vtoolOf(p.vtool)[1])}</a>
-      <span class="small">Trong ${esc(vtoolOf(p.vtool)[1])}: chọn tạo video từ ảnh, đính kèm ảnh, dán câu lệnh rồi gửi. Tải video về máy, quay lại đây bấm "Nhận video".</span>
-      <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Clip đã nhận (${(p.clips || []).length})</span>${clipList(p)}
-        ${upBox("pclips", "Nhận video", `Chọn video vừa lưu từ ${esc(vtoolOf(p.vtool)[1])}, tối đa ${MAX_MB}MB mỗi clip`, "video/*", true)}</div>
-      <button class="btn ok big" data-pgo="dung-phim" ${(p.clips || []).length ? "" : "disabled"}>Chuyển ${(p.clips || []).length || ""} clip sang Dựng Phim →</button></div>`;
-  }
-  function pipeDungPhim(p) {
-    const e = p.edit || {}, st = p.status || "dang-lam", busy = st === "cho-dung" || st === "dang-dung";
-    const vid = p.videoId && S.videos.find(v => v.id === p.videoId);
-    return `<div class="card col" style="gap:12px">
-      <div class="row between"><b>3. Dựng Phim</b><span class="who">đoàn phim Claude</span></div>
-      <div class="col" style="gap:6px"><span style="font-size:13px;font-weight:700">Thứ tự clip (${(p.clips || []).length})</span>${clipList(p) || `<span class="small">Chưa có clip. Quay lại khâu Quay Phim để nhận video.</span>`}</div>
-      <div class="row between"><label for="pnarr" style="font-size:14px">Có lời đọc</label><input id="pnarr" type="checkbox" ${e.narration !== false ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
-      ${e.narration !== false ? `<div class="col" style="gap:4px"><label class="f" for="pscript">Lời đọc</label>
-        <textarea id="pscript" rows="3" placeholder="Để trống thì đoàn phim tự viết theo ý tưởng của dự án">${esc(e.script || "")}</textarea>
-        <span class="small">Giọng ${esc(curVoice())} · đổi giọng ở mục "Làm video".</span></div>` : ""}
-      <div class="row between"><label for="pcap" style="font-size:14px">Phụ đề</label><input id="pcap" type="checkbox" ${e.captions !== false ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
-      <div class="row between"><label for="pmusic" style="font-size:14px">Nhạc nền và tiếng động</label><input id="pmusic" type="checkbox" ${e.music !== false ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red)"></div>
-      <div class="col" style="gap:4px"><label class="f" for="pnote">Dặn đoàn phim</label>
-        <textarea id="pnote" rows="2" placeholder="Ví dụ: cắt nhanh theo nhịp, chữ tiêu đề to ở 2 giây đầu, kết bằng logo QBK">${esc(e.note || "")}</textarea></div>
-      ${st === "xong" ? `<div class="col" style="gap:8px"><span class="pill p-ok" style="align-self:flex-start">Đã dựng xong</span>
-          ${p.video ? `<video src="${blob(p.video)}" controls playsinline preload="metadata" style="width:100%;max-width:260px;align-self:center"></video>` : ""}
-          ${p.result ? `<span class="small">${esc(p.result)}</span>` : ""}
-          ${vid ? `<a class="btn dark" href="#review" data-sel="${esc(vid.id)}">Xem, duyệt và góp ý</a>` : ""}
-          <button class="btn" data-psend="1">Gửi dựng lại với lời dặn mới</button></div>`
-        : busy ? `<div class="col" style="gap:4px"><span class="pill ${PST[st][1]}" style="align-self:flex-start">${PST[st][0]}</span><span class="small">${esc(p.result || "Đoàn phim sẽ ghép clip, thêm lời đọc, phụ đề, âm thanh rồi gửi về mục \"Cần bạn duyệt\" ở Trang chủ.")}</span></div>`
-        : `${st === "loi" ? `<span class="small" style="color:var(--red-ink)">${esc(p.result || "Lần dựng trước bị lỗi.")}</span>` : ""}
-          <button class="btn primary big" data-psend="1" ${(p.clips || []).length && S.db ? "" : "disabled"}>Gửi đoàn phim dựng</button>`}</div>`;
-  }
-  V.xuong = () => {
-    const p = curPipe(); if (!p) { S.pipeSel = null; return pipeList(); }
-    const stage = p.stage || "hoa-si";
-    return `<div class="row"><button class="back" id="pback" aria-label="Về danh sách dự án" style="border:0;background:none;cursor:pointer">${svg("back")}</button>
-        <input id="ptitle" type="text" value="${esc(p.title || "")}" aria-label="Tên dự án" style="flex:1;min-width:0;font:400 24px var(--display);border-width:1.5px;padding:6px 10px"></div>
-      <nav class="flow" aria-label="Các khâu">${PSTEPS.map(([k, n, d], i) => `<button type="button" data-pstep="${k}" class="${stepDone(p, k) ? "done" : ""}" ${stage === k ? 'aria-current="step"' : ""}><b>${i + 1}. ${n}</b><span class="small">${d}</span></button>`).join("")}</nav>
-      ${stage === "quay-phim" ? pipeQuayPhim(p) : stage === "dung-phim" ? pipeDungPhim(p) : pipeHoaSi(p)}
-      <button class="del" id="pdel">${S.pipeDelArm === p.id ? "Bấm lần nữa để xóa dự án và các tệp của nó" : "Xóa dự án"}</button>`;
-  };
-  async function uploadTo(p, field, files, kind) {
-    const list = [...files]; let added = 0;
-    for (const file of list) {
-      if (file.size > MAX_MB * 1048576) { toast(`"${file.name}" lớn hơn ${MAX_MB}MB, cắt ngắn rồi thử lại.`); continue; }
-      toast(`Đang tải "${file.name}"…`);
-      try { const res = await S.assets.upload(file); const cur = curPipe() || p;
-        const item = kind === "src" ? { id: res.id, name: file.name } : field === "images" ? { id: res.id, name: file.name, pick: true } : { id: res.id, name: file.name };
-        if (kind === "src") await savePipe(p.id, { src: item }, true);
-        else await savePipe(p.id, { [field]: [...(cur[field] || []), item] }, true);
-        added++; render();
-      } catch (e) { toast(`Chưa tải được "${file.name}": ` + (e?.code === "unsupported_type" ? "loại tệp không hỗ trợ." : e?.code === "quota_exceeded" ? "kho tệp của app đã đầy." : "thử lại sau.")); }
-    }
-    if (added) toast(kind === "src" ? "Đã nhận ảnh gốc" : `Đã nhận ${added} ${field === "images" ? "ảnh" : "clip"}`);
-  }
-  function bindXuong() {
-    const pn = $("#pnew"); if (pn) pn.onclick = async () => { pn.disabled = true;
-      try { const d = new Date(), data = { title: "Dự án " + d.toLocaleDateString("vi-VN") + " " + hhmm(d), idea: "", look: "nguoi-que", images: [], clips: [], motion: "",
-          edit: { narration: true, captions: true, music: true, script: "", note: "" }, stage: "hoa-si", status: "dang-lam", createdAt: nowISO(), updatedAt: nowISO() };
-        const ref = await S.db.collection("pipelines").add(data);
-        if (!S.pipes.some(x => x.id === ref.id)) S.pipes = [{ id: ref.id, ...data }, ...S.pipes]; // hiện ngay, không chờ db báo về
-        S.pipeSel = ref.id; render(); } catch { pn.disabled = false; toast("Chưa tạo được dự án, thử lại sau."); } };
-    document.querySelectorAll("[data-popen]").forEach(b => b.onclick = () => { S.pipeSel = b.dataset.popen; render.last = null; render(); });
-    const p = curPipe(); if (!p) return;
-    const id = p.id, field = (sel, key, opts = {}) => { const el = $(sel); if (el) el.addEventListener("input", () => { savePipe(id, opts.wrap ? opts.wrap(el.value) : { [key]: el.value }); opts.after?.(el.value); }); };
-    $("#pback").onclick = () => { S.pipeSel = null; render.last = null; render(); };
-    field("#ptitle", "title");
-    const refreshImg = () => { const q = curPipe(), el = $("#pimg"); if (el && !q.imgEdited) el.value = buildImg(q); };
-    const refreshVid = () => { const q = curPipe(), el = $("#pvid"); if (el && !q.vidEdited) el.value = buildVid(q); };
-    field("#pidea", "idea", { after: refreshImg });
-    field("#pidea2", "idea", { after: () => refreshVid() });
-    field("#pneg", "vidNeg");
-    document.querySelectorAll("[data-pclaude]").forEach(b => b.onclick = () => askClaude(b.dataset.pclaude, b));
-    document.querySelectorAll("[data-pvtool]").forEach(b => b.onclick = () => { savePipe(id, { vtool: b.dataset.pvtool }, true); render(); });
-    const nc = $("#pnegcopy"); if (nc) nc.onclick = () => navigator.clipboard?.writeText($("#pneg").value).then(() => toast("Đã chép negative prompt"), () => toast("Giữ ngón tay trên ô để sao chép"));
-    field("#pimg", "", { wrap: v => ({ imgPrompt: v, imgEdited: true }) });
-    field("#pmotion", "motion", { after: refreshVid });
-    field("#pvid", "", { wrap: v => ({ vidPrompt: v, vidEdited: true }) });
-    const editField = (sel, key, isBox) => { const el = $(sel); if (el) el.addEventListener(isBox ? "change" : "input", () => { savePipe(id, { edit: { ...(curPipe().edit || {}), [key]: isBox ? el.checked : el.value } }, isBox); if (isBox && key === "narration") render(); }); };
-    editField("#pscript", "script"); editField("#pnote", "note"); editField("#pnarr", "narration", true); editField("#pcap", "captions", true); editField("#pmusic", "music", true);
-    const ir = $("#pimgreset"); if (ir) ir.onclick = () => { savePipe(id, { imgEdited: false, imgPrompt: "", imgBy: "", imgNote: "" }, true); render(); };
-    const vr = $("#pvidreset"); if (vr) vr.onclick = () => { savePipe(id, { vidEdited: false, vidPrompt: "", vidBy: "", vidNote: "", vidNeg: "" }, true); render(); };
-    document.querySelectorAll("[data-plook]").forEach(b => b.onclick = () => { savePipe(id, { look: b.dataset.plook }, true); render(); });
-    document.querySelectorAll("[data-pmove]").forEach(b => b.onclick = () => { const q = curPipe(), m = b.dataset.pmove;
-      const v = (q.motion || "").trim() ? q.motion.trim().replace(/[.,;]$/, "") + ", " + m.toLowerCase() : m; savePipe(id, { motion: v }); $("#pmotion").value = v; refreshVid(); });
-    document.querySelectorAll("[data-pstep]").forEach(b => b.onclick = () => { savePipe(id, { stage: b.dataset.pstep }, true); render(); });
-    document.querySelectorAll("[data-pgo]").forEach(b => b.onclick = () => { savePipe(id, { stage: b.dataset.pgo }, true); render(); window.scrollTo(0, 0); });
-    // Chép câu lệnh vào bộ nhớ tạm rồi để liên kết tự mở ChatGPT / Gemini ở thẻ mới
-    document.querySelectorAll("[data-popenapp]").forEach(a => a.addEventListener("click", () => {
-      const isImg = a.dataset.popenapp === "img", text = (isImg ? $("#pimg") : $("#pvid"))?.value || "";
-      navigator.clipboard?.writeText(text).then(() => toast(`Đã chép câu lệnh. Dán vào ${isImg ? "ChatGPT" : vtoolOf(curPipe().vtool)[1]} nhé.`), () => toast("Chưa chép tự động được: giữ ngón tay trên ô câu lệnh để sao chép."));
-      if (isImg && !curPipe().src) a.href = GPT_URL + "?q=" + encodeURIComponent(text); // không có ảnh gốc: câu lệnh điền sẵn luôn
-    }));
-    const sp = $("#psrc"); if (sp) sp.onchange = () => { const f = [...sp.files]; sp.value = ""; uploadTo(p, "src", f, "src"); };
-    const ip = $("#pimgs"); if (ip) ip.onchange = () => { const f = [...ip.files]; ip.value = ""; uploadTo(p, "images", f); };
-    const cp = $("#pclips"); if (cp) cp.onchange = () => { const f = [...cp.files]; cp.value = ""; uploadTo(p, "clips", f); };
-    const sx = $("#psrcx"); if (sx) sx.onclick = async () => { const old = p.src; await savePipe(id, { src: null }, true); render(); if (old?.id && S.assets) try { await S.assets.delete(old.id); } catch {} };
-    document.querySelectorAll("[data-ppick]").forEach(b => b.onclick = () => { const imgs = [...(curPipe().images || [])], i = +b.dataset.ppick; imgs[i] = { ...imgs[i], pick: !imgs[i].pick }; savePipe(id, { images: imgs }, true); render(); });
-    document.querySelectorAll("[data-prm]").forEach(b => b.onclick = async () => { const [k, i] = b.dataset.prm.split("|"), arr = [...(curPipe()[k] || [])], [gone] = arr.splice(+i, 1);
-      await savePipe(id, { [k]: arr }, true); render(); if (gone?.id && S.assets) try { await S.assets.delete(gone.id); } catch {} });
-    document.querySelectorAll("[data-pmv]").forEach(b => b.onclick = () => { const [i, d] = b.dataset.pmv.split("|").map(Number), arr = [...(curPipe().clips || [])], j = i + d;
-      if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; savePipe(id, { clips: arr }, true); render(); });
-    document.querySelectorAll("[data-psave]").forEach(b => b.onclick = async () => { if (!S.dl) return; b.disabled = true;
-      try { const res = await fetch(blob(b.dataset.psave)), data = await res.blob(); await S.dl.save({ filename: `qbk-anh-${b.dataset.psave.slice(0, 6)}.${data.type.includes("png") ? "png" : "jpg"}`, data }); toast("Đã lưu ảnh"); }
-      catch (e) { toast(e?.code === "declined" ? "Đã hủy" : "Chưa lưu được ảnh"); } b.disabled = false; });
-    document.querySelectorAll("[data-psend]").forEach(b => b.onclick = async () => { const q = curPipe(); if (!q.clips?.length) { toast("Cần ít nhất một clip"); return; } b.disabled = true;
-      try { await savePipe(id, { status: "cho-dung", result: "", sentAt: nowISO() }, true);
-        const ok = await fireCrew(`Xưởng AI: dựng video từ dự án pipelines/${id} (${q.clips.length} clip)`); render();
-        toast(ok ? "Đã gửi. Đoàn phim bắt đầu dựng." : "Đã lưu. Nhắn \"chạy đi\" cho Claude để đoàn phim dựng.");
-      } catch { b.disabled = false; toast("Chưa gửi được, thử lại sau."); } });
-    $("#pdel").onclick = async () => { if (S.pipeDelArm !== id) { S.pipeDelArm = id; render(); setTimeout(() => { if (S.pipeDelArm === id) { S.pipeDelArm = null; if (route() === "xuong") render(); } }, 5000); return; }
-      S.pipeDelArm = null; const q = curPipe();
-      try { await S.db.doc("pipelines/" + id).delete(); S.pipeSel = null; render();
-        if (S.assets) for (const a of [q.src, ...(q.images || []), ...(q.clips || [])]) if (a?.id) try { await S.assets.delete(a.id); } catch {}
-        toast("Đã xóa dự án"); } catch { toast("Chưa xóa được, thử lại sau."); } };
-  }
-
   function render() {
     if (audio && route() !== "new") { audio.pause(); audio = null; S.playing = null; }
     const r = route(); renderTabs(r);
@@ -884,7 +654,7 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
     document.querySelectorAll("[data-sel]").forEach(a => a.addEventListener("click", () => { S.sel = a.dataset.sel; S.draftFb = []; }));
     document.querySelectorAll("[data-scriptok]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.scriptok); if (!v || !S.db) return;
       b.disabled = true;
-      try { await S.db.doc("videos/" + v.id).update({ scriptStatus: "da-duyet", scriptApprovedAt: nowISO(), stage: "Dự toán", stageNote: "Bạn đã duyệt kịch bản, đoàn phim làm tiếp", updatedAt: nowISO() });
+      try { await S.db.doc("videos/" + v.id).update({ scriptStatus: "da-duyet", scriptApprovedAt: nowISO(), stage: "Giọng", stageNote: "Bạn đã duyệt kịch bản, đoàn phim làm tiếp", updatedAt: nowISO() });
         const ok = await fireCrew("Đã duyệt kịch bản video " + v.id + ", làm tiếp"); toast(ok ? "Đã duyệt kịch bản. Đoàn phim làm tiếp ngay." : "Đã duyệt. Nhắn \"chạy đi\" cho Claude để đoàn phim làm tiếp.");
       } catch { b.disabled = false; toast("Chưa lưu được, thử lại sau."); } });
     document.querySelectorAll("[data-scriptfb]").forEach(b => b.onclick = async () => { const v = S.videos.find(x => x.id === b.dataset.scriptfb); if (!v || !S.db) return;
@@ -919,29 +689,31 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
       const fp = $("#fpick"); if (fp) fp.onchange = () => { const list = [...fp.files]; fp.value = ""; addFiles(list); };
       bindFiles();
       $("#clarify").onchange = e => { f.clarify = e.target.checked; saveDraft(); };
-      document.querySelectorAll("[data-style]").forEach(b => b.onclick = () => { f.style = b.dataset.style; f.gateA = f.style === "anime-dong"; render(); });
+      document.querySelectorAll("[data-style]").forEach(b => b.onclick = () => { f.style = b.dataset.style; render(); });
       $("#len").oninput = e => { f.length = +e.target.value; $("#lenv").textContent = fmtLen(f.length); $("#etav").textContent = "khoảng " + dur(etaTotal(f.style, f.length)); };
       document.querySelectorAll("[data-plat]").forEach(b => b.onclick = () => { f.platform = b.dataset.plat; f.length = Math.min(f.length, maxLen(f)); render(); });
       $("#gate").onchange = e => f.gate = e.target.checked;
       $("#narr").onchange = e => { f.narration = e.target.checked; render(); };
-      const ga = $("#gateA"); if (ga) ga.onchange = e => f.gateA = e.target.checked;
+      const bp = $("#bpick"); if (bp) bp.onchange = () => { const list = [...bp.files]; bp.value = ""; addBoard(list); };
+      bindBoard();
       document.querySelectorAll("[data-play]").forEach(b => b.onclick = e => { e.stopPropagation(); playVoice(b.dataset.play); });
       document.querySelectorAll("[data-voice]").forEach(r => { const pick = () => { f.voice = r.dataset.voice; render(); }; r.onclick = pick; r.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }; });
       $("#newf").onsubmit = async e => {
         e.preventDefault(); if (!S.db) return;
-        if (!f.brief.trim() && !f.files.length) { toast("Viết yêu cầu hoặc thêm ít nhất một tệp"); $("#brief").focus(); return; }
-        if (f.files.some(x => x.status === "up")) { toast("Đợi tệp tải xong rồi gửi nhé"); return; }
-        const first = (f.brief.trim().split(/\n/)[0] || f.files[0]?.name || "Video mới").replace(/\s+/g, " ");
+        const board = f.board.filter(x => x.status === "ok");
+        if (needBoard(f.style) && !board.length) { toast("Thêm ảnh storyboard (ảnh từng cảnh) rồi gửi nhé"); $("#bpick")?.closest(".card")?.scrollIntoView({ block: "center" }); return; }
+        if (!f.brief.trim() && !f.files.length && !board.length) { toast("Viết yêu cầu hoặc thêm ít nhất một tệp"); $("#brief").focus(); return; }
+        if (f.files.some(x => x.status === "up") || f.board.some(x => x.status === "up")) { toast("Đợi ảnh, tệp tải xong rồi gửi nhé"); return; }
+        const first = (f.brief.trim().split(/\n/)[0] || (board.length ? `Video từ ${board.length} ảnh storyboard` : f.files[0]?.name) || "Video mới").replace(/\s+/g, " ");
         const topic = first.length > 80 ? first.slice(0, 77) + "…" : first;
         const attachments = f.files.filter(x => x.status === "ok").map(x => ({ id: x.id, name: x.name, type: x.type, kind: x.kind, size: x.size, role: x.role, note: (x.note || "").trim() }));
-        try { await S.db.collection("requests").add({ v: 2, topic, brief: f.brief.trim(), must: f.must.trim(), avoid: f.avoid.trim(), links: f.links.trim(), attachments, clarify: !!f.clarify, style: f.style, length: Math.min(f.length, maxLen(f)), platform: f.platform, aspect: platOf(f.platform)[2], gateScript: f.gate, gateAnimatic: isAnime(f.style) ? !!f.gateA : false, narration: !!f.narration, voice: f.narration ? curVoice() : "", status: "moi", createdAt: nowISO() });
+        try { await S.db.collection("requests").add({ v: 2, topic, brief: f.brief.trim(), must: f.must.trim(), avoid: f.avoid.trim(), links: f.links.trim(), attachments, clarify: !!f.clarify, style: f.style, length: Math.min(f.length, maxLen(f)), platform: f.platform, aspect: platOf(f.platform)[2], gateScript: f.gate, storyboard: board.map(x => ({ id: x.id, name: x.name, type: x.type, size: x.size, note: (x.note || "").trim() })), narration: !!f.narration, voice: f.narration ? curVoice() : "", status: "moi", createdAt: nowISO() });
           S.form = { ...newForm(), voice: f.voice }; saveDraft();
-          go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + topic + (attachments.length ? ` (${attachments.length} tệp đính kèm)` : ""));
+          go("home"); const ok = await fireCrew("Yêu cầu mới từ app: " + topic + (board.length ? ` (storyboard ${board.length} ảnh, chỉ dựng)` : "") + (attachments.length ? ` (${attachments.length} tệp đính kèm)` : ""));
           toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
         } catch (err) { toast("Chưa gửi được: " + (err?.code === "quota_exceeded" ? "cơ sở dữ liệu đã đầy." : "thử lại sau ít phút.")); }
       };
     }
-    if (r === "xuong") bindXuong();
     if (r === "home") {
       document.querySelectorAll("[data-ans]").forEach(inp => inp.oninput = () => { const [id, i] = inp.dataset.ans.split("|"); (S.answers[id] ||= {})[i] = inp.value; });
       document.querySelectorAll("[data-ansopt]").forEach(b => b.onclick = () => { const [id, i] = b.dataset.ansopt.split("|"); const a = (S.answers[id] ||= {}); a[i] = a[i] === b.dataset.val ? "" : b.dataset.val; render(); });
@@ -1028,7 +800,6 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
     S.dl = await window.claude?.use?.("downloads").catch(() => null);
     S.assets = await window.claude?.use?.("assets").catch(() => null);
     S.mcp = await window.claude?.use?.("mcp").catch(() => null);
-    S.sample = await window.claude?.use?.("sample").catch(() => null); if (S.sample && route() === "xuong") render();
     pollRun();
     if (!db) { S.ready = true; render(); return; }
     S.db = db;
@@ -1040,7 +811,6 @@ ${(p.idea || "").trim() ? "Bối cảnh: " + p.idea.trim() + ".\n" : ""}Không c
     live(db.doc("app/styles"), d => { S.stylesDoc = d.exists ? d.data() : null; render(); });
     live(db.collection("styleRequests").orderBy("createdAt", "desc").limit(20), snap => { S.styleReqs = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); });
     live(db.doc("app/run"), d => { S.runDoc = d.exists ? d.data() : null; refreshLive(); });
-    live(db.collection("pipelines").orderBy("updatedAt", "desc").limit(30), snap => { S.pipes = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (route() === "xuong") render(); });
     live(db.doc("app/stats"), d => { S.stats = d.exists ? d.data() : null; render(); });
   })();
 })();

@@ -17,7 +17,7 @@ Ghi `projects/<slug>/qa.md` gồm bảng `Hạng mục | Kết quả (ĐẠT/L�
 - Đọc toàn bộ `captions-audio.json` và mọi `text`: dấu tiếng Việt, tên riêng viết hoa đúng.
 - Phụ đề ghép lại phải khớp `narration.txt`.
 
-## 3. Hình ảnh, bố cục → `dao-dien` (hoặc `hoa-si` nếu lỗi do engine)
+## 3. Hình ảnh, bố cục → `dao-dien` (storyboard: `dung-phim`; lỗi nằm trong ảnh người dùng gửi thì báo người dùng)
 Trích khung hình ở **mỗi lần đổi shot**, cộng 1 khung giữa mỗi shot dài hơn 3 giây, rồi xem từng khung:
 - Không vật thể nào đè lên phụ đề (y 1370–1470). Không đặt nội dung quan trọng dưới y 1550 hay sát lề phải.
 - Chữ trên hình không tràn mép, không đè nhân vật.
