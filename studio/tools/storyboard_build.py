@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Dựng video phong cách "Vẽ tay · storyboard" từ vetay.json: mỗi cảnh một ảnh người dùng gửi + một đoạn lời.
+"""Dựng video phong cách "Storyboard" từ storyboard.json: mỗi cảnh một ảnh người dùng gửi + một đoạn lời.
 Lồng tiếng TỪNG CẢNH (tts.py), nên độ dài mỗi cảnh = đúng độ dài lời của cảnh đó: hình đổi đúng lúc lời đổi.
 
-  python3 studio/tools/vetay_build.py projects/<slug> [--no-tts]   (--no-tts: dùng lại audio/sNN.wav đã có)
+  python3 studio/tools/storyboard_build.py projects/<slug> [--no-tts]   (--no-tts: dùng lại audio/sNN.wav đã có)
 
-projects/<slug>/vetay.json:
-{"voice": "Bodi", "tempo": 1.15, "aspect": "9:16", "fit": "pad", "music": "chill", "musicGain": 0.16,
+projects/<slug>/storyboard.json:
+{"reveal": "ve-tay", "voice": "Bodi", "tempo": 1.15, "aspect": "9:16", "fit": "pad", "music": "chill", "musicGain": 0.16,
  "scenes": [{"image": "board/01.png", "text": "An đứng lặng trước gương…", "move": "push"}, ...]}
+- reveal: "ve-tay" (mỗi cảnh hiện dần như đang vẽ tay, drawon.py) hoặc "hien-thang" (ảnh hiện đủ ngay, mờ dần từ cảnh trước).
 - move: push | pull | panL | panR | none (theo ghi chú máy quay trên storyboard; bỏ trống thì xen kẽ push/pull).
 - text rỗng: cảnh không lời, dài "dur" giây (mặc định 3).
 - music: chill | warm | bright | none (nhạc tự sáng tác bằng music.py), hoặc đường dẫn file nhạc có giấy phép.
@@ -17,7 +18,9 @@ import numpy as np
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 proj = os.path.abspath(sys.argv[1]); args = sys.argv[2:]
-V = json.load(open(os.path.join(proj, 'vetay.json'), encoding='utf8'))
+cfg = os.path.join(proj, 'storyboard.json')
+V = json.load(open(cfg if os.path.exists(cfg) else os.path.join(proj, 'vetay.json'), encoding='utf8'))
+DRAW = 0.55 if V.get('reveal', 've-tay') == 've-tay' else 0.0
 P = lambda f: f if os.path.isabs(f) else os.path.join(proj, f)
 os.makedirs(P('audio'), exist_ok=True); os.makedirs(P('output'), exist_ok=True)
 SR, XF, LEAD, TAIL = 24000, 0.4, 0.35, 0.45   # chuyển cảnh mờ 0,4 s; lời bắt đầu sau khi hình hiện 0,35 s; nghỉ 0,45 s cuối cảnh
@@ -60,7 +63,7 @@ for i, s in enumerate(scenes, 1):
     if i == 1: dur += 0.3
     if i == len(scenes): dur += 0.8
     mv = s.get('move') or ('push' if i % 2 else 'pull')
-    clips.append({'file': s['image'], 'dur': dur, 'move': mv, 'draw': True})
+    clips.append({'file': s['image'], 'dur': dur, 'move': mv, 'draw': True, 'drawPart': DRAW})
     t0 = start + LEAD + (0.3 if i == 1 else 0)
     voice_tracks.append((t0, a))
     ph = phrases(text) if text else []

@@ -140,7 +140,7 @@ a.link{color:var(--navy)}
   const styles = () => S.stylesDoc?.full ? dbStyles().map(x => [x.id, x.name || x.id, x.color || "#8A8A8A", x.thumb, x.engine])
     : [...BASE_STYLES, ...dbStyles().filter(x => !BASE_STYLES.some(b => b[0] === x.id)).map(x => [x.id, x.name || x.id, x.color || "#8A8A8A", x.thumb, x.engine])];
   const styleNote = id => dbStyles().find(x => x.id === id)?.note || STYLE_NOTE[id] || "";
-  const STYLE_NOTE = {"storyboard":"Dùng nguyên ảnh bạn tạo sẵn, đoàn phim chỉ dựng. Miễn phí.","ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
+  const STYLE_NOTE = {"storyboard":"Dùng nguyên ảnh bạn tạo sẵn, đoàn phim lồng tiếng và dựng. Chọn hiện cảnh kiểu vẽ tay hoặc hiện thẳng. Miễn phí.","ve-tinh":"Nền ảnh vệ tinh thật, zoom từ quả địa cầu, ảnh thật từ Wikimedia (ghi tác giả), chữ trắng cam. Không người que. Hợp địa lý, trận đánh có địa điểm thật, công trình."};
   const STEPS = ["Kịch bản","Giọng","Dựng","Kiểm định"];
   const STATUS = {
     "dang-lam": ["Đang làm","p-work"], "cho-duyet": ["Chờ duyệt","p-wait"], "dang-sua": ["Đang sửa","p-work"],
@@ -155,11 +155,11 @@ a.link{color:var(--navy)}
   const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
     sel: null, draftFb: [], form: null, voicesDoc: null, playing: null, answers: {} };
   // Phiếu yêu cầu (thay ô "Chủ đề" một dòng): lời dặn tự do + tệp đính kèm + bắt buộc có / không được có / nguồn + cho phép hỏi lại
-  const newForm = () => ({ style: "", inputs: {}, brief: "", files: [], script: "", must: "", avoid: "", links: "", gate: true, narration: true, voice: "", music: "auto", musicNote: "", lenAuto: true, length: 45, platform: "tiktok", clarify: true });
+  const newForm = () => ({ style: "", inputs: {}, reveal: "ve-tay", brief: "", files: [], script: "", must: "", avoid: "", links: "", gate: true, narration: true, voice: "", music: "auto", musicNote: "", lenAuto: true, length: 45, platform: "tiktok", clarify: true });
   const DRAFT_KEY = "qbk-draft-v2";
   const loadDraft = () => { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); if (d) { const f = { ...newForm(), ...d, files: (d.files || []).filter(x => x.id), inputs: {} };
       for (const [k, v] of Object.entries(d.inputs || {})) f.inputs[k] = { mode: v.mode || "auto", text: v.text || "", files: (v.files || []).filter(x => x.id) };
-      if (/^anime-dong$/.test(f.style)) f.style = ""; return f; } } catch {} return newForm(); };
+      if (/^anime-dong$/.test(f.style)) f.style = ""; if (f.style === "ve-tay") f.style = "storyboard"; return f; } } catch {} return newForm(); };
   const saveDraft = () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...S.form, files: S.form.files.filter(x => x.id).map(({ url, ...x }) => x), inputs: Object.fromEntries(Object.entries(S.form.inputs).map(([k, v]) => [k, { ...v, files: v.files.filter(x => x.id).map(({ url, ...x }) => x) }])) })); } catch {} };
   const ROLES = [["dung", "Đưa vào video"], ["mau", "Mẫu phong cách"], ["tu-lieu", "Tư liệu nội dung"]];
   const kindOf = t => t.startsWith("image/") ? "image" : t.startsWith("video/") ? "video" : "doc";
@@ -430,8 +430,7 @@ a.link{color:var(--navy)}
     "toa-do": { label: "Tọa độ hoặc link Google Maps", hint: "Vị trí chính xác của địa điểm, dự án.", text: true, ph: "Ví dụ: 10.0452, 105.7469 hoặc link maps.app.goo.gl/…" }
   };
   const STYLE_INPUTS = {
-    storyboard: [["storyboard", 1]],
-    "ve-tay": [{ key: "storyboard", required: true, label: "Ảnh từng cảnh", hint: "Tải từng cảnh theo thứ tự. Mỗi cảnh hiện ra như đang được vẽ tay, đúng lúc lời đọc của cảnh đó bắt đầu. Khung cuối giữ nguyên ảnh của bạn." }, ["trang-sb", 0]],
+    storyboard: [{ key: "storyboard", required: true, label: "Ảnh từng cảnh", hint: "Ảnh từng cảnh bạn tạo bên Gemini, tải lên theo thứ tự. Đoàn phim giữ nguyên ảnh, lồng tiếng từng cảnh nên hình đổi đúng lúc lời đổi." }, ["trang-sb", 0]],
     "anime-tinh": [["storyboard", 1], ["nhan-vat", 0]], "giay-gap": [["storyboard", 1]],
     "ve-tinh": [["toa-do", 0], ["anh", 0], ["video", 0]], "thi-nghiem": [["anh-3d", 0]],
     bds: [["toa-do", 1], ["anh", 1], ["video", 0]], "bds-tien-ich": [["toa-do", 1], ["anh", 0], ["video", 0]],
@@ -441,6 +440,7 @@ a.link{color:var(--navy)}
     return list.map(s => Array.isArray(s) ? { key: s[0], required: !!s[1] } : { ...s, required: !!s.required }).filter(s => SLOT[s.key]); };
   const slotOf = k => S.form.inputs[k] || (S.form.inputs[k] = { mode: "auto", files: [], text: "" });
   const sending = s => s.required || slotOf(s.key).mode === "gui";
+  const REVEAL = [["ve-tay", "Vẽ tay (hiện từng nét)"], ["hien-thang", "Hiện thẳng (mờ dần)"]];
   const MUSIC = [["auto", "Đoàn phim chọn"], ["none", "Không nhạc"], ["mo-ta", "Mình mô tả"]];
   const upIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>';
   const sec = (n, title, opt, body, extra = "") => `<section class="card col" style="gap:10px" ${extra}><div class="row" style="gap:8px"><b class="secn">${n}</b><b style="font-size:15px;flex:1">${title}</b>${opt ? '<span class="pill p-mute">Không bắt buộc</span>' : ""}</div>${body}</section>`;
@@ -503,7 +503,10 @@ a.link{color:var(--navy)}
     const s1 = sec(1, "Chọn phong cách", false, `<div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : eng === "anh" ? ' <span class="pill p-ok">Ảnh của bạn</span>' : ""}</span></button>`).join("")}${S.guest ? "" : `<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a>`}</div>
         ${f.style && styleNote(f.style) ? `<span class="small">${esc(styleNote(f.style))}</span>` : ""}`);
     if (!f.style) return `${head}<form id="newf" class="col" style="gap:14px">${s1}<div class="empty">Chọn một phong cách. App sẽ hỏi tiếp những thứ phong cách đó cần.</div></form>`;
-    const s2 = sec(2, `${esc(styleName(f.style))} cần`, !ins.some(s => s.required), ins.map(slotCard).join('<hr class="sep">') || `<span class="small">Phong cách này không cần bạn gửi gì thêm.</span>`, 'id="sec-inputs"');
+    const revealBox = ins.some(s => s.key === "storyboard") ? `<hr class="sep"><div class="col" style="gap:6px"><b style="font-size:14px">Cách hiện cảnh</b>
+        <div class="chips sm">${REVEAL.map(([k, l]) => `<button type="button" class="chip" data-reveal="${k}" aria-pressed="${f.reveal === k}">${l}</button>`).join("")}</div>
+        <span class="small">${f.reveal === "ve-tay" ? "Mỗi cảnh hiện dần như đang được vẽ: nét trước, bóng sau, khoảng 3 giây đầu cảnh. Hợp nhất với tranh chì, phác thảo." : "Ảnh hiện đủ ngay, mờ dần từ cảnh trước sang, máy đẩy hoặc lia nhẹ. Hợp với ảnh màu."}</span></div>` : "";
+    const s2 = sec(2, `${esc(styleName(f.style))} cần`, !ins.some(s => s.required), (ins.map(slotCard).join('<hr class="sep">') || `<span class="small">Phong cách này không cần bạn gửi gì thêm.</span>`) + revealBox, 'id="sec-inputs"');
     const s3 = sec(3, "Chủ đề", false, `<label class="small" for="brief">Video kể về gì, cho ai xem, muốn mở và kết thế nào. Dán được link bài báo, link video mẫu.</label>
         <textarea id="brief" rows="4" placeholder="Ví dụ: Vì sao có thủy triều, cho học sinh lớp 6. Mở bằng cảnh bãi biển sáng và chiều khác nhau, kết bằng câu hỏi cho người xem.">${esc(f.brief)}</textarea>
         <div class="chips sm" aria-label="Gợi ý thêm vào chủ đề">${HINTS.map(h => `<button type="button" class="chip" data-hint="${esc(h)}">+ ${esc(h)}</button>`).join("")}</div>
@@ -741,6 +744,7 @@ a.link{color:var(--navy)}
       document.querySelectorAll("[data-spick]").forEach(inp => inp.onchange = () => { const list = [...inp.files]; inp.value = ""; addSlotFiles(inp.dataset.spick, list); });
       document.querySelectorAll("[data-stext]").forEach(inp => inp.oninput = () => { slotOf(inp.dataset.stext).text = inp.value; saveDraft(); });
       document.querySelectorAll("[data-smode]").forEach(b => b.onclick = () => { const [k, m] = b.dataset.smode.split("|"); slotOf(k).mode = m; saveDraft(); render(); });
+      document.querySelectorAll("[data-reveal]").forEach(b => b.onclick = () => { f.reveal = b.dataset.reveal; saveDraft(); render(); });
       document.querySelectorAll("[data-music]").forEach(b => b.onclick = () => { f.music = b.dataset.music; saveDraft(); render(); });
       document.querySelectorAll("[data-lenauto]").forEach(b => b.onclick = () => { f.lenAuto = b.dataset.lenauto === "1"; saveDraft(); render(); });
       $("#clarify").onchange = e => { f.clarify = e.target.checked; saveDraft(); };
@@ -766,7 +770,7 @@ a.link{color:var(--navy)}
           return [s.key, { label: s.label || SLOT[s.key].label, required: s.required, auto: !send, files: send && !SLOT[s.key].text ? okFiles(s.key).map(pack) : [], text: send && SLOT[s.key].text ? st.text.trim() : "" }]; }));
         const attachments = f.files.filter(x => x.status === "ok").map(x => ({ id: x.id, name: x.name, type: x.type, kind: x.kind, size: x.size, role: x.role, note: (x.note || "").trim() }));
         const len = f.lenAuto ? null : Math.min(f.length, maxLen(f));
-        try { await S.db.collection("requests").add({ v: 3, topic, style: f.style, inputs, storyboard: board.map(pack), brief: f.brief.trim(), attachments,
+        try { await S.db.collection("requests").add({ v: 3, topic, style: f.style, inputs, storyboard: board.map(pack), reveal: ins.some(s => s.key === "storyboard") ? f.reveal : "", brief: f.brief.trim(), attachments,
             script: f.script.trim(), must: f.must.trim(), avoid: f.avoid.trim(), links: f.links.trim(), gateScript: f.gate,
             narration: !!f.narration, voice: f.narration ? curVoice() : "", audio: { narration: !!f.narration, voice: f.narration ? curVoice() : "", music: f.music, musicNote: f.music === "mo-ta" ? f.musicNote.trim() : "" },
             length: len, lengthAuto: !!f.lenAuto, platform: f.platform, aspect: platOf(f.platform)[2], clarify: !!f.clarify, by: S.me, guest: S.guest, status: "moi", createdAt: nowISO() });

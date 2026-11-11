@@ -7,7 +7,7 @@ rồi máy quay chuyển động nhẹ. Khung cuối chính là ảnh gốc (gi�
 
 - --fit pad (mặc định): tranh giữ nguyên, đặt giữa khung; phần trống là chính tranh làm mờ, nhạt như giấy.
   --fit cover: cắt tranh cho đầy khung (mất hai bên nếu tranh ngang mà video dọc).
-- --draw: phần thời lượng dành cho lúc vẽ (tối đa 3,2 giây); sau đó tranh đứng yên, máy vẫn chuyển động.
+- --draw: phần thời lượng dành cho lúc vẽ (tối đa 3,2 giây); sau đó tranh đứng yên, máy vẫn chuyển động. --draw 0: hiện đủ ngay (không vẽ).
 - Tự cắt viền khung đen dày quanh tranh (khung ô storyboard) nếu có.
 Dùng trong assemble.py bằng clip ảnh có "draw": true.
 """

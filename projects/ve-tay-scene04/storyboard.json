@@ -1,4 +1,4 @@
-{"voice": "Bodi", "tempo": 1.15, "aspect": "9:16", "fit": "pad", "music": "chill", "musicGain": 0.14,
+{"reveal": "ve-tay", "voice": "Bodi", "tempo": 1.15, "aspect": "9:16", "fit": "pad", "music": "chill", "musicGain": 0.14,
  "scenes": [
   {"image": "board/01.png", "move": "push", "text": "An đứng lặng trước gương, hai tay giấu sau lưng. Cô suy nghĩ rất lâu về cuộc hẹn tối nay."},
   {"image": "board/02.png", "move": "push", "text": "Bỗng có tiếng động ngoài cửa. An khựng lại, tay khẽ chạm lên sợi dây chuyền."},
