@@ -119,6 +119,9 @@ App hỏi theo thứ tự: **phong cách → tư liệu phong cách đó cần �
 - `audio: {narration, voice, music, musicNote}`: `music` = `auto` (đoàn phim chọn), `none` (không nhạc), `mo-ta` (theo `musicNote`). `narration`, `voice` vẫn có ở cấp ngoài.
 - `length` = `null` và `lengthAuto: true` khi người dùng để đoàn phim chọn: chọn độ dài vừa nội dung (storyboard: khoảng 3–6 giây mỗi ảnh theo lời), trong giới hạn khung (9:16 tối đa 90 giây, 16:9 tối đa 300 giây).
 
+### Khách dùng thử (11/11/2026)
+Người được chủ app mời (không phải chủ) dùng app ở **chế độ khách**: chỉ thấy video của mình, không xóa được, tối đa `app/guest.max` video (mặc định 2). Request của khách có `by` (id người gửi) và `guest: true`. **Khi tạo `videos/<slug>` từ request đó, chép `by` và `guest: true` sang doc video**, nếu không khách sẽ không thấy video của mình. Khách thường không tự gọi được đoàn phim: app ghi `app/guestPing {at, why, by}`, app của chủ thấy ping mới thì gọi tác vụ giúp. Video của khách vẫn chạy bằng hạn mức của chủ, làm như video thường.
+
 ### Phiếu yêu cầu từ app (`requests` v2)
 Mục tiêu: hiểu đúng ý người dùng **trước** khi viết, để kịch bản không lệch đề. Yêu cầu cũ không có `v` thì chỉ có `topic`, làm như trước.
 

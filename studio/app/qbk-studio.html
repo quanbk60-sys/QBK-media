@@ -147,9 +147,10 @@ a.link{color:var(--navy)}
     "da-duyet": ["Đã duyệt · chờ đăng","p-ok"], "da-dang": ["Đã đăng","p-navy"], "tam-dung": ["Tạm dừng","p-mute"]};
   const TRIGGER = "trig_01S2GWJmEdKSxZesBjXC3gFB"; // tác vụ "Đoàn phim QBK: nhận việc từ app"
   async function fireCrew(why) {
-    if (!S.mcp) return false;
-    try { await S.mcp.callTool("Claude Code Remote", "fire_trigger", { trigger_id: TRIGGER, text: why }); return true; }
-    catch (e) { console.warn("fire_trigger", e?.code); return false; }
+    if (S.mcp) { try { await S.mcp.callTool("Claude Code Remote", "fire_trigger", { trigger_id: TRIGGER, text: why }); return true; }
+      catch (e) { console.warn("fire_trigger", e?.code); } }
+    if (S.guest && S.db) { try { await S.db.doc("app/guestPing").set({ at: nowISO(), why: String(why).slice(0, 300), by: S.me }); } catch {} }
+    return false;
   }
   const S = { mcp: null, videos: [], requests: [], stylesDoc: null, styleReqs: [], learnUrl: "", feedback: [], trends: null, crew: null, stats: null, db: null, dl: null, assets: null, ready: false,
     sel: null, draftFb: [], form: null, voicesDoc: null, playing: null, answers: {} };
@@ -169,6 +170,15 @@ a.link{color:var(--navy)}
   const platOf = id => PLATFORMS.find(p => p[0] === id) || PLATFORMS[0];
   const maxLen = f => platOf(f.platform)[2] === "16:9" ? 300 : 90;
   S.form = loadDraft();
+  // ===== Chế độ khách: người được mời (không phải chủ app) chỉ thấy video, yêu cầu của chính họ, không xóa được, tối đa GUEST_MAX video =====
+  // requests và videos của khách mang `by` (id người gửi) và `guest: true`. Chủ app đổi số lượt trong app/guest.max.
+  // Đây là giới hạn của giao diện, không phải bảo mật: dữ liệu vẫn nằm chung một kho.
+  S.guest = false; S.me = null; S.guestDoc = null; S.allVideos = []; S.allRequests = [];
+  const guestMax = () => +(S.guestDoc?.max ?? 2);
+  const mine = arr => S.guest ? arr.filter(x => x.by && x.by === S.me) : arr;
+  const guestUsed = () => S.allRequests.filter(x => x.by && x.by === S.me && x.status !== "huy").length;
+  const guestLeft = () => Math.max(0, guestMax() - guestUsed());
+  const guestKey = () => { try { let k = localStorage.getItem("qbk-guest-key"); if (!k) { k = "k_" + Math.random().toString(36).slice(2, 12); localStorage.setItem("qbk-guest-key", k); } return k; } catch { return "k_tam"; } };
   // Phong cách dùng ảnh người dùng tự tạo (storyboard): bắt buộc tải ảnh từng cảnh, đoàn phim chỉ dựng
   const fmtLen = n => n >= 60 ? Math.floor(n / 60) + " phút" + (n % 60 ? " " + (n % 60) + " giây" : "") : n + " giây";
 
@@ -190,9 +200,10 @@ a.link{color:var(--navy)}
     back: '<path d="M15 5l-7 7 7 7"/>'
   };
   const svg = (k, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
-  const TABS = [["home","Trang chủ"],["new","Làm video"],["report","Báo cáo"],["crew","Đoàn phim"]];
+  const ALL_TABS = [["home","Trang chủ"],["new","Làm video"],["report","Báo cáo"],["crew","Đoàn phim"]];
+  const tabs = () => S.guest ? ALL_TABS.slice(0, 2) : ALL_TABS;
 
-  function route() { const h = (location.hash || "#home").slice(1); return ["home","new","learn","review","post","report","crew"].includes(h) ? h : "home"; }
+  function route() { const h = (location.hash || "#home").slice(1); if (S.guest && ["learn","report","crew"].includes(h)) return "home"; return ["home","new","learn","review","post","report","crew"].includes(h) ? h : "home"; }
   function go(h) { if (location.hash !== "#" + h) location.hash = h; else render(); }
   window.addEventListener("hashchange", render);
 
@@ -200,7 +211,7 @@ a.link{color:var(--navy)}
     const waiting = S.videos.filter(v => v.status === "cho-duyet").length;
     const map = { review: "home", post: "home", learn: "new" };
     const active = map[cur] || cur;
-    $("#tabs").innerHTML = TABS.map(([k, l]) => `<a class="tab" href="#${k}" ${active === k ? 'aria-current="page"' : ""}>${svg(k)}${l}${k === "home" && waiting ? `<span class="badge">${waiting}</span>` : ""}</a>`).join("");
+    $("#tabs").style.gridTemplateColumns = `repeat(${tabs().length},minmax(0,1fr))`; $("#tabs").innerHTML = tabs().map(([k, l]) => `<a class="tab" href="#${k}" ${active === k ? 'aria-current="page"' : ""}>${svg(k)}${l}${k === "home" && waiting ? `<span class="badge">${waiting}</span>` : ""}</a>`).join("");
   }
 
   // Dự toán do agent du-toan ghi vào videos/<id>.estimate = {usd, cap, items:[{what, usd}], note, needApproval, approved, spent}
@@ -318,7 +329,7 @@ a.link{color:var(--navy)}
       <div class="row" style="align-items:flex-start">
         ${v.thumb ? `<img class="thumb" src="${blob(v.thumb)}" alt="Ảnh bìa ${esc(v.title)}">` : `<span class="thumb" aria-hidden="true"></span>`}
         <div class="col" style="flex:1">
-          <span><span class="pill ${st[1]}">${st[0]}${v.round ? " · vòng " + esc(v.round) : ""}</span></span>
+          <span><span class="pill ${st[1]}">${st[0]}${v.round ? " · vòng " + esc(v.round) : ""}</span>${v.guest && !S.guest ? ' <span class="pill p-navy">Khách</span>' : ""}</span>
           <span style="font:400 23px/1.05 var(--display)">${esc(v.title)}</span>
           <span class="small">${v.platform ? esc(platOf(v.platform)[1]) + " · " : ""}${esc(styleName(v.style))}${v.duration ? " · " + esc(v.duration) + " giây" : ""}</span>
           ${working ? `<span class="small">${esc(v.stageNote || "")}</span><span class="col" style="gap:6px" data-eta="${esc(v.id)}">${etaHtml(v)}</span>` : ""}
@@ -327,7 +338,7 @@ a.link{color:var(--navy)}
           ${v.status === "cho-duyet" && v.video ? `<a class="btn dark sm" href="#review" data-sel="${esc(v.id)}">Xem và duyệt</a>` : ""}
           ${v.video && v.status !== "cho-duyet" ? `<button class="btn dark sm" data-watch="${esc(v.id)}">▶ Xem video${v.round > 1 ? " · vòng " + esc(v.round) : ""}</button>` : ""}
           ${v.status === "da-duyet" ? `<a class="btn sm" href="#post" data-sel="${esc(v.id)}">Mở bộ đăng bài</a>` : ""}
-          ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
+          ${S.db && !S.guest ? `<button class="del" data-del="${esc(v.id)}">Xóa video</button>` : ""}
         </div>
       </div>
       ${scriptWaiting(v) ? `<div style="margin-top:10px">${scriptBox(v)}</div>` : ""}
@@ -347,14 +358,15 @@ a.link{color:var(--navy)}
     const pending = S.requests.filter(r => r.status === "moi" || r.status === "tra-loi");
     const asks = S.requests.filter(r => r.status === "can-hoi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
-    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">Xưởng phim ngắn: ảnh storyboard của bạn, vệ tinh, thí nghiệm 3D</p></div></div>
+    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">${S.guest ? "Bạn đang dùng thử với tài khoản khách" : "Xưởng phim ngắn: ảnh storyboard của bạn, vệ tinh, thí nghiệm 3D"}</p></div></div>
+      ${S.guest ? `<div class="card info col" style="gap:4px"><b style="color:var(--navy)">Dùng thử: còn ${guestLeft()}/${guestMax()} video</b><span style="font-size:13.5px">Bạn chỉ thấy video của mình. Gửi yêu cầu xong, đoàn phim sẽ bắt đầu khi chủ xưởng mở app hoặc nhận được báo.</span></div>` : ""}
       <a class="btn primary big" href="#new">Làm video mới</a>
-      <div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>
+      ${S.guest ? "" : `<div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>`}
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
       <div class="card col" style="gap:4px" data-run>${runHtml()}</div>
       ${asks.length ? `<h2>Đoàn phim cần bạn trả lời</h2>${asks.map(askCard).join("")}` : ""}
       ${waiting.length ? `<h2>Cần bạn duyệt</h2>${waiting.map(v => videoCard(v)).join("")}` : ""}
-      ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${r.genre ? esc(r.genre) + " · " : ""}${esc(styleName(r.style))}${r.attachments?.length ? ` · ${r.attachments.length} tệp` : ""} · ${r.status === "tra-loi" ? "đã trả lời, chờ đoàn phim làm tiếp" : "chờ đoàn phim nhận"} · làm khoảng ${dur(etaTotal(r.style, r.length))}</div></div><span class="pill p-mute">${r.status === "tra-loi" ? "Đã trả lời" : "Mới"}</span></div>`).join("")}</div>
+      ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${r.guest && !S.guest ? '<span class="pill p-navy">Khách</span> ' : ""}${r.genre ? esc(r.genre) + " · " : ""}${esc(styleName(r.style))}${r.attachments?.length ? ` · ${r.attachments.length} tệp` : ""} · ${r.status === "tra-loi" ? "đã trả lời, chờ đoàn phim làm tiếp" : "chờ đoàn phim nhận"} · làm khoảng ${dur(etaTotal(r.style, r.length))}</div></div><span class="pill p-mute">${r.status === "tra-loi" ? "Đã trả lời" : "Mới"}</span></div>`).join("")}</div>
         <p class="small">Đoàn phim được gọi ngay khi bạn gửi. Nếu yêu cầu nằm ở đây quá 10 phút, nhắn "chạy đi" cho Claude.</p>` : ""}
       ${working.length ? `<h2>Đang làm</h2>${working.map(v => videoCard(v)).join("")}` : ""}
       ${ready.length ? `<h2>Chờ đăng</h2>${ready.map(v => videoCard(v)).join("")}` : ""}
@@ -484,7 +496,8 @@ a.link{color:var(--navy)}
             <span class="grow"><b style="font-weight:600">${esc(v.name)}</b>${v.id === (S.voicesDoc?.default || "Bodi") ? ' <span class="pill p-mute">mặc định</span>' : ""}<br><span class="small">${esc(v.desc || "")}</span></span></div>`).join("")}</div>
           <span class="small">Bấm ▶ để nghe thử câu mẫu, bấm vào dòng để chọn giọng.</span>` : `<span class="small">Đang tải danh sách giọng…</span>`}</div>` : `<span class="small">Không lời: chỉ nhạc và tiếng động.</span>`;
     const head = `<div class="row"><a class="back" href="#home" aria-label="Quay lại">${svg("back")}</a><h1>Làm video mới</h1></div>`;
-    const s1 = sec(1, "Chọn phong cách", false, `<div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : eng === "anh" ? ' <span class="pill p-ok">Ảnh của bạn</span>' : ""}</span></button>`).join("")}<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a></div>
+    if (S.guest && S.ready && !guestLeft()) return `${head}<div class="card info col"><b style="color:var(--navy)">Bạn đã dùng hết ${guestMax()} video dùng thử</b><span style="font-size:14px">Muốn làm thêm, liên hệ chủ xưởng để được mở thêm lượt.</span></div>`;
+    const s1 = sec(1, "Chọn phong cách", false, `<div class="styles">${styles().map(([id, n, c, th, eng]) => `<button type="button" class="sty" data-style="${esc(id)}" aria-pressed="${f.style === id}">${th ? `<img class="prev" src="${blob(th)}" alt="" loading="lazy" style="background:${esc(c)}">` : `<i style="background:${esc(c)}"></i>`}<span>${esc(n)}${eng === "3d" ? ' <span class="pill p-navy">3D</span>' : eng === "anh" ? ' <span class="pill p-ok">Ảnh của bạn</span>' : ""}</span></button>`).join("")}${S.guest ? "" : `<a class="sty" href="#learn" style="text-decoration:none"><i style="aspect-ratio:9/12;height:auto;background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--card) 6px 12px)"></i>+ Học phong cách mới</a>`}</div>
         ${f.style && styleNote(f.style) ? `<span class="small">${esc(styleNote(f.style))}</span>` : ""}`);
     if (!f.style) return `${head}<form id="newf" class="col" style="gap:14px">${s1}<div class="empty">Chọn một phong cách. App sẽ hỏi tiếp những thứ phong cách đó cần.</div></form>`;
     const s2 = sec(2, `${esc(styleName(f.style))} cần`, !ins.some(s => s.required), ins.map(slotCard).join('<hr class="sep">') || `<span class="small">Phong cách này không cần bạn gửi gì thêm.</span>`, 'id="sec-inputs"');
@@ -565,7 +578,7 @@ a.link{color:var(--navy)}
         <button class="btn" id="sendfb" ${S.draftFb.length && S.db ? "" : "disabled"}>Gửi góp ý (${S.draftFb.length})</button>
         <button class="btn ok" id="approve" ${S.db ? "" : "disabled"}>Duyệt video</button>
       </div>
-      ${S.db ? `<button class="del" data-del="${esc(v.id)}">Xóa video này</button>` : ""}`;
+      ${S.db && !S.guest ? `<button class="del" data-del="${esc(v.id)}">Xóa video này</button>` : ""}`;
   };
 
   V.post = () => {
@@ -736,6 +749,7 @@ a.link{color:var(--navy)}
       document.querySelectorAll("[data-voice]").forEach(r => { const pick = () => { f.voice = r.dataset.voice; saveDraft(); render(); }; r.onclick = pick; r.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }; });
       $("#newf").onsubmit = async e => {
         e.preventDefault(); if (!S.db) return;
+        if (S.guest && !guestLeft()) { toast(`Bạn đã dùng hết ${guestMax()} video dùng thử`); return; }
         const ins = styleInputs(f.style), okFiles = k => slotOf(k).files.filter(x => x.status === "ok");
         for (const s of ins) if (s.required && !(SLOT[s.key].text ? slotOf(s.key).text.trim() : okFiles(s.key).length)) {
           toast(`Phong cách này cần: ${s.label || SLOT[s.key].label}`); $("#sec-inputs")?.scrollIntoView({ block: "start" }); return; }
@@ -752,11 +766,11 @@ a.link{color:var(--navy)}
         try { await S.db.collection("requests").add({ v: 3, topic, style: f.style, inputs, storyboard: board.map(pack), brief: f.brief.trim(), attachments,
             script: f.script.trim(), must: f.must.trim(), avoid: f.avoid.trim(), links: f.links.trim(), gateScript: f.gate,
             narration: !!f.narration, voice: f.narration ? curVoice() : "", audio: { narration: !!f.narration, voice: f.narration ? curVoice() : "", music: f.music, musicNote: f.music === "mo-ta" ? f.musicNote.trim() : "" },
-            length: len, lengthAuto: !!f.lenAuto, platform: f.platform, aspect: platOf(f.platform)[2], clarify: !!f.clarify, status: "moi", createdAt: nowISO() });
+            length: len, lengthAuto: !!f.lenAuto, platform: f.platform, aspect: platOf(f.platform)[2], clarify: !!f.clarify, by: S.me, guest: S.guest, status: "moi", createdAt: nowISO() });
           S.form = { ...newForm(), voice: f.voice, platform: f.platform }; saveDraft();
           go("home"); const sent = Object.values(inputs).reduce((a, x) => a + x.files.length, 0);
           const ok = await fireCrew("Yêu cầu mới từ app: " + topic + ` (${styleName(f.style)}${sent ? ", " + sent + " tệp tư liệu" : ""}${board.length ? ", storyboard " + board.length + " ảnh, chỉ dựng" : ""})`);
-          toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
+          toast(ok ? "Đã giao và gọi đoàn phim. Họ bắt đầu làm ngay." : S.guest ? "Đã gửi. Đoàn phim bắt đầu khi chủ xưởng mở app." : "Đã lưu yêu cầu. Chưa gọi được đoàn phim tự động, nhắn \"chạy đi\" cho Claude.");
         } catch (err) { toast("Chưa gửi được: " + (err?.code === "quota_exceeded" ? "cơ sở dữ liệu đã đầy." : "thử lại sau ít phút.")); }
       };
     }
@@ -840,18 +854,30 @@ a.link{color:var(--navy)}
   setInterval(pollRun, 30000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) pollRun(); });
 
+  // Khách thường không gọi được đoàn phim (công cụ chạy bằng tài khoản chủ app): việc của khách ghi vào app/guestPing,
+  // app của chủ đang mở (hoặc lần mở sau) thấy ping mới thì gọi đoàn phim giúp rồi ghi wokeAt.
+  async function wakeForGuests(d) {
+    if (!d || !d.at || (d.wokeAt && d.wokeAt >= d.at) || !S.mcp || !S.db || wakeForGuests.busy) return;
+    wakeForGuests.busy = true;
+    try { if (await fireCrew("Khách dùng thử: " + (d.why || "có việc mới"))) await S.db.doc("app/guestPing").update({ wokeAt: nowISO() }); } catch {}
+    finally { wakeForGuests.busy = false; }
+  }
   render();
   (async () => {
     const db = await window.claude?.use?.("db").catch(() => null);
     S.dl = await window.claude?.use?.("downloads").catch(() => null);
     S.assets = await window.claude?.use?.("assets").catch(() => null);
     S.mcp = await window.claude?.use?.("mcp").catch(() => null);
+    const u = await window.claude?.use?.("user").catch(() => null);
+    if (u) { const owner = await u.isOwner().catch(() => true); S.guest = !owner; if (S.guest) S.me = (await u.id().catch(() => null)) || guestKey(); }
     pollRun();
     if (!db) { S.ready = true; render(); return; }
     S.db = db;
     const live = (ref, fn) => ref.onSnapshot(fn, () => { S.ready = true; render(); });
-    live(db.collection("videos").orderBy("updatedAt", "desc"), snap => { S.videos = snap.docs.map(d => ({ id: d.id, ...d.data() })); S.ready = true; render(); });
-    live(db.collection("requests").orderBy("createdAt", "desc").limit(50), snap => { S.requests = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); });
+    live(db.collection("videos").orderBy("updatedAt", "desc"), snap => { S.allVideos = snap.docs.map(d => ({ id: d.id, ...d.data() })); S.videos = mine(S.allVideos); S.ready = true; render(); });
+    live(db.collection("requests").orderBy("createdAt", "desc").limit(50), snap => { S.allRequests = snap.docs.map(d => ({ id: d.id, ...d.data() })); S.requests = mine(S.allRequests); render(); });
+    live(db.doc("app/guest"), d => { S.guestDoc = d.exists ? d.data() : null; render(); });
+    if (!S.guest) live(db.doc("app/guestPing"), d => { if (d.exists) wakeForGuests(d.data()); });
     live(db.doc("app/crew"), d => { S.crew = d.exists ? d.data() : null; render(); });
     live(db.doc("app/voices"), d => { S.voicesDoc = d.exists ? d.data() : null; render(); });
     live(db.doc("app/styles"), d => { S.stylesDoc = d.exists ? d.data() : null; render(); });
