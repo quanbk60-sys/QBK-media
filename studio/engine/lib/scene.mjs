@@ -175,9 +175,14 @@ export function makeRenderer(s) {
       if (ST.captionBox === 'note') { ctx.rotate(((cue.start * 7) % 3 - 1) * 0.015); ctx.fillStyle = '#FFF2A8'; ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4; ctx.fillRect(-bw / 2, -bh / 2, bw, bh); ctx.shadowBlur = 0; ctx.fillStyle = '#1F2A44'; }
       else if (ST.captionBox === 'sticker') { ctx.rotate(((cue.start * 13) % 3 - 1) * 0.03); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(-bw / 2 + 6, -bh / 2 + 6, bw, bh, 14); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 14); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#111'; ctx.stroke(); ctx.fillStyle = '#111'; }
       else if (ST.captionBox === 'intertitle') { ctx.fillStyle = '#0c0c0c'; ctx.fillRect(-s.width * 0.42, -bh * 0.75, s.width * 0.84, bh * 1.5); ctx.strokeStyle = '#d9d9d9'; ctx.lineWidth = 3; ctx.strokeRect(-s.width * 0.42 + 12, -bh * 0.75 + 12, s.width * 0.84 - 24, bh * 1.5 - 24); ctx.fillStyle = '#efefef'; }
+      else if (ST.captionBox === 'stamp') { ctx.rotate(((cue.start * 11) % 3 - 1) * 0.035); ctx.fillStyle = 'rgba(243,230,204,.94)'; ctx.beginPath(); ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 10); ctx.fill();
+        ctx.strokeStyle = '#C8402A'; ctx.lineWidth = 7; ctx.beginPath(); ctx.roundRect(-bw / 2 + 9, -bh / 2 + 9, bw - 18, bh - 18, 8); ctx.stroke(); ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-bw / 2 + 20, -bh / 2 + 20, bw - 40, bh - 40, 5); ctx.stroke();
+        ctx.fillStyle = '#C8402A'; }
       else if (ST.captionBox === 'tag') { ctx.fillStyle = 'rgba(15,40,80,.9)'; ctx.fillRect(-bw / 2, -bh / 2, bw, bh); ctx.strokeStyle = ST.ink; ctx.lineWidth = 2; ctx.strokeRect(-bw / 2 + 6, -bh / 2 + 6, bw - 12, bh - 12); ctx.fillStyle = '#ffffff'; }
       const shown = ST.captionTypewriter ? cue.text.slice(0, Math.ceil(clamp((T - cue.start) / Math.min(0.6, (cue.end - cue.start) * 0.6)) * cue.text.length)) : cue.text;
-      ctx.fillText(shown, ST.captionTypewriter ? -tw / 2 + ctx.measureText(shown).width / 2 : 0, 2); ctx.restore(); }
+      ctx.fillText(shown, ST.captionTypewriter ? -tw / 2 + ctx.measureText(shown).width / 2 : 0, 2);
+      if (ST.captionBox === 'stamp') { const R = rng(Math.round(cue.start * 100)); ctx.fillStyle = 'rgba(243,230,204,.85)'; for (let i = 0; i < 90; i++) { ctx.beginPath(); ctx.arc((R() - 0.5) * bw, (R() - 0.5) * bh * 0.8, 1 + R() * 3, 0, Math.PI * 2); ctx.fill(); } }
+      ctx.restore(); }
     else
     if (cue) { const st = s.captionStyle; ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', st.size) : `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; const fill = (s.captions?.color) || ST.caption?.color || st.color;

@@ -30,5 +30,9 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - "Các phong cách giống hệt nhau, chỉ khác nền" là lỗi. Mỗi phong cách có ngữ pháp riêng (nét, cách tô, cách hiện hình, chuyển cảnh, phụ đề), xem SCENE_FORMAT.md, mục "Ngữ pháp phong cách". Đạo diễn còn phải đổi cả bố cục và nhịp cho hợp phong cách.
 - Học từ mẫu 3D thực tế thì dựng bằng `studio/engine3d/`, không thay bằng nét vẽ trên giấy. Video làm đá bản nét vẽ đã bị người dùng chê "khác hoàn toàn mẫu".
 
+## Phong cách tượng đá (`tuong-da`)
+- Mỗi câu thoại một cảnh, người đang nói là tượng chính giữa khung với `talk: true`. Tên nhân vật trên `cardSign`, kết bằng thẻ "CÒN TIẾP...". Cắt cứng, nhịp đều 4–8 s, cú lật thì cắt dồn. *(Học mẫu tuong-da-ca-khia, 12/11/2026)*
+- Kịch bản kiểu này cần **giọng khác nhau cho từng nhân vật**; một giọng đọc hết thì mất phần buồn cười. *(Học mẫu tuong-da-ca-khia)*
+
 ## Vận hành
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*

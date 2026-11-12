@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `tuong-da` (tượng đá cà khịa: tường đá, hạt phim, khung bo góc, phụ đề dấu mộc; đạo cụ `bust`, `column`, `trident`, `bolt`, `cardSign`; thẻ `studio/references/tuong-da-ca-khia/card.md`) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -88,6 +88,8 @@ Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu t
 | `zzz` (chữ Z bay lên, mờ dần, lặp). Neo ngay trên đầu người ngủ | `size` (1), `color` (navy), `speed` (1) |
 | `dust` (bụi + vệt tốc độ sau người chạy, tự hoạt hình). Neo ở chân người chạy; cho `track` chạy cùng `x` với nhân vật | `dir` (1 = người chạy nhìn sang phải, bụi bay sang trái; -1 ngược lại), `size`, `n` số cụm (5), `progress` 0..1 độ mạnh, `lines: false` bỏ vệt tốc độ, `color` |
 | `thought` = `thoughtBubble` (bóng nghĩ). Neo gần đầu người nghĩ | `dx`, `dy` tâm bóng (170, -260), `w`, `h`, `text`, `size`, `color`, `icon: "pillow"` (hình gối), `iconColor`, `progress` 0..1 (chấm rồi bóng hiện ra) |
+| `bust` (tượng bán thân trên bệ, cao ~760 px; neo đáy bệ) | `tone` marble\|basalt, `hair` curls\|laurel\|coral\|hood\|bald, `hairColor`, `beard`, `mouth` closed\|open\|grin\|shout, `talk` (miệng mấp máy), `brows` calm\|angry\|smug\|sad, `eyes` blank\|look, `headphones` (màu), `glasses` (kính pixel), `crack`, `hold` trident\|bolt\|mic\|scroll\|card, `holdColor`, `seed` |
+| `column` (cột Hy Lạp) · `trident` (đinh ba) · `bolt` (tia sét) · `cardSign` (bảng bìa carton có chữ; neo giữa) | `h`, `w`, `color` · `h`, `color` · `color` · `text` (`\n` tách dòng), `w`, `h`, `size`, `color` |
 | `infoPanel` (bảng thông tin nền tối cho video bản đồ; neo = GIỮA CẠNH TRÊN, cao tự tính; dùng màu theo style) | `w` (760), `label` (nhãn nhỏ viết hoa, vàng), `title` (`\n` tách dòng), `titleSize`, `big` (số lớn), `bigSize`, `bigColor`, `strike` (gạch đỏ qua số ngộ nhận), `bars` [{`label`, `value` 0..1, `color`, `text`}] (tối đa 4), `progress` 0..1 (thanh mọc dần, so le), `source` (tự thêm "NGUỒN: ") |
 | `southAmericaMap` (Nam Mỹ MINH HỌA, đơn giản hóa, không chính xác địa lý; neo tâm, ~600x880) | `fill` 0..1 (Amazon loang dần, mặc định 1), `lost` 0..1 (mép đông nam đỏ gạch), `color`, `land`, `label` (mặc định "BẢN ĐỒ MINH HỌA", "" để ẩn) |
 | `pin` (chấm định vị + vòng lan + nhãn; neo = điểm cần chỉ) | `label`, `color` (gold), `side` (1 phải / -1 trái / 0 trên), `size`, `progress` |
@@ -143,7 +145,7 @@ Mỗi phong cách không chỉ đổi màu. Nó còn đổi cách vẽ, và engi
 | `boil`, `boilEvery` | nét rung nhẹ theo khung (cảm giác vẽ tay sống động) |
 | `drawMode` | mặc định là bàn tay vẽ · `pop` (bật ra) · `fade` (hiện dần). `hand: false` thì vẽ nét mà không hiện bàn tay |
 | `transition` | chuyển cảnh đầu mỗi shot: `fade` · `flash` · `wipe` · `scan` · `iris` · `page` · `smudge` · `cut` (`transitionDur`). Shot có thể ghi đè bằng `transition` |
-| `captionBox` | `note` (giấy nhớ vàng) · `sticker` · `intertitle` (khung phim câm) · `tag` (nhãn bản vẽ), kèm `captionTypewriter` |
+| `captionBox` | `note` (giấy nhớ vàng) · `sticker` · `intertitle` (khung phim câm) · `tag` (nhãn bản vẽ) · `stamp` (dấu mộc đỏ), kèm `captionTypewriter` |
 Đạo diễn nên dựng cảnh khác nhau theo phong cách (bố cục, nhịp, kiểu chữ), không chỉ đổi `style`. Video cần đồ vật như thật thì dùng `studio/engine3d/`.
 
 ## Phong cách vệ tinh (`ve-tinh`, `lib/geo.mjs`)

@@ -1,0 +1,258 @@
+{
+ "style": "tuong-da",
+ "width": 1080,
+ "height": 1920,
+ "fps": 30,
+ "duration": 8.4,
+ "textFollowsCamera": true,
+ "captions": {
+  "items": [
+   {
+    "start": 0.15,
+    "end": 2.6,
+    "text": "Đỉnh núi này là của tao!"
+   },
+   {
+    "start": 2.85,
+    "end": 5.4,
+    "text": "Núi đá thì ăn được gì?"
+   },
+   {
+    "start": 5.65,
+    "end": 7.3,
+    "text": "Hai ông im giùm cái!"
+   }
+  ],
+  "y": 1500,
+  "size": 66
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 2.8,
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.0
+    },
+    {
+     "t": 2.8,
+     "zoom": 1.08,
+     "x": 540,
+     "y": 900
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "column",
+     "x": 130,
+     "y": 1420,
+     "params": {
+      "h": 1100
+     }
+    },
+    {
+     "type": "prop",
+     "name": "column",
+     "x": 950,
+     "y": 1420,
+     "params": {
+      "h": 1100
+     }
+    },
+    {
+     "type": "prop",
+     "name": "bust",
+     "x": 540,
+     "y": 1380,
+     "scale": 1.15,
+     "enter": "pop",
+     "params": {
+      "beard": true,
+      "hair": "laurel",
+      "headphones": "red",
+      "brows": "angry",
+      "mouth": "open",
+      "talk": true,
+      "hold": "bolt"
+     }
+    },
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 300,
+     "y": 330,
+     "rotate": -0.08,
+     "from": 0.3,
+     "enter": "pop",
+     "params": {
+      "text": "ZEUS",
+      "w": 302,
+      "h": 140,
+      "size": 72
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "thud",
+     "gain": 0.6
+    },
+    {
+     "t": 0.4,
+     "kind": "crack",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 2.8,
+   "end": 5.6,
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.1,
+     "x": 540,
+     "y": 880
+    },
+    {
+     "t": 2.8,
+     "zoom": 1.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "bust",
+     "x": 560,
+     "y": 1380,
+     "scale": 1.15,
+     "enter": "pop",
+     "params": {
+      "hair": "coral",
+      "brows": "smug",
+      "mouth": "grin",
+      "eyes": "look",
+      "headphones": "navy",
+      "hold": "trident",
+      "holdColor": "#8A5A3C",
+      "seed": 7
+     }
+    },
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 310,
+     "y": 300,
+     "rotate": 0.06,
+     "from": 0.3,
+     "enter": "pop",
+     "params": {
+      "text": "POSEIDON",
+      "w": 494,
+      "h": 140,
+      "size": 72
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.5
+    },
+    {
+     "t": 0.3,
+     "kind": "splash",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 5.6,
+   "end": 7.4,
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.0
+    },
+    {
+     "t": 1.8,
+     "zoom": 1.12,
+     "x": 540,
+     "y": 860
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "bust",
+     "x": 540,
+     "y": 1380,
+     "scale": 1.15,
+     "enter": "drop",
+     "motion": "shake",
+     "params": {
+      "tone": "basalt",
+      "hair": "hood",
+      "glasses": true,
+      "mouth": "shout",
+      "crack": true,
+      "seed": 5
+     }
+    },
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 540,
+     "y": 300,
+     "rotate": -0.04,
+     "from": 0.2,
+     "enter": "pop",
+     "params": {
+      "text": "HADES",
+      "w": 350,
+      "h": 140,
+      "size": 72
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "gong",
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "start": 7.4,
+   "end": 8.4,
+   "transition": "cut",
+   "elements": [
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 540,
+     "y": 900,
+     "rotate": -0.05,
+     "enter": "pop",
+     "params": {
+      "text": "CÒN TIẾP...",
+      "w": 700,
+      "h": 260
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "pop",
+     "gain": 0.5
+    }
+   ]
+  }
+ ]
+}

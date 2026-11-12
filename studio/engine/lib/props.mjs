@@ -312,6 +312,64 @@ export const PROPS = {
     ctx.beginPath(); ctx.arc(66, -38, 6, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill();
     ctx.restore();
   },
+  // --- Tượng đá cà khịa (style tuong-da): marble bust on a pedestal, ground-centre anchor, ~760 px tall.
+  // p.tone marble|basalt · p.hair curls|laurel|coral|hood|bald · p.beard · p.mouth closed|open|grin|shout · p.talk (mouth moves)
+  // p.brows calm|angry|smug|sad · p.eyes blank|look · p.headphones colour · p.glasses (pixel shades) · p.crack · p.hold trident|bolt|mic|scroll|card · p.holdColor
+  bust(ctx, p, t) {
+    const basalt = p.tone === 'basalt', M = basalt ? '#5A534B' : '#E9DCC4', MS = basalt ? '#3F3933' : '#C9B79A', hr = hash(p.seed || 3);
+    poly(ctx, [[-170, 0], [170, 0], [150, -50], [-150, -50]], MS, 6); poly(ctx, [[-80, -50], [80, -50], [60, -115], [-60, -115]], M, 6); poly(ctx, [[-150, -115], [150, -115], [135, -150], [-135, -150]], MS, 6);
+    ctx.beginPath(); ctx.moveTo(-215, -150); ctx.bezierCurveTo(-260, -230, -270, -340, -205, -395); ctx.quadraticCurveTo(-120, -440, -55, -430); ctx.lineTo(55, -430); ctx.quadraticCurveTo(120, -440, 205, -395); ctx.bezierCurveTo(270, -340, 260, -230, 215, -150); ctx.closePath();
+    ctx.fillStyle = M; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+    line(ctx, [[-150, -300], [-60, -270], [0, -295], [60, -270], [150, -300]], 4, MS); line(ctx, [[0, -295], [0, -190]], 3, MS);
+    poly(ctx, [[-52, -425], [52, -425], [48, -485], [-48, -485]], M, 6);
+    const hy = -575, talk = p.talk ? Math.abs(Math.sin(t * 13)) : 0;
+    if (p.hair === 'hood') { ctx.beginPath(); ctx.moveTo(-170, -420); ctx.bezierCurveTo(-190, -620, -120, -730, 0, -735); ctx.bezierCurveTo(120, -730, 190, -620, 170, -420); ctx.closePath(); ctx.fillStyle = '#2E2925'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke(); }
+    ctx.beginPath(); ctx.ellipse(0, hy, 102, 128, 0, 0, Math.PI * 2); ctx.fillStyle = M; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+    for (let i = 0; i < 12; i++) { const a = hr() * Math.PI * 2, rr = Math.sqrt(hr()); ctx.beginPath(); ctx.arc(Math.cos(a) * 85 * rr, hy + Math.sin(a) * 110 * rr, 1.5 + hr() * 2, 0, Math.PI * 2); ctx.fillStyle = basalt ? '#4A443D' : '#D3C3A6'; ctx.fill(); }
+    if (p.beard) { ctx.beginPath(); ctx.moveTo(-100, hy + 10); ctx.bezierCurveTo(-120, hy + 150, -60, hy + 215, 0, hy + 230); ctx.bezierCurveTo(60, hy + 215, 120, hy + 150, 100, hy + 10); ctx.quadraticCurveTo(60, hy + 90, 0, hy + 85); ctx.quadraticCurveTo(-60, hy + 90, -100, hy + 10); ctx.closePath(); ctx.fillStyle = M; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+      for (let i = 0; i < 7; i++) { const x = -75 + i * 25; line(ctx, [[x, hy + 100 + (i % 2) * 15], [x * 0.8, hy + 150 + (i % 3) * 18], [x * 0.55, hy + 195]], 3, MS); } }
+    if (p.hair === 'curls' || p.hair === 'laurel' || !p.hair) for (let i = 0; i < 9; i++) { const a = Math.PI * (1.05 + i * 0.112); puffC(ctx, Math.cos(a) * 98, hy + Math.sin(a) * 118, 30, M); }
+    if (p.hair === 'laurel') for (let i = 0; i < 10; i++) { const a = Math.PI * (1.0 + i * 0.11), x = Math.cos(a) * 112, y = hy - 10 + Math.sin(a) * 118; ctx.save(); ctx.translate(x, y); ctx.rotate(a + Math.PI / 2); ctx.beginPath(); ctx.ellipse(0, 0, 11, 24, 0.5, 0, Math.PI * 2); ctx.fillStyle = color('gold'); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.stroke(); ctx.restore(); }
+    if (p.hair === 'coral') for (const sx of [-1, 1]) { const c = color(p.hairColor || 'red'); line(ctx, [[sx * 70, hy - 90], [sx * 140, hy - 190]], 16, c); line(ctx, [[sx * 105, hy - 140], [sx * 175, hy - 150]], 13, c); line(ctx, [[sx * 125, hy - 165], [sx * 120, hy - 235]], 12, c); line(ctx, [[sx * 95, hy - 70], [sx * 170, hy - 90]], 12, c); }
+    if (p.headphones) { const c = color(p.headphones); ctx.beginPath(); ctx.arc(0, hy - 10, 132, Math.PI * 1.05, Math.PI * 1.95); ctx.lineWidth = 26; ctx.strokeStyle = INK; ctx.stroke(); ctx.lineWidth = 16; ctx.strokeStyle = c; ctx.stroke();
+      for (const sx of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sx * 112, hy + 5, 36, 58, 0, 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke(); ctx.beginPath(); ctx.ellipse(sx * 100, hy + 5, 14, 34, 0, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill(); } }
+    const br = p.brows || 'calm', by = hy - 30, tilt = br === 'angry' ? 18 : br === 'sad' ? -14 : br === 'smug' ? 8 : 0;
+    line(ctx, [[-70, by - (br === 'smug' ? 10 : 0)], [-22, by + tilt]], 9); line(ctx, [[70, by], [22, by + tilt]], 9);
+    if (p.glasses) { ctx.fillStyle = '#0B0B0B'; ctx.fillRect(-95, hy - 22, 190, 18); for (const sx of [-1, 1]) { ctx.fillRect(sx > 0 ? 14 : -84, hy - 4, 70, 26); ctx.fillRect(sx > 0 ? 24 : -74, hy + 22, 50, 12); ctx.fillStyle = '#F4F4F4'; ctx.fillRect(sx > 0 ? 24 : -74, hy, 12, 12); ctx.fillStyle = '#0B0B0B'; } }
+    else for (const sx of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sx * 42, hy + 2, 22, 13, 0, 0, Math.PI * 2); ctx.fillStyle = basalt ? '#7A7168' : '#F6EEDD'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = INK; ctx.stroke();
+      if (p.eyes === 'look') { ctx.beginPath(); ctx.arc(sx * 42 + 6, hy + 3, 7, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill(); } }
+    line(ctx, [[0, hy + 5], [-14, hy + 50], [6, hy + 56]], 4);
+    const mo = p.mouth || 'closed', my = hy + 80, open = mo === 'shout' ? 0.75 + talk * 0.25 : mo === 'open' ? 0.4 + talk * 0.5 : talk * 0.6;
+    if (mo === 'grin') { ctx.beginPath(); ctx.moveTo(-48, my - 10); ctx.quadraticCurveTo(0, my + 38, 48, my - 10); ctx.closePath(); ctx.fillStyle = '#F6F0E2'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); line(ctx, [[-40, my], [40, my]], 3); }
+    else if (open > 0.05) { const w = mo === 'shout' ? 46 : 32; ctx.beginPath(); ctx.ellipse(0, my + open * 12, w, 6 + open * 40, 0, 0, Math.PI * 2); ctx.fillStyle = '#2A1612'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+      if (open > 0.35) { ctx.fillStyle = '#F2EAD8'; ctx.fillRect(-w * 0.7, my + open * 12 - 6 - open * 36, w * 1.4, 10); } }
+    else line(ctx, [[-30, my], [0, my + (br === 'smug' ? -6 : 3)], [32, my - (br === 'smug' ? 12 : 0)]], 6);
+    if (p.crack) { line(ctx, [[-20, hy - 128], [-30, hy - 80], [-8, hy - 55], [-34, hy - 20]], 4, '#9E3B2A'); line(ctx, [[60, hy - 110], [48, hy - 70], [70, hy - 40]], 3, '#9E3B2A'); }
+    if (p.hold) { ctx.save(); ctx.translate(190, -250); const hc = p.holdColor;
+      if (p.hold === 'trident') PROPS.trident(ctx, {color: hc, h: 620}, t);
+      else if (p.hold === 'bolt') { ctx.save(); ctx.translate(0, -150); ctx.rotate(0.15); PROPS.bolt(ctx, {color: hc}, t); ctx.restore(); }
+      else if (p.hold === 'mic') { line(ctx, [[0, 30], [0, -140]], 16, '#3A3530'); ctx.beginPath(); ctx.ellipse(0, -170, 30, 42, 0, 0, Math.PI * 2); ctx.fillStyle = '#8C8C8C'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke(); }
+      else if (p.hold === 'scroll') { ctx.save(); ctx.translate(-30, -140); ctx.scale(0.55, 0.75); PROPS.scroll(ctx, {}, t); ctx.restore(); }
+      else if (p.hold === 'card') { ctx.save(); ctx.rotate(-0.25); poly(ctx, [[-70, -150], [70, -150], [70, -60], [-70, -60]], hc || '#151515', 5); line(ctx, [[-45, -125], [-15, -125]], 10, 'gold'); ctx.restore(); }
+      ctx.beginPath(); ctx.roundRect(-42, -30, 84, 66, 22); ctx.fillStyle = M; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke(); for (let i = 1; i < 4; i++) line(ctx, [[-42 + i * 21, -28], [-42 + i * 21, -6]], 3); ctx.restore(); }
+  },
+  column(ctx, p) { const h = p.h || 900, w = p.w || 130, c = p.color || '#D8C8AA', s = '#A8977A';
+    poly(ctx, [[-w * 0.85, 0], [w * 0.85, 0], [w * 0.75, -50], [-w * 0.75, -50]], s, 6); poly(ctx, [[-w / 2, -50], [w / 2, -50], [w * 0.45, -h + 70], [-w * 0.45, -h + 70]], c, 6);
+    for (let i = 1; i < 5; i++) { const x = -w / 2 + i * w / 5; line(ctx, [[x, -60], [x * 0.9, -h + 80]], 3, s); }
+    poly(ctx, [[-w * 0.6, -h + 70], [w * 0.6, -h + 70], [w * 0.9, -h + 20], [-w * 0.9, -h + 20]], c, 6); poly(ctx, [[-w, -h + 20], [w, -h + 20], [w, -h], [-w, -h]], s, 6);
+    for (const sx of [-1, 1]) { ctx.beginPath(); ctx.arc(sx * w * 0.75, -h + 45, 18, 0, Math.PI * 2); ctx.fillStyle = color(c); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); } },
+  trident(ctx, p) { const h = p.h || 700, c = p.color || '#8A5A3C';
+    line(ctx, [[0, 60], [0, -h]], 22, INK); line(ctx, [[0, 60], [0, -h]], 12, c);
+    ctx.beginPath(); ctx.moveTo(-70, -h - 110); ctx.lineTo(-70, -h); ctx.quadraticCurveTo(0, -h + 40, 70, -h); ctx.lineTo(70, -h - 110); ctx.moveTo(0, -h); ctx.lineTo(0, -h - 140); ctx.lineWidth = 22; ctx.strokeStyle = INK; ctx.stroke(); ctx.lineWidth = 12; ctx.strokeStyle = color(c); ctx.stroke();
+    for (const x of [-70, 0, 70]) poly(ctx, [[x - 20, -h - (x ? 105 : 135)], [x + 20, -h - (x ? 105 : 135)], [x, -h - (x ? 150 : 185)]], c, 5); },
+  bolt(ctx, p, t) { poly(ctx, [[20, -170], [-60, 10], [0, 10], [-30, 170], [70, -30], [10, -30], [50, -170]], p.color || 'gold', 7);
+    if (Math.sin(t * 9) > 0) { line(ctx, [[-90, -40], [-130, -60]], 8, 'gold'); line(ctx, [[90, 20], [130, 0]], 8, 'gold'); line(ctx, [[-70, 90], [-110, 110]], 8, 'gold'); } },
+  cardSign(ctx, p) { const w = p.w || 640, h = p.h || 260, hr = hash(11);
+    const pts = []; for (let x = -w / 2; x <= w / 2; x += 32) pts.push([x, -h / 2 + (hr() - 0.5) * 14]); for (let y = -h / 2; y <= h / 2; y += 32) pts.push([w / 2 + (hr() - 0.5) * 14, y]);
+    for (let x = w / 2; x >= -w / 2; x -= 32) pts.push([x, h / 2 + (hr() - 0.5) * 14]); for (let y = h / 2; y >= -h / 2; y -= 32) pts.push([-w / 2 + (hr() - 0.5) * 14, y]);
+    poly(ctx, pts, p.color || '#B8946A', 6); poly(ctx, [[-w / 2 + 30, -h / 2 + 30], [w / 2 - 30, -h / 2 + 30], [w / 2 - 30, h / 2 - 30], [-w / 2 + 30, h / 2 - 30]], null, 4, '#5C4630');
+    const lines = String(p.text || 'CÒN TIẾP...').split('\n'), sz = p.size || Math.min(90, h / (lines.length + 0.8));
+    lines.forEach((l, i) => { ctx.font = `bold ${sz}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#2A1E14'; ctx.fillText(l, 0, (i - (lines.length - 1) / 2) * sz * 1.1); }); },
 };
 PROPS.finishFlag = PROPS.checkerFlag;
 PROPS.thoughtBubble = PROPS.thought;
@@ -324,6 +382,8 @@ function checkerStrip(ctx, w, rows) { // checkered band lying on the ground (sli
     for (let i = 0; i < n; i++) if ((i + r) % 2 === 0) poly(ctx, [[X(i, y0), y0], [X(i + 1, y0), y0], [X(i + 1, y1), y1], [X(i, y1), y1]], INK, 0); }
   poly(ctx, edge, null, 5);
 }
+function hash(seed) { let x = seed * 9301 + 49297; return () => ((x = (x * 9301 + 49297) % 233280) / 233280); }
+function puffC(ctx, x, y, r, fill) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); }
 function ribbon(ctx, pts, wd, col) { line(ctx, pts, wd + 10, INK); line(ctx, pts, wd, col); }
 function puff(ctx, x, y, r, fill) {
   ctx.beginPath(); const n = 6;

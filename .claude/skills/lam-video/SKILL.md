@@ -1,6 +1,6 @@
 ---
 name: lam-video
-description: Đoàn phim QBK. Từ một chủ đề, làm trọn video hoạt hình 9:16 (TikTok, YouTube Shorts) vẽ 100% bằng code với 9 gói phong cách, có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
+description: Đoàn phim QBK. Từ một chủ đề, làm trọn video hoạt hình 9:16 (TikTok, YouTube Shorts) vẽ 100% bằng code với 12 gói phong cách, có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
 ---
 
 # /lam-video: Nhà sản xuất điều phối đoàn phim (quy trình v2)
@@ -65,6 +65,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Tâm lý, kỹ năng, năng suất | `so-tay`, `phac-thao` |
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
+| Thần thoại, lịch sử thế giới kể hài, đối đáp nhiều nhân vật, "ai giàu nhất" | `tuong-da` (tượng bán thân `bust`, tên trên `cardSign`, phụ đề dấu mộc; kịch bản dạng thoại; xem `studio/references/tuong-da-ca-khia/card.md`) |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.

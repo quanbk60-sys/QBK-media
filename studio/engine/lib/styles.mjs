@@ -36,6 +36,9 @@ export const STYLES = {
   'thi-nghiem': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'cut',label: 'Thí nghiệm cổ', genres: 'khoa học đời thường, cách làm, mẹo dân gian, đồ vật (khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng)', bg: '#E9E6E0', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
                  layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
+  'tuong-da':   { stroke: 'clean', fill: 'drop', drawMode: 'pop', hand: false, transition: 'flash', transitionDur: 0.25, captionBox: 'stamp', captionFont: '{size}px QBKBlack',label: 'Tượng đá cà khịa', genres: 'thần thoại, lịch sử thế giới kể hài, đối đáp nhiều nhân vật, khoe của, cà khịa (tượng cẩm thạch bán thân, tường đá, dấu mộc đỏ, hạt phim)', bg: '#191410', deco: 'stone', ink: '#191410', body: '#E5D0AE', lineScale: 1.25,
+                 palette: {red: '#C8402A', navy: '#3E6FA8', gold: '#E3A92B', green: '#5E8C4A', wood: '#977656', steel: '#BDA98B', water: '#4F8FC0', waterDeep: '#2F5F8C', paper: '#E5D0AE', skin: '#E5D0AE', sky: '#4A392B'},
+                 caption: {color: '#F3E6CC', stroke: 'rgba(15,10,6,.92)'}, titleFont: 'Sans'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 
@@ -62,6 +65,14 @@ export function paintBackground(ctx, st, W, H, frameNo) {
     case 'frame': ctx.lineWidth = 14; ctx.strokeStyle = '#B23A2E'; ctx.strokeRect(24, 24, W - 48, H - 48); ctx.lineWidth = 4; ctx.strokeStyle = '#3B2414'; ctx.strokeRect(46, 46, W - 92, H - 92);
       for (let i = 0; i < 900; i++) { ctx.fillStyle = `rgba(90,60,30,${(r() * 0.05).toFixed(3)})`; ctx.fillRect(r() * W, r() * H, 2, 2); } break;
     case 'vignette': { const g = ctx.createRadialGradient(W / 2, H * 0.45, H * 0.2, W / 2, H * 0.45, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); break; }
+    case 'stone': { // dark ashlar wall, light from upper centre (reference: Greek-statue roast collage)
+      const bw = 210, bh = 120; for (let y = -20, row = 0; y < H; y += bh, row++) for (let x = -(row % 2) * bw / 2 - 20; x < W; x += bw) {
+        const v = r(), sh = Math.round(40 + v * 34), ox = (r() - 0.5) * 10, oy = (r() - 0.5) * 8;
+        ctx.fillStyle = `rgb(${sh + 14},${sh + 6},${sh - 4})`; ctx.beginPath(); ctx.roundRect(x + 5 + ox, y + 5 + oy, bw - 12, bh - 12, 14); ctx.fill();
+        ctx.fillStyle = 'rgba(255,240,215,.06)'; ctx.fillRect(x + 12 + ox, y + 9 + oy, bw - 30, 8);
+        for (let k = 0; k < 6; k++) { ctx.fillStyle = `rgba(0,0,0,${(0.08 + r() * 0.12).toFixed(2)})`; ctx.beginPath(); ctx.arc(x + 20 + r() * (bw - 40), y + 20 + r() * (bh - 40), 3 + r() * 9, 0, Math.PI * 2); ctx.fill(); } }
+      const g = ctx.createRadialGradient(W / 2, H * 0.36, H * 0.08, W / 2, H * 0.42, H * 0.72); g.addColorStop(0, 'rgba(255,214,150,.20)'); g.addColorStop(0.5, 'rgba(25,20,16,.15)'); g.addColorStop(1, 'rgba(10,7,5,.78)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); break; }
   }
 }
 
@@ -79,4 +90,11 @@ export function paintOverlay(ctx, st, W, H, frameNo) {
     ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, 70); ctx.fillRect(0, H - 70, W, 70);
   }
   if (st.deco === 'letterbox') { ctx.fillStyle = '#0E0D0B'; ctx.fillRect(0, 0, W, 230); ctx.fillRect(0, H - 380, W, 380); }
+  if (st.deco === 'stone') { // warm grade, film grain, scratches, rounded dark frame like an old print
+    ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = '#F2DDBB'; ctx.fillRect(0, 0, W, H); ctx.restore();
+    const r = rng(2000 + frameNo); for (let i = 0; i < 1600; i++) { ctx.fillStyle = r() < 0.5 ? `rgba(255,240,210,${(r() * 0.08).toFixed(3)})` : `rgba(0,0,0,${(r() * 0.12).toFixed(3)})`; ctx.fillRect(r() * W, r() * H, 2, 2); }
+    if (frameNo % 23 < 3) { ctx.strokeStyle = 'rgba(255,235,200,.10)'; ctx.lineWidth = 2; const x = r() * W; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + (r() - 0.5) * 40, H); ctx.stroke(); }
+    ctx.fillStyle = '#0B0806'; ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.roundRect(18, 18, W - 36, H - 36, 46); ctx.fill('evenodd');
+    ctx.strokeStyle = 'rgba(229,208,174,.18)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(18, 18, W - 36, H - 36, 46); ctx.stroke();
+  }
 }
