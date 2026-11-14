@@ -32,7 +32,7 @@ export LIB=$HOME/lemo-opuscar PLAYWRIGHT_CHROME=<đường dẫn in ra>
    - Phụ đề vẽ trong trang, đúng kiểu của phong cách (đề từ, chữ in lề, mảnh giấy, dòng LOG...), tránh vùng giao diện TikTok ở đáy (đặt khoảng y 1400–1650).
 4. **Xem thử**: `cd $LIB && node core/render/still.mjs <dự án>/lemo 1 3 5 --size 1080x1920 --q ch=a --out <thư mục>`. Ghép tờ tiếp xúc, soi từng khung theo STYLE.md (mục Pitfalls).
 5. **Render**: `node core/render/video.mjs <dự án>/lemo --size 1080x1920 --fps 24 --workers 4 --q ch=a --out <dự án>/lemo/out/ch-a.mp4` và `node core/render/events.mjs ... --out out/ev-a.json` cho sự kiện âm thanh.
-6. **Âm thanh**: `mix.py` trong dự án dùng `$LIB/core/audio/sfx.py` (tổng hợp, không bản quyền) theo `window.EV`, nền nhạc theo bảng nhạc cụ của STYLE.md, giọng cao hơn nền khoảng 10 dB. Chạy bằng `$LIB/.venv/bin/python`.
+6. **Âm thanh**: **không dùng tiếng làm từ nhiễu** (bút lông, dao khắc, burin, giấy, gõ phím nghe sẹt sẹt, người dùng đã chê), dù STYLE.md có gợi ý. `mix.py` trong dự án dùng `$LIB/core/audio/sfx.py` cho tiếng có cao độ theo `window.EV`, nền nhạc theo bảng nhạc cụ của STYLE.md, giọng cao hơn nền khoảng 10 dB. Chạy bằng `$LIB/.venv/bin/python`.
 7. **Ghép và master**: nối các chương (`ffmpeg concat`), rồi `sh $LIB/core/render/mux.sh video.mp4 mix.wav final.mp4 24` (−14 LUFS). Phong cách nét mảnh, giấy, pixel: không thêm grain.
    - Container cloud có ffmpeg 6.1 nên `mux.sh` từ chối chạy. Khi đó chuẩn hóa `mix.wav` hai lượt `loudnorm` (I=−14, TP=−1,5) ra wav mới, rồi ghép với video bằng `libx264 -crf 20` + `aac 192k` và cắt đúng độ dài (`-t`). Đo lại bằng `ebur128` và so độ dài hình/tiếng. Xem `projects/hanh-trinh-chu-in/notes.md`.
 8. Kiểm định, phát hành, tải lên app như mọi video (`lam-video`, mục App QBK Studio).

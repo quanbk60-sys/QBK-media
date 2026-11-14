@@ -32,13 +32,16 @@ def events(ch):
     p = f'{HERE}/out/ev-{ch}.json'
     return json.load(open(p))['ev'] if os.path.exists(p) else []
 
+# Tiếng làm từ nhiễu trắng (bút lông, dao khắc, burin, lăn mực, giấy, gõ phím) nghe sẹt sẹt: tắt hết theo góp ý người dùng 14/11/2026
+NOISY = {'brush', 'wash', 'carve', 'brayer', 'paper', 'peel', 'burin', 'tick', 'type', 'scan'}
 for ch, (t0, t1) in CH.items():
     for e in events(ch):
         at, ty, d = t0 + e['t'], e['type'], e.get('dur', 1.0)
+        if ty in NOISY: continue   # người dùng: bỏ hết tiếng sẹt sẹt (tiếng nhiễu)
         if ty == 'brush':
             n = e.get('n', 4)
             for k in range(n): add(fx, brush(.3 + .2 * rng.random(), .35), at + k * d / n, 1, rng.uniform(-.3, .3))
-        elif ty == 'seal':  add(fx, thump(.6, 90) * .5, at, 1); add(fx, bp(noise(.12), 800, 3000) * env_exp(.12, .03) * .3, at + .02, 1)
+        elif ty == 'seal':  add(fx, thump(.6, 90) * .5, at, 1)
         elif ty == 'drop':  add(fx, tone(1900, .25, .25, (1, .3)) * env_exp(.25, .05), at, 1); add(fx, thump(.4, 70) * .5, at + .03, 1)
         elif ty == 'wash':  add(fx, fade(lp(noise(1.6), 900) * .12, .6, .8), at, 1)
         elif ty == 'carve':
@@ -56,7 +59,7 @@ for ch, (t0, t1) in CH.items():
         elif ty == 'clack':
             n = e.get('n', 6)
             for k in range(n): add(fx, tone(2400 + 200 * rng.random(), .08, .2, (1, .4)) * env_exp(.08, .015), at + k * d / n, 1, -.4 + .8 * k / n)
-        elif ty == 'press':  add(fx, thump(1, 55) * .7, at, 1); add(fx, fade(lp(noise(.6), 300) * .25, .02, .4), at, 1)
+        elif ty == 'press':  add(fx, thump(1, 55) * .7, at, 1)
         elif ty == 'tick':
             for k in range(6): add(fx, key(.25), at + k * d / 6, 1)
         elif ty == 'poweron': add(fx, thump(.7, 60) * .6, at, 1); add(fx, fade(tone(60, 1.2, .08, (1, .5, .3, .2)), .02, .6), at, 1)

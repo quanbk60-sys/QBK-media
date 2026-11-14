@@ -7,6 +7,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 
 ## Âm thanh
 - **Không dùng tiếng bút sột soạt** khi bàn tay vẽ (engine đã mặc định `scribbleGain: 0`). *(Rùa và Thỏ)*
+- **Không dùng tiếng nhiễu kiểu sẹt sẹt** (bút lông, dao khắc, burin, lăn mực, giấy, gõ phím làm từ nhiễu trắng). Chỉ dùng tiếng có cao độ (trống gỗ, ting, chuông) và nhạc nền. *(Hành trình của chữ in, góp ý của người dùng 14/11/2026)*
 - Tiếng `pop` không được đặt trùng đầu câu thoại quan trọng. Đặt sớm hơn khoảng 0,15 giây. *(QA Rùa và Thỏ)*
 
 ## Hình ảnh

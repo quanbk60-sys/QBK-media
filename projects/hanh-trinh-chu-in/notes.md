@@ -8,3 +8,4 @@
 - Âm thanh: `lemo/mix.py` dùng sfx.py của thư viện theo `window.EV`. Nền: dây gảy ngũ cung (A), drone dây trầm + trống gỗ (B), harpsichord (C), pad saw (D). Giọng nén, nền nhún xuống khi có lời.
 - Master: `mux.sh` cần ffmpeg 7, container có 6.1, nên dùng loudnorm 2 lượt thủ công: −14,1 LUFS, 43,6 giây, 11,5 MB.
 - Lệnh dựng lại: xem skill `lemo-opuscar` mục 3.
+- Vòng 2 (góp ý người dùng): bỏ hết tiếng sẹt sẹt. `mix.py` bỏ qua các sự kiện trong `NOISY`, bỏ phần nhiễu trong tiếng dấu và máy ép. Master lại −14,0 LUFS.
