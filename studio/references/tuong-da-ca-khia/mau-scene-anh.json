@@ -1,0 +1,180 @@
+{
+ "style": "tuong-da",
+ "width": 1080,
+ "height": 1920,
+ "fps": 30,
+ "textFollowsCamera": true,
+ "captions": {
+  "path": "tts/captions-audio.json",
+  "lead": 0.15,
+  "y": 1560,
+  "size": 62
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 5.14,
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.0
+    },
+    {
+     "t": 5.14,
+     "zoom": 1.08,
+     "x": 540,
+     "y": 900
+    }
+   ],
+   "elements": [
+    {
+     "type": "photo",
+     "full": true,
+     "path": "img/poseidon.png",
+     "talkPath": "img/poseidon-noi.png",
+     "talk": [
+      [
+       0.15,
+       3.2
+      ],
+      [
+       3.42,
+       5.02
+      ]
+     ],
+     "dim": 0,
+     "shade": false,
+     "kenburns": 1.0,
+     "enterDur": 0.01
+    },
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 300,
+     "y": 230,
+     "rotate": -0.05,
+     "from": 0.2,
+     "enter": "pop",
+     "params": {
+      "text": "POSEIDON",
+      "w": 500,
+      "h": 140,
+      "size": 72
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.5
+    },
+    {
+     "t": 0.3,
+     "kind": "chime",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 5.14,
+   "end": 8.41,
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.15,
+     "x": 540,
+     "y": 820
+    },
+    {
+     "t": 0.5,
+     "zoom": 1.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "photo",
+     "full": true,
+     "path": "img/hades.png",
+     "dim": 0,
+     "shade": false,
+     "kenburns": 1.06,
+     "motion": "shake",
+     "enterDur": 0.01
+    },
+    {
+     "type": "prop",
+     "name": "stampText",
+     "x": 560,
+     "y": 1150,
+     "from": 0.3,
+     "enter": "pop",
+     "params": {
+      "text": "IM\nGIÙM!",
+      "color": "#F3E6CC",
+      "size": 150
+     }
+    },
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 760,
+     "y": 230,
+     "rotate": 0.05,
+     "from": 0.2,
+     "enter": "pop",
+     "params": {
+      "text": "HADES",
+      "w": 380,
+      "h": 140,
+      "size": 72
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "gong",
+     "gain": 0.6
+    },
+    {
+     "t": 0.65,
+     "kind": "thud",
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "start": 8.41,
+   "end": 9.71,
+   "transition": "cut",
+   "elements": [
+    {
+     "type": "prop",
+     "name": "cardSign",
+     "x": 540,
+     "y": 900,
+     "rotate": -0.05,
+     "enter": "pop",
+     "params": {
+      "text": "CÒN TIẾP...",
+      "w": 700,
+      "h": 260
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "pop",
+     "gain": 0.5
+    }
+   ]
+  }
+ ],
+ "narration": {
+  "path": "tts/narration.wav",
+  "lead": 0.15
+ },
+ "duration": 9.71
+}

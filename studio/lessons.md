@@ -33,6 +33,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 ## Phong cách tượng đá (`tuong-da`)
 - Mỗi câu thoại một cảnh, người đang nói là tượng chính giữa khung với `talk: true`. Tên nhân vật trên `cardSign`, kết bằng thẻ "CÒN TIẾP...". Cắt cứng, nhịp đều 4–8 s, cú lật thì cắt dồn. *(Học mẫu tuong-da-ca-khia, 12/11/2026)*
 - Kịch bản kiểu này cần **giọng khác nhau cho từng nhân vật**; một giọng đọc hết thì mất phần buồn cười. *(Học mẫu tuong-da-ca-khia)*
+- Người dùng muốn "y hệt" mẫu QBK60: dùng ảnh Gemini người dùng tạo, mỗi cảnh 2 ảnh (miệng ngậm, miệng mở) để tượng nói được. Mẫu gốc là video AI, ảnh tĩnh không có tay vung, nên bù bằng máy quay, chữ bật, âm thanh. *(Người dùng, 14/11/2026)*
 
 ## Vận hành
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*

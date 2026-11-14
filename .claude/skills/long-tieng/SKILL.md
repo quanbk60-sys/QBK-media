@@ -20,6 +20,13 @@ ffprobe -v error -show_entries format=duration -of csv=p=0 projects/<slug>/audio
 - Ghi vào `checkpoint.json`: model, giọng, thời lượng, và số token nếu có trong phần `usage`.
 - Nếu thời lượng (sau khi tăng tốc) lệch mục tiêu quá 20%, báo Nhà sản xuất để biên kịch chỉnh lời. Ngoài tempo theo brief, không tự kéo giãn hay nén thêm.
 
+## Thoại nhiều nhân vật (mỗi vai một giọng)
+Kịch bản dạng thoại (`dialogue.txt`, mỗi dòng `Tên: lời`) thì không dùng `tts.py` một lần, mà dùng:
+```bash
+python3 studio/tools/thoai.py projects/<slug>/dialogue.txt projects/<slug>/voices.json projects/<slug>/audio
+```
+`voices.json`: `{"Zeus": {"voice": "Charon", "style": "old, grumpy, bossy", "tempo": 1.1}, ...}`. `style` là vài tính từ tiếng Anh, được gửi thành thẻ `[style]` trước câu: điều khiển giọng mà không bị đọc thành lời. **Không** viết "Say ...:" trước câu (bị đọc thành lời) và không dùng systemInstruction (model từ chối). Kết quả: `narration.wav`, `captions-audio.json` (có `speaker`), `talk.json` (lúc từng nhân vật nói, để đạo diễn đặt `talk` cho ảnh). Mỗi vai nên khác giới, tuổi hoặc tốc độ để người nghe phân biệt được. Nghe lại bằng Gemini để chắc không câu nào bị đọc thừa.
+
 ## Tốc độ (mặc định 1,2x theo bài học)
 Sau khi thu giọng, tăng tốc theo `brief.md` (mặc định 1,2). Lệnh này giữ bản gốc ở `audio/narration-orig.wav` và tự căn lại phụ đề:
 ```bash

@@ -65,6 +65,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Tâm lý, kỹ năng, năng suất | `so-tay`, `phac-thao` |
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
+| Thần thoại kể hài **bằng ảnh Gemini của người dùng** (app: "Tượng đá · ảnh của bạn") | style `tuong-da` + `photo` `full: true` có `talkPath`/`talk`; giọng từng vai bằng `thoai.py`; xem `studio/references/tuong-da-ca-khia/card.md` mục "Biến thể ảnh của bạn" |
 | Thần thoại, lịch sử thế giới kể hài, đối đáp nhiều nhân vật, "ai giàu nhất" | `tuong-da` (tượng bán thân `bust`, tên trên `cardSign`, phụ đề dấu mộc; kịch bản dạng thoại; xem `studio/references/tuong-da-ca-khia/card.md`) |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |

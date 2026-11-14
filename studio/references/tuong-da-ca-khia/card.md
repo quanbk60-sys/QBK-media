@@ -24,6 +24,14 @@
 - Tay tượng cử động (hiện chỉ có nắm tay cầm đồ), xoay đầu, mắt đảo; cảnh chia đôi có vạch nứt; tim hồng bay, biển neon, biểu tượng wifi; cảnh cắt dồn nhanh. Giao `hoa-si` theo nhu cầu.
 - Nhạc trap: kênh chưa có nhạc có giấy phép (xem skill `am-thanh`).
 
+## Biến thể ảnh của bạn (`tuong-da-anh` trong app, 14/11/2026)
+Người dùng muốn **y hệt** mẫu. Mẫu gốc là **video AI tạo từ ảnh** (tượng mấp máy miệng, giơ tay, thẻ lấp lánh), không phải ảnh tĩnh. Cách miễn phí gần nhất:
+- **Hình:** người dùng tạo ảnh bên Gemini theo `gemini-anh.md`. Mỗi cảnh có nói thì 2 ảnh: `NN-ten.png` (miệng ngậm) và `NN-ten-noi.png` (miệng mở, còn lại y hệt).
+- **Giọng:** `studio/tools/thoai.py` thu mỗi vai một giọng, ra `talk.json`.
+- **Dựng:** style `tuong-da`, mỗi cảnh một `photo` `full: true`, `dim: 0`, `shade: false`, `enterDur: 0.01`, `talkPath` + `talk` (từ `talk.json` cộng `lead`). Trên ảnh: `cardSign` (tên), `stampText` (câu chốt đóng dấu), `rays` (tia vàng vẽ tay). Phụ đề dấu mộc tự có. Máy quay đẩy chậm khi nói, giật zoom và `motion: shake` ở câu gắt, cắt cứng mỗi câu, kết bằng `cardSign` "CÒN TIẾP...".
+- Đã thử bằng khung hình lấy từ video của kênh (không lưu vào repo): miệng mấp máy khớp lời, hai giọng Puck và Charon phân biệt rõ.
+- **Không làm được bằng ảnh tĩnh:** tay vung, vật bay, nước bắn. Muốn có thì cần video AI (tốn phí, người dùng đã tắt video AI ngày 11/11), phải hỏi và báo giá trước.
+
 ## Hợp với
 Thần thoại Hy Lạp, La Mã, Bắc Âu; lịch sử thế giới kể hài (các hoàng đế, triết gia đọ tài); "ai giàu nhất, ai mạnh nhất"; đối đáp nhiều nhân vật; giải thích kinh tế bằng chuyện cãi nhau (đất đai so với tiền mặt).
 

@@ -364,6 +364,18 @@ export const PROPS = {
     for (const x of [-70, 0, 70]) poly(ctx, [[x - 20, -h - (x ? 105 : 135)], [x + 20, -h - (x ? 105 : 135)], [x, -h - (x ? 150 : 185)]], c, 5); },
   bolt(ctx, p, t) { poly(ctx, [[20, -170], [-60, 10], [0, 10], [-30, 170], [70, -30], [10, -30], [50, -170]], p.color || 'gold', 7);
     if (Math.sin(t * 9) > 0) { line(ctx, [[-90, -40], [-130, -60]], 8, 'gold'); line(ctx, [[90, 20], [130, 0]], 8, 'gold'); line(ctx, [[-70, 90], [-110, 110]], 8, 'gold'); } },
+  // Big rubber-stamp text slapped over the picture (centre anchor). p.text (\n splits), p.color (default red), p.size, p.wear (speckle colour, optional), p.seed
+  stampText(ctx, p) { const lines = String(p.text || 'VIP').split('\n'), sz = p.size || 120, c = color(p.color || 'red'), hr = hash(p.seed || 9);
+    ctx.font = `bold ${sz}px Sans`; const w = Math.max(...lines.map(l => l.length)) * sz * 0.62 + sz * 0.9, h = lines.length * sz * 1.05 + sz * 0.6;
+    ctx.save(); ctx.rotate(p.rotate0 ?? -0.12); ctx.lineWidth = sz * 0.1; ctx.strokeStyle = c; ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, sz * 0.18); ctx.stroke();
+    ctx.lineWidth = sz * 0.035; ctx.beginPath(); ctx.roundRect(-w / 2 + sz * 0.16, -h / 2 + sz * 0.16, w - sz * 0.32, h - sz * 0.32, sz * 0.1); ctx.stroke();
+    ctx.fillStyle = c; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; lines.forEach((l, i) => ctx.fillText(l, 0, (i - (lines.length - 1) / 2) * sz * 1.05 + sz * 0.04));
+    if (p.wear) for (let i = 0; i < 120; i++) { ctx.fillStyle = p.wear; ctx.beginPath(); ctx.arc((hr() - 0.5) * w, (hr() - 0.5) * h, 1 + hr() * sz * 0.03, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore(); },
+  // Hand-drawn chalky rays bursting around the anchor (centre). p.color (gold), p.r inner radius, p.len, p.n
+  rays(ctx, p, t) { const n = p.n || 14, r0 = p.r || 260, L = p.len || 160, c = p.color || 'gold', hr = hash(p.seed || 4), wob = Math.sin(t * 10) * 0.02;
+    for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2 + (hr() - 0.5) * 0.25 + wob, r1 = r0 + hr() * 40, r2 = r1 + L * (0.6 + hr() * 0.6);
+      line(ctx, [[Math.cos(a) * r1, Math.sin(a) * r1], [Math.cos(a + 0.02) * (r1 + r2) / 2, Math.sin(a + 0.02) * (r1 + r2) / 2], [Math.cos(a) * r2, Math.sin(a) * r2]], 12 + hr() * 6, c); } },
   cardSign(ctx, p) { const w = p.w || 640, h = p.h || 260, hr = hash(11);
     const pts = []; for (let x = -w / 2; x <= w / 2; x += 32) pts.push([x, -h / 2 + (hr() - 0.5) * 14]); for (let y = -h / 2; y <= h / 2; y += 32) pts.push([w / 2 + (hr() - 0.5) * 14, y]);
     for (let x = w / 2; x >= -w / 2; x -= 32) pts.push([x, h / 2 + (hr() - 0.5) * 14]); for (let y = h / 2; y >= -h / 2; y -= 32) pts.push([-w / 2 + (hr() - 0.5) * 14, y]);

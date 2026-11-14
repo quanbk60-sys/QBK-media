@@ -44,7 +44,7 @@ async function loadSat(s) {
 export async function preloadGeo(s) {
   s._sat = await loadSat(s);
   s._photos = new Map();
-  for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'photo' && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
+  for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'photo') for (const f of [e.path, e.talkPath].filter(Boolean)) if (!s._photos.has(f)) s._photos.set(f, await loadImage(path.join(s.base, f)));
   if (s.shots.some(sh => (sh.elements || []).some(e => e.type === 'globe'))) {
     const w = s._sat?.levels.filter(l => l.world).at(-1); if (!w) throw new Error('globe cần một mức "world" trong satmap.json (satmap.py --level 4:world)');
     const cv = createCanvas(w.w, w.h), c = cv.getContext('2d'); c.drawImage(w.img, 0, 0);
@@ -55,6 +55,7 @@ export function validateGeo(s, e, where, err) {
   if (!GEO_TYPES.includes(e.type)) return false;
   if (['satmap', 'globe'].includes(e.type) && !s.satmap) err(`${where}: scene cần "satmap": "đường/dẫn/satmap.json"`);
   if (e.type === 'photo' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
+  if (e.type === 'photo' && e.talkPath && !fs.existsSync(path.join(s.base, e.talkPath))) err(`${where}: missing talkPath ${e.talkPath}`);
   if (e.type === 'route' && !(e.path?.length >= 2)) err(`${where}: route cần path [[lat,lon],...]`);
   return true;
 }
@@ -190,11 +191,19 @@ function title(ctx, e, t, s) {
   if (e.badge) { ctx.shadowBlur = 0; const q = clamp((k - td - 0.2) / 0.3); ctx.globalAlpha = a * q; ctx.font = `${e.badgeSize ?? 30}px ${F.black}`; const bw = ctx.measureText(e.badge.toUpperCase()).width + 30, bx = align === 'center' ? x - bw / 2 : x; ctx.fillStyle = ORANGE; ctx.fillRect(bx, y - 30, bw, 46); ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.fillText(e.badge.toUpperCase(), bx + 15, y + 4); }
   ctx.restore();
 }
+// Talking still: e.talkPath = same picture with the mouth open; e.talk = true | [[from, to], ...] (seconds, relative to the element).
+// The two pictures alternate at syllable rate (~7–9 Hz, irregular) inside the talk windows.
+function talkOpen(e, k) {
+  if (!e.talkPath || !e.talk) return false;
+  const on = e.talk === true || e.talk.some(([a, b]) => k >= a && k < b); if (!on) return false;
+  const n = Math.floor(k * (e.talkRate ?? 8)), h = Math.sin(n * 12.9898 + (e.talkSeed ?? 1) * 78.233) * 43758.5453;
+  return (h - Math.floor(h)) > 0.38;
+}
 function photo(ctx, e, t, s) {
-  const im = s._photos.get(e.path), k = local(e, t), dur = (e.to ?? (e._shotDur ?? 4)) - (e.from ?? 0), a = fadeA({...e, enter: 'none'}, t);
+  const k0 = local(e, t), im = s._photos.get(talkOpen(e, k0) ? e.talkPath : e.path), k = k0, dur = (e.to ?? (e._shotDur ?? 4)) - (e.from ?? 0), a = fadeA({...e, enter: 'none'}, t);
   const kb = 1 + ((e.kenburns ?? 1.08) - 1) * clamp(k / Math.max(1, dur));
   if (e.full) { // full-frame photo background
-    const sc = Math.max(s.width / im.width, s.height / im.height) * kb, w = im.width * sc, h = im.height * sc, fx = e.focus?.[0] ?? 0.5, fy = e.focus?.[1] ?? 0.5;
+    const sc = Math.max(s.width / im.width, s.height / im.height) * kb * (e.overscan ?? 1.06), w = im.width * sc, h = im.height * sc, fx = e.focus?.[0] ?? 0.5, fy = e.focus?.[1] ?? 0.5;
     ctx.save(); ctx.globalAlpha = a * clamp(k / (e.enterDur ?? 0.4)); ctx.drawImage(im, (s.width - w) * fx, (s.height - h) * fy, w, h);
     if (e.dim !== 0) { ctx.fillStyle = `rgba(0,0,0,${e.dim ?? 0.25})`; ctx.fillRect(0, 0, s.width, s.height); }
     ctx.restore(); if (e.shade !== false) shade(ctx, {}, t, s); if (e.credit) credit(ctx, s, e.credit, s.height - 330, 'left'); return;
