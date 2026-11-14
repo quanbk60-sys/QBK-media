@@ -89,7 +89,7 @@ Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu t
 | `dust` (bụi + vệt tốc độ sau người chạy, tự hoạt hình). Neo ở chân người chạy; cho `track` chạy cùng `x` với nhân vật | `dir` (1 = người chạy nhìn sang phải, bụi bay sang trái; -1 ngược lại), `size`, `n` số cụm (5), `progress` 0..1 độ mạnh, `lines: false` bỏ vệt tốc độ, `color` |
 | `thought` = `thoughtBubble` (bóng nghĩ). Neo gần đầu người nghĩ | `dx`, `dy` tâm bóng (170, -260), `w`, `h`, `text`, `size`, `color`, `icon: "pillow"` (hình gối), `iconColor`, `progress` 0..1 (chấm rồi bóng hiện ra) |
 | `bust` (tượng bán thân trên bệ, cao ~760 px; neo đáy bệ) | `tone` marble\|basalt, `hair` curls\|laurel\|coral\|hood\|bald, `hairColor`, `beard`, `mouth` closed\|open\|grin\|shout, `talk` (miệng mấp máy), `brows` calm\|angry\|smug\|sad, `eyes` blank\|look, `headphones` (màu), `glasses` (kính pixel), `crack`, `hold` trident\|bolt\|mic\|scroll\|card, `holdColor`, `seed` |
-| `riverBend` (sông phối cảnh; x,y = 0, tọa độ khung) · `ripple` · `splash` · `bigTree` · `bush` · `forest` · `rock` · `groundTex` · `log` · `raft` · `signpost` · `drowner` · `thinkIcons` (phong cảnh nét, style `ngu-ngon-trang`) | `far`, `near` [[x,y]...], `flow`, `strokes`, `dir`, `lip` · `r`, `drops` · `size` · `h`, `w`, `grey`, `trunk` · `w`, `grey` · `w`, `gap`, `seed` · `w`, `h` · `w`, `depth`, `n` · `len`, `r` · `n`, `len`, `float` · `text`, `w`, `h`, `size` · `seed` · `icons` (clock, money, target, flag) |
+| `riverBend` (sông phối cảnh; x,y = 0, tọa độ khung) · `ripple` · `splash` · `bigTree` · `bush` · `forest` · `rock` · `groundTex` · `log` · `raft` · `signpost` · `drowner` · `thinkIcons` · `treasureMap` (bản đồ màu: `title`, `sub`, `steps`, `start`, `goal`, `reveal` 0..1) · `parchment` (`open` 0..1) (phong cảnh nét, style `ngu-ngon-trang`) | `far`, `near` [[x,y]...], `flow`, `strokes`, `dir`, `lip` · `r`, `drops` · `size` · `h`, `w`, `grey`, `trunk` · `w`, `grey` · `w`, `gap`, `seed` · `w`, `h` · `w`, `depth`, `n` · `len`, `r` · `n`, `len`, `float` · `text`, `w`, `h`, `size` · `seed` · `icons` (clock, money, target, flag) |
 | `stampText` (chữ đóng dấu to đè lên hình; neo giữa) · `rays` (tia vẽ tay quanh một điểm) | `text` (`\n` tách dòng), `color`, `size`, `wear` (màu chấm mòn), `rotate0` · `color`, `r`, `len`, `n` |
 | `column` (cột Hy Lạp) · `trident` (đinh ba) · `bolt` (tia sét) · `cardSign` (bảng bìa carton có chữ; neo giữa) | `h`, `w`, `color` · `h`, `color` · `color` · `text` (`\n` tách dòng), `w`, `h`, `size`, `color` |
 | `infoPanel` (bảng thông tin nền tối cho video bản đồ; neo = GIỮA CẠNH TRÊN, cao tự tính; dùng màu theo style) | `w` (760), `label` (nhãn nhỏ viết hoa, vàng), `title` (`\n` tách dòng), `titleSize`, `big` (số lớn), `bigSize`, `bigColor`, `strike` (gạch đỏ qua số ngộ nhận), `bars` [{`label`, `value` 0..1, `color`, `text`}] (tối đa 4), `progress` 0..1 (thanh mọc dần, so le), `source` (tự thêm "NGUỒN: ") |
@@ -106,7 +106,7 @@ Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu t
 `{"type": "image", "path": "art/x.png", "x": 540, "y": 900, "w": 800}` (neo ở tâm).
 
 ## Trang phục (`cast`)
-`headband`, `stick` (người que một nét), `hair` (`long` | `spiky`), `hat` (`official` | `crown` | `helmet` | `cone` | `cap` | `fedora`), `hatColor`, `beard`, `sash` (+ `sashX: false` để chỉ có một dải đai), `belt`, `cape`, `robe`, `robeTrim`, `body`, `shoes`, `prop` (`spear` | `sword` | `dagger` | `hammer` | `oar` | `flag` | `scroll` | `seal` | `axe`), `propColor`.
+`headband`, `stick` (người que một nét), `hair` (`long` | `spiky`), `hat` (`official` | `crown` | `helmet` | `cone` | `cap` | `fedora`), `hatColor`, `beard`, `sash` (+ `sashX: false` để chỉ có một dải đai), `belt`, `cape`, `robe`, `robeTrim`, `body`, `shoes`, `prop` (`spear` | `sword` | `dagger` | `hammer` | `oar` | `flag` | `scroll` | `seal` | `axe` | `pole`), `propColor`.
 
 Hóa trang con vật (v2):
 - `ears: "bunny"` (hoặc `"rabbit"`): tai thỏ dài, lòng hồng (`earColor`), nhúc nhích theo `wind` khi chạy. **Tự cụp** theo biểu cảm: `sad` 0,9, `asleep` 0,75, `scared` 0,7, `pain` 0,6, `sleepy` 0,55, `embarrassed` 0,5, `yawn` 0,3. `earsDown: 0..1` (hoặc `true`) ghi đè; `earsDown: 0` giữ tai dựng. Đặt trong `costume` của element để đổi theo cảnh.
@@ -142,11 +142,11 @@ Một số âm được tạo **tự động**: tiếng bút khi bàn tay vẽ, 
 Mỗi phong cách không chỉ đổi màu. Nó còn đổi cách vẽ, và engine tự áp dụng cho mọi nhân vật và đạo cụ:
 | Thuộc tính | Giá trị |
 |---|---|
-| `stroke` | `wobble` (nét run tay) · `chalk` (phấn, đứt quãng nhiều lớp) · `pencil` (chì nhiều nét mảnh) · `marker` (bút dạ) · `woodcut` (khắc gỗ đậm) · `plotter` (nét kỹ thuật mảnh, đều) · `clean` (vector dày) · `neon` (phát sáng) |
+| `stroke` | `ink` (mực vẽ tay, đậm nhạt) · `wobble` (nét run tay) · `chalk` (phấn, đứt quãng nhiều lớp) · `pencil` (chì nhiều nét mảnh) · `marker` (bút dạ) · `woodcut` (khắc gỗ đậm) · `plotter` (nét kỹ thuật mảnh, đều) · `clean` (vector dày) · `neon` (phát sáng) |
 | `fill` | phẳng (mặc định) · `offset` (màu in lệch) · `drop` (bóng đổ đen) · `ghost` (tô mờ) · `chalk` · `hatch` (gạch chì) · `grain` (vân giấy dó) |
 | `boil`, `boilEvery` | nét rung nhẹ theo khung (cảm giác vẽ tay sống động) |
 | `drawMode` | mặc định là bàn tay vẽ · `pop` (bật ra) · `fade` (hiện dần). `hand: false` thì vẽ nét mà không hiện bàn tay |
-| `transition` | chuyển cảnh đầu mỗi shot: `fade` · `flash` · `wipe` · `scan` · `iris` · `page` · `smudge` · `cut` (`transitionDur`). Shot có thể ghi đè bằng `transition` |
+| `transition` | chuyển cảnh đầu mỗi shot: `dissolve` (hòa tan từ khung cuối cảnh trước) · `fade` · `flash` · `wipe` · `scan` · `iris` · `page` · `smudge` · `cut` (`transitionDur`). Shot có thể ghi đè bằng `transition` |
 | `captionBox` | `note` (giấy nhớ vàng) · `sticker` · `intertitle` (khung phim câm) · `tag` (nhãn bản vẽ) · `stamp` (dấu mộc đỏ), kèm `captionTypewriter` |
 Đạo diễn nên dựng cảnh khác nhau theo phong cách (bố cục, nhịp, kiểu chữ), không chỉ đổi `style`. Video cần đồ vật như thật thì dùng `studio/engine3d/`.
 

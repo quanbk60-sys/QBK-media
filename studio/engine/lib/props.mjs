@@ -397,6 +397,7 @@ export const PROPS = {
     const smooth = (pts) => { ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length - 1; i++) { const m = [(pts[i][0] + pts[i + 1][0]) / 2, (pts[i][1] + pts[i + 1][1]) / 2]; ctx.quadraticCurveTo(pts[i][0], pts[i][1], m[0], m[1]); } ctx.lineTo(...pts.at(-1)); };
     const at = (pts, u) => { const L = pts.length - 1, f = Math.min(L - 1e-6, Math.max(0, u * L)), i = Math.floor(f), k = f - i; return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k]; };
     // far bank: edge + earth face (lip) + vertical cracks
+    if (lip) { ctx.beginPath(); smooth(F); [...F].reverse().forEach(([x, y]) => ctx.lineTo(x, y + lip)); ctx.closePath(); ctx.fillStyle = '#EDEDED'; ctx.fill(); }
     ctx.beginPath(); smooth(F); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
     ctx.beginPath(); smooth(F.map(([x, y]) => [x, y + lip])); ctx.lineWidth = 3.5; ctx.stroke();
     for (let u = 0.01; u < 1; u += 0.018 + hr() * 0.02) { const [x, y] = at(F, u); if (hr() < 0.55) line(ctx, [[x, y + 3], [x + (hr() - 0.5) * 4, y + lip - 3]], 2.5); }
@@ -441,6 +442,41 @@ export const PROPS = {
       if (k < 0.45) for (let j = -2; j <= 2; j++) line(ctx, [[x + j * 6, y], [x + j * 9 + (j === 0 ? 2 : 0), y - 14 - (j % 2 ? 0 : 8)]], 2.5);
       else if (k < 0.75) { ctx.beginPath(); ctx.ellipse(x, y, 9 + hr() * 9, 5 + hr() * 4, 0, 0, Math.PI * 2); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = INK; ctx.stroke(); }
       else line(ctx, [[x, y], [x + 18 + hr() * 30, y + 2]], 2.5, '#8E8E8E'); } },
+  // Coloured parchment map insert (centre anchor, ~1600×900). p.title, p.sub, p.steps [labels along the path], p.start, p.goal, p.reveal 0..1 (path drawn so far)
+  treasureMap(ctx, p, t) { const W = p.w || 1640, H = p.h || 920, hr = hash(p.seed || 17), BR = '#5B3A1E', PA = '#EAD5A8', ED = '#B88B52', BL = '#4F9CD3', RD = '#D2342A', GR = '#6E8F4E';
+    const edge = []; for (let x = -W / 2; x <= W / 2; x += 40) edge.push([x, -H / 2 + (hr() - 0.5) * 18]); for (let y = -H / 2; y <= H / 2; y += 40) edge.push([W / 2 + (hr() - 0.5) * 18, y]);
+    for (let x = W / 2; x >= -W / 2; x -= 40) edge.push([x, H / 2 + (hr() - 0.5) * 18]); for (let y = H / 2; y >= -H / 2; y -= 40) edge.push([-W / 2 + (hr() - 0.5) * 18, y]);
+    poly(ctx, edge, ED, 0); ctx.save(); ctx.scale(0.965, 0.95); poly(ctx, edge, PA, 0); ctx.restore(); poly(ctx, edge, null, 5, BR);
+    for (let i = 0; i < 40; i++) { ctx.beginPath(); ctx.ellipse((hr() - 0.5) * W * 0.9, (hr() - 0.5) * H * 0.85, 20 + hr() * 60, 8 + hr() * 20, hr() * 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(160,110,50,0.10)'; ctx.fill(); }
+    const txt = (s, x, y, sz, c = BR, f = 'Hand', al = 'center') => { ctx.font = `${sz}px ${f}`; ctx.textAlign = al; ctx.textBaseline = 'middle'; ctx.fillStyle = c; ctx.fillText(s, x, y); };
+    txt(p.title || 'BẢN ĐỒ', 0, -H / 2 + 80, 74, BR, 'Sans'); if (p.sub) txt(p.sub, 0, -H / 2 + 140, 34);
+    // mountains (back, top band) and trees
+    for (let i = 0; i < 9; i++) { const x = -W * 0.42 + i * W * 0.1 + (hr() - 0.5) * 40, y = -H * 0.18 + (i % 2) * 20, s = 70 + hr() * 50;
+      poly(ctx, [[x - s, y], [x - s * 0.15, y - s * 1.1], [x + s * 0.2, y - s * 0.75], [x + s * 0.45, y - s * 1.0], [x + s, y]], '#D9BE8A', 4, BR); line(ctx, [[x - s * 0.15, y - s * 1.1], [x - s * 0.05, y - s * 0.5], [x + s * 0.2, y - s * 0.3]], 3, BR); }
+    for (let i = 0; i < 26; i++) { const x = (hr() - 0.5) * W * 0.85, y = H * (0.02 + hr() * 0.3); if (Math.abs(y - H * 0.12) < 40) continue; line(ctx, [[x, y], [x, y - 22]], 4, BR); ctx.beginPath(); ctx.arc(x, y - 36, 18, 0, Math.PI * 2); ctx.fillStyle = GR; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = BR; ctx.stroke(); }
+    // river with waterfall at the end
+    const riv = [[-W * 0.46, H * 0.36], [-W * 0.3, H * 0.2], [-W * 0.1, H * 0.26], [W * 0.08, H * 0.1], [W * 0.25, H * 0.14], [W * 0.36, -H * 0.04]];
+    ctx.beginPath(); ctx.moveTo(...riv[0]); for (let i = 1; i < riv.length; i++) ctx.lineTo(...riv[i]); ctx.lineWidth = 46; ctx.strokeStyle = BR; ctx.stroke(); ctx.lineWidth = 36; ctx.strokeStyle = BL; ctx.stroke();
+    for (let i = 0; i < 6; i++) { const x = W * 0.36 + (i - 2.5) * 14; line(ctx, [[x, -H * 0.04], [x + 4, H * 0.09]], 4, '#FFFFFF'); }
+    // dashed red path with step labels, X at the goal
+    const steps = p.steps || ['Chặng 1', 'Chặng 2', 'Chặng 3', 'Chặng 4', 'Chặng 5'], n = steps.length, rev = p.reveal ?? 1;
+    const path = Array.from({length: n + 1}, (_, i) => { const u = i / n; return [-W * 0.4 + u * W * 0.78, H * 0.3 - Math.sin(u * Math.PI * 1.6) * H * 0.2 - u * H * 0.32]; });
+    let total = 0; const segs = []; for (let i = 1; i < path.length; i++) { const L = Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]); segs.push(L); total += L; }
+    let left = total * rev; for (let i = 1; i < path.length && left > 0; i++) { const f = Math.min(1, left / segs[i - 1]); left -= segs[i - 1];
+      for (let d = 0; d < f; d += 26 / segs[i - 1]) { const e = Math.min(f, d + 14 / segs[i - 1]), a = path[i - 1], b = path[i]; line(ctx, [[a[0] + (b[0] - a[0]) * d, a[1] + (b[1] - a[1]) * d], [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e]], 7, RD); } }
+    steps.forEach((s, i) => { if ((i + 0.5) / n > rev + 0.02) return; const a = path[i], b = path[i + 1], x = (a[0] + b[0]) / 2, y = (a[1] + b[1]) / 2 - 46, w = s.length * 15 + 40;
+      poly(ctx, [[x - w / 2, y - 24], [x + w / 2, y - 24], [x + w / 2, y + 24], [x - w / 2, y + 24]], '#F6E7C4', 3, BR); txt(s, x, y + 2, 26); });
+    if (rev > 0.98) { const [gx, gy] = path[n]; line(ctx, [[gx - 34, gy - 34], [gx + 34, gy + 34]], 12, RD); line(ctx, [[gx + 34, gy - 34], [gx - 34, gy + 34]], 12, RD); if (p.goal) txt(p.goal, gx, gy - 76, 34, RD, 'Sans'); }
+    if (p.start) { const [sx, sy] = path[0]; poly(ctx, [[sx - 110, sy + 30], [sx + 110, sy + 30], [sx + 110, sy + 86], [sx - 110, sy + 86]], '#F6E7C4', 3, BR); txt(p.start, sx, sy + 58, 28, RD); }
+    // compass
+    const cx = W * 0.4, cy = H * 0.32; ctx.beginPath(); ctx.arc(cx, cy, 52, 0, Math.PI * 2); ctx.fillStyle = '#F6E7C4'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = BR; ctx.stroke();
+    poly(ctx, [[cx, cy - 70], [cx + 14, cy], [cx, cy + 70], [cx - 14, cy]], '#C9A36A', 3, BR); poly(ctx, [[cx - 70, cy], [cx, cy - 14], [cx + 70, cy], [cx, cy + 14]], '#C9A36A', 3, BR); txt('B', cx, cy - 92, 30); },
+  // Open parchment held up in front of a character (centre anchor). p.w, p.open 0..1 (unrolling)
+  parchment(ctx, p) { const w = (p.w || 300) * (0.25 + 0.75 * (p.open ?? 1)), h = p.h || 220, PA = '#E8D2A2', BR = '#6B4A2A';
+    poly(ctx, [[-w / 2, -h / 2 + 8], [w / 2, -h / 2], [w / 2 - 6, h / 2], [-w / 2 + 4, h / 2 + 6]], PA, 5);
+    for (const sx of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sx * w / 2, 0, 18, h / 2 + 12, 0, 0, Math.PI * 2); ctx.fillStyle = '#D9BC85'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); }
+    if ((p.open ?? 1) > 0.6) { for (let i = 0; i < 4; i++) line(ctx, [[-w * 0.35, -h * 0.28 + i * h * 0.18], [w * (0.1 + (i % 2) * 0.2), -h * 0.28 + i * h * 0.18]], 3, BR);
+      line(ctx, [[-w * 0.3, h * 0.3], [0, h * 0.15], [w * 0.28, h * 0.32]], 4, '#D2342A'); line(ctx, [[w * 0.22, h * 0.24], [w * 0.34, h * 0.4]], 4, '#D2342A'); line(ctx, [[w * 0.34, h * 0.24], [w * 0.22, h * 0.4]], 4, '#D2342A'); } },
   log(ctx, p) { const L = p.len || 420, r = p.r || 34, hr = hash(p.seed || 4);
     poly(ctx, [[-L / 2, -2 * r], [L / 2, -2 * r], [L / 2, 0], [-L / 2, 0]], 'wood', 5);
     for (let i = 0; i < 5; i++) { const y = -r * (0.35 + hr() * 1.3), x0 = -L / 2 + 20 + hr() * L * 0.4; line(ctx, [[x0, y], [x0 + L * (0.2 + hr() * 0.3), y + (hr() - 0.5) * 6]], 2.5); }

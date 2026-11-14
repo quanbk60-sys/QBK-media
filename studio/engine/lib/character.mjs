@@ -141,10 +141,11 @@ export function drawCharacter(ctx, opts) {
   ctx.save(); ctx.translate(0, lift); ctx.fillStyle = 'rgba(42,39,35,.12)'; ctx.beginPath(); ctx.ellipse((fF[0] + fB[0]) / 2, 2, 120, 14, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
 
   const torsoC = up(0, -150), neckBase = up(0, -298), neckTop = up(0, -318), nod = P.nod || 0;
-  const headC = nod ? [neckTop[0] + (D.head - 4) * Math.sin(lean + nod), neckTop[1] - (D.head - 4) * Math.cos(lean + nod)] : up(0, -318 - D.head + 4);
+  const HR = D.head * (c.stick ? 1.18 : 1); // stick figures: bigger head
+  const headC = nod ? [neckTop[0] + (HR - 4) * Math.sin(lean + nod), neckTop[1] - (HR - 4) * Math.cos(lean + nod)] : up(0, -318 - HR + 4);
   const shF = c.stick ? up(4, -262) : up(48, -262), shB = c.stick ? up(-4, -262) : up(-48, -262);
   const limb = (a, b, cc, w = lw) => { ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.lineTo(...cc); ctx.stroke(); };
-  const foot = c.stick ? f => { ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(f[0] - 4, f[1]); ctx.lineTo(f[0] + 30, f[1] + 6); ctx.stroke(); } : f => { ctx.fillStyle = color(c.shoes || 'white'); ctx.beginPath(); ctx.ellipse(f[0] + 13, f[1] + 5, 30, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
+  const foot = c.stick ? f => { ctx.fillStyle = '#FFFFFF'; ctx.lineWidth = lw * 0.8; ctx.beginPath(); ctx.ellipse(f[0] + 14, f[1] + 4, 24, 11, 0.05, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); } : f => { ctx.fillStyle = color(c.shoes || 'white'); ctx.beginPath(); ctx.ellipse(f[0] + 13, f[1] + 5, 30, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
   const hand = c.stick ? h => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(h[0], h[1], 7, 0, Math.PI * 2); ctx.fill(); } : h => { ctx.fillStyle = body; ctx.beginPath(); ctx.arc(h[0], h[1], 20, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
 
   // cape behind everything above the legs
@@ -175,7 +176,7 @@ export function drawCharacter(ctx, opts) {
   ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(...neckBase); ctx.lineTo(...neckTop); ctx.stroke();
 
   // head
-  const [hx, hy] = headC, R = D.head;
+  const [hx, hy] = headC, R = HR;
   if (c.ears) drawEars(ctx, c, hx, hy, R, lean + nod, opts, body, ink);
   ctx.fillStyle = body; ctx.beginPath(); ctx.arc(hx, hy, R, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke();
   drawFace(ctx, hx, hy, E, opts, ink);
@@ -190,7 +191,7 @@ export function drawCharacter(ctx, opts) {
     }
     ctx.beginPath(); ctx.arc(knot[0], knot[1], 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   }
-  drawHat(ctx, c, hx, hy, R, t);
+  drawHat(ctx, c, hx, hy - (R - D.head), R, t); // hat offsets are tuned for the default head radius
 
   // front arm + prop (prop drawn first so the hand sits on top)
   const eF = segp(shF, P.fu, D.upper), hF = segp(eF, P.ff, D.fore);
@@ -232,9 +233,10 @@ function drawFace(ctx, hx, hy, E, opts, ink) {
 }
 
 function drawHat(ctx, c, hx, hy, R, t) {
-  if (c.hair === 'long') { ctx.lineWidth = 5; for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(hx + s * 20, hy - R + 4); ctx.bezierCurveTo(hx + s * (R + 30), hy - R * 0.6, hx + s * (R + 26), hy + R * 0.6, hx + s * (R + 4), hy + R * 1.15); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(hx + s * 10, hy - R + 2); ctx.bezierCurveTo(hx + s * (R + 8), hy - R * 0.4, hx + s * (R + 6), hy + R * 0.5, hx + s * (R - 10), hy + R * 0.95); ctx.stroke(); } }
-  else if (c.hair === 'spiky') { ctx.lineWidth = 5; for (let i = -2; i <= 2; i++) { const a = -Math.PI / 2 + i * 0.28; ctx.beginPath(); ctx.moveTo(hx + Math.cos(a) * (R - 6), hy + Math.sin(a) * (R - 6)); ctx.lineTo(hx + Math.cos(a) * (R + 28), hy + Math.sin(a) * (R + 28)); ctx.stroke(); } }
+  const hy0 = hy + (R - DIM.head); // true head centre (hy is shifted for hats)
+  if (c.hair === 'long') { ctx.lineWidth = 5; for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(hx + s * 20, hy0 - R + 4); ctx.bezierCurveTo(hx + s * (R + 30), hy0 - R * 0.6, hx + s * (R + 26), hy0 + R * 0.6, hx + s * (R + 4), hy0 + R * 1.15); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(hx + s * 10, hy0 - R + 2); ctx.bezierCurveTo(hx + s * (R + 8), hy0 - R * 0.4, hx + s * (R + 6), hy0 + R * 0.5, hx + s * (R - 10), hy0 + R * 0.95); ctx.stroke(); } }
+  else if (c.hair === 'spiky') { ctx.lineWidth = 5; for (let i = -2; i <= 2; i++) { const a = -Math.PI / 2 + i * 0.28; ctx.beginPath(); ctx.moveTo(hx + Math.cos(a) * (R - 6), hy0 + Math.sin(a) * (R - 6)); ctx.lineTo(hx + Math.cos(a) * (R + 28), hy0 + Math.sin(a) * (R + 28)); ctx.stroke(); } }
   if (!c.hat) return;
   const col = color(c.hatColor || 'navy'); ctx.fillStyle = col; ctx.lineWidth = 5;
   if (c.hat === 'official') { ctx.beginPath(); ctx.moveTo(hx - 62, hy - 78); ctx.lineTo(hx - 54, hy - 200); ctx.lineTo(hx + 54, hy - 200); ctx.lineTo(hx + 62, hy - 78); ctx.closePath(); ctx.fill(); ctx.stroke();
@@ -264,6 +266,7 @@ function drawHeldProp(ctx, c, h, sp, ink, t) {
     case 'oar': shaft(240, 200, 8, 'wood'); poly([at(-200, -26), at(-330, -30), at(-340, 0), at(-330, 30), at(-200, 26)], 'wood'); break;
     case 'flag': shaft(420, 120, 7, 'wood'); { const w = Math.sin(t * 6) * 12; poly([at(420, 0), at(420 + w * 0.3, 160), at(330 + w, 170), at(300, 0)], c.propColor || 'red'); } break;
     case 'scroll': poly([at(-20, -60), at(20, -60), at(20, 60), at(-20, 60)], '#F6EBCF'); poly([at(-6, -18), at(6, -18), at(6, 18), at(-6, 18)], c.propColor || 'navy'); break;
+    case 'pole': shaft(520, 520, 8, 'wood'); break;
     case 'axe': shaft(215, 40, 9, 'wood'); poly([at(160, -20), at(200, -20), at(200, 8), at(236, 86), at(190, 104), at(130, 86), at(160, 8)], 'steel'); poly([at(200, -20), at(160, -20), at(166, -38), at(194, -38)], 'steel'); break;
     case 'seal': poly([at(-30, -34), at(30, -34), at(30, 34), at(-30, 34)], 'gold'); break;
   }

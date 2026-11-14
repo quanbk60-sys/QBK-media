@@ -3,7 +3,7 @@
  "width": 1920,
  "height": 1080,
  "fps": 30,
- "duration": 24.6,
+ "duration": 36.4,
  "textFollowsCamera": true,
  "music": {
   "path": "music.wav",
@@ -16,7 +16,11 @@
   },
   "heroP": {
    "hat": "fedora",
-   "prop": "oar"
+   "prop": "pole"
+  },
+  "heroM": {
+   "hat": "fedora",
+   "prop": "scroll"
   },
   "a": {},
   "b": {
@@ -858,7 +862,356 @@
   },
   {
    "start": 10.6,
-   "end": 15.4,
+   "end": 13.6,
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.0,
+     "x": 960,
+     "y": 540
+    },
+    {
+     "t": 3.0,
+     "zoom": 1.25,
+     "x": 1000,
+     "y": 520
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "forest",
+     "x": 760,
+     "y": 620,
+     "scale": 0.75,
+     "params": {
+      "w": 1800,
+      "seed": 21,
+      "gap": 320
+     }
+    },
+    {
+     "type": "prop",
+     "name": "bigTree",
+     "x": 1500,
+     "y": 860,
+     "scale": 1.25,
+     "params": {
+      "seed": 41
+     }
+    },
+    {
+     "type": "prop",
+     "name": "cliff",
+     "x": 1100,
+     "y": 860,
+     "scale": 1.0,
+     "params": {
+      "w": 1500,
+      "h": 300
+     }
+    },
+    {
+     "type": "prop",
+     "name": "groundTex",
+     "x": 900,
+     "y": 870,
+     "scale": 1,
+     "params": {
+      "w": 1300,
+      "depth": 120,
+      "n": 14,
+      "seed": 8
+     }
+    },
+    {
+     "type": "actor",
+     "cast": "heroM",
+     "x": 1080,
+     "y": 860,
+     "scale": 0.46,
+     "facing": 1,
+     "costume": {
+      "prop": null
+     },
+     "acting": [
+      {
+       "t": 0,
+       "pose": "stand",
+       "expr": "neutral"
+      },
+      {
+       "t": 0.6,
+       "pose": "carry",
+       "expr": "surprised"
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "parchment",
+     "x": 1120,
+     "y": 690,
+     "scale": 0.55,
+     "from": 0.6,
+     "enter": "pop",
+     "ptrack": [
+      {
+       "t": 0.6,
+       "open": 0
+      },
+      {
+       "t": 1.4,
+       "open": 1
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.9,
+     "kind": "scribble",
+     "gain": 0.3,
+     "dur": 0.4
+    }
+   ]
+  },
+  {
+   "start": 13.6,
+   "end": 17.4,
+   "transition": "cut",
+   "background": "#F3E9D2",
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.0
+    },
+    {
+     "t": 3.8,
+     "zoom": 1.06,
+     "x": 990,
+     "y": 560
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "treasureMap",
+     "x": 960,
+     "y": 540,
+     "scale": 1.0,
+     "params": {
+      "title": "BẢN ĐỒ LÀM GIÀU BỀN VỮNG",
+      "sub": "Đi từng chặng, không nhảy cóc",
+      "steps": [
+       "Học nghề",
+       "Làm thật",
+       "Tiết kiệm",
+       "Đầu tư",
+       "Kiên trì"
+      ],
+      "start": "BẠN Ở ĐÂY",
+      "goal": "BỜ BÊN KIA"
+     },
+     "ptrack": [
+      {
+       "t": 0.2,
+       "reveal": 0
+      },
+      {
+       "t": 3.2,
+       "reveal": 1
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 3.2,
+     "kind": "chime",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 17.4,
+   "end": 21.4,
+   "transition": "cut",
+   "camera": [
+    {
+     "t": 0,
+     "zoom": 1.15,
+     "x": 760,
+     "y": 560
+    },
+    {
+     "t": 4.0,
+     "zoom": 1.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "prop",
+     "name": "meadow",
+     "x": 1300,
+     "y": 720,
+     "scale": 1,
+     "params": {
+      "far": 140,
+      "seed": 9,
+      "n": 10
+     }
+    },
+    {
+     "type": "prop",
+     "name": "riverBend",
+     "x": 0,
+     "y": 0,
+     "scale": 1,
+     "params": {
+      "far": [
+       [
+        700,
+        760
+       ],
+       [
+        1100,
+        740
+       ],
+       [
+        1500,
+        760
+       ],
+       [
+        2100,
+        740
+       ]
+      ],
+      "near": [
+       [
+        700,
+        1180
+       ],
+       [
+        1100,
+        1150
+       ],
+       [
+        1500,
+        1170
+       ],
+       [
+        2100,
+        1150
+       ]
+      ],
+      "flow": 5,
+      "strokes": 6,
+      "dir": -1
+     }
+    },
+    {
+     "type": "prop",
+     "name": "cliff",
+     "x": 300,
+     "y": 760,
+     "scale": 1.0,
+     "params": {
+      "w": 900,
+      "h": 420
+     }
+    },
+    {
+     "type": "prop",
+     "name": "rock",
+     "x": 120,
+     "y": 760,
+     "scale": 1.2
+    },
+    {
+     "type": "prop",
+     "name": "bush",
+     "x": 40,
+     "y": 770,
+     "scale": 0.9,
+     "params": {
+      "w": 260
+     }
+    },
+    {
+     "type": "actor",
+     "cast": "hero",
+     "x": 600,
+     "y": 760,
+     "scale": 0.46,
+     "facing": 1,
+     "acting": [
+      {
+       "t": 0,
+       "pose": "think",
+       "expr": "neutral"
+      },
+      {
+       "t": 2.2,
+       "pose": "point",
+       "expr": "grin",
+       "snap": true
+      }
+     ]
+    },
+    {
+     "type": "prop",
+     "name": "thinkIcons",
+     "x": 420,
+     "y": 290,
+     "scale": 0.75,
+     "params": {
+      "icons": [
+       "clock",
+       "money",
+       "target"
+      ]
+     },
+     "from": 0.4,
+     "to": 2.1,
+     "enter": "pop"
+    },
+    {
+     "type": "prop",
+     "name": "thinkIcons",
+     "x": 470,
+     "y": 290,
+     "scale": 0.9,
+     "params": {
+      "icons": [
+       "flag"
+      ]
+     },
+     "from": 2.2,
+     "enter": "pop"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.4,
+     "kind": "pop",
+     "gain": 0.35
+    },
+    {
+     "t": 2.2,
+     "kind": "chime",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 21.4,
+   "end": 25.8,
    "camera": [
     {
      "t": 0,
@@ -867,7 +1220,7 @@
      "y": 600
     },
     {
-     "t": 4.8,
+     "t": 4.4,
      "zoom": 1.0
     }
    ],
@@ -892,7 +1245,7 @@
      "scale": 1,
      "params": {
       "w": 2000,
-      "depth": 260,
+      "depth": 300,
       "n": 30,
       "seed": 5
      }
@@ -927,7 +1280,22 @@
      "params": {
       "seed": 21
      },
-     "to": 1.9
+     "to": 2.6,
+     "track": [
+      {
+       "t": 0,
+       "rotate": 0
+      },
+      {
+       "t": 1.6,
+       "rotate": 0.04
+      },
+      {
+       "t": 2.5,
+       "rotate": 1.5,
+       "ease": "linear"
+      }
+     ]
     },
     {
      "type": "prop",
@@ -935,7 +1303,7 @@
      "x": 1180,
      "y": 960,
      "scale": 0.9,
-     "from": 1.9
+     "from": 1.6
     },
     {
      "type": "actor",
@@ -952,46 +1320,51 @@
        "cycle": "hammer"
       },
       {
+       "t": 1.6,
+       "pose": "stand",
+       "expr": "surprised"
+      },
+      {
        "t": 2.7,
        "pose": "carry",
-       "expr": "determined"
+       "expr": "happy"
       }
      ]
     },
     {
      "type": "prop",
      "name": "log",
-     "x": 1330,
+     "x": 1430,
      "y": 1010,
      "scale": 0.75,
      "params": {
       "seed": 1
      },
-     "from": 1.95,
+     "from": 2.55,
      "enter": "drop"
     },
     {
      "type": "prop",
      "name": "log",
-     "x": 1350,
+     "x": 1450,
      "y": 958,
      "scale": 0.75,
      "params": {
       "seed": 2
      },
-     "from": 2.8,
+     "from": 3.2,
      "enter": "drop"
     },
     {
      "type": "prop",
      "name": "log",
-     "x": 1325,
+     "x": 1425,
      "y": 906,
      "scale": 0.75,
      "params": {
       "seed": 3
      },
-     "from": 3.6,
+     "from": 3.8,
      "enter": "drop"
     },
     {
@@ -1019,30 +1392,30 @@
      "gain": 0.5
     },
     {
-     "t": 1.9,
+     "t": 1.6,
      "kind": "crack",
-     "gain": 0.5
+     "gain": 0.55
     },
     {
-     "t": 2.0,
+     "t": 2.5,
      "kind": "thud",
-     "gain": 0.45
+     "gain": 0.7
     },
     {
-     "t": 2.85,
+     "t": 3.25,
      "kind": "thud",
-     "gain": 0.45
+     "gain": 0.4
     },
     {
-     "t": 3.65,
+     "t": 3.85,
      "kind": "thud",
-     "gain": 0.45
+     "gain": 0.4
     }
    ]
   },
   {
-   "start": 15.4,
-   "end": 19.6,
+   "start": 25.8,
+   "end": 30.0,
    "camera": [
     {
      "t": 0,
@@ -1129,6 +1502,38 @@
       "dir": 1,
       "lip": 0
      }
+    },
+    {
+     "type": "prop",
+     "name": "ripple",
+     "x": 260,
+     "y": 884,
+     "scale": 0.5,
+     "params": {
+      "r": 90,
+      "seed": 8
+     },
+     "from": 1.2
+    },
+    {
+     "type": "prop",
+     "name": "drowner",
+     "x": 260,
+     "y": 880,
+     "scale": 0.5,
+     "params": {
+      "seed": 8
+     },
+     "from": 1.2
+    },
+    {
+     "type": "prop",
+     "name": "splash",
+     "x": 260,
+     "y": 880,
+     "scale": 0.7,
+     "from": 1.1,
+     "to": 1.9
     },
     {
      "type": "prop",
@@ -1256,7 +1661,7 @@
      "cast": "hero",
      "x": 860,
      "y": 960,
-     "scale": 0.42,
+     "scale": 0.44,
      "facing": 1,
      "acting": [
       {
@@ -1293,12 +1698,17 @@
      "t": 1.9,
      "kind": "hammer",
      "gain": 0.45
+    },
+    {
+     "t": 1.15,
+     "kind": "splash",
+     "gain": 0.4
     }
    ]
   },
   {
-   "start": 19.6,
-   "end": 24.6,
+   "start": 30.0,
+   "end": 36.4,
    "camera": [
     {
      "t": 0,
@@ -1307,9 +1717,9 @@
      "y": 540
     },
     {
-     "t": 5.0,
-     "zoom": 1.0,
-     "x": 1060,
+     "t": 6.4,
+     "zoom": 1.05,
+     "x": 1120,
      "y": 540
     }
    ],
@@ -1391,14 +1801,14 @@
        ]
       ],
       "flow": 8,
-      "strokes": 11,
+      "strokes": 8,
       "dir": -1
      }
     },
     {
      "type": "prop",
      "name": "signpost",
-     "x": 1820,
+     "x": 1700,
      "y": 520,
      "scale": 0.6,
      "params": {
@@ -1511,9 +1921,9 @@
        "x": 460
       },
       {
-       "t": 5.0,
-       "x": 1280,
-       "ease": "linear"
+       "t": 5.2,
+       "x": 1330,
+       "ease": "out"
       }
      ]
     },
@@ -1533,9 +1943,9 @@
        "x": 460
       },
       {
-       "t": 5.0,
-       "x": 1280,
-       "ease": "linear"
+       "t": 5.2,
+       "x": 1330,
+       "ease": "out"
       }
      ]
     },
@@ -1544,7 +1954,7 @@
      "cast": "heroP",
      "x": 560,
      "y": 790,
-     "scale": 0.38,
+     "scale": 0.4,
      "facing": 1,
      "track": [
       {
@@ -1552,9 +1962,9 @@
        "x": 470
       },
       {
-       "t": 5.0,
-       "x": 1290,
-       "ease": "linear"
+       "t": 5.2,
+       "x": 1340,
+       "ease": "out"
       }
      ],
      "acting": [
@@ -1563,6 +1973,11 @@
        "pose": "rowA",
        "expr": "happy",
        "cycle": "row"
+      },
+      {
+       "t": 5.2,
+       "pose": "stand",
+       "expr": "smug"
       }
      ]
     },
@@ -1572,7 +1987,7 @@
      "x": 960,
      "y": 170,
      "size": 84,
-     "from": 3.0,
+     "from": 4.0,
      "enter": "fade"
     }
    ],
@@ -1583,7 +1998,7 @@
      "gain": 0.3
     },
     {
-     "t": 3.0,
+     "t": 4.0,
      "kind": "chime",
      "gain": 0.4
     }

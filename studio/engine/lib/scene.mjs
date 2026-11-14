@@ -114,9 +114,11 @@ function recordElement(s, e, t, sceneT) {
 export function makeRenderer(s) {
   const cv = createCanvas(s.width, s.height), ctx = cv.getContext('2d');
   const events = []; let lastContact = new Map();
+  const snap = createCanvas(s.width, s.height), held = createCanvas(s.width, s.height); let snapShot = null, heldOk = false; // for 'dissolve'
   function frame(T) {
     const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1);
     const t = T - sh.start;
+    if (snapShot && snapShot !== sh) { held.getContext('2d').drawImage(snap, 0, 0); heldOk = true; }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const ST = s.styleDef, fno = Math.round(T * s.fps); ST._fno = fno;
     if (sh.background || s.background) { ctx.fillStyle = ST.map(color(sh.background || s.background)); ctx.fillRect(0, 0, s.width, s.height); } else paintBackground(ctx, ST, s.width, s.height, fno);
@@ -159,6 +161,7 @@ export function makeRenderer(s) {
     if (tr && tr !== 'cut' && sh.start > 0 && t < td) {
       const k = clamp(t / td), W = s.width, H = s.height, bgc = ST.bg; ctx.save();
       if (tr === 'fade') { ctx.globalAlpha = 1 - ease(k); ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); }
+      else if (tr === 'dissolve') { ctx.globalAlpha = 1 - ease(k); if (heldOk) ctx.drawImage(held, 0, 0); else { ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); } }
       else if (tr === 'flash') { ctx.globalAlpha = (1 - k) * 0.9; ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H); }
       else if (tr === 'wipe') { ctx.fillStyle = bgc; ctx.fillRect(W * ease(k), 0, W, H); ctx.fillStyle = ST.ink; ctx.globalAlpha = 0.5; ctx.fillRect(W * ease(k) - 3, 0, 6, H); }
       else if (tr === 'scan') { const y = H * ease(k); ctx.fillStyle = bgc; ctx.fillRect(0, y, W, H - y); ctx.strokeStyle = ST.ink; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
@@ -198,6 +201,7 @@ export function makeRenderer(s) {
         let x = s.width / 2 - (ws.reduce((a, b) => a + b, 0) + sp * (words.length - 1)) / 2; ctx.textAlign = 'left';
         words.forEach((w, i) => { ctx.strokeText(w, x, cy); ctx.fillStyle = i === key && words.length > 1 ? ST.captionHighlight : fill; ctx.fillText(w, x, cy); x += ws[i] + sp; });
       } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
+    snap.getContext('2d').drawImage(cv, 0, 0); snapShot = sh;
     return {drawing};
   }
   return {cv, ctx, frame, events};

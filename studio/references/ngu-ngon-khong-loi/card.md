@@ -16,11 +16,13 @@
 - Nhân vật: `stick: true` (thân một nét, tay chân mảnh, chấm tay), mũ `fedora`, đồ cầm `axe`.
 - Đạo cụ: `river` (dòng sông có sóng chạy), `drowner` (người chới với, vẫy tay), `lineTree` (cây nét, tán lượn, đung đưa), `meadow` (đồi xa, cỏ, sỏi), `log`, `raft` (bè, `float` nhấp nhô), `signpost` (biển gỗ hai chân có chữ), `cliff` (bờ đá), `thinkIcons` (bong bóng suy nghĩ có biểu tượng clock, money, target, flag).
 - **Cảnh chi tiết (bản 2, theo góp ý "vẽ cảnh chi tiết hơn"):** `riverBend` (sông uốn theo phối cảnh: `far`/`near` là hai đường bờ theo tọa độ khung, bờ xa có mặt đất dày và vết nứt dọc, bờ gần có cỏ, nét nước chảy theo dòng `dir`), `ripple` (vòng gợn, giọt nước), `splash` (nước bắn khi nhảy xuống), `bigTree` (thân rẽ nhánh, tán mây nhiều múi có nét cong bên trong, `grey` cho cây xa), `bush`, `forest` (hàng cây xám xa, hai lớp cây, bụi), `rock` (đá có vết nứt, sỏi), `groundTex` (cỏ, sỏi, vệt đất). Người que có `hair: long|spiky` để đám đông khác nhau. Khúc gỗ có vân vòng tuổi.
+- **Bản 3 (người dùng: "làm giống 100% mẫu", chọn giữ vẽ bằng code):** nét `ink` (vẽ tay hơi run, đậm nhạt không đều), chuyển cảnh `dissolve` (hòa tan từ khung cuối cảnh trước, giống chuyển cảnh liền của mẫu), người que đầu to hơn và bàn chân bầu dục, mặt bờ xa tô xám nhạt, `treasureMap` (bản đồ giấy cổ có màu: núi, cây, sông xanh, đường đỏ đứt nét vẽ dần qua `ptrack` `reveal`, nhãn từng chặng, dấu X, la bàn; cắt cứng vào và ra như mẫu), `parchment` (giấy da mở ra trên tay, `open`), đồ cầm `pole` (sào chống bè), cây đổ bằng `track` `rotate`. Phim mẫu theo đủ 8 nhịp kể của mẫu (36 s).
+- **Âm lượng:** video không lời thì sau khi render chuẩn hóa −14 LUFS (`ffmpeg -af loudnorm=I=-14:TP=-1.5:LRA=11`), vì nhạc tự tổng hợp chỉ khoảng −26 LUFS.
 - Nhạc tự tổng hợp miễn phí: `studio/tools/nhac.py OUT.wav GIÂY --mood vui|tram|hoi-hop`.
 
 ## Còn thiếu
 - Hình AI của mẫu vẫn mềm và nhiều sắc độ hơn; bản code đã có sông phối cảnh, rừng nhiều lớp, đá, cỏ.
-- Chuyển cảnh **biến hình liền mạch** (morph) như video AI: engine chỉ có mờ chéo và lia máy.
+- Biến hình thật (vật này thành vật kia) như video AI: engine có hòa tan và lia máy, chưa biến hình.
 - Người nhảy xuống nước: hiện là ngã rồi đổi sang `drowner`; chưa có tia nước bắn lớn. Chặt cây: chưa có cây đổ nghiêng (dùng `stump` + `log` rơi xuống).
 - Tấm bản đồ giấy cổ có màu: dùng ảnh (`image`/`photo`) hoặc vẽ thêm đạo cụ `treasureMap` khi cần.
 - Nếu muốn giống hình AI hơn: làm biến thể "ảnh của bạn" (người dùng tạo tranh nét bên Gemini, đoàn phim dựng chuyển động, nhạc), như `tuong-da-anh`.
