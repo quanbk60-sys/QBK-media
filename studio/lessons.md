@@ -36,4 +36,5 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Người dùng muốn "y hệt" mẫu QBK60: dùng ảnh Gemini người dùng tạo, mỗi cảnh 2 ảnh (miệng ngậm, miệng mở) để tượng nói được. Mẫu gốc là video AI, ảnh tĩnh không có tay vung, nên bù bằng máy quay, chữ bật, âm thanh. *(Người dùng, 14/11/2026)*
 
 ## Vận hành
+- **Cổng "token miễn phí" (OmniRoute, FreeLLMAPI) không dùng cho đoàn phim.** Chúng không cho Claude miễn phí mà chuyển Claude Code sang các model miễn phí khác (Groq, Gemini, OpenRouter...), cần nhiều tài khoản và key, chỉ dành để thử nghiệm cá nhân. Đoàn phim chạy trên phiên Claude Code đám mây, không đổi model được; viết tiếng Việt và sửa engine cần model mạnh. Gemini (giọng, nghe lại) vẫn qua key proxy như cũ. *(Đánh giá video TikTok @marketing.tuhoc, 14/11/2026)*
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*
