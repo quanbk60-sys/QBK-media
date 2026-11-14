@@ -34,6 +34,7 @@ export LIB=$HOME/lemo-opuscar PLAYWRIGHT_CHROME=<đường dẫn in ra>
 5. **Render**: `node core/render/video.mjs <dự án>/lemo --size 1080x1920 --fps 24 --workers 4 --q ch=a --out <dự án>/lemo/out/ch-a.mp4` và `node core/render/events.mjs ... --out out/ev-a.json` cho sự kiện âm thanh.
 6. **Âm thanh**: `mix.py` trong dự án dùng `$LIB/core/audio/sfx.py` (tổng hợp, không bản quyền) theo `window.EV`, nền nhạc theo bảng nhạc cụ của STYLE.md, giọng cao hơn nền khoảng 10 dB. Chạy bằng `$LIB/.venv/bin/python`.
 7. **Ghép và master**: nối các chương (`ffmpeg concat`), rồi `sh $LIB/core/render/mux.sh video.mp4 mix.wav final.mp4 24` (−14 LUFS). Phong cách nét mảnh, giấy, pixel: không thêm grain.
+   - Container cloud có ffmpeg 6.1 nên `mux.sh` từ chối chạy. Khi đó chuẩn hóa `mix.wav` hai lượt `loudnorm` (I=−14, TP=−1,5) ra wav mới, rồi ghép với video bằng `libx264 -crf 20` + `aac 192k` và cắt đúng độ dài (`-t`). Đo lại bằng `ebur128` và so độ dài hình/tiếng. Xem `projects/hanh-trinh-chu-in/notes.md`.
 8. Kiểm định, phát hành, tải lên app như mọi video (`lam-video`, mục App QBK Studio).
 
 ## 4. Ghi công
