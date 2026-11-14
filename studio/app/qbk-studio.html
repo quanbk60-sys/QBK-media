@@ -174,7 +174,9 @@ a.link{color:var(--navy)}
   // requests và videos của khách mang `by` (id người gửi) và `guest: true`. Chủ app đổi số lượt trong app/guest.max.
   // Đây là giới hạn của giao diện, không phải bảo mật: dữ liệu vẫn nằm chung một kho.
   S.guest = false; S.me = null; S.guestDoc = null; S.allVideos = []; S.allRequests = [];
-  const guestMax = () => +(S.guestDoc?.max ?? 2);
+  // app/guest.max: số > 0 thì giới hạn số video mỗi khách; bỏ trống hoặc 0 = không giới hạn (mặc định từ 14/11/2026)
+  const guestMax = () => { const m = +(S.guestDoc?.max || 0); return m > 0 ? m : Infinity; };
+  const guestUnlimited = () => guestMax() === Infinity;
   const mine = arr => S.guest ? arr.filter(x => x.by && x.by === S.me) : arr;
   const guestUsed = () => S.allRequests.filter(x => x.by && x.by === S.me && x.status !== "huy").length;
   const guestLeft = () => Math.max(0, guestMax() - guestUsed());
@@ -358,8 +360,8 @@ a.link{color:var(--navy)}
     const pending = S.requests.filter(r => r.status === "moi" || r.status === "tra-loi");
     const asks = S.requests.filter(r => r.status === "can-hoi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
-    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">${S.guest ? "Bạn đang dùng thử với tài khoản khách" : "Xưởng phim ngắn: ảnh storyboard của bạn, vệ tinh, thí nghiệm 3D"}</p></div></div>
-      ${S.guest ? `<div class="card info col" style="gap:4px"><b style="color:var(--navy)">Dùng thử: còn ${guestLeft()}/${guestMax()} video</b><span style="font-size:13.5px">Bạn chỉ thấy video của mình. Gửi yêu cầu xong, đoàn phim sẽ bắt đầu khi chủ xưởng mở app hoặc nhận được báo.</span></div>` : ""}
+    return `<div class="row between"><div><h1>QBK <em>Studio</em></h1><p class="sub">${S.guest ? "Bạn đang dùng với tài khoản khách" : "Xưởng phim ngắn: ảnh storyboard của bạn, vệ tinh, thí nghiệm 3D"}</p></div></div>
+      ${S.guest ? `<div class="card info col" style="gap:4px"><b style="color:var(--navy)">${guestUnlimited() ? "Bạn được làm video thoải mái, không giới hạn" : `Dùng thử: còn ${guestLeft()}/${guestMax()} video`}</b><span style="font-size:13.5px">Bạn chỉ thấy video của mình. Gửi yêu cầu xong, đoàn phim sẽ bắt đầu khi chủ xưởng mở app hoặc nhận được báo.</span></div>` : ""}
       <a class="btn primary big" href="#new">Làm video mới</a>
       ${S.guest ? "" : `<div class="tiles"><div class="tile"><b>${made}</b><span>video đã làm</span></div><div class="tile"><b>${posted}</b><span>đã đăng</span></div><div class="tile"><b>${esc(S.stats?.costMonth ?? "0đ")}</b><span>chi phí tháng</span></div></div>`}
       ${!S.ready ? `<div class="empty">Đang tải dữ liệu của xưởng…</div>` : ""}
