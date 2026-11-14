@@ -168,7 +168,7 @@ a.link{color:var(--navy)}
   // Nền tảng quyết định khung hình: dọc 9:16 (TikTok, Facebook Reels, YouTube Shorts) hoặc ngang 16:9 (YouTube)
   const PLATFORMS = [["tiktok", "TikTok", "9:16"], ["facebook", "Facebook Reels", "9:16"], ["shorts", "YouTube Shorts", "9:16"], ["youtube", "YouTube", "16:9"]];
   const platOf = id => PLATFORMS.find(p => p[0] === id) || PLATFORMS[0];
-  const maxLen = f => platOf(f.platform)[2] === "16:9" ? 300 : 90;
+  // Độ dài không giới hạn (người dùng, 14/11/2026). Phim dài thì đoàn phim làm lâu hơn.
   S.form = loadDraft();
   // ===== Chế độ khách: người được mời (không phải chủ app) chỉ thấy video, yêu cầu của chính họ, không xóa được, tối đa GUEST_MAX video =====
   // requests và videos của khách mang `by` (id người gửi) và `guest: true`. Chủ app đổi số lượt trong app/guest.max.
@@ -277,7 +277,7 @@ a.link{color:var(--navy)}
     }
     const d = S.runDoc; if (!d) return { known: false };
     const beat = tms(d.heartbeat) || tms(d.startedAt);
-    const running = d.state === "running" && beat != null && Date.now() - beat < 45 * 6e4;
+    const running = d.state === "running" && beat != null && Date.now() - beat < 4 * 60 * 6e4;   // đoàn phim luôn ghi idle khi xong; dựng phim dài có thể lâu không báo tin
     return { known: true, running, failed: d.state === "error", since: tms(d.startedAt), end: running ? null : (tms(d.endedAt) || beat), src: "doc" };
   }
   function runHtml() {
@@ -303,7 +303,7 @@ a.link{color:var(--navy)}
     const ll = lastLog(v);
     if (crewStopped(v)) { const r = runState();
       return `<span class="small" style="color:var(--red-ink)"><b>Đã dừng ở bước ${esc(v.stage || "?")}</b>: đoàn phim nghỉ lúc ${r.end ? hhmm(new Date(r.end)) : "?"} mà chưa báo xong hay báo lỗi.${ll ? " Việc cuối: " + esc(ll.msg) + "." : ""}</span>${reviveBtn(v)}`; }
-    if (e.stale && !runState().running) return `<span class="small" style="color:var(--red-ink)"><b>Có thể đã dừng:</b> không thấy đoàn phim cập nhật ${dur(e.quiet)} (từ ${hhmm(new Date(Date.parse(v.updatedAt)))}).</span>${reviveBtn(v)}`;
+    if (e.stale && !runState().running) return `<span class="small" style="color:var(--gold)"><b>Lâu chưa báo tin:</b> đoàn phim chưa cập nhật ${dur(e.quiet)} (từ ${hhmm(new Date(Date.parse(v.updatedAt)))}). Bước dựng phim dài có thể mất lâu; chỉ gọi lại nếu quá 1 giờ.</span>${e.quiet > 60 ? reviveBtn(v) : ""}`;
     const live = runState().running ? ` · <b style="color:var(--green-ink)">đoàn phim đang chạy</b>` : "";
     const now = ll ? `<span class="small">Đang làm: ${esc(ll.step ? ll.step + " · " : "")}${esc(ll.msg)}${tms(ll.at) ? " (" + ago(tms(ll.at)) + ")" : ""}</span>` : "";
     if (e.left <= 0) return `${now}<span class="small">Sắp xong, đang hoàn tất · ${upd}${live}</span>`;
@@ -494,7 +494,7 @@ a.link{color:var(--navy)}
   }
 
   V.new = () => {
-    const f = S.form, ins = styleInputs(f.style), lenV = Math.min(f.length, maxLen(f));
+    const f = S.form, ins = styleInputs(f.style), lenV = Math.max(5, +f.length || 45);
     const voiceBox = f.narration ? `<div class="col" style="gap:6px"><div class="row between"><span style="font-size:14px">Giọng đọc</span><span class="pill p-mute">${esc(curVoice())} · ${esc(String(S.voicesDoc?.tempo ?? 1.2).replace(".", ","))}x</span></div>
           ${voiceList().length ? `<div class="voices" role="radiogroup" aria-label="Chọn giọng đọc">${voiceList().map(v => `<div class="vo" role="radio" tabindex="0" aria-checked="${curVoice() === v.id}" data-voice="${esc(v.id)}">
             <button type="button" class="play" data-play="${esc(v.id)}" aria-pressed="${S.playing === v.id}" aria-label="Nghe thử giọng ${esc(v.name)}">${S.playing === v.id ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>'}</button>
@@ -539,10 +539,14 @@ a.link{color:var(--navy)}
         </div></details>`);
     const s6 = sec(6, "Độ dài", true, `<div class="chips sm">${[[1, "Để đoàn phim chọn"], [0, "Mình chọn"]].map(([a, l]) => `<button type="button" class="chip" data-lenauto="${a}" aria-pressed="${!!f.lenAuto === !!a}">${l}</button>`).join("")}</div>
         ${f.lenAuto ? `<span class="small">Đoàn phim chọn độ dài vừa với nội dung${ins.some(s => s.key === "storyboard") ? " và số ảnh storyboard" : ""}.</span>`
-          : `<div class="row between"><label for="len" style="font-size:14px">Độ dài</label><b id="lenv" style="font-variant-numeric:tabular-nums">${fmtLen(lenV)}</b></div>
-        <input id="len" type="range" min="15" max="${maxLen(f)}" step="${maxLen(f) > 90 ? 15 : 5}" value="${lenV}" style="width:100%;accent-color:var(--red)">`}`);
+          : `<div class="row" style="gap:8px;flex-wrap:wrap"><label class="small" for="lenm" style="width:100%">Độ dài, không giới hạn</label>
+          <input id="lenm" type="number" inputmode="numeric" min="0" step="1" value="${Math.floor(lenV / 60)}" aria-label="Số phút" style="width:84px;font:16px var(--body);padding:10px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink)"><span>phút</span>
+          <input id="lens" type="number" inputmode="numeric" min="0" max="59" step="5" value="${lenV % 60}" aria-label="Số giây" style="width:84px;font:16px var(--body);padding:10px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink)"><span>giây</span>
+          <b id="lenv" style="margin-left:auto;font-variant-numeric:tabular-nums">${fmtLen(lenV)}</b></div>
+        <div class="chips sm">${[[30, "30 giây"], [60, "1 phút"], [180, "3 phút"], [600, "10 phút"], [1800, "30 phút"]].map(([n, l]) => `<button type="button" class="chip" data-lenpick="${n}" aria-pressed="${lenV === n}">${l}</button>`).join("")}</div>
+        <span class="small">Phim càng dài thì đoàn phim làm càng lâu.</span>`}`);
     const s7 = sec(7, "Khung hình", false, `<div class="chips">${PLATFORMS.map(([id, n, ar]) => `<button type="button" class="chip" data-plat="${id}" aria-pressed="${f.platform === id}">${n} <span class="small" style="color:inherit;opacity:.75">${ar === "16:9" ? "ngang 16:9" : "dọc 9:16"}</span></button>`).join("")}</div>
-        ${platOf(f.platform)[2] === "16:9" ? `<span class="small">Khung ngang 16:9, dài tối đa 5 phút.</span>` : ""}`);
+        ${platOf(f.platform)[2] === "16:9" ? `<span class="small">Khung ngang 16:9.</span>` : ""}`);
     return `${head}<form id="newf" class="col" style="gap:14px">${s1}${s2}${s3}${s4}${s5}${s6}${s7}
       <div class="row between" style="padding:0 4px"><label for="clarify" style="font-size:14px">Hỏi lại mình nếu yêu cầu chưa rõ<br><span class="small">Câu hỏi hiện ở Trang chủ</span></label><input id="clarify" type="checkbox" ${f.clarify ? "checked" : ""} style="width:22px;height:22px;accent-color:var(--red);flex-shrink:0"></div>
       <p class="small" style="text-align:center;margin:0">Thời gian làm ước tính: <b id="etav">khoảng ${dur(etaTotal(f.style, f.lenAuto ? 45 : lenV))}</b>, chưa tính lúc chờ bạn duyệt. Không gọi dịch vụ trả phí nào.</p>
@@ -750,8 +754,11 @@ a.link{color:var(--navy)}
       document.querySelectorAll("[data-music]").forEach(b => b.onclick = () => { f.music = b.dataset.music; saveDraft(); render(); });
       document.querySelectorAll("[data-lenauto]").forEach(b => b.onclick = () => { f.lenAuto = b.dataset.lenauto === "1"; saveDraft(); render(); });
       $("#clarify").onchange = e => { f.clarify = e.target.checked; saveDraft(); };
-      const ln = $("#len"); if (ln) ln.oninput = e => { f.length = +e.target.value; $("#lenv").textContent = fmtLen(f.length); $("#etav").textContent = "khoảng " + dur(etaTotal(f.style, f.length)); saveDraft(); };
-      document.querySelectorAll("[data-plat]").forEach(b => b.onclick = () => { f.platform = b.dataset.plat; f.length = Math.min(f.length, maxLen(f)); saveDraft(); render(); });
+      const setLen = () => { const m = Math.max(0, Math.floor(+$("#lenm").value || 0)), sec = Math.max(0, Math.floor(+$("#lens").value || 0)); f.length = Math.max(5, m * 60 + sec);
+        $("#lenv").textContent = fmtLen(f.length); $("#etav").textContent = "khoảng " + dur(etaTotal(f.style, f.length)); saveDraft(); };
+      for (const id of ["lenm", "lens"]) { const el = $("#" + id); if (el) el.oninput = setLen; }
+      document.querySelectorAll("[data-lenpick]").forEach(b => b.onclick = () => { f.length = +b.dataset.lenpick; saveDraft(); render(); });
+      document.querySelectorAll("[data-plat]").forEach(b => b.onclick = () => { f.platform = b.dataset.plat; saveDraft(); render(); });
       $("#gate").onchange = e => { f.gate = e.target.checked; saveDraft(); };
       $("#narr").onchange = e => { f.narration = e.target.checked; saveDraft(); render(); };
       document.querySelectorAll("[data-play]").forEach(b => b.onclick = e => { e.stopPropagation(); playVoice(b.dataset.play); });
@@ -771,7 +778,7 @@ a.link{color:var(--navy)}
         const inputs = Object.fromEntries(ins.map(s => { const st = slotOf(s.key), send = sending(s);
           return [s.key, { label: s.label || SLOT[s.key].label, required: s.required, auto: !send, files: send && !SLOT[s.key].text ? okFiles(s.key).map(pack) : [], text: send && SLOT[s.key].text ? st.text.trim() : "" }]; }));
         const attachments = f.files.filter(x => x.status === "ok").map(x => ({ id: x.id, name: x.name, type: x.type, kind: x.kind, size: x.size, role: x.role, note: (x.note || "").trim() }));
-        const len = f.lenAuto ? null : Math.min(f.length, maxLen(f));
+        const len = f.lenAuto ? null : Math.max(5, +f.length || 45);
         try { await S.db.collection("requests").add({ v: 3, topic, style: f.style, inputs, storyboard: board.map(pack), reveal: ins.some(s => s.key === "storyboard") ? f.reveal : "", brief: f.brief.trim(), attachments,
             script: f.script.trim(), must: f.must.trim(), avoid: f.avoid.trim(), links: f.links.trim(), gateScript: f.gate,
             narration: !!f.narration, voice: f.narration ? curVoice() : "", audio: { narration: !!f.narration, voice: f.narration ? curVoice() : "", music: f.music, musicNote: f.music === "mo-ta" ? f.musicNote.trim() : "" },
