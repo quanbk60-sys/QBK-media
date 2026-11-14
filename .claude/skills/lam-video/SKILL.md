@@ -67,6 +67,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Bí ẩn, chuyện lạ | `phim-cam` |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
+| Phong cách có nhãn **Lemo** trong app (`engine: "lemo"`, trường `lemo` là slug: `ink-wash`, `woodcut`, `engraving`, `ascii-crt`, hoặc `nhieu` = mỗi thời kỳ một phong cách) | **dựng bằng thư viện Lemo-Opuscar theo skill `lemo-opuscar`** (kịch bản, giọng, kiểm định, phát hành giữ nguyên). Phim mẫu `projects/hanh-trinh-chu-in/` |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
 
@@ -100,7 +101,7 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 4. Render một đoạn thử khoảng 8 giây bằng phong cách mới để kiểm tra.
    - Mẫu dùng thứ engine không làm được (3D thực tế, quay thật, ảnh AI): **không bỏ cuộc**. Giữ những gì dựng được: bố cục khung, kiểu chữ, màu, nhịp cắt, chuyển động camera. Thay phần hình bằng ảnh thật (Wikimedia) hoặc hình vẽ code. Ghi rõ phần "thay thế" trong thẻ và trong `result`. Ví dụ: `thi-nghiem` học từ một mẫu 3D.
    - Thật sự không làm được gì thì đặt `status: "loi"` (app hiện "Cần bạn xem"), **không bao giờ** đặt `"xong"` khi chưa thêm phong cách vào `app/styles`.
-5. Thêm vào `app/styles.list` (doc có `full: true`, tức danh sách này là toàn bộ phong cách app hiển thị) mục `{id, name, thumb, color, note, genres, engine}`. `thumb` là id asset của một ảnh xem trước 270×480 cắt từ đoạn render thử, tải lên bằng Artifact `asset: true`. `engine` nhận `2d`, `3d` hoặc `ve-tinh`: `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
+5. Thêm vào `app/styles.list` (doc có `full: true`, tức danh sách này là toàn bộ phong cách app hiển thị) mục `{id, name, thumb, color, note, genres, engine}`. `thumb` là id asset của một ảnh xem trước 270×480 cắt từ đoạn render thử, tải lên bằng Artifact `asset: true`. `engine` nhận `2d`, `3d`, `ve-tinh` hoặc `lemo` (kèm `lemo: "<slug>"`): `color` là mã màu hoặc gradient CSS gợi đúng phong cách, `note` một câu mô tả. Đọc doc trước rồi ghi với `if_version`.
 6. Đặt `status: "xong"`, `result` là tóm tắt ngắn (đã có gì, còn thiếu gì). Commit và push.
 
 ## Nguyên tắc
