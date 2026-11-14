@@ -391,9 +391,62 @@ export const PROPS = {
     for (let i = 0; i < (p.n || 26); i++) { const x = (hr() - 0.5) * w, y = (hr() - 0.2) * (p.depth || 160);
       if (hr() < 0.7) { for (let k = -2; k <= 2; k++) line(ctx, [[x + k * 7, y], [x + k * 10, y - 18 - (k % 2) * 9]], 3); }
       else { ctx.beginPath(); ctx.ellipse(x, y, 16 + hr() * 14, 9 + hr() * 6, 0, Math.PI, Math.PI * 2); ctx.closePath(); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.stroke(); } } },
-  log(ctx, p) { const L = p.len || 420, r = p.r || 34; poly(ctx, [[-L / 2, -2 * r], [L / 2, -2 * r], [L / 2, 0], [-L / 2, 0]], 'wood', 5);
-    ctx.beginPath(); ctx.ellipse(L / 2, -r, r * 0.55, r, 0, 0, Math.PI * 2); ctx.fillStyle = color('wood'); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(L / 2, -r, r * 0.28, r * 0.5, 0, 0, Math.PI * 2); ctx.lineWidth = 3; ctx.stroke(); line(ctx, [[-L / 2 + 40, -r * 1.3], [L / 2 - 80, -r * 1.4]], 3); line(ctx, [[-L / 2 + 90, -r * 0.6], [L / 2 - 30, -r * 0.5]], 3); },
+  // ===== Detailed line-art scenery (style ngu-ngon-trang). Coordinates are local to the anchor; give x:0,y:0 to use frame coords. =====
+  // River between two banks given as polylines (left → right). p.far / p.near: [[x,y],...]; p.flow: number of current rows; p.lip: far-bank face height
+  riverBend(ctx, p, t) { const F = p.far || [[-800, -200], [0, -220], [800, -200]], N = p.near || [[-800, 120], [0, 100], [800, 120]], hr = hash(p.seed || 7), lip = p.lip ?? 22, G2 = '#8E8E8E';
+    const smooth = (pts) => { ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length - 1; i++) { const m = [(pts[i][0] + pts[i + 1][0]) / 2, (pts[i][1] + pts[i + 1][1]) / 2]; ctx.quadraticCurveTo(pts[i][0], pts[i][1], m[0], m[1]); } ctx.lineTo(...pts.at(-1)); };
+    const at = (pts, u) => { const L = pts.length - 1, f = Math.min(L - 1e-6, Math.max(0, u * L)), i = Math.floor(f), k = f - i; return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k]; };
+    // far bank: edge + earth face (lip) + vertical cracks
+    ctx.beginPath(); smooth(F); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    ctx.beginPath(); smooth(F.map(([x, y]) => [x, y + lip])); ctx.lineWidth = 3.5; ctx.stroke();
+    for (let u = 0.01; u < 1; u += 0.018 + hr() * 0.02) { const [x, y] = at(F, u); if (hr() < 0.55) line(ctx, [[x, y + 3], [x + (hr() - 0.5) * 4, y + lip - 3]], 2.5); }
+    for (let u = 0.04; u < 1; u += 0.12 + hr() * 0.1) { const [x, y] = at(F, u), d = 8 + hr() * 14; ctx.beginPath(); ctx.moveTo(x - d, y); ctx.lineTo(x - d * 0.6, y - 8); ctx.lineTo(x + d * 0.4, y - 6); ctx.lineTo(x + d, y); ctx.lineWidth = 3; ctx.stroke(); }
+    // near bank: irregular edge with small notches and grass
+    ctx.beginPath(); smooth(N.map(([x, y], i) => [x, y + (i % 2 ? 4 : -3)])); ctx.lineWidth = 5; ctx.stroke();
+    for (let u = 0.03; u < 1; u += 0.07 + hr() * 0.08) { const [x, y] = at(N, u); if (hr() < 0.5) for (let k = -2; k <= 2; k++) line(ctx, [[x + k * 6, y + 2], [x + k * 9, y - 14 - (k % 2) * 7]], 2.5); else line(ctx, [[x - 12, y + 10], [x + 14, y + 12]], 2.5); }
+    // current: short curved strokes between the banks, drifting along the flow
+    const rows = p.flow || 6, dir = p.dir ?? -1;
+    for (let r = 1; r <= rows; r++) { const v = (r - 0.3) / (rows + 0.4); for (let k = 0; k < (p.strokes || 9); k++) {
+      const u0 = ((k + hr() * 0.6) / (p.strokes || 9) + dir * t * 0.02 * (1 + r * 0.1)) % 1, u = u0 < 0 ? u0 + 1 : u0, du = 0.035 + hr() * 0.03;
+      const P1 = at(F, u), P2 = at(N, u), Q1 = at(F, Math.min(1, u + du)), Q2 = at(N, Math.min(1, u + du)), lerp2 = (A, B) => [A[0] + (B[0] - A[0]) * v, A[1] + lip * (1 - v) + (B[1] - A[1] - lip * (1 - v)) * v];
+      const a = lerp2(P1, P2), b = lerp2(Q1, Q2), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2 - 5];
+      ctx.beginPath(); ctx.moveTo(...a); ctx.quadraticCurveTo(m[0], m[1], b[0], b[1]); ctx.lineWidth = 2.5; ctx.strokeStyle = r % 2 ? INK : G2; ctx.stroke(); } }
+    ctx.strokeStyle = INK; },
+  ripple(ctx, p, t) { const s = p.r || 70, k = (t * 0.8 + (p.seed || 0) * 0.3) % 1; for (const f of [0.55, 1]) { ctx.beginPath(); ctx.ellipse(0, 0, s * f * (0.9 + 0.2 * k), s * f * 0.22, 0, 0, Math.PI * 2); ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.stroke(); }
+    if (p.drops !== false) for (let i = 0; i < 6; i++) { const a = Math.PI * (1.1 + i * 0.16), r = s * (0.8 + ((t * 2 + i * 0.37) % 1) * 0.6); ctx.beginPath(); ctx.ellipse(Math.cos(a) * r, Math.sin(a) * r * 0.5 - 20, 4, 6, 0, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.stroke(); } },
+  splash(ctx, p, t) { const s = p.size || 1, hr = hash(p.seed || 3); for (let i = 0; i < 9; i++) { const a = Math.PI * (1.08 + i * 0.105), L = (60 + hr() * 70) * s; ctx.beginPath(); ctx.moveTo(Math.cos(a) * 20 * s, Math.sin(a) * 10 * s); ctx.quadraticCurveTo(Math.cos(a) * L * 0.6, Math.sin(a) * L * 0.9, Math.cos(a) * L, Math.sin(a) * L * 0.75 + 10); ctx.lineWidth = 4; ctx.strokeStyle = INK; ctx.stroke(); }
+    for (let i = 0; i < 8; i++) { ctx.beginPath(); ctx.ellipse((hr() - 0.5) * 200 * s, -(40 + hr() * 110) * s, 5, 7, 0, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.stroke(); } PROPS.ripple(ctx, {r: 90 * s, drops: false}, t); },
+  // Detailed tree: tapered trunk with fork branches, cauliflower canopy of overlapping clumps (inner scallops show), bark marks. p.grey for distant trees
+  bigTree(ctx, p, t) { const h = p.h || 620, w = p.w || 360, hr = hash(p.seed || 2), sw = Math.sin(t * 1.1 + (p.seed || 0)) * 3, ink = p.grey ? '#A0A0A0' : INK, lw = p.grey ? 3 : 5;
+    const tw = p.trunk || 30, ty = -h * 0.5;
+    poly(ctx, [[-tw - 10, 0], [-tw * 0.6, -h * 0.12], [-tw * 0.55, ty], [tw * 0.55, ty], [tw * 0.6, -h * 0.12], [tw + 12, 0]], 'white', lw, ink);
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s * tw * 0.4, ty + 10); ctx.quadraticCurveTo(s * w * 0.12, ty - h * 0.08, s * w * 0.22 + sw, ty - h * 0.2); ctx.lineWidth = lw * 2.2; ctx.strokeStyle = ink; ctx.stroke(); ctx.lineWidth = lw * 1.2; ctx.strokeStyle = '#FFFFFF'; ctx.stroke(); }
+    line(ctx, [[0, ty + 5], [sw, ty - h * 0.24]], lw * 1.5, ink);
+    if (!p.grey) { line(ctx, [[-tw * 0.2, -h * 0.08], [-tw * 0.25, -h * 0.2]], 2.5); line(ctx, [[tw * 0.25, -h * 0.25], [tw * 0.2, -h * 0.36]], 2.5); ctx.beginPath(); ctx.ellipse(tw * 0.1, -h * 0.3, 6, 11, 0, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.stroke(); }
+    const cy = -h * 0.72, blobs = [[-w * 0.2, cy + h * 0.04, w * 0.32, h * 0.17], [w * 0.2, cy + h * 0.05, w * 0.3, h * 0.16], [sw * 0.5, cy - h * 0.08, w * 0.34, h * 0.18]];
+    for (const [bx, by, rx, ry] of blobs) cloudBlob(ctx, bx + sw, by, rx, ry, hr, ink, lw, p.grey);
+    ctx.strokeStyle = INK; },
+  bush(ctx, p) { const w = p.w || 260, hr = hash(p.seed || 6), ink = p.grey ? '#A0A0A0' : INK; cloudBlob(ctx, 0, -w * 0.18, w / 2, w * 0.2, hr, ink, p.grey ? 3 : 4, p.grey, true); ctx.strokeStyle = INK; },
+  forest(ctx, p, t) { const w = p.w || 1800, hr = hash(p.seed || 12); // distant grey treeline + two rows of trees + bushes at the foot; anchor = ground line of the front row
+    ctx.beginPath(); ctx.moveTo(-w / 2, -60); for (let x = -w / 2; x <= w / 2; x += 50) ctx.quadraticCurveTo(x + 25, -60 - 30 - hr() * 40 - (p.back || 260) * 0.3, x + 50, -60 - hr() * 20); ctx.lineWidth = 3; ctx.strokeStyle = '#B0B0B0'; ctx.stroke(); ctx.strokeStyle = INK;
+    const back = []; for (let x = -w / 2; x <= w / 2; x += 110 + hr() * 60) back.push(x); back.forEach((x, i) => { ctx.save(); ctx.translate(x, -50); PROPS.bigTree(ctx, {h: 360 + hr() * 80, w: 200 + hr() * 60, seed: i + 30, grey: true, trunk: 14}, t); ctx.restore(); });
+    for (let x = -w / 2; x <= w / 2; x += 260 + hr() * 120) { ctx.save(); ctx.translate(x, -20); PROPS.bush(ctx, {w: 220 + hr() * 120, seed: Math.round(x), grey: true}); ctx.restore(); }
+    const front = []; for (let x = -w / 2 + 60; x <= w / 2; x += (p.gap || 260) + hr() * 120) front.push(x); front.forEach((x, i) => { ctx.save(); ctx.translate(x + (hr() - 0.5) * 60, (i % 2) * 20); PROPS.bigTree(ctx, {h: 520 + hr() * 160, w: 300 + hr() * 80, seed: i + 3}, t); ctx.restore(); });
+    for (let x = -w / 2; x <= w / 2; x += 300 + hr() * 200) { ctx.save(); ctx.translate(x, 30); PROPS.bush(ctx, {w: 200 + hr() * 120, seed: Math.round(x) + 1}); ctx.restore(); } },
+  rock(ctx, p) { const w = p.w || 120, h = p.h || 70; ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.bezierCurveTo(-w / 2, -h * 0.8, -w * 0.2, -h, w * 0.1, -h); ctx.bezierCurveTo(w * 0.45, -h, w / 2, -h * 0.4, w / 2, 0); ctx.closePath(); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = INK; ctx.stroke();
+    line(ctx, [[-w * 0.1, -h * 0.75], [w * 0.05, -h * 0.45], [-w * 0.05, -h * 0.25]], 2.5); line(ctx, [[w * 0.25, -h * 0.8], [w * 0.33, -h * 0.55]], 2.5);
+    for (const [x, r] of [[w * 0.62, 12], [w * 0.78, 7], [-w * 0.65, 9]]) { ctx.beginPath(); ctx.ellipse(x, -r * 0.5, r, r * 0.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 3; ctx.stroke(); } },
+  groundTex(ctx, p) { const w = p.w || 1900, d = p.depth || 300, hr = hash(p.seed || 21); // ground texture: grass tufts, pebbles, dash marks spread below the anchor
+    for (let i = 0; i < (p.n || 30); i++) { const x = (hr() - 0.5) * w, y = hr() * d, k = hr();
+      if (k < 0.45) for (let j = -2; j <= 2; j++) line(ctx, [[x + j * 6, y], [x + j * 9 + (j === 0 ? 2 : 0), y - 14 - (j % 2 ? 0 : 8)]], 2.5);
+      else if (k < 0.75) { ctx.beginPath(); ctx.ellipse(x, y, 9 + hr() * 9, 5 + hr() * 4, 0, 0, Math.PI * 2); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = INK; ctx.stroke(); }
+      else line(ctx, [[x, y], [x + 18 + hr() * 30, y + 2]], 2.5, '#8E8E8E'); } },
+  log(ctx, p) { const L = p.len || 420, r = p.r || 34, hr = hash(p.seed || 4);
+    poly(ctx, [[-L / 2, -2 * r], [L / 2, -2 * r], [L / 2, 0], [-L / 2, 0]], 'wood', 5);
+    for (let i = 0; i < 5; i++) { const y = -r * (0.35 + hr() * 1.3), x0 = -L / 2 + 20 + hr() * L * 0.4; line(ctx, [[x0, y], [x0 + L * (0.2 + hr() * 0.3), y + (hr() - 0.5) * 6]], 2.5); }
+    if (p.knot !== false) { ctx.beginPath(); ctx.ellipse(-L * 0.1, -r * 1.1, 10, 6, 0, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.strokeStyle = INK; ctx.stroke(); }
+    ctx.beginPath(); ctx.ellipse(L / 2, -r, r * 0.6, r, 0, 0, Math.PI * 2); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    for (const f of [0.68, 0.4, 0.15]) { ctx.beginPath(); ctx.ellipse(L / 2 + 1, -r, r * 0.6 * f, r * f, 0, 0, Math.PI * 2); ctx.lineWidth = 2.5; ctx.stroke(); } },
   raft(ctx, p, t) { const n = p.n || 5, L = p.len || 460, bob = p.float ? Math.sin(t * 2.2) * 5 : 0; ctx.save(); ctx.translate(0, bob);
     for (let i = n - 1; i >= 0; i--) { ctx.save(); ctx.translate(-i * 18 + (n - 1) * 9, -i * 30); PROPS.log(ctx, {len: L, r: 26}); ctx.restore(); }
     for (const x of [-L * 0.3, L * 0.3]) line(ctx, [[x - 20, -n * 30 - 10], [x + 20, 4]], 6); ctx.restore(); },
@@ -440,6 +493,16 @@ function checkerStrip(ctx, w, rows) { // checkered band lying on the ground (sli
   poly(ctx, edge, null, 5);
 }
 function hash(seed) { let x = seed * 9301 + 49297; return () => ((x = (x * 9301 + 49297) % 233280) / 233280); }
+function cloudBlob(ctx, cx, cy, rx, ry, hr, ink, lw, grey, flatBottom) { // cloud-like outline with irregular bumps + a few inner scallops
+  const n = 9 + Math.floor(hr() * 4), pts = [];
+  for (let i = 0; i <= n; i++) { const a = flatBottom ? Math.PI + (i / n) * Math.PI : (i / n) * Math.PI * 2 + 0.3; pts.push([cx + Math.cos(a) * rx * (0.92 + hr() * 0.12), cy + Math.sin(a) * ry * (0.92 + hr() * 0.12)]); }
+  ctx.beginPath(); ctx.moveTo(...pts[0]);
+  for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], mx = (x0 + x1) / 2, my = (y0 + y1) / 2, dx = mx - cx, dy = my - cy, k = hr() * 0.25;
+    const d = Math.hypot(dx, dy) || 1, chord = Math.hypot(x1 - x0, y1 - y0), bump = chord * (0.55 + k);
+    ctx.quadraticCurveTo(mx + dx / d * bump, my + dy / d * bump, x1, y1); }
+  if (flatBottom) { ctx.lineTo(cx + rx, cy + ry * 0.9); ctx.lineTo(cx - rx, cy + ry * 0.9); } ctx.closePath(); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = lw; ctx.strokeStyle = ink; ctx.stroke();
+  for (let i = 0; i < (flatBottom ? 2 : 5); i++) { const x = cx + (hr() - 0.5) * rx * 1.1, y = cy + (hr() - 0.3) * ry * 0.9, r = Math.min(rx, ry) * (0.18 + hr() * 0.12); ctx.beginPath(); ctx.arc(x, y, r, Math.PI * (1.05 + hr() * 0.2), Math.PI * (1.75 + hr() * 0.2)); ctx.lineWidth = Math.max(2, lw - 2); ctx.strokeStyle = ink; ctx.stroke(); }
+}
 function puffC(ctx, x, y, r, fill) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); }
 function ribbon(ctx, pts, wd, col) { line(ctx, pts, wd + 10, INK); line(ctx, pts, wd, col); }
 function puff(ctx, x, y, r, fill) {

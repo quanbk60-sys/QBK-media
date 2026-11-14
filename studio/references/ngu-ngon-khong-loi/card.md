@@ -15,10 +15,11 @@
 - Khung **ngang 16:9**: đặt `"width": 1920, "height": 1080`.
 - Nhân vật: `stick: true` (thân một nét, tay chân mảnh, chấm tay), mũ `fedora`, đồ cầm `axe`.
 - Đạo cụ: `river` (dòng sông có sóng chạy), `drowner` (người chới với, vẫy tay), `lineTree` (cây nét, tán lượn, đung đưa), `meadow` (đồi xa, cỏ, sỏi), `log`, `raft` (bè, `float` nhấp nhô), `signpost` (biển gỗ hai chân có chữ), `cliff` (bờ đá), `thinkIcons` (bong bóng suy nghĩ có biểu tượng clock, money, target, flag).
+- **Cảnh chi tiết (bản 2, theo góp ý "vẽ cảnh chi tiết hơn"):** `riverBend` (sông uốn theo phối cảnh: `far`/`near` là hai đường bờ theo tọa độ khung, bờ xa có mặt đất dày và vết nứt dọc, bờ gần có cỏ, nét nước chảy theo dòng `dir`), `ripple` (vòng gợn, giọt nước), `splash` (nước bắn khi nhảy xuống), `bigTree` (thân rẽ nhánh, tán mây nhiều múi có nét cong bên trong, `grey` cho cây xa), `bush`, `forest` (hàng cây xám xa, hai lớp cây, bụi), `rock` (đá có vết nứt, sỏi), `groundTex` (cỏ, sỏi, vệt đất). Người que có `hair: long|spiky` để đám đông khác nhau. Khúc gỗ có vân vòng tuổi.
 - Nhạc tự tổng hợp miễn phí: `studio/tools/nhac.py OUT.wav GIÂY --mood vui|tram|hoi-hop`.
 
 ## Còn thiếu
-- Hình AI của mẫu chi tiết hơn (vách đá, rừng dày, bóng nước). Bản code gọn và sạch hơn, kém "giàu" hơn.
+- Hình AI của mẫu vẫn mềm và nhiều sắc độ hơn; bản code đã có sông phối cảnh, rừng nhiều lớp, đá, cỏ.
 - Chuyển cảnh **biến hình liền mạch** (morph) như video AI: engine chỉ có mờ chéo và lia máy.
 - Người nhảy xuống nước: hiện là ngã rồi đổi sang `drowner`; chưa có tia nước bắn lớn. Chặt cây: chưa có cây đổ nghiêng (dùng `stump` + `log` rơi xuống).
 - Tấm bản đồ giấy cổ có màu: dùng ảnh (`image`/`photo`) hoặc vẽ thêm đạo cụ `treasureMap` khi cần.

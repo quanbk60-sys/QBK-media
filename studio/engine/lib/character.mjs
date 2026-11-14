@@ -232,6 +232,9 @@ function drawFace(ctx, hx, hy, E, opts, ink) {
 }
 
 function drawHat(ctx, c, hx, hy, R, t) {
+  if (c.hair === 'long') { ctx.lineWidth = 5; for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(hx + s * 20, hy - R + 4); ctx.bezierCurveTo(hx + s * (R + 30), hy - R * 0.6, hx + s * (R + 26), hy + R * 0.6, hx + s * (R + 4), hy + R * 1.15); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(hx + s * 10, hy - R + 2); ctx.bezierCurveTo(hx + s * (R + 8), hy - R * 0.4, hx + s * (R + 6), hy + R * 0.5, hx + s * (R - 10), hy + R * 0.95); ctx.stroke(); } }
+  else if (c.hair === 'spiky') { ctx.lineWidth = 5; for (let i = -2; i <= 2; i++) { const a = -Math.PI / 2 + i * 0.28; ctx.beginPath(); ctx.moveTo(hx + Math.cos(a) * (R - 6), hy + Math.sin(a) * (R - 6)); ctx.lineTo(hx + Math.cos(a) * (R + 28), hy + Math.sin(a) * (R + 28)); ctx.stroke(); } }
   if (!c.hat) return;
   const col = color(c.hatColor || 'navy'); ctx.fillStyle = col; ctx.lineWidth = 5;
   if (c.hat === 'official') { ctx.beginPath(); ctx.moveTo(hx - 62, hy - 78); ctx.lineTo(hx - 54, hy - 200); ctx.lineTo(hx + 54, hy - 200); ctx.lineTo(hx + 62, hy - 78); ctx.closePath(); ctx.fill(); ctx.stroke();
