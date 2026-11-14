@@ -1,0 +1,57 @@
+{
+ "video": "(không lưu video gốc) https://vt.tiktok.com/ZSp4U9NBM/",
+ "duration_s": 46.33,
+ "size": "1024x576",
+ "fps": "30/1",
+ "crop": [
+  0,
+  0
+ ],
+ "cuts": 2,
+ "cut_times": [
+  19.87,
+  21.47
+ ],
+ "avg_shot_s": 15.44,
+ "palette": [
+  {
+   "hex": "#FAFAFA",
+   "share": 0.193
+  },
+  {
+   "hex": "#EEEDED",
+   "share": 0.184
+  },
+  {
+   "hex": "#FBFBFB",
+   "share": 0.18
+  },
+  {
+   "hex": "#FDFDFD",
+   "share": 0.17
+  },
+  {
+   "hex": "#D2D1D1",
+   "share": 0.159
+  },
+  {
+   "hex": "#F6F6F6",
+   "share": 0.114
+  }
+ ],
+ "brightness": 0.94,
+ "colourfulness": 0.0,
+ "audio": {
+  "sound_ratio": 1.0,
+  "mean_db": -16.4,
+  "max_db": 0.0
+ },
+ "files": {
+  "contact": "contact.png",
+  "frames": [
+   "f00.png",
+   "f01.png",
+   "f02.png"
+  ]
+ }
+}

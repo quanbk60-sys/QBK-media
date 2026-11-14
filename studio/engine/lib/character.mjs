@@ -125,7 +125,7 @@ export function drawCharacter(ctx, opts) {
   // skeleton (hip at 0,0), then lift so the lowest foot touches the ground
   const lean = P.lean || 0;
   const up = (dx, dy) => [dx * Math.cos(lean) - dy * Math.sin(lean), dx * Math.sin(lean) + dy * Math.cos(lean)];
-  const hipF = [16, 0], hipB = [-16, 0];
+  const hipF = c.stick ? [3, 0] : [16, 0], hipB = c.stick ? [-3, 0] : [-16, 0];
   const kF = segp(hipF, P.ft, D.thigh), fF = segp(kF, P.ft + P.fk, D.shin);
   const kB = segp(hipB, P.bt, D.thigh), fB = segp(kB, P.bt + P.bk, D.shin);
   let lift = Math.max(fF[1], fB[1]) + 14 - (P.bob || 0);
@@ -142,10 +142,10 @@ export function drawCharacter(ctx, opts) {
 
   const torsoC = up(0, -150), neckBase = up(0, -298), neckTop = up(0, -318), nod = P.nod || 0;
   const headC = nod ? [neckTop[0] + (D.head - 4) * Math.sin(lean + nod), neckTop[1] - (D.head - 4) * Math.cos(lean + nod)] : up(0, -318 - D.head + 4);
-  const shF = up(48, -262), shB = up(-48, -262);
+  const shF = c.stick ? up(4, -262) : up(48, -262), shB = c.stick ? up(-4, -262) : up(-48, -262);
   const limb = (a, b, cc, w = lw) => { ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.lineTo(...cc); ctx.stroke(); };
-  const foot = f => { ctx.fillStyle = color(c.shoes || 'white'); ctx.beginPath(); ctx.ellipse(f[0] + 13, f[1] + 5, 30, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
-  const hand = h => { ctx.fillStyle = body; ctx.beginPath(); ctx.arc(h[0], h[1], 20, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
+  const foot = c.stick ? f => { ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(f[0] - 4, f[1]); ctx.lineTo(f[0] + 30, f[1] + 6); ctx.stroke(); } : f => { ctx.fillStyle = color(c.shoes || 'white'); ctx.beginPath(); ctx.ellipse(f[0] + 13, f[1] + 5, 30, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
+  const hand = c.stick ? h => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(h[0], h[1], 7, 0, Math.PI * 2); ctx.fill(); } : h => { ctx.fillStyle = body; ctx.beginPath(); ctx.arc(h[0], h[1], 20, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = lw; ctx.stroke(); };
 
   // cape behind everything above the legs
   if (c.cape) { ctx.fillStyle = color(c.cape); ctx.beginPath(); const a = up(-60, -270), b = up(60, -270), cl = up(-110 - 20 * Math.sin(t * 3), 40), cr = up(30, 60);
@@ -163,12 +163,13 @@ export function drawCharacter(ctx, opts) {
     if (c.robeTrim) { ctx.strokeStyle = color(c.robeTrim); ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(...up(-110, 150)); ctx.lineTo(...up(110, 150)); ctx.stroke(); ctx.strokeStyle = ink; } }
   // torso
   ctx.save(); ctx.translate(...torsoC); ctx.rotate(lean);
-  if (!c.robe) { ctx.fillStyle = body; ctx.beginPath(); ctx.ellipse(0, 0, D.torsoRx, D.torsoRy, 0, 0, Math.PI * 2); ctx.fill(); }
+  if (!c.robe && !c.stick) { ctx.fillStyle = body; ctx.beginPath(); ctx.ellipse(0, 0, D.torsoRx, D.torsoRy, 0, 0, Math.PI * 2); ctx.fill(); }
+  if (c.stick && !c.robe) { ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(0, 150); ctx.lineTo(0, -150); ctx.stroke(); } // classic one-line stick body (hip → neck)
   const band = (x0, y0, x1, y1, w, col) => { const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy), nx = -dy / L * w / 2, ny = dx / L * w / 2;
     ctx.fillStyle = color(col); ctx.beginPath(); ctx.moveTo(x0 + nx, y0 + ny); ctx.lineTo(x1 + nx, y1 + ny); ctx.lineTo(x1 - nx, y1 - ny); ctx.lineTo(x0 - nx, y0 - ny); ctx.closePath(); ctx.fill(); ctx.lineWidth = 4; ctx.stroke(); };
   if (c.sash) { band(-50, -112, 62, 92, 28, c.sash); if (c.sashX !== false) band(50, -112, -62, 92, 28, c.sash); }
   if (c.belt) { ctx.fillStyle = color(c.belt); ctx.beginPath(); ctx.moveTo(-70, 78); ctx.quadraticCurveTo(0, 90, 70, 78); ctx.lineTo(56, 108); ctx.quadraticCurveTo(0, 118, -56, 108); ctx.closePath(); ctx.fill(); ctx.lineWidth = 4; ctx.stroke(); }
-  if (!c.robe) { ctx.lineWidth = lw; ctx.beginPath(); ctx.ellipse(0, 0, D.torsoRx, D.torsoRy, 0, 0, Math.PI * 2); ctx.stroke(); }
+  if (!c.robe && !c.stick) { ctx.lineWidth = lw; ctx.beginPath(); ctx.ellipse(0, 0, D.torsoRx, D.torsoRy, 0, 0, Math.PI * 2); ctx.stroke(); }
   if (c.tail) drawTail(ctx, c, t, opts.wind ?? 1);
   ctx.restore();
   ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(...neckBase); ctx.lineTo(...neckTop); ctx.stroke();
@@ -241,6 +242,10 @@ function drawHat(ctx, c, hx, hy, R, t) {
   else if (c.hat === 'helmet') { ctx.beginPath(); ctx.arc(hx, hy - 30, R + 6, Math.PI * 1.05, Math.PI * 1.95); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(hx, hy - 136); ctx.lineTo(hx, hy - 175); ctx.stroke(); ctx.fillStyle = color('red'); ctx.beginPath(); ctx.ellipse(hx, hy - 178, 10, 14, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
   else if (c.hat === 'cone') { ctx.fillStyle = color(c.hatColor || '#E8D9A8'); ctx.beginPath(); ctx.moveTo(hx - 140, hy - 50); ctx.lineTo(hx, hy - 170); ctx.lineTo(hx + 140, hy - 50); ctx.quadraticCurveTo(hx, hy - 70, hx - 140, hy - 50); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  else if (c.hat === 'fedora') { ctx.fillStyle = color(c.hatColor || 'white'); // brim + pinched crown + band
+    ctx.beginPath(); ctx.ellipse(hx + 6, hy - 70, 112, 20, -0.04, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(hx - 62, hy - 74); ctx.bezierCurveTo(hx - 66, hy - 150, hx - 30, hy - 170, hx + 4, hy - 150); ctx.bezierCurveTo(hx + 40, hy - 172, hx + 74, hy - 150, hx + 70, hy - 74); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(hx - 63, hy - 92); ctx.lineTo(hx + 70, hy - 92); ctx.lineTo(hx + 70, hy - 76); ctx.lineTo(hx - 62, hy - 76); ctx.closePath(); ctx.fillStyle = color(c.bandColor || 'ink'); ctx.fill(); ctx.stroke(); }
   else if (c.hat === 'cap') { ctx.beginPath(); ctx.ellipse(hx, hy - 74, 74, 30, 0, Math.PI, Math.PI * 2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
 }
 
@@ -256,6 +261,7 @@ function drawHeldProp(ctx, c, h, sp, ink, t) {
     case 'oar': shaft(240, 200, 8, 'wood'); poly([at(-200, -26), at(-330, -30), at(-340, 0), at(-330, 30), at(-200, 26)], 'wood'); break;
     case 'flag': shaft(420, 120, 7, 'wood'); { const w = Math.sin(t * 6) * 12; poly([at(420, 0), at(420 + w * 0.3, 160), at(330 + w, 170), at(300, 0)], c.propColor || 'red'); } break;
     case 'scroll': poly([at(-20, -60), at(20, -60), at(20, 60), at(-20, 60)], '#F6EBCF'); poly([at(-6, -18), at(6, -18), at(6, 18), at(-6, 18)], c.propColor || 'navy'); break;
+    case 'axe': shaft(215, 40, 9, 'wood'); poly([at(160, -20), at(200, -20), at(200, 8), at(236, 86), at(190, 104), at(130, 86), at(160, 8)], 'steel'); poly([at(200, -20), at(160, -20), at(166, -38), at(194, -38)], 'steel'); break;
     case 'seal': poly([at(-30, -34), at(30, -34), at(30, 34), at(-30, 34)], 'gold'); break;
   }
 }

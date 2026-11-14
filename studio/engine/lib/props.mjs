@@ -376,6 +376,51 @@ export const PROPS = {
   rays(ctx, p, t) { const n = p.n || 14, r0 = p.r || 260, L = p.len || 160, c = p.color || 'gold', hr = hash(p.seed || 4), wob = Math.sin(t * 10) * 0.02;
     for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2 + (hr() - 0.5) * 0.25 + wob, r1 = r0 + hr() * 40, r2 = r1 + L * (0.6 + hr() * 0.6);
       line(ctx, [[Math.cos(a) * r1, Math.sin(a) * r1], [Math.cos(a + 0.02) * (r1 + r2) / 2, Math.sin(a + 0.02) * (r1 + r2) / 2], [Math.cos(a) * r2, Math.sin(a) * r2]], 12 + hr() * 6, c); } },
+  // --- Ngụ ngôn không lời (style ngu-ngon-trang): line-art scenery, ground-centre anchors
+  lineTree(ctx, p, t) { const h = p.h || 520, w = p.w || 300, hr = hash(p.seed || 2), sw = Math.sin(t * 1.3 + (p.seed || 0)) * 4; // line-art tree: bumpy canopy, inner branches, trunk with roots
+    poly(ctx, [[-22, 0], [22, 0], [16, -h * 0.55], [-16, -h * 0.55]], 'white', 5); line(ctx, [[-22, 0], [-46, 10]], 4); line(ctx, [[22, 0], [44, 8]], 4);
+    const cy = -h * 0.68, n = 11; ctx.beginPath();
+    for (let i = 0; i <= n; i++) { const a = Math.PI * (0.95 + 1.1 * i / n) - Math.PI * 0.05, r = (0.9 + hr() * 0.2), x = Math.cos(a) * w / 2 * r + sw, y = cy + Math.sin(a) * h * 0.34 * r;
+      if (!i) ctx.moveTo(x, y); else { const am = Math.PI * (0.95 + 1.1 * (i - 0.5) / n) - Math.PI * 0.05; ctx.quadraticCurveTo(Math.cos(am) * w / 2 * 1.18 + sw, cy + Math.sin(am) * h * 0.34 * 1.18, x, y); } }
+    ctx.quadraticCurveTo(w * 0.3, cy + h * 0.3, 0, cy + h * 0.24); ctx.quadraticCurveTo(-w * 0.3, cy + h * 0.3, -w / 2 * 0.95 + sw, cy + Math.sin(Math.PI * 0.9) * h * 0.34);
+    ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    line(ctx, [[0, -h * 0.5], [-w * 0.18, cy - 10]], 4); line(ctx, [[0, -h * 0.55], [w * 0.2, cy + 5]], 4);
+    for (let i = 0; i < 5; i++) { const x = (hr() - 0.5) * w * 0.7, y = cy + (hr() - 0.6) * h * 0.4; ctx.beginPath(); ctx.arc(x + sw, y, 14 + hr() * 10, Math.PI * 1.1, Math.PI * 1.9); ctx.lineWidth = 3; ctx.stroke(); } },
+  meadow(ctx, p) { const w = p.w || 3000, hr = hash(p.seed || 5), far = p.far ?? 330; // far hills + grass tufts + pebbles around the anchor (ground line)
+    ctx.beginPath(); ctx.moveTo(-w / 2, -far); for (let x = -w / 2; x <= w / 2; x += 60) ctx.lineTo(x, -far - Math.sin(x / 260 + (p.seed || 0)) * 40 - Math.sin(x / 90) * 8); ctx.lineWidth = 3; ctx.strokeStyle = '#9A9A9A'; ctx.stroke();
+    for (let i = 0; i < (p.n || 26); i++) { const x = (hr() - 0.5) * w, y = (hr() - 0.2) * (p.depth || 160);
+      if (hr() < 0.7) { for (let k = -2; k <= 2; k++) line(ctx, [[x + k * 7, y], [x + k * 10, y - 18 - (k % 2) * 9]], 3); }
+      else { ctx.beginPath(); ctx.ellipse(x, y, 16 + hr() * 14, 9 + hr() * 6, 0, Math.PI, Math.PI * 2); ctx.closePath(); ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.stroke(); } } },
+  log(ctx, p) { const L = p.len || 420, r = p.r || 34; poly(ctx, [[-L / 2, -2 * r], [L / 2, -2 * r], [L / 2, 0], [-L / 2, 0]], 'wood', 5);
+    ctx.beginPath(); ctx.ellipse(L / 2, -r, r * 0.55, r, 0, 0, Math.PI * 2); ctx.fillStyle = color('wood'); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(L / 2, -r, r * 0.28, r * 0.5, 0, 0, Math.PI * 2); ctx.lineWidth = 3; ctx.stroke(); line(ctx, [[-L / 2 + 40, -r * 1.3], [L / 2 - 80, -r * 1.4]], 3); line(ctx, [[-L / 2 + 90, -r * 0.6], [L / 2 - 30, -r * 0.5]], 3); },
+  raft(ctx, p, t) { const n = p.n || 5, L = p.len || 460, bob = p.float ? Math.sin(t * 2.2) * 5 : 0; ctx.save(); ctx.translate(0, bob);
+    for (let i = n - 1; i >= 0; i--) { ctx.save(); ctx.translate(-i * 18 + (n - 1) * 9, -i * 30); PROPS.log(ctx, {len: L, r: 26}); ctx.restore(); }
+    for (const x of [-L * 0.3, L * 0.3]) line(ctx, [[x - 20, -n * 30 - 10], [x + 20, 4]], 6); ctx.restore(); },
+  signpost(ctx, p) { const w = p.w || 380, h = p.h || 170; line(ctx, [[-w * 0.38, 0], [-w * 0.38, -h - 120]], 10); line(ctx, [[w * 0.38, 0], [w * 0.38, -h - 120]], 10);
+    poly(ctx, [[-w / 2, -h - 150], [w / 2, -h - 150], [w / 2, -150], [-w / 2, -150]], 'white', 6);
+    const lines = String(p.text || 'BIỂN').split('\n'), sz = p.size || Math.min(64, h / (lines.length + 0.5));
+    lines.forEach((l, i) => { ctx.font = `${sz}px Hand`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = INK; ctx.fillText(l, 0, -150 - h / 2 + (i - (lines.length - 1) / 2) * sz * 1.1); }); },
+  cliff(ctx, p) { const w = p.w || 700, h = p.h || 260, s = p.side === 'left' ? -1 : 1; // ground plateau ending in a rock face (face on the right by default)
+    poly(ctx, [[-w / 2 * s, 0], [w / 2 * s, 0], [(w / 2 + 30) * s, h * 0.35], [(w / 2 - 10) * s, h], [-w / 2 * s, h]], 'white', 5);
+    for (let i = 0; i < 4; i++) line(ctx, [[(w / 2 - 20 - i * 6) * s, 20 + i * 55], [(w / 2 - 70 - i * 10) * s, 60 + i * 55]], 3);
+    line(ctx, [[(w / 2 + 10) * s, h * 0.3], [(w / 2 - 30) * s, h * 0.55], [(w / 2 - 5) * s, h * 0.8]], 3); },
+  river(ctx, p, t) { const w = p.w || 1600, h = p.h || 220; // flat stream band seen in perspective; anchor = near bank centre
+    line(ctx, [[-w / 2, 0], [w / 2, 0]], 5); line(ctx, [[-w / 2, -h], [w / 2, -h]], 5);
+    for (let r = 0; r < 4; r++) wavyLine(ctx, -w / 2 + 60 + r * 40, w / 2 - 60, -h * (0.2 + r * 0.2), 5, 90 + r * 20, t * 2.5 + r, 2.5); },
+  drowner(ctx, p, t) { const s = Math.sin(t * 7 + (p.seed || 0)), dy = Math.sin(t * 3.1 + (p.seed || 0)) * 8; ctx.save(); ctx.translate(0, dy);
+    ctx.beginPath(); ctx.arc(0, -40, 34, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    for (const ex of [-12, 12]) { ctx.beginPath(); ctx.ellipse(ex, -46, 5, 7, 0, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill(); }
+    ctx.beginPath(); ctx.ellipse(0, -24, 8, 10, 0, 0, Math.PI * 2); ctx.fillStyle = '#5a2320'; ctx.fill();
+    line(ctx, [[-28, -30], [-60, -95 - s * 18], [-75 + s * 8, -120 - s * 18]], 5); line(ctx, [[28, -30], [62, -90 + s * 18], [80, -112 + s * 18]], 5); ctx.restore();
+    wavyLine(ctx, -80, 80, -6, 5, 40, t * 6, 4); for (const x of [-70, 70]) line(ctx, [[x, -10], [x + Math.sign(x) * 16, -34 - Math.abs(s) * 10]], 3); },
+  thinkIcons(ctx, p) { const icons = p.icons || ['clock', 'money', 'target']; ctx.beginPath(); ctx.ellipse(0, 0, 70 * icons.length + 30, 95, 0, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    for (const [x, y, r] of [[-30 * icons.length - 40, 110, 18], [-30 * icons.length - 75, 150, 11]]) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+    icons.forEach((ic, i) => { const x = (i - (icons.length - 1) / 2) * 140; ctx.beginPath(); ctx.arc(x, 0, 52, 0, Math.PI * 2); ctx.stroke();
+      if (ic === 'clock') { line(ctx, [[x, 0], [x, -32]], 5); line(ctx, [[x, 0], [x + 24, 10]], 5); }
+      else if (ic === 'money') { poly(ctx, [[x - 26, -10], [x + 26, -10], [x + 32, 34], [x - 32, 34]], 'white', 4); line(ctx, [[x - 14, -10], [x - 20, -30], [x + 20, -30], [x + 14, -10]], 4); ctx.font = 'bold 34px Sans'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = INK; ctx.fillText('$', x, 14); }
+      else if (ic === 'target') { for (const r of [36, 22, 8]) { ctx.beginPath(); ctx.arc(x, 0, r, 0, Math.PI * 2); ctx.stroke(); } line(ctx, [[x, 0], [x + 40, -40]], 5); }
+      else if (ic === 'flag') { line(ctx, [[x - 30, 34], [x, -20], [x + 30, 34]], 4); line(ctx, [[x, -20], [x, -44]], 4); poly(ctx, [[x, -44], [x + 26, -36], [x, -28]], 'red', 3); } }); },
   cardSign(ctx, p) { const w = p.w || 640, h = p.h || 260, hr = hash(11);
     const pts = []; for (let x = -w / 2; x <= w / 2; x += 32) pts.push([x, -h / 2 + (hr() - 0.5) * 14]); for (let y = -h / 2; y <= h / 2; y += 32) pts.push([w / 2 + (hr() - 0.5) * 14, y]);
     for (let x = w / 2; x >= -w / 2; x -= 32) pts.push([x, h / 2 + (hr() - 0.5) * 14]); for (let y = h / 2; y >= -h / 2; y -= 32) pts.push([-w / 2 + (hr() - 0.5) * 14, y]);

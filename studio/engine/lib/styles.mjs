@@ -39,6 +39,9 @@ export const STYLES = {
   'tuong-da':   { stroke: 'clean', fill: 'drop', drawMode: 'pop', hand: false, transition: 'flash', transitionDur: 0.25, captionBox: 'stamp', captionFont: '{size}px QBKBlack',label: 'Tượng đá cà khịa', genres: 'thần thoại, lịch sử thế giới kể hài, đối đáp nhiều nhân vật, khoe của, cà khịa (tượng cẩm thạch bán thân, tường đá, dấu mộc đỏ, hạt phim)', bg: '#191410', deco: 'stone', ink: '#191410', body: '#E5D0AE', lineScale: 1.25,
                  palette: {red: '#C8402A', navy: '#3E6FA8', gold: '#E3A92B', green: '#5E8C4A', wood: '#977656', steel: '#BDA98B', water: '#4F8FC0', waterDeep: '#2F5F8C', paper: '#E5D0AE', skin: '#E5D0AE', sky: '#4A392B'},
                  caption: {color: '#F3E6CC', stroke: 'rgba(15,10,6,.92)'}, titleFont: 'Sans'},
+  'ngu-ngon-trang': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'fade', transitionDur: 0.9, castDefaults: {stick: true}, label: 'Ngụ ngôn không lời', genres: 'ngụ ngôn ẩn dụ, bài học cuộc sống, kinh doanh, làm nghề (nét đen trên nền trắng, khung ngang 16:9, không lời, nhạc nhẹ)', bg: '#FFFFFF', deco: 'none', ink: '#1C1C1C', body: '#FFFFFF', lineScale: 0.72,
+                 palette: {red: '#D23B2E', navy: '#FFFFFF', gold: '#FFFFFF', green: '#FFFFFF', wood: '#FFFFFF', steel: '#E6E6E6', water: '#FFFFFF', waterDeep: '#FFFFFF', paper: '#FFFFFF', skin: '#FFFFFF', sky: '#FFFFFF'},
+                 caption: {color: '#1C1C1C', stroke: 'rgba(255,255,255,.92)'}, captionFont: '{size}px Hand', titleFont: 'Hand'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 

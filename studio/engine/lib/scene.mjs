@@ -99,7 +99,7 @@ function recordElement(s, e, t, sceneT) {
   if (e.type === 'actor') {
     const A = acting(e, t);
     const blinkAt = e.blinks || [1.3, 4.1, 7.2];
-    R._actor = drawCharacter(R, {costume: {...s.cast[e.cast], ...(e.costume || {})}, pose: A.pose, expr: A.expr, facing: e.facing ?? 1, t: sceneT, blink: blinkAt.some(b => Math.abs(t - b) < 0.07), wind: e.wind ?? ({run: 2.5, sprint: 3.2, walk: 1.8, jump: 1.8}[A.cycle] || 1)});
+    R._actor = drawCharacter(R, {costume: {...(s.styleDef.castDefaults || {}), ...s.cast[e.cast], ...(e.costume || {})}, pose: A.pose, expr: A.expr, facing: e.facing ?? 1, t: sceneT, blink: blinkAt.some(b => Math.abs(t - b) < 0.07), wind: e.wind ?? ({run: 2.5, sprint: 3.2, walk: 1.8, jump: 1.8}[A.cycle] || 1)});
     R._contact = A.pose.contact; R._cycle = A.cycle; R._impact = A.pose.impact;
   } else if (e.type === 'prop') {
     const params = {...(e.params || {}), ...sampleTrack(e.ptrack, t, Object.keys(Object.assign({}, ...(e.ptrack || [{}]))).filter(k => k !== 't' && k !== 'ease'))};
