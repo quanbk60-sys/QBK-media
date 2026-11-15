@@ -1,0 +1,217 @@
+{
+ "name": "CĂN HỘ NAM LONG II",
+ "intro": [
+  "CĂN HỘ",
+  "NAM LONG II"
+ ],
+ "subtitle": "Xung quanh có gì?",
+ "area": "CÁI RĂNG · CẦN THƠ",
+ "tagline": "Nhỏ xinh · ấm áp · nhiều ánh sáng",
+ "cta": "LIÊN HỆ HẸN XEM NHÀ",
+ "note": "Khoảng cách theo đường đi, số phút ước tính",
+ "footer": "",
+ "project": {
+  "lat": 9.99465,
+  "lon": 105.78452
+ },
+ "introZoom": [
+  11.6,
+  15.6
+ ],
+ "outroZoom": 17.0,
+ "durations": {
+  "intro": 3.6,
+  "poi": 6.4,
+  "descend": 4.6,
+  "summary": 5.2,
+  "outro": 4.4
+ },
+ "order": [
+  "intro",
+  "map",
+  "descend",
+  "summary",
+  "outro"
+ ],
+ "photos": [
+  {
+   "path": "photos/p5-loi-vao.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.42,
+    "side": 0.08,
+    "yaw": [
+     3,
+     -3
+    ],
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  },
+  {
+   "path": "photos/p6-tu-chanh.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.34,
+    "side": -0.1,
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  },
+  {
+   "path": "photos/p2-cong-vom-hanh-lang.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.3,
+    "side": 0.06,
+    "yaw": [
+     -18,
+     14
+    ],
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  },
+  {
+   "path": "photos/p4-sofa.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.36,
+    "side": -0.12,
+    "yaw": [
+     2,
+     -2
+    ],
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  },
+  {
+   "path": "photos/p7-tong-quan.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.22,
+    "side": 0.08,
+    "yaw": [
+     -16,
+     16
+    ],
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  },
+  {
+   "path": "photos/p3-bep-ban-an.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.45,
+    "side": 0.08,
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  },
+  {
+   "path": "photos/p1-rem-cua-so-ke.jpg",
+   "mode": "cover",
+   "focus": [
+    0.5,
+    0.5
+   ],
+   "cam": {
+    "fwd": 0.16,
+    "side": 0.04,
+    "yaw": [
+     -12,
+     15
+    ],
+    "hand": 0,
+    "bob": 0,
+    "ease": "walk"
+   }
+  }
+ ],
+ "pois": [
+  {
+   "cat": "DU LỊCH",
+   "name": "Chợ nổi Cái Răng",
+   "lat": 10.004,
+   "lon": 105.7468,
+   "sty": "violet"
+  },
+  {
+   "cat": "GIÁO DỤC",
+   "name": "Đại học Cần Thơ",
+   "lat": 10.02989,
+   "lon": 105.76968,
+   "sty": "green"
+  },
+  {
+   "cat": "TRUNG TÂM",
+   "name": "Bến Ninh Kiều",
+   "lat": 10.0349,
+   "lon": 105.78903,
+   "sty": "gold"
+  },
+  {
+   "cat": "KẾT NỐI",
+   "name": "Cầu Cần Thơ",
+   "lat": 10.0316,
+   "lon": 105.8086,
+   "sty": "blue",
+   "closeZoom": 16.8
+  }
+ ],
+ "descendZoom": 17.8,
+ "descendTilt": 55,
+ "walk": {
+  "xfade": 1.1
+ },
+ "sfx": false,
+ "narration": false,
+ "music": {
+  "generate": true,
+  "mood": "warm",
+  "bpm": 84,
+  "seed": 5,
+  "gain": 0.85
+ },
+ "poiMode": "zoom",
+ "closeZoom": 17.4,
+ "closeTilt": 55,
+ "descendTitle": [
+  "KHU ĐÔ THỊ",
+  "NAM LONG II"
+ ],
+ "descendSub": "Central Lake · Cái Răng",
+ "summaryTitle": "Vị trí kết nối · KĐT Nam Long II"
+}

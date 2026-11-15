@@ -1,0 +1,3 @@
+{"fps": 30, "music": true, "shots": [
+ {"start": 0, "end": 8, "theme": "bien", "seed": 3, "speed": 4.2},
+ {"start": 8, "end": 15, "theme": "nui", "seed": 5, "speed": 3.6}]}
