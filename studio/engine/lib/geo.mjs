@@ -67,7 +67,7 @@ async function loadSat(s) {
 export async function preloadGeo(s) {
   s._sat = await loadSat(s);
   s._photos = new Map(); await preloadBds(s);
-  for (const sh of s.shots) for (const e of sh.elements || []) if ((e.type === 'photo' || (e.type === 'pcard' && e.path)) && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
+  for (const sh of s.shots) for (const e of sh.elements || []) if ((e.type === 'photo' || e.type === 'ecard' || (e.type === 'pcard' && e.path)) && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
   if (s.shots.some(sh => (sh.elements || []).some(e => e.type === 'globe'))) {
     const w = s._sat?.levels.filter(l => l.world).at(-1); if (!w) throw new Error('globe cần một mức "world" trong satmap.json (satmap.py --level 4:world)');
     const cv = createCanvas(w.w, w.h), c = cv.getContext('2d'); c.drawImage(w.img, 0, 0);
@@ -78,7 +78,7 @@ export function validateGeo(s, e, where, err) {
   if (!GEO_TYPES.includes(e.type)) return false;
   if (BDS_TYPES.includes(e.type)) { validateBds(s, e, where, err); return true; }
   if (['satmap', 'globe'].includes(e.type) && !s.satmap) err(`${where}: scene cần "satmap": "đường/dẫn/satmap.json"`);
-  if ((e.type === 'photo' || (e.type === 'pcard' && e.path)) && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
+  if ((e.type === 'photo' || e.type === 'ecard' || (e.type === 'pcard' && e.path)) && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
   if (e.type === 'clip' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing clip ${e.path}`);
   if (e.type === 'overlay' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing overlay ${e.path} (tạo bằng studio/tools/georef.py)`);
   if (e.type === 'route' && !(e.path?.length >= 2)) err(`${where}: route cần path [[lat,lon],...]`);

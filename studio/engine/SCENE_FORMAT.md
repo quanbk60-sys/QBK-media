@@ -198,6 +198,21 @@ Bản đồ vị trí và tiện ích dự án trên ảnh vệ tinh. Dùng đư
 Icon (`poi`, `info`, `pcard`): home, school, cart, hospital, food, plane, train, bus, park, mall, bank, building, coffee, bridge, road, water, stadium, star, gov, clock.
 Vùng an toàn: chữ và nhãn cách mép trái phải 40 px (tự né). Phụ đề nên đặt `captions.y` = 1500; giữ thẻ `info`, `checklist`, `cta` trong khoảng y 1180–1440.
 
+## Phong cách BĐS Google Earth tối (`bds-earth`, `lib/earth.mjs`)
+Ảnh vệ tinh tối kiểu Google Earth, viền neon tự chạy, biển tên dự án, thẻ nhãn, chữ to, chuyển cảnh zoom nhòe. Dùng được mọi phần tử của `ve-tinh` và `bds-tien-ich`. Thẻ: `studio/references/bds-google-earth-toi/card.md`. Demo: `projects/_mau-bds-earth/build_scene.py`.
+- Mỗi shot nên có `{"type": "satmap", "shade": false}` rồi `{"type": "grade"}`. Chuyển cảnh mặc định `zoomblur` (`transitionDur` 0,45; `blurDir` 1 = bay vào, −1 = bay ra; shot sau quyết định nhòe ở cuối shot trước). Đổi `view.zoom` 1–3 mức giữa hai shot để cú bay có nghĩa.
+- Màu (`color`): `lime` (dự án), `chanh` (chữ phụ, số), `mint` (ranh quận), `magenta` (đối tượng thứ hai), `yellow` (đường), `cyan`, `white` hoặc mã hex.
+
+| Phần tử (`type`) | Thuộc tính |
+|---|---|
+| `grade` | chỉnh màu toàn khung: `desat` (0,62), `tint` (màu nhân), `vignette` (0,5) |
+| `outline` | viền neon theo tọa độ: `path` [[lat,lon]…], `closed` (true), `color`, `width` (7), `draw: {at, dur}`, `smooth` (2 lần làm tròn), `fill` (độ mờ tô trong, ví dụ 0,08), `head: false` tắt đầu sao chổi, `alpha` |
+| `etag` | thẻ nhãn tối "• TÊN": `geo` hoặc `x, y`, `text`, `dx, dy` (vị trí thẻ so với điểm), `align` (left/right/center), `color` (chấm), `size` (22) |
+| `sign` | biển tên trên cột: `geo`, `name`, `sub`, `stick` (80 px), `size` (34), `ink` (màu chữ), `color` (cột và chấm) |
+| `ecard` | thẻ ảnh bo góc: `path`, `credit` (bắt buộc với ảnh ngoài), `x, y` (tâm), `w` (420), `ratio`, `focus` |
+| `ebig` | chữ to nhiều dòng: `lines` [{`text`, `size`, `color`, `spacing`, `font: "bold"`, `gap`}], `x`, `y`, `align`, `stagger` |
+| `estat` | số liệu: `label`, `value` ("43,8 ha": tự đếm lên, giữ dấu phẩy), `count` (giây đếm; 0 = không đếm), `note` (dòng nhỏ dưới), `size` (110), `color` |
+
 ## Phong cách BĐS (`bds`, `lib/bds.mjs`)
 Video giới thiệu bất động sản: mở đầu trên ảnh vệ tinh → ảnh thật của dự án (thông số, tiện ích) → từng địa điểm lân cận có tuyến đường, km, phút → thẻ kêu gọi. Phần vị trí học từ skill `map-location-video` (thẻ `studio/references/vi-tri-ket-noi-bds/card.md`).
 Builder: `"poiMode": "zoom"` → mỗi địa điểm: ghim, máy lao xuống nghiêng 3D sát điểm (`closeZoom` 17,4, `closeTilt` 55, riêng từng điểm được), rồi kéo ra; `order` thêm `summary` (thẻ "Vị trí kết nối" liệt kê km, phút tới mọi địa điểm, `summaryTitle`) và `descend` (bay xuống sát mái tòa nhà: `descendZoom`, `descendTilt`, `descendCenter`, `descendTitle` [2 dòng], `descendSub`); ảnh đầu sau bản đồ tự lao vào; `"walk": {"xfade": 0.8}` nối các ảnh liền một mạch. `"sfx": false` bỏ mọi tiếng hiệu ứng. `"narration": false` bỏ lời đọc và phụ đề; `"music": {"generate": true, "mood": "chill|warm|bright", "bpm", "seed", "gain"}` tự sáng tác nhạc nền bằng `studio/tools/music.py` dài đúng video. Ảnh có `"cam": {fwd, side, up, yaw:[đầu,cuối], pitch, hand, bob, ease, zoom, focus}` thành cảnh quay cầm tay (`bdsClip`, ưu tiên dùng thay `move`: không làm cong tường). **Không viết tay scene này**: điền `projects/<slug>/bds.json` (mẫu `studio/references/vi-tri-ket-noi-bds/bds.example.json`) rồi chạy `python3 studio/tools/bds_build.py projects/<slug>`. Builder lấy tuyến OSRM, tính zoom, tải ảnh vệ tinh, viết `scene.json`. Kiểm tra: `node studio/engine/check_layout.mjs scene.json --sheet sheet.png` (phải 0 lỗi).

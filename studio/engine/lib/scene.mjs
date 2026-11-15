@@ -12,6 +12,7 @@ import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo, shade} from './geo.mjs';
 import {prepareBds} from './bds.mjs';
 import {GROUND_TYPES, preloadOverlays, preloadClips, prepareClips} from './tienich.mjs';
+import './earth.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -153,6 +154,13 @@ function tiltGround(ctx, s, sh, view, t, deg) {
   s._tilt = {th, D, cx, cy};
 }
 
+let _zb = null;
+function zoomBlur(ctx, cv, s, k, dir) {
+  const W = s.width, H = s.height; if (!_zb) _zb = createCanvas(W, H); const z = _zb.getContext('2d'); z.setTransform(1, 0, 0, 1, 0, 0); z.globalAlpha = 1; z.drawImage(cv, 0, 0);
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const n = 9, amt = 0.32 * k;
+  for (let i = 1; i <= n; i++) { const sc = 1 + dir * amt * i / n; ctx.globalAlpha = 0.42 / (i * 0.8 + 1); ctx.drawImage(_zb, W / 2 - W * sc / 2, H / 2 - H * sc / 2, W * sc, H * sc); }
+  ctx.globalAlpha = 0.05 * k; ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H); ctx.restore();
+}
 export function makeRenderer(s) {
   const cv = createCanvas(s.width, s.height), ctx = cv.getContext('2d');
   const events = []; let lastContact = new Map();
@@ -213,6 +221,12 @@ export function makeRenderer(s) {
       else if (tr === 'smudge') { const r = rng(fno); ctx.globalAlpha = 1 - k; ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = (1 - k) * 0.5; ctx.fillStyle = ST.ink; for (let i = 0; i < 40; i++) ctx.fillRect(r() * W, r() * H, 80 + r() * 200, 3); }
       ctx.restore();
     }
+    // zoomblur (phong cách bds-earth): nhòe phóng tâm như cú bay Google Earth, cuối shot trước và đầu shot sau
+    { const nx = s.shots[s.shots.indexOf(sh) + 1], zd = sh.transitionDur ?? ST.transitionDur ?? 0.45;
+      let zk = 0, dir = 1;
+      if ((sh.transition ?? ST.transition) === 'zoomblur' && sh.start > 0 && t < zd) { zk = 1 - ease(clamp(t / zd)); dir = sh.blurDir ?? 1; }
+      if (nx && (nx.transition ?? ST.transition) === 'zoomblur') { const zd2 = (nx.transitionDur ?? ST.transitionDur ?? 0.45) * 0.6, left = sh.end - T; if (left < zd2) { zk = Math.max(zk, ease(1 - left / zd2)); dir = nx.blurDir ?? 1; } }
+      if (zk > 0.01) zoomBlur(ctx, cv, s, zk, dir); }
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
     if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;

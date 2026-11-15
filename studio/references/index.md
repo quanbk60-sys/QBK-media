@@ -16,3 +16,4 @@
 | [Cách viết lệnh Omni](omni-prompt/card.md) | công cụ cho `anime-dong` (quay phim) | Mọi phim anime động | Clip 4–8 giây, ba nhịp có mốc giờ | Tài liệu tham khảo (MIT, rút từ Stickman Video Director) |
 | [Hoạt hình tu tiên vietsub](hoat-hinh-tu-tien-vietsub/card.md) | chưa có (đề xuất `tien-hiep` + đầu mặt meme) | Truyện hài "hệ thống", tu tiên, phim bộ | Cắt ghép ảnh tĩnh, cảnh 4 s, một giọng đọc suốt, phụ đề ngoặc kép | Ghi nhận · thiếu trang phục, bối cảnh, hiệu ứng |
 | Slide "Stickman Video Director" (ảnh, đầu cuộc trò chuyện) | 10 phong cách A1–B4 của skill gốc | Đa thể loại | | Tham khảo cho các gói phong cách |
+| [BĐS · Google Earth tối](bds-google-earth-toi/card.md) | `bds-earth` | Giới thiệu dự án, khu đô thị, vị trí và tiện ích | Gần như không cắt cứng, chuyển cảnh zoom nhòe, viền neon tự chạy, chữ to xanh chanh, lời đọc không phụ đề | Đã có engine · demo `projects/_mau-bds-earth/` |
