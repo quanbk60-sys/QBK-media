@@ -6,13 +6,10 @@ description: Chuẩn bị bộ đăng bài cho TikTok và YouTube Shorts từ vi
 # Phát hành: `publish.md` và ảnh bìa
 
 ## Đầu vào
-`script.md`, `sources.md`, `output/final.mp4`, `scene.json`.
+`script.md`, `sources.md` (nếu có), `output/final.mp4`, khung hình `keys/` (anime).
 
 ## Ảnh bìa (`output/thumbnail.png`, 1080×1920)
-Trích một khung hình đẹp nhất (nhân vật chính rõ mặt, hành động cao trào) bằng ffmpeg, hoặc tạo một `thumb.json` riêng (1 shot, 1 giây) với chữ lớn 2–4 từ cùng nhân vật chính, rồi render và trích khung đầu:
-```bash
-cd studio/engine && node render.mjs ../../projects/<slug>/thumb.json --name thumb && ffmpeg -v error -y -ss 0.9 -i ../../projects/<slug>/output/thumb.mp4 -frames:v 1 ../../projects/<slug>/output/thumbnail.png
-```
+Trích một khung hình đẹp nhất (nhân vật chính rõ mặt, hành động cao trào) bằng ffmpeg từ `final.mp4`, hoặc dùng khung hình đẹp nhất của họa sĩ trong `keys/` (anime). Thêm chữ lớn 2–4 từ nếu hợp (ffmpeg drawtext với font trong `studio/engine/fonts/`).
 Chữ trên ảnh bìa phải đọc được khi thu nhỏ: ≤4 từ, cỡ 160 trở lên, màu tương phản.
 
 ## `publish.md`

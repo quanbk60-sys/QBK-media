@@ -2,7 +2,7 @@
 // Dựng video 3D thực tế từ scene3d.json (three.js trong Chromium headless, miễn phí).
 // node render3d.mjs ../../projects/<slug>/scene3d.json [--from S] [--to S] [--name preview] [--fps 30]
 // Bố cục mặc định "blurband": khung 16:9 (1080x608) giữa màn 9:16, trên dưới là hình mờ phóng to (như mẫu TikTok 3D).
-// "layout": "full" thì dựng thẳng 1080x1920.
+// "layout": "full" thì dựng thẳng 1080x1920; "wide" dựng ngang 1920x1080 cho YouTube.
 import fs from 'node:fs';
 import path from 'node:path';
 import {spawn, spawnSync} from 'node:child_process';
@@ -14,7 +14,7 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname), FONTS = path.join(
 const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const file = args.find(a => a.endsWith('.json')); if (!file) { console.error('usage: node render3d.mjs scene3d.json [--from S] [--to S]'); process.exit(2); }
 const base = path.dirname(path.resolve(file)), s = JSON.parse(fs.readFileSync(file, 'utf8'));
-const fps = Number(opt('--fps', s.fps || 30)), full = s.layout === 'full', OW = 1080, OH = 1920, W = 1080, H = full ? 1920 : 608;
+const fps = Number(opt('--fps', s.fps || 30)), wide = s.layout === 'wide', full = s.layout === 'full' || wide, OW = wide ? 1920 : 1080, OH = wide ? 1080 : 1920, W = OW, H = wide ? 1080 : full ? 1920 : 608; // wide: YouTube ngang 1920x1080
 // captions: [{start,end,text}] + lead, split into chunks of <= 3 words (proportional timing)
 const lead = s.captions?.lead ?? s.narration?.lead ?? 0.15;
 const capsRaw = s.captions?.items || (s.captions?.path ? JSON.parse(fs.readFileSync(path.join(base, s.captions.path), 'utf8')) : []);
