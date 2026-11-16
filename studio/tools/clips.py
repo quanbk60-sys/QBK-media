@@ -85,8 +85,11 @@ def commons_url(it, height):
 # ---------------- NASA ----------------
 def nasa_item(x):
     d = (x.get('data') or [{}])[0]
+    by = d.get('secondary_creator') or d.get('photographer') or ''
+    # footage credited to someone other than NASA (a company, ESA, a TV network) is not automatically public domain
+    third = bool(by) and not re.search(r'nasa|jpl|goddard|kennedy|johnson|marshall|ames|langley|glenn|armstrong|stennis', by, re.I)
     return {'id': 'nasa:' + d.get('nasa_id', ''), 'source': 'NASA', 'title': d.get('title', ''), 'page': 'https://images.nasa.gov/details/' + urllib.parse.quote(d.get('nasa_id', '')),
-            'author': d.get('secondary_creator') or d.get('photographer') or d.get('center') or 'NASA', 'license': 'Public domain (NASA)', 'license_ok': True,
+            'author': by or d.get('center') or 'NASA', 'license': 'Public domain (NASA)' if not third else f'Không rõ (quay bởi {by})', 'license_ok': not third,
             'duration': None, 'desc': strip_html(d.get('description', ''))[:160],
             'note': 'NASA media thường thuộc phạm vi công cộng; nếu mô tả ghi bên thứ ba (ESA, công ty, đài truyền hình) thì không dùng.'}
 
