@@ -89,11 +89,12 @@ Công cụ: `studio/tools/commons.py` (tải ảnh + tác giả, giấy phép), 
 - Người que, đạo cụ, camera, sfx tổng hợp (nổ, gió, pop) của engine 2D.
 - Bố cục khung con trên nền khác màu: `thi-nghiem` (khung 16:9 giữa màn, render ghép 1080×1920).
 
+## Đã làm (16/11/2026)
+- Gói **`ty-phu`** (`lib/typhu.mjs`): `panel` (ảnh, ghép đôi `split`, clip video), `headline` cố định có từ khóa vàng, `counter`, `timeline`, `chip`, nền navy với biểu tượng QBK (đồ thị đi lên trong đồng xu). Đạo cụ `rocket`, `fireball`; sfx `boom`, `rocket`. Đoạn mẫu `studio/engine/examples/styles/ty-phu/sample.mp4` (ảnh Musk năm 2008 CC BY/CC BY-SA, Falcon 1 lần 4 của SpaceX CC0; "clip" trong đoạn mẫu là ảnh CC0 có zoom, chỉ để thử đường clip).
+
 ## Còn thiếu
-- **Gói phong cách `ty-phu`:** ô hình trên 56% + tiêu đề cố định có từ khóa vàng + nền navy có hoa văn mờ (QBK dùng biểu tượng riêng, ví dụ đồng xu hoặc biểu đồ đi lên nét mảnh, không dùng quả địa cầu của mẫu).
-- Ô hình nhận **clip video** (hiện `photo` chỉ nhận ảnh tĩnh): đọc khung từ file mp4/webm.
-- **Ghép đôi** trong ô hình (trên–dưới, trái–phải) kèm đường chia mảnh.
-- **Bộ đếm số tài sản** nhảy số ("$869 TỈ"), thanh so sánh, dòng thời gian năm.
+- Thanh so sánh tài sản nhiều người.
+- Người que có nét nhận diện riêng (kiểu tóc, kính) cho từng tỉ phú.
 - Cảnh vẽ thay cho clip báo chí: người que có nét nhận diện (tóc, áo), đạo cụ tên lửa, quả cầu lửa, xấp tiền, đồ thị cổ phiếu.
 - Âm thanh: nhạc cinematic có giấy phép (xem skill `am-thanh`), sfx tên lửa gầm.
 

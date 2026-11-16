@@ -26,6 +26,11 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Bản đăng: nén lại khoảng 1,65 Mbps và chuẩn hóa âm lượng về −14 LUFS (ảnh vệ tinh làm file gốc nặng 70MB). Không commit file gốc. *(Bạch Đằng ve-tinh)*
 - Mô tả đăng bài không được nói quá kịch bản (ví dụ "cả ba trận đều dùng cọc" là sai). *(Bạch Đằng ve-tinh)*
 
+## Phong cách tỉ phú (`ty-phu`)
+- Video mẫu (TikTok 1,6 triệu lượt xem) dùng **ảnh báo chí, clip truyền hình, ảnh AI giả cảnh thật và ảnh sai năm**. QBK **không làm theo**: chỉ dùng ảnh và clip có giấy phép tự do, đúng sự kiện, đúng năm, có dòng ghi nguồn. Khoảnh khắc không có ảnh tự do thì vẽ bằng code và gắn nhãn "Minh họa". *(Học mẫu tỉ phú, 16/11/2026)*
+- Tài sản tỉ phú thay đổi từng ngày: luôn ghi "theo Forbes/Bloomberg, ngày …". Câu trích của nhân vật phải có nguồn gốc (phỏng vấn, sách, ngày); không có thì bỏ. *(Học mẫu tỉ phú)*
+- API Commons báo 429 thì `commons.py` tự đọc wikitext thô của trang File: (`index.php?action=raw`) để lấy tác giả, ngày, giấy phép. *(Học mẫu tỉ phú)*
+
 ## Phong cách phải khác nhau thật (người dùng, 09/11/2026)
 - "Các phong cách giống hệt nhau, chỉ khác nền" là lỗi. Mỗi phong cách có ngữ pháp riêng (nét, cách tô, cách hiện hình, chuyển cảnh, phụ đề), xem SCENE_FORMAT.md, mục "Ngữ pháp phong cách". Đạo diễn còn phải đổi cả bố cục và nhịp cho hợp phong cách.
 - Học từ mẫu 3D thực tế thì dựng bằng `studio/engine3d/`, không thay bằng nét vẽ trên giấy. Video làm đá bản nét vẽ đã bị người dùng chê "khác hoàn toàn mẫu".

@@ -2,6 +2,7 @@
 // scales line weight, paints a background treatment, styles captions and optionally applies a post filter.
 // Use in scene.json: "style": "bang-phan". List: node catalog.mjs
 import {COLORS, rng} from './math.mjs';
+import {paintTyPhuBg} from './typhu.mjs';
 
 export const STYLES = {
   'giay-muc':   { stroke: 'wobble', boil: true, transition: 'fade', hand: true,label: 'Giấy mực', genres: 'ngụ ngôn, lịch sử VN, kể chuyện', bg: '#F3EADB', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
@@ -37,6 +38,9 @@ export const STYLES = {
                  layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
 };
+STYLES['ty-phu'] = { stroke: 'clean', drawMode: 'pop', hand: false, transition: 'cut', label: 'Tỉ phú · ảnh thật', genres: 'tỉ phú, doanh nhân, thất bại → thành công, thương vụ (ô ảnh/clip thật trên, tiêu đề cố định vàng, nền navy)', bg: '#1F3150', deco: 'typhu', ink: '#FFFFFF', body: '#1F3150', lineScale: 1.1,
+  palette: {red: '#FF5A4E', navy: '#5B8BD9', gold: '#F5C842', green: '#4CC38A', paper: '#1F3150', sky: '#0B111C'},
+  captionHighlight: '#F5C842', captionY: 1500, caption: {color: '#FFFFFF', stroke: 'rgba(8,14,26,.95)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 10, titleFont: 'Sans'};
 export const STYLE_NAMES = Object.keys(STYLES);
 
 export function getStyle(name) {
@@ -61,6 +65,7 @@ export function paintBackground(ctx, st, W, H, frameNo) {
     case 'burst': ctx.save(); ctx.translate(W / 2, H * 0.42); for (let i = 0; i < 18; i++) { ctx.rotate(Math.PI / 9); if (i % 2) continue; ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(H, -150); ctx.lineTo(H, 150); ctx.closePath(); ctx.fill(); } ctx.restore(); break;
     case 'frame': ctx.lineWidth = 14; ctx.strokeStyle = '#B23A2E'; ctx.strokeRect(24, 24, W - 48, H - 48); ctx.lineWidth = 4; ctx.strokeStyle = '#3B2414'; ctx.strokeRect(46, 46, W - 92, H - 92);
       for (let i = 0; i < 900; i++) { ctx.fillStyle = `rgba(90,60,30,${(r() * 0.05).toFixed(3)})`; ctx.fillRect(r() * W, r() * H, 2, 2); } break;
+    case 'typhu': paintTyPhuBg(ctx, W, H); break;
     case 'vignette': { const g = ctx.createRadialGradient(W / 2, H * 0.45, H * 0.2, W / 2, H * 0.45, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); break; }
   }
 }

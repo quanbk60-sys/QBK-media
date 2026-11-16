@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`) | `ty-phu` (ô ảnh/clip thật phía trên, tiêu đề cố định có từ khóa vàng, nền navy; xem mục "Phong cách tỉ phú").
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -171,6 +171,25 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
+
+## Phong cách tỉ phú (`ty-phu`, `lib/typhu.mjs`)
+Học từ mẫu `studio/references/ty-phu-anh-that/card.md`. Đoạn mẫu: `examples/styles/ty-phu/sample.json`.
+
+Bố cục cố định (khung 1920): **ô hình** y 0–1080 (ảnh thật, ảnh ghép đôi, clip, hoặc ô tối cho cảnh vẽ bằng code) · **tiêu đề cố định** khoảng y 1140–1210 · **vùng số liệu** khoảng y 1290–1420 (`counter`, `timeline`) · **phụ đề** y 1500 (từ khóa vàng, đánh dấu bằng `*từ*`) · biểu tượng QBK mờ ở đáy. Chuyển cảnh mặc định `cut`.
+
+- Cấp scene: `"headline": "KHI BẠN *MUỐN BỎ CUỘC*, HÃY NHỚ…"` (từ trong `*…*` tô vàng, tự xuống tối đa 2 dòng). Hoặc `{text, y, size, maxLines}`. Shot có thể ghi đè bằng `headline` riêng.
+- Cảnh vẽ bằng code: đặt `panel` với `bg` rồi thêm `actor` và `prop` như thường, chân nhân vật khoảng y 1000, scale 0,8–0,9, **giữ trong y < 1080**. Gắn `chip` "Minh họa".
+
+| Phần tử | Thuộc tính |
+|---|---|
+| `panel` | ô hình. `path` (ảnh `.jpg/.png` hoặc clip `.mp4/.webm/.mov`), `focus` [fx,fy], `kenburns` (ảnh mặc định 1,1; clip 1), `credit` (**bắt buộc** "Tác giả · Giấy phép", hiện dạng nhãn góc dưới trái), `seek` (giây bắt đầu trong clip), `speed`. Ghép đôi: `paths` [{path, focus, credit}, …] + `split` `"v"` (trên–dưới) hoặc `"h"` (trái–phải), `stagger` (0,35 s). Ô trống cho cảnh vẽ: chỉ `bg` |
+| `counter` | số đếm nhảy: `value`, `start` (0), `prefix`, `suffix`, `decimals`, `dur` (1,2), `label` (dòng nhỏ dưới), `size` (120), `color` (vàng; `red`), `x`, `y` (1385) |
+| `timeline` | dòng năm: `years` [2006, 2007, 2008], `labels`, `at` (chỉ số mốc dừng), `dur`, `y` (1350), `x0`, `x1` |
+| `chip` | nhãn nhỏ: `text`, `x`, `y`, `align`, `bg` (`gold`, `dark`, `red`), `size` |
+
+Đạo cụ hợp phong cách: `rocket` (`flame` 0..1), `fireball` (`progress` 0..1). Sfx: `boom` (nổ), `rocket` (động cơ gầm, đặt `dur`).
+
+Ảnh và clip: chỉ dùng file có giấy phép tự do (CC0, PD, CC BY, CC BY-SA; NASA là phạm vi công cộng). Tải bằng `studio/tools/commons.py`. Clip Commons (`.webm`) dùng trực tiếp trong `panel`. **Ảnh phải đúng sự kiện và đúng năm**, nếu không thì ghi "minh họa". Engine cắt clip thành chuỗi JPEG trong RAM, nên mỗi clip nên ngắn hơn khoảng 10 giây.
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).

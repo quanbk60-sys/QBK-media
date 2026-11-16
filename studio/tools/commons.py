@@ -48,8 +48,16 @@ def main():
             pages = json.loads(get(api, 1))['query']['pages']; em = next(iter(pages.values()))['imageinfo'][0]['extmetadata']
             strip = lambda v: re.sub('<[^>]+>', '', v or '').strip()
             entry.setdefault('author', strip(em.get('Artist', {}).get('value'))); entry.setdefault('license', em.get('LicenseShortName', {}).get('value'))
-        except Exception:
-            entry.setdefault('author', None); entry.setdefault('license', None)
+        except Exception:  # API hay báo 429: đọc wikitext thô của trang File: (index.php?action=raw vẫn trả lời)
+            try:
+                wt = get('https://commons.wikimedia.org/w/index.php?action=raw&title=' + urllib.parse.quote(f), 2).decode('utf-8', 'ignore')
+                au = re.search(r'\|\s*Author\s*=\s*(.+)', wt); dt = re.search(r'\|\s*Date\s*=\s*([^\n|]+)', wt)
+                lic = re.findall(r'\{\{\s*(cc-[\w.-]+|cc0|pd-[\w-]+|gfdl[^}|]*|public domain)', wt, re.I)
+                a = re.sub(r'\[\S+\s([^\]]+)\]', r'\1', au.group(1)).strip() if au else None
+                entry.setdefault('author', re.sub(r'\s+from\s.*$', '', a) if a else None); entry.setdefault('license', lic[0].upper() if lic else None)
+                if dt: entry.setdefault('date', dt.group(1).strip())
+            except Exception:
+                entry.setdefault('author', None); entry.setdefault('license', None)
         meta[f] = entry; print('ok', dst, os.path.getsize(dst) // 1024, 'KB')
     json.dump(meta, open(mf, 'w'), ensure_ascii=False, indent=1)
 

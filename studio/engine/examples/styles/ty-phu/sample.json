@@ -1,0 +1,34 @@
+{
+ "style": "ty-phu",
+ "fps": 30,
+ "duration": 8.4,
+ "textFollowsCamera": true,
+ "headline": "NĂM 2008, *ELON MUSK* CHỈ CÒN *MỘT LẦN PHÓNG CUỐI CÙNG*",
+ "captions": {"items": [
+  {"start": 0.1, "end": 2.9, "text": "Năm 2008, Elon Musk *37* tuổi."},
+  {"start": 3.0, "end": 5.4, "text": "Tên lửa của ông đã hỏng *ba* lần liên tiếp."},
+  {"start": 5.5, "end": 8.3, "text": "Ngày 28/9/2008, lần thứ tư *bay* vào quỹ đạo."}
+ ]},
+ "cast": {"musk": {"body": "#2B2F36"}},
+ "shots": [
+  {"start": 0, "end": 3, "elements": [
+   {"type": "panel", "split": "h", "paths": [
+     {"path": "photos/elon-musk-2779423491.jpg", "focus": [0.5, 0.25], "credit": "Chris Radcliff · CC BY-SA 2.0"},
+     {"path": "photos/elon-musk-3017880199.jpg", "focus": [0.75, 0.3], "credit": "JD Lasica · CC BY 2.0"}], "kenburns": 1.12},
+   {"type": "chip", "text": "2008", "x": 40, "y": 50, "from": 0.4},
+   {"type": "counter", "value": 37, "suffix": " TUỔI", "label": "Elon Musk năm 2008", "from": 0.3, "dur": 1}
+  ], "sfx": [{"t": 0.05, "kind": "whoosh"}]},
+  {"start": 3, "end": 5.5, "elements": [
+   {"type": "panel", "bg": "#0B111C"},
+   {"type": "prop", "name": "fireball", "x": 700, "y": 470, "ptrack": [{"t": 0, "progress": 0}, {"t": 0.5, "progress": 1}], "params": {"size": 1.2}},
+   {"type": "actor", "cast": "musk", "x": 300, "y": 1010, "scale": 0.85, "facing": 1, "acting": [{"t": 0, "pose": "stand", "expr": "surprised"}, {"t": 0.9, "pose": "sad", "expr": "sad"}]},
+   {"type": "chip", "text": "Minh họa", "bg": "dark", "align": "right", "x": 1040, "y": 50, "size": 26},
+   {"type": "timeline", "years": [2006, 2007, 2008], "labels": ["Thất bại", "Thất bại", "Thất bại"], "at": 2, "dur": 1.4}
+  ], "sfx": [{"t": 0.05, "kind": "boom"}]},
+  {"start": 5.5, "end": 8.4, "elements": [
+   {"type": "panel", "path": "clip-launch.mp4", "credit": "SpaceX · CC0"},
+   {"type": "chip", "text": "28/9/2008", "x": 40, "y": 50, "from": 0.3},
+   {"type": "counter", "value": 4, "prefix": "LẦN ", "label": "Falcon 1 vào quỹ đạo", "from": 0.4, "dur": 0.6}
+  ], "sfx": [{"t": 0.1, "kind": "rocket", "dur": 2.6}, {"t": 1.2, "kind": "cheer"}]}
+ ]
+}

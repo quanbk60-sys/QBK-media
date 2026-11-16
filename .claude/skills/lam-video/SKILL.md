@@ -1,6 +1,6 @@
 ---
 name: lam-video
-description: Đoàn phim QBK. Từ một chủ đề, làm trọn video hoạt hình 9:16 (TikTok, YouTube Shorts) vẽ 100% bằng code với 9 gói phong cách, có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
+description: Đoàn phim QBK. Từ một chủ đề, làm trọn video hoạt hình 9:16 (TikTok, YouTube Shorts) vẽ 100% bằng code với 12 gói phong cách, có giọng đọc tiếng Việt, phụ đề, âm thanh và bộ đăng bài, rồi gửi người dùng duyệt và sửa theo góp ý. Dùng khi người dùng nói "làm video", "/lam-video <chủ đề>", "làm video tiếp theo", hoặc gửi góp ý cho một video đã làm.
 ---
 
 # /lam-video: Nhà sản xuất điều phối đoàn phim (quy trình v2)
@@ -67,6 +67,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Bí ẩn, chuyện lạ | `phim-cam` |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
+| Tỉ phú, doanh nhân, "thất bại → thành công", thương vụ (ảnh và clip thật có giấy phép + cảnh vẽ minh họa) | `ty-phu` (cần mạng tới upload.wikimedia.org; xem `studio/references/ty-phu-anh-that/card.md`, mục "Phong cách tỉ phú" trong SCENE_FORMAT.md; biên kịch theo cấu trúc 5 nhịp trong thẻ) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
 

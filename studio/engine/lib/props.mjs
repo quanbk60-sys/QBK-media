@@ -312,6 +312,25 @@ export const PROPS = {
     ctx.beginPath(); ctx.arc(66, -38, 6, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill();
     ctx.restore();
   },
+  // Tên lửa một tầng (kiểu Falcon 1). Neo = đáy giữa. p.size (1), p.flame 0..1 (lửa đuôi), p.color thân (steel), p.band (navy)
+  rocket(ctx, p, t) {
+    const s = p.size ?? 1, f = p.flame ?? 0; ctx.save(); ctx.scale(s, s);
+    if (f > 0) { const fl = 1 + Math.sin(t * 40) * 0.12; poly(ctx, [[-26, 0], [0, 150 * f * fl], [26, 0]], '#FF9F1C', 4, '#E85D04'); poly(ctx, [[-13, 0], [0, 85 * f * fl], [13, 0]], '#FFE066', 0); }
+    poly(ctx, [[-34, 0], [-58, 6], [-34, -70]], 'red', 5); poly(ctx, [[34, 0], [58, 6], [34, -70]], 'red', 5);
+    poly(ctx, [[-34, 0], [34, 0], [34, -380], [-34, -380]], p.color || '#E8ECF1', 5);
+    poly(ctx, [[-34, -300], [34, -300], [34, -325], [-34, -325]], p.band || 'navy', 0);
+    poly(ctx, [[-34, -380], [34, -380], [0, -470]], p.color || '#E8ECF1', 5);
+    ctx.restore();
+  },
+  // Quả cầu lửa nổ. Neo = tâm. p.progress 0..1 (to dần), p.size (1)
+  fireball(ctx, p, t) {
+    const s = (p.size ?? 1) * (0.25 + 0.75 * (p.progress ?? 1)); ctx.save(); ctx.scale(s, s);
+    const ring = (r, n, c, ph) => { ctx.beginPath(); for (let i = 0; i <= n * 2; i++) { const a = i / (n * 2) * Math.PI * 2, rr = r * (i % 2 ? 0.72 : 1) * (1 + 0.06 * Math.sin(t * 9 + i + ph)); i ? ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : ctx.moveTo(rr, 0); } ctx.closePath(); ctx.fillStyle = c; ctx.fill(); };
+    ctx.globalAlpha = 0.35; ctx.fillStyle = '#4A4E57'; for (let i = 0; i < 6; i++) { const a = i * 1.05 + t * 0.4; ctx.beginPath(); ctx.arc(Math.cos(a) * 190, Math.sin(a) * 150 - 40, 70, 0, Math.PI * 2); ctx.fill(); }
+    ctx.globalAlpha = 1;
+    ring(220, 11, '#E85D04', 0); ring(165, 9, '#FF9F1C', 1.3); ring(105, 8, '#FFE066', 2.1);
+    ctx.restore();
+  },
 };
 PROPS.finishFlag = PROPS.checkerFlag;
 PROPS.thoughtBubble = PROPS.thought;

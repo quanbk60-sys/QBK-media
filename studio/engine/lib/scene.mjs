@@ -10,6 +10,7 @@ import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
+import {TP_TYPES, validateTyPhu, drawTyPhu, preloadTyPhu, prepareTyPhu, paintHeadline} from './typhu.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -30,7 +31,7 @@ export function loadScene(file) {
   s.styleDef = getStyle(s.style);
   // blurband layout: draw a 16:9 band; render.mjs places it in the middle of the 9:16 frame over a blurred enlarged copy
   if (s.styleDef.layout === 'blurband') { s.outHeight = s.height; s.height = Math.round(s.width * 9 / 16 / 2) * 2; }
-  s.captionStyle = {y: cap.y ?? (s.outHeight ? s.height - 62 : Math.round(s.height * 0.73)), size: cap.size ?? (s.outHeight ? 46 : 58), color: cap.color || '#2A2723', maxWidth: s.width - 120};
+  s.captionStyle = {y: cap.y ?? s.styleDef.captionY ?? (s.outHeight ? s.height - 62 : Math.round(s.height * 0.73)), size: cap.size ?? (s.outHeight ? 46 : 58), color: cap.color || '#2A2723', maxWidth: s.width - 120};
   s.captionItems = items.map(c => ({start: c.start + lead, end: c.end + lead, text: c.text}));
   if (!s.duration) s.duration = Math.max(...s.shots.map(x => x.end), ...s.captionItems.map(c => c.end + 0.4), 1);
   validate(s);
@@ -50,6 +51,7 @@ export function validate(s) {
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
       else if (validateGeo(s, e, where, err)) {}
+      else if (validateTyPhu(s, e, where, err)) {}
       else if (e.type === 'image') { if (!fs.existsSync(path.join(s.base, e.path))) err(`${where}: missing image ${e.path}`); }
       else err(`${where}: unknown type "${e.type}"`);
     }
@@ -91,7 +93,7 @@ function transform(e, t) {
 const images = new Map();
 async function img(s, p) { const { loadImage } = await import('@napi-rs/canvas'); const f = path.join(s.base, p); if (!images.has(f)) images.set(f, await loadImage(f)); return images.get(f); }
 
-export async function preloadImages(s) { await preloadGeo(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
+export async function preloadImages(s) { await preloadGeo(s); await preloadTyPhu(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
 
 function recordElement(s, e, t, sceneT) {
   const R = new Recorder(); const {x, y, sc, rot} = transform(e, t);
@@ -128,6 +130,7 @@ export function makeRenderer(s) {
     const view = sampleView(sh.view, t);
     for (const [idx, e] of (sh.elements || []).entries()) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
+      if (TP_TYPES.includes(e.type)) { ctx.save(); drawTyPhu(ctx, e, t, s, sh.end - sh.start); ctx.restore(); continue; }
       if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
       if (e.geo) { e._view = view; e._s = s; }
       if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
@@ -167,6 +170,8 @@ export function makeRenderer(s) {
       else if (tr === 'smudge') { const r = rng(fno); ctx.globalAlpha = 1 - k; ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = (1 - k) * 0.5; ctx.fillStyle = ST.ink; for (let i = 0; i < 40; i++) ctx.fillRect(r() * W, r() * H, 80 + r() * 200, 3); }
       ctx.restore();
     }
+    // fixed headline (style ty-phu or any scene with "headline"): above transitions, under captions
+    const hl = sh.headline ?? s.headline; if (hl) paintHeadline(ctx, s, hl);
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
     if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
@@ -195,7 +200,7 @@ export function makeRenderer(s) {
       } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
     return {drawing};
   }
-  return {cv, ctx, frame, events};
+  return {cv, ctx, frame, events, prepare: T => prepareTyPhu(s, T)};
 }
 
 // Split captions that would wrap into two timed halves at the space nearest the middle (proportional timing).
