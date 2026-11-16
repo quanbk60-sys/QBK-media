@@ -1,0 +1,437 @@
+{
+ "width": 1080,
+ "height": 1920,
+ "fps": 30,
+ "style": "ban-tin",
+ "duration": 22.89,
+ "narration": {
+  "path": "audio/narration.wav",
+  "lead": 0.15
+ },
+ "captions": {
+  "path": "captions-audio.json",
+  "lead": 0.15
+ },
+ "music": {
+  "path": "audio/bed.wav",
+  "gain": 0.07
+ },
+ "scribbleGain": 0,
+ "shots": [
+  {
+   "start": 0,
+   "end": 3.55,
+   "elements": [
+    {
+     "type": "headline",
+     "text": "ChatGPT ra mắt",
+     "source": "Nguồn: history.com · OpenAI công bố 30/11/2022"
+    },
+    {
+     "type": "prop",
+     "name": "chatWindow",
+     "x": 650,
+     "y": 690,
+     "params": {
+      "w": 600
+     },
+     "draw": {
+      "at": 0.15,
+      "dur": 0.9,
+      "hand": false
+     }
+    },
+    {
+     "type": "prop",
+     "name": "calendar",
+     "x": 200,
+     "y": 1040,
+     "params": {
+      "top": "THÁNG 11",
+      "day": "30",
+      "w": 250
+     },
+     "draw": {
+      "at": 0.95,
+      "dur": 0.6,
+      "hand": false
+     }
+    },
+    {
+     "type": "label",
+     "text": "2022",
+     "x": 200,
+     "y": 1235,
+     "size": 54,
+     "color": "red",
+     "from": 1.5
+    },
+    {
+     "type": "stamp",
+     "text": "Ra mắt",
+     "x": 740,
+     "y": 1060,
+     "rotate": -0.22,
+     "from": 1.9
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.9,
+     "kind": "pop",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 3.55,
+   "end": 6.0,
+   "elements": [
+    {
+     "type": "headline",
+     "text": "5 ngày: 1 triệu người dùng",
+     "source": "Nguồn: Sam Altman, theo history.com"
+    },
+    {
+     "type": "counter",
+     "from": 0,
+     "to": 1000000,
+     "x": 540,
+     "y": 560,
+     "size": 118,
+     "dur": 1.6
+    },
+    {
+     "type": "label",
+     "text": "người dùng",
+     "x": 540,
+     "y": 680,
+     "size": 52,
+     "from": 0.3
+    },
+    {
+     "type": "prop",
+     "name": "people",
+     "x": 540,
+     "y": 900,
+     "params": {
+      "n": 5,
+      "size": 80
+     },
+     "draw": {
+      "at": 0.4,
+      "dur": 0.9,
+      "hand": false
+     }
+    },
+    {
+     "type": "prop",
+     "name": "timeline",
+     "x": 540,
+     "y": 1130,
+     "params": {
+      "w": 720,
+      "ticks": 5,
+      "from": "30/11",
+      "to": "5/12"
+     },
+     "draw": {
+      "at": 0.9,
+      "dur": 1.0,
+      "hand": false
+     }
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "pop",
+     "gain": 0.25
+    },
+    {
+     "t": 1.6,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 6.0,
+   "end": 9.55,
+   "elements": [
+    {
+     "type": "headline",
+     "text": "Hai tháng sau",
+     "source": "Nguồn: Reuters 02/02/2023 · ghi chú UBS, dữ liệu Similarweb"
+    },
+    {
+     "type": "card",
+     "x": 540,
+     "y": 790,
+     "w": 760,
+     "ratio": 0.56,
+     "textSize": 31,
+     "titleSize": 40,
+     "rotate": -0.012,
+     "site": "Reuters · 02/02/2023 (tóm tắt)",
+     "title": "ChatGPT lập kỷ lục tăng người dùng nhanh nhất",
+     "lines": [
+      "Theo ghi chú của ngân hàng UBS, ChatGPT ước tính",
+      "đạt *100 triệu người dùng mỗi tháng* vào tháng 1,",
+      "chỉ hai tháng sau khi ra mắt.",
+      "Số liệu dựa trên dữ liệu của Similarweb."
+     ],
+     "markAt": 1.6,
+     "from": 0.1,
+     "enter": "slide-up"
+    },
+    {
+     "type": "badge",
+     "text": "UBS",
+     "x": 870,
+     "y": 520,
+     "r": 70,
+     "from": 2.0
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "whoosh",
+     "gain": 0.25
+    },
+    {
+     "t": 2.0,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 9.55,
+   "end": 14.55,
+   "elements": [
+    {
+     "type": "headline",
+     "text": "~100 triệu người dùng/tháng",
+     "source": "Nguồn: Reuters · ước tính của UBS"
+    },
+    {
+     "type": "prop",
+     "name": "rocket",
+     "x": 290,
+     "y": 820,
+     "params": {
+      "size": 330
+     },
+     "draw": {
+      "at": 0.05,
+      "dur": 0.8,
+      "hand": false
+     }
+    },
+    {
+     "type": "box",
+     "x": 690,
+     "y": 690,
+     "w": 520,
+     "h": 200,
+     "text": "~100 triệu",
+     "sub": "người dùng mỗi tháng",
+     "from": 0.6
+    },
+    {
+     "type": "label",
+     "text": "Ứng dụng tiêu dùng\ntăng nhanh nhất",
+     "x": 690,
+     "y": 930,
+     "size": 46,
+     "from": 2.1
+    },
+    {
+     "type": "label",
+     "text": "(lúc đó)",
+     "x": 690,
+     "y": 1050,
+     "size": 38,
+     "color": "gray",
+     "from": 3.4
+    },
+    {
+     "type": "stamp",
+     "text": "Kỷ lục",
+     "x": 330,
+     "y": 1150,
+     "rotate": -0.28,
+     "from": 2.4
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.6,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 2.4,
+     "kind": "pop",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 14.55,
+   "end": 19.3,
+   "elements": [
+    {
+     "type": "headline",
+     "text": "Thời gian đạt 100 triệu người dùng",
+     "source": "Nguồn: Sensor Tower, theo Reuters"
+    },
+    {
+     "type": "label",
+     "text": "ChatGPT",
+     "x": 100,
+     "y": 560,
+     "size": 50,
+     "align": "left",
+     "from": 0.2
+    },
+    {
+     "type": "box",
+     "x": 128.66666666666666,
+     "y": 640,
+     "w": 57.333333333333336,
+     "h": 64,
+     "color": "blue",
+     "from": 0.35
+    },
+    {
+     "type": "label",
+     "text": "2 tháng",
+     "x": 181.33333333333334,
+     "y": 640,
+     "size": 50,
+     "align": "left",
+     "color": "blue",
+     "from": 0.6
+    },
+    {
+     "type": "label",
+     "text": "TikTok",
+     "x": 100,
+     "y": 790,
+     "size": 50,
+     "align": "left",
+     "from": 1.3
+    },
+    {
+     "type": "box",
+     "x": 229.0,
+     "y": 870,
+     "w": 258.0,
+     "h": 64,
+     "color": "red",
+     "from": 1.4500000000000002
+    },
+    {
+     "type": "label",
+     "text": "~9 tháng",
+     "x": 382.0,
+     "y": 870,
+     "size": 50,
+     "align": "left",
+     "color": "red",
+     "from": 1.7000000000000002
+    },
+    {
+     "type": "label",
+     "text": "Instagram",
+     "x": 100,
+     "y": 1020,
+     "size": 50,
+     "align": "left",
+     "from": 2.4000000000000004
+    },
+    {
+     "type": "box",
+     "x": 530.0,
+     "y": 1100,
+     "w": 860.0,
+     "h": 64,
+     "color": "red",
+     "from": 2.5500000000000003
+    },
+    {
+     "type": "label",
+     "text": "2,5 năm",
+     "x": 980,
+     "y": 1020,
+     "size": 50,
+     "align": "right",
+     "color": "red",
+     "from": 2.8000000000000003
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.35,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 1.4500000000000002,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 2.5500000000000003,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 19.3,
+   "end": 22.89,
+   "elements": [
+    {
+     "type": "label",
+     "text": "Bạn nghĩ sao?",
+     "x": 540,
+     "y": 470,
+     "size": 104,
+     "underline": true
+    },
+    {
+     "type": "qbox",
+     "n": 1,
+     "text": "Bạn bắt đầu dùng ChatGPT từ khi nào?",
+     "x": 540,
+     "y": 730,
+     "from": 0.5
+    },
+    {
+     "type": "qbox",
+     "n": 2,
+     "text": "Bạn hay dùng nó để làm gì?",
+     "x": 540,
+     "y": 930,
+     "from": 1.5
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.5,
+     "kind": "pop",
+     "gain": 0.35
+    },
+    {
+     "t": 1.5,
+     "kind": "pop",
+     "gain": 0.35
+    }
+   ]
+  }
+ ]
+}

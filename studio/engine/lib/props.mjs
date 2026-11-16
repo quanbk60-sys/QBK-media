@@ -1,6 +1,7 @@
 // Procedural props. Each draws with origin at its anchor (ground-centre for objects, centre for icons).
 // Signature: (ctx, p = params, t = seconds) — must only use the Recorder-compatible Canvas API.
 import {color} from './math.mjs';
+import {NEWS_PROPS} from './news-props.mjs';
 
 const INK = '#2A2723';
 function poly(ctx, pts, fill, w = 5, stroke = INK) { ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); if (fill) { ctx.fillStyle = color(fill); ctx.fill(); } if (w) { ctx.lineWidth = w; ctx.strokeStyle = stroke; ctx.stroke(); } }
@@ -312,6 +313,7 @@ export const PROPS = {
     ctx.beginPath(); ctx.arc(66, -38, 6, 0, Math.PI * 2); ctx.fillStyle = INK; ctx.fill();
     ctx.restore();
   },
+  ...NEWS_PROPS,
 };
 PROPS.finishFlag = PROPS.checkerFlag;
 PROPS.thoughtBubble = PROPS.thought;

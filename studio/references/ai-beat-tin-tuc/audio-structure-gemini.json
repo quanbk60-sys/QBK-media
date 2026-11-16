@@ -1,0 +1,806 @@
+{
+  "voice": {
+    "gender": "male",
+    "age_feel": "young adult (25-35)",
+    "tts_or_human": "TTS (AI voice, natural inflection)",
+    "pace_words_per_min": 150,
+    "pitch": "medium",
+    "energy": "moderate, journalistic",
+    "tone": "informative, analytical, engaging",
+    "notable": "clear diction, slight dramatic pauses at sentence breaks"
+  },
+  "music": {
+    "present": true,
+    "genre": "ambient lo-fi synth",
+    "mood": "contemplative, subtle suspense",
+    "level_vs_voice_db": "-18dB",
+    "changes": [
+      {
+        "t_ms": 0,
+        "what": "low synth bed begins"
+      },
+      {
+        "t_ms": 40000,
+        "what": "tempo remains steady, light percussive beat continues"
+      },
+      {
+        "t_ms": 137000,
+        "what": "music soft fade towards call-to-action outro"
+      }
+    ]
+  },
+  "sfx": [
+    {
+      "t_ms": 1200,
+      "kind": "stamp",
+      "what_triggers": "red stamp 'ĐÃ RỜI NVIDIA' slaps onto photo"
+    },
+    {
+      "t_ms": 2100,
+      "kind": "pop",
+      "what_triggers": "Elon Musk photo card appears"
+    },
+    {
+      "t_ms": 3200,
+      "kind": "pop",
+      "what_triggers": "speech bubble 'That would be an honor' pops up"
+    },
+    {
+      "t_ms": 4000,
+      "kind": "pop",
+      "what_triggers": "CEO badge badge appears"
+    },
+    {
+      "t_ms": 6200,
+      "kind": "woosh",
+      "what_triggers": "scene wipes to stock chart"
+    },
+    {
+      "t_ms": 7100,
+      "kind": "whoosh",
+      "what_triggers": "red graph plunges downward"
+    },
+    {
+      "t_ms": 15600,
+      "kind": "paper",
+      "what_triggers": "Wikipedia card slides in"
+    },
+    {
+      "t_ms": 20800,
+      "kind": "marker",
+      "what_triggers": "timeline animation draws across screen"
+    },
+    {
+      "t_ms": 27200,
+      "kind": "pop",
+      "what_triggers": "pie chart ring animates to 80%"
+    },
+    {
+      "t_ms": 34000,
+      "kind": "whoosh",
+      "what_triggers": "bar chart bars grow upwards"
+    },
+    {
+      "t_ms": 41200,
+      "kind": "click",
+      "what_triggers": "GPU card drawing reveals CUDA module"
+    },
+    {
+      "t_ms": 55000,
+      "kind": "paper",
+      "what_triggers": "AlexNet paper page slides in"
+    },
+    {
+      "t_ms": 65000,
+      "kind": "camera shutter",
+      "what_triggers": "news article headline snaps onto screen"
+    },
+    {
+      "t_ms": 114000,
+      "kind": "stamp",
+      "what_triggers": "red 'NGHI VẤN' stamp appears"
+    },
+    {
+      "t_ms": 133500,
+      "kind": "pop",
+      "what_triggers": "X post screenshot enters"
+    },
+    {
+      "t_ms": 151500,
+      "kind": "woosh",
+      "what_triggers": "temple bank icon animates"
+    },
+    {
+      "t_ms": 207500,
+      "kind": "flip",
+      "what_triggers": "calendar page turns to Nov 17"
+    },
+    {
+      "t_ms": 218000,
+      "kind": "pop",
+      "what_triggers": "question box 1 appears"
+    },
+    {
+      "t_ms": 221000,
+      "kind": "pop",
+      "what_triggers": "question box 2 appears"
+    }
+  ],
+  "transcript": [
+    {
+      "start_ms": 0,
+      "end_ms": 1800,
+      "text": "Jensen Huang đã rời Nvidia,"
+    },
+    {
+      "start_ms": 1800,
+      "end_ms": 5500,
+      "text": "ngay lập tức Elon Musk muốn mời ông làm CEO cho công ty chip của mình."
+    },
+    {
+      "start_ms": 5600,
+      "end_ms": 11500,
+      "text": "Nvidia lao dốc hơn mười phần trăm trước giờ mở cửa, và hơn sáu trăm tỷ đô la vốn hóa biến mất trong tuần."
+    },
+    {
+      "start_ms": 11600,
+      "end_ms": 15200,
+      "text": "Vậy không còn Jensen Huang, cuộc đua AI sẽ đi về đâu?"
+    },
+    {
+      "start_ms": 15300,
+      "end_ms": 20400,
+      "text": "Sinh ở Đài Loan, Jensen sang Mỹ năm chín tuổi và từng rửa bát tại Denny's khi mới mười lăm."
+    },
+    {
+      "start_ms": 20500,
+      "end_ms": 26400,
+      "text": "Năm 1993, ông cùng hai kỹ sư lập Nvidia, rồi làm CEO suốt ba mươi ba năm."
+    },
+    {
+      "start_ms": 26500,
+      "end_ms": 33200,
+      "text": "Đến năm 2025, Nvidia nắm hơn tám mươi phần trăm thị trường GPU phục vụ huấn luyện và vận hành AI."
+    },
+    {
+      "start_ms": 33300,
+      "end_ms": 37200,
+      "text": "Nvidia thành công ty đầu tiên từng chạm vốn hóa năm nghìn tỷ đô la."
+    },
+    {
+      "start_ms": 37300,
+      "end_ms": 40500,
+      "text": "Jensen được mệnh danh là \"Mr. AI\"."
+    },
+    {
+      "start_ms": 40600,
+      "end_ms": 47200,
+      "text": "Năm 2006, Nvidia đưa CUDA lên mọi card game, để GPU làm tính toán chung chứ không chỉ xử lý đồ họa."
+    },
+    {
+      "start_ms": 47300,
+      "end_ms": 54200,
+      "text": "Khi đó, nhiều người chê đây là đốt tiền: chi phí tăng năm mươi phần trăm, còn giá trị Nvidia rơi về khoảng một tỷ rưỡi đô la."
+    },
+    {
+      "start_ms": 54300,
+      "end_ms": 59100,
+      "text": "Rồi năm 2012, chính CUDA mở ra thời kỳ deep learning, tiền đề cho AI."
+    },
+    {
+      "start_ms": 59200,
+      "end_ms": 64800,
+      "text": "Hôm nay AI chạy trên CUDA, và canh bạc ấy đã được chứng minh tầm nhìn vượt thời đại của CEO này."
+    },
+    {
+      "start_ms": 64900,
+      "end_ms": 73200,
+      "text": "Ngày 29 tháng 10, The New York Times viết rằng quan chức Mỹ tin Jensen có quan hệ gần gũi với một nữ doanh nhân bị tình báo Mỹ nghi ngờ làm gián điệp cho Trung Quốc."
+    },
+    {
+      "start_ms": 73300,
+      "end_ms": 75800,
+      "text": "Nghi ngờ đó chưa phải kết luận."
+    },
+    {
+      "start_ms": 75900,
+      "end_ms": 80800,
+      "text": "Ngày 8 tháng 11, Jensen thừa nhận ngoại tình, nhưng phủ nhận làm lộ bí mật Nvidia."
+    },
+    {
+      "start_ms": 80900,
+      "end_ms": 89000,
+      "text": "Ngày 11, The New York Times đưa tin về vụ việc thứ hai với một phó chủ tịch Nvidia báo cáo cho ông, còn WSJ nói hội đồng quản trị chuẩn bị bãi nhiệm."
+    },
+    {
+      "start_ms": 89100,
+      "end_ms": 93200,
+      "text": "Ngày 12 tháng 11, tức hôm nay, ông từ chức CEO."
+    },
+    {
+      "start_ms": 93300,
+      "end_ms": 99000,
+      "text": "Tài khoản tài chính Zerohedge viết: \"Elon please hire Jensen\", và Musk đáp: \"That would be an honor\"."
+    },
+    {
+      "start_ms": 99100,
+      "end_ms": 103800,
+      "text": "Musk còn đổi bio trên X gắn link tới trang chủ tuyển dụng công ty chip của mình."
+    },
+    {
+      "start_ms": 103900,
+      "end_ms": 107600,
+      "text": "Terafab là dự án nhà máy chip của Tesla, SpaceX và xAI."
+    },
+    {
+      "start_ms": 107700,
+      "end_ms": 111200,
+      "text": "Người ta viết \"game over\" nếu Jensen đầu quân cho Musk."
+    },
+    {
+      "start_ms": 111300,
+      "end_ms": 114200,
+      "text": "Nvidia được gọi là \"ngân hàng trung ương của AI\"."
+    },
+    {
+      "start_ms": 114300,
+      "end_ms": 121800,
+      "text": "Một trader nói Nvidia bán chip rồi cho khách vay tiền, nên nếu hãng rút lại, các công ty AI nhỏ có thể mất nguồn vốn."
+    },
+    {
+      "start_ms": 121900,
+      "end_ms": 127200,
+      "text": "Bill Blain thấy niềm tin AI đã lung lay nhiều tháng, còn Robert Greifeld nói chưa có bong bóng nào để vỡ."
+    },
+    {
+      "start_ms": 127300,
+      "end_ms": 131200,
+      "text": "Điều phải theo dõi tiếp theo là báo cáo quý Nvidia ngày 17 tháng 11."
+    },
+    {
+      "start_ms": 131300,
+      "end_ms": 137500,
+      "text": "Câu trả lời là: chip và CUDA vẫn ở đó, nhưng người từng đặt cược cho thập kỷ tiếp theo thì đã rời đi."
+    },
+    {
+      "start_ms": 137600,
+      "end_ms": 147000,
+      "text": "Không có Jensen, Nvidia còn dẫn đầu AI được không? Và Elon Musk có nên đưa ông về Terafab không? Hãy để lại ý kiến của bạn."
+    }
+  ],
+  "structure": [
+    {
+      "start_ms": 0,
+      "end_ms": 15200,
+      "section": "hook",
+      "summary": "Tin giả định Jensen rời Nvidia, Elon ngỏ lời, cổ phiếu rớt giá"
+    },
+    {
+      "start_ms": 15300,
+      "end_ms": 64800,
+      "section": "bối cảnh",
+      "summary": "Hành trình xây dựng Nvidia, ván cược CUDA và vị thế độc tôn AI"
+    },
+    {
+      "start_ms": 64900,
+      "end_ms": 93200,
+      "section": "diễn biến",
+      "summary": "Chuỗi bê bối điều tra, ngoại tình và đơn từ chức CEO"
+    },
+    {
+      "start_ms": 93300,
+      "end_ms": 111200,
+      "section": "phản ứng",
+      "summary": "Elon Musk chèo kéo Jensen về dự án Terafab"
+    },
+    {
+      "start_ms": 111300,
+      "end_ms": 127200,
+      "section": "phân tích",
+      "summary": "Tác động hệ thống lên ngành AI và rủi ro chuỗi vốn"
+    },
+    {
+      "start_ms": 127300,
+      "end_ms": 137500,
+      "section": "kết",
+      "summary": "CUDA còn nhưng mất linh hồn kiến tạo tương lai"
+    },
+    {
+      "start_ms": 137600,
+      "end_ms": 147000,
+      "section": "CTA",
+      "summary": "Đặt hai câu hỏi thảo luận về Nvidia và Terafab"
+    }
+  ],
+  "visual_grammar": {
+    "background": "kem nhạt vân giấy sần (creamy textured sketch paper)",
+    "headline_style": "chữ in không chân đen đậm ở trên cùng, kèm nguồn nhỏ bên dưới",
+    "source_line": "font sans-serif xám mờ dạng 'Nguồn: domain.com • dd/mm/yyyy'",
+    "photo_cards": "ảnh viền trắng dày kiểu polaroid, kèm ghim kẹp đen hoặc băng dính",
+    "screenshot_cards": "ảnh chụp màn hình bài báo/tweet có viền đen mảnh bo góc nhẹ",
+    "line_art": "nét vẽ tay sketch doodle, độ dày 3-5px, vẽ trực tiếp dạng draw-on",
+    "accent_colors": [
+      "#E24A32 (đỏ cam nhấn mạnh)",
+      "#2B6CB0 (xanh dương kỹ thuật/chip)",
+      "#1A1A1A (đen mực vẽ)"
+    ],
+    "stickers_badges": "con dấu đỏ ('ĐÃ RỜI NVIDIA', 'NGHI VẤN'), nhãn cam hình oval",
+    "arrows": "mũi tên vẽ tay nguệch ngoạc chỉ trực tiếp vào trọng tâm",
+    "captions": "chữ nằm góc dưới, font serif/sans đỏ đen, highlight từng từ khi đọc",
+    "progress_bar": "dải mảnh trên đỉnh đổi màu dần theo thời lượng",
+    "transitions": "cắt trực tiếp kết hợp trượt nhẹ 150-250ms",
+    "camera_moves": "tĩnh hoàn toàn, tạo cảm giác sổ tay minh họa cố định",
+    "element_entrances": "draw-on vẽ nét (300ms), pop nảy đàn hồi (200ms), trượt slide (250ms)",
+    "pacing": "1-2 chi tiết minh họa mới xuất hiện mỗi giây đồng bộ với giọng đọc"
+  },
+  "scenes": [
+    {
+      "start_ms": 0,
+      "end_ms": 5500,
+      "headline": "Huang rời Nvidia, Musk muốn mời",
+      "layout": "2 thẻ nhân vật đặt cạnh logo Nvidia",
+      "elements": [
+        {
+          "t_ms": 0,
+          "element": "Logo Nvidia",
+          "entrance": "fade in"
+        },
+        {
+          "t_ms": 200,
+          "element": "Ảnh Jensen Huang kèm nhãn tên",
+          "entrance": "slide up"
+        },
+        {
+          "t_ms": 1200,
+          "element": "Dấu đỏ 'ĐÃ RỜI NVIDIA'",
+          "entrance": "stamp down"
+        },
+        {
+          "t_ms": 2100,
+          "element": "Ảnh Elon Musk",
+          "entrance": "slide in right"
+        },
+        {
+          "t_ms": 3200,
+          "element": "Bong bóng thoại 'That would be an honor'",
+          "entrance": "pop up"
+        },
+        {
+          "t_ms": 4000,
+          "element": "Huy hiệu tròn cam 'CEO?'",
+          "entrance": "pop"
+        }
+      ]
+    },
+    {
+      "start_ms": 5600,
+      "end_ms": 11500,
+      "headline": "Cổ phiếu Nvidia",
+      "layout": "Đồ thị chứng khoán vẽ tay kèm số liệu giảm vốn hóa",
+      "elements": [
+        {
+          "t_ms": 5800,
+          "element": "Khung biểu đồ và đường đen ngang",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 6800,
+          "element": "Đường nét đỏ lao dốc mạnh kèm chấm đen",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 7200,
+          "element": "Chữ đỏ '-10% trước giờ mở cửa'",
+          "entrance": "pop"
+        },
+        {
+          "t_ms": 8400,
+          "element": "Bộ số đếm '-600+ tỷ đô vốn hóa bốc hơi'",
+          "entrance": "counter roll up"
+        }
+      ]
+    },
+    {
+      "start_ms": 11600,
+      "end_ms": 15200,
+      "headline": "Không còn Jensen Huang",
+      "layout": "Biển chỉ đường ngã rẽ dấu hỏi",
+      "elements": [
+        {
+          "t_ms": 11800,
+          "element": "Bảng tên Jensen gạch ngang đỏ",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 13000,
+          "element": "Cột cắm hai biển chỉ đường mang dấu hỏi",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 13800,
+          "element": "Dòng chữ đỏ 'Cuộc đua AI sẽ đi về đâu?'",
+          "entrance": "fade"
+        }
+      ]
+    },
+    {
+      "start_ms": 15300,
+      "end_ms": 20400,
+      "headline": "Từ Đài Loan đến Denny's",
+      "layout": "Trang Wikipedia cá nhân Jensen Huang với gạch chân đỏ",
+      "elements": [
+        {
+          "t_ms": 15500,
+          "element": "Khung chụp bài viết Wikipedia",
+          "entrance": "scale up"
+        },
+        {
+          "t_ms": 17200,
+          "element": "Nét gạch đỏ dưới quê quán và tuổi thơ",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 19000,
+          "element": "Nét gạch đỏ dưới đoạn rửa bát tại Denny's",
+          "entrance": "draw-on"
+        }
+      ]
+    },
+    {
+      "start_ms": 20500,
+      "end_ms": 26400,
+      "headline": "33 năm làm CEO Nvidia",
+      "layout": "Timeline vẽ tay 1993 đến 2026",
+      "elements": [
+        {
+          "t_ms": 20800,
+          "element": "Icon 3 nhà sáng lập và chip Nvidia",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 22000,
+          "element": "Trục thời gian xanh kẻ từ mốc 1993 tới 2026",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 23500,
+          "element": "Cột cờ đen đánh dấu kết thúc",
+          "entrance": "pop"
+        }
+      ]
+    },
+    {
+      "start_ms": 26500,
+      "end_ms": 33200,
+      "headline": "Nvidia nắm hơn 80% thị trường GPU cho AI",
+      "layout": "Biểu đồ tròn tỉ lệ phần trăm và dãy icon chip",
+      "elements": [
+        {
+          "t_ms": 26800,
+          "element": "Biểu đồ vòng cung cam chạy từ 0 đến 80%",
+          "entrance": "radial wipe"
+        },
+        {
+          "t_ms": 28500,
+          "element": "4 chip đỏ và 1 chip xám biểu thị 80/20",
+          "entrance": "staggered pop"
+        }
+      ]
+    },
+    {
+      "start_ms": 33300,
+      "end_ms": 37200,
+      "headline": "Công ty đầu tiên chạm 5.000 tỷ đô",
+      "layout": "Biểu đồ cột tăng trưởng với mốc cờ đỉnh cao",
+      "elements": [
+        {
+          "t_ms": 33500,
+          "element": "Các cột xám tăng dần kèm mũi tên xanh bay lên",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 35200,
+          "element": "Cột đỏ cao nhất chạm cờ 5.000 tỷ",
+          "entrance": "grow vertical"
+        }
+      ]
+    },
+    {
+      "start_ms": 37300,
+      "end_ms": 40500,
+      "headline": "Jensen là \"Mr. AI\"",
+      "layout": "Trích đoạn báo CNBC gọi Jensen là Mr. AI",
+      "elements": [
+        {
+          "t_ms": 37500,
+          "element": "Bài báo CNBC",
+          "entrance": "fade"
+        },
+        {
+          "t_ms": 38500,
+          "element": "Vòng tròn đỏ khoanh chữ 'He's Mr. AI'",
+          "entrance": "draw-on"
+        }
+      ]
+    },
+    {
+      "start_ms": 40600,
+      "end_ms": 47200,
+      "headline": "Card game + CUDA",
+      "layout": "Sơ đồ bóc tách card đồ họa sang tính toán ma trận",
+      "elements": [
+        {
+          "t_ms": 41000,
+          "element": "Hình vẽ card màn hình có chip CUDA cam",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 43000,
+          "element": "Nhánh rẽ trái trỏ vào icon tay cầm game Đồ họa",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 44500,
+          "element": "Nhánh rẽ phải trỏ vào bảng nhị phân Tính toán chung",
+          "entrance": "draw-on"
+        }
+      ]
+    },
+    {
+      "start_ms": 47300,
+      "end_ms": 54200,
+      "headline": "Bị chê là đốt tiền",
+      "layout": "Hình minh họa cọc tiền bốc cháy kèm mũi tên chỉ số",
+      "elements": [
+        {
+          "t_ms": 47800,
+          "element": "Cọc tiền vẽ tay và ngọn lửa cam",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 49500,
+          "element": "Mũi tên đỏ đi lên 'Chi phí +50%'",
+          "entrance": "slide in"
+        },
+        {
+          "t_ms": 51000,
+          "element": "Mũi tên đen đi xuống 'Vốn hóa ~1,5 tỷ đô'",
+          "entrance": "slide in"
+        }
+      ]
+    },
+    {
+      "start_ms": 54300,
+      "end_ms": 59100,
+      "headline": "2012 - AlexNet chạy trên CUDA",
+      "layout": "Trang Wikipedia về mạng AlexNet",
+      "elements": [
+        {
+          "t_ms": 54800,
+          "element": "Tài liệu AlexNet với thông số viết bằng CUDA, C++",
+          "entrance": "scale in"
+        },
+        {
+          "t_ms": 56200,
+          "element": "Khoanh đỏ mốc ngày 30/09/2012",
+          "entrance": "draw circle"
+        }
+      ]
+    },
+    {
+      "start_ms": 59200,
+      "end_ms": 64800,
+      "headline": "AI chạy trên CUDA",
+      "layout": "Bóng đèn ý tưởng và nền tảng CUDA nâng đỡ các ứng dụng AI",
+      "elements": [
+        {
+          "t_ms": 59800,
+          "element": "Khối đế màu xanh 'CUDA'",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 61000,
+          "element": "3 khối hộp: Chatbot, Tạo ảnh, Tạo video",
+          "entrance": "pop sequence"
+        },
+        {
+          "t_ms": 62500,
+          "element": "Hộp cam 'Đã chứng minh' cùng bóng đèn phát sáng",
+          "entrance": "pop"
+        }
+      ]
+    },
+    {
+      "start_ms": 64900,
+      "end_ms": 75800,
+      "headline": "29/10 - Nghi vấn gián điệp",
+      "layout": "Tweet đài CNN kèm hình Jensen Huang và con dấu nghi vấn",
+      "elements": [
+        {
+          "t_ms": 65500,
+          "element": "Bài đăng X từ CNN kèm ảnh Jensen bước đi",
+          "entrance": "slide down"
+        },
+        {
+          "t_ms": 68000,
+          "element": "Gạch đỏ chữ 'suspected Chinese spy'",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 73500,
+          "element": "Tài liệu dấu hỏi đóng dấu 'NGHI VẤN' to bản",
+          "entrance": "stamp down"
+        }
+      ]
+    },
+    {
+      "start_ms": 75900,
+      "end_ms": 80800,
+      "headline": "8/11 - Huang thừa nhận ngoại tình",
+      "layout": "Bài báo CNBC về phát ngôn xin lỗi gia đình",
+      "elements": [
+        {
+          "t_ms": 76200,
+          "element": "Trang tin CNBC",
+          "entrance": "fade"
+        },
+        {
+          "t_ms": 77800,
+          "element": "Gạch đỏ từ 'apologized' và 'unfaithful to my wife'",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 79500,
+          "element": "Trích dẫn hộp chữ Jensen phủ nhận lộ bí mật",
+          "entrance": "pop"
+        }
+      ]
+    },
+    {
+      "start_ms": 80900,
+      "end_ms": 93200,
+      "headline": "11/11 - WSJ: Nvidia chuẩn bị sa thải Huang",
+      "layout": "Tin WatcherGuru và video họp báo chuyển giao",
+      "elements": [
+        {
+          "t_ms": 81500,
+          "element": "Bài đăng WatcherGuru dẫn nguồn WSJ",
+          "entrance": "pop"
+        },
+        {
+          "t_ms": 89200,
+          "element": "Thông cáo báo chí từ Nvidia Newsroom về CEO Transition",
+          "entrance": "slide up"
+        }
+      ]
+    },
+    {
+      "start_ms": 93300,
+      "end_ms": 103800,
+      "headline": "Zerohedge gọi, Musk đáp",
+      "layout": "Màn hình bài tương tác trên mạng xã hội X",
+      "elements": [
+        {
+          "t_ms": 94000,
+          "element": "Dòng tweet kêu gọi Musk thuê Jensen",
+          "entrance": "pop"
+        },
+        {
+          "t_ms": 96000,
+          "element": "Bình luận Elon Musk xác nhận",
+          "entrance": "highlight"
+        },
+        {
+          "t_ms": 99500,
+          "element": "Hồ sơ X của Musk có link Terafab.AI",
+          "entrance": "slide in"
+        }
+      ]
+    },
+    {
+      "start_ms": 103900,
+      "end_ms": 111200,
+      "headline": "Terafab: nhà máy chip của Musk",
+      "layout": "Landing page Terafab và nhận định cộng đồng mạng",
+      "elements": [
+        {
+          "t_ms": 104200,
+          "element": "Giao diện website đen Terafab liên minh Tesla SpaceX xAI",
+          "entrance": "fade"
+        },
+        {
+          "t_ms": 108000,
+          "element": "Bình luận 'If Elon hires Jensen... it's game over'",
+          "entrance": "slide up"
+        }
+      ]
+    },
+    {
+      "start_ms": 111300,
+      "end_ms": 121800,
+      "headline": "Ngân hàng trung ương của AI",
+      "layout": "Hình vẽ điện thờ ngân hàng và sơ đồ phân phối vốn cho vay",
+      "elements": [
+        {
+          "t_ms": 111800,
+          "element": "Mô hình tòa nhà ngân hàng gắn icon chip AI",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 115000,
+          "element": "Sơ đồ Nvidia cấp chip và dòng vốn cho 3 startup",
+          "entrance": "draw-on"
+        },
+        {
+          "t_ms": 118000,
+          "element": "Kéo cắt đứt chuỗi cung ứng dẫn tới mất vốn",
+          "entrance": "pop"
+        }
+      ]
+    },
+    {
+      "start_ms": 121900,
+      "end_ms": 131200,
+      "headline": "Lo sụp đổ hay chưa có bong bóng?",
+      "layout": "Hai luồng quan điểm tài chính đối lập",
+      "elements": [
+        {
+          "t_ms": 122200,
+          "element": "Phân tích của Bill Blain về sự lung lay",
+          "entrance": "slide down"
+        },
+        {
+          "t_ms": 125000,
+          "element": "Nhận định Robert Greifeld phản bác quan điểm bong bóng",
+          "entrance": "draw underline"
+        },
+        {
+          "t_ms": 128000,
+          "element": "Lịch để bàn lật tới ngày 17 tháng 11",
+          "entrance": "flip"
+        }
+      ]
+    },
+    {
+      "start_ms": 131300,
+      "end_ms": 137500,
+      "headline": "Chip và CUDA vẫn còn",
+      "layout": "Màn hình chia đôi: Chip công nghệ đối lập cánh cửa văn phòng trống",
+      "elements": [
+        {
+          "t_ms": 131800,
+          "element": "Bên trái: Dấu tích xanh, chip CUDA",
+          "entrance": "slide in left"
+        },
+        {
+          "t_ms": 133500,
+          "element": "Bên phải: Ghế xoay trống, cửa mở và dấu chân bước đi",
+          "entrance": "draw-on right"
+        }
+      ]
+    },
+    {
+      "start_ms": 137600,
+      "end_ms": 147000,
+      "headline": "Bạn nghĩ sao?",
+      "layout": "Giao diện bình chọn 2 câu hỏi kèm khung bình luận",
+      "elements": [
+        {
+          "t_ms": 138000,
+          "element": "Hộp lựa chọn 1: Nvidia còn dẫn đầu AI được không?",
+          "entrance": "pop"
+        },
+        {
+          "t_ms": 140500,
+          "element": "Hộp lựa chọn 2: Musk có nên mời ông về Terafab?",
+          "entrance": "pop"
+        },
+        {
+          "t_ms": 143000,
+          "element": "Khung nhập ý kiến kèm icon nút gửi màu cam",
+          "entrance": "slide up"
+        }
+      ]
+    }
+  ]
+}

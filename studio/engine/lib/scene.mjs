@@ -11,6 +11,7 @@ import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
 import {validateClip, prepareClip, drawClip, closeClips} from './clip.mjs';
+import {NEWS_TYPES, validateNews, drawNews, preloadNews, karaokeCaption} from './news.mjs';
 export {closeClips};
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
@@ -19,6 +20,7 @@ GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/NotoSans.ttf'), 'Sans');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-Black.otf'), 'QBKBlack');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-ExtraBoldItalic.otf'), 'QBKItalic');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Inter-Bold.otf'), 'QBKBold');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Mali-Bold.ttf'), 'QBKCaption');
 
 export function loadScene(file) {
   const base = path.dirname(path.resolve(file));
@@ -32,7 +34,7 @@ export function loadScene(file) {
   s.styleDef = getStyle(s.style);
   // blurband layout: draw a 16:9 band; render.mjs places it in the middle of the 9:16 frame over a blurred enlarged copy
   if (s.styleDef.layout === 'blurband') { s.outHeight = s.height; s.height = Math.round(s.width * 9 / 16 / 2) * 2; }
-  s.captionStyle = {y: cap.y ?? (s.outHeight ? s.height - 62 : Math.round(s.height * 0.73)), size: cap.size ?? (s.outHeight ? 46 : 58), color: cap.color || '#2A2723', maxWidth: s.width - 120};
+  s.captionStyle = {y: cap.y ?? s.styleDef.captionY ?? (s.outHeight ? s.height - 62 : Math.round(s.height * 0.73)), size: cap.size ?? s.styleDef.captionSize ?? (s.outHeight ? 46 : 58), color: cap.color || '#2A2723', maxWidth: cap.maxWidth ?? s.styleDef.captionMaxWidth ?? s.width - 120};
   s.captionItems = items.map(c => ({start: c.start + lead, end: c.end + lead, text: c.text}));
   if (!s.duration) s.duration = Math.max(...s.shots.map(x => x.end), ...s.captionItems.map(c => c.end + 0.4), 1);
   validate(s);
@@ -52,6 +54,7 @@ export function validate(s) {
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
       else if (validateGeo(s, e, where, err)) {}
+      else if (validateNews(s, e, where, err)) {}
       else if (validateClip(s, e, where, err)) { e.y ??= e.full === true ? 960 : 820; }
       else if (e.type === 'image') { if (!fs.existsSync(path.join(s.base, e.path))) err(`${where}: missing image ${e.path}`); }
       else err(`${where}: unknown type "${e.type}"`);
@@ -94,7 +97,7 @@ function transform(e, t) {
 const images = new Map();
 async function img(s, p) { const { loadImage } = await import('@napi-rs/canvas'); const f = path.join(s.base, p); if (!images.has(f)) images.set(f, await loadImage(f)); return images.get(f); }
 
-export async function preloadImages(s) { await preloadGeo(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
+export async function preloadImages(s) { await preloadGeo(s); await preloadNews(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
 
 function recordElement(s, e, t, sceneT) {
   const R = new Recorder(); const {x, y, sc, rot} = transform(e, t);
@@ -140,6 +143,7 @@ export function makeRenderer(s) {
       if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
       if (e.geo) { e._view = view; e._s = s; }
       if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
+      if (NEWS_TYPES.includes(e.type)) { drawNews(ctx, e, t, s); continue; }
       if (e.type === 'clip') { drawClip(ctx, e, t, s, transform(e, t), sh.end - sh.start); continue; }
       if (e.type === 'image') {
         const im = images.get(path.join(s.base, e.path)); const {x, y, sc, rot, a} = transform(e, t); const w = (e.w || im.width) * sc, h = w * im.height / im.width;
@@ -162,7 +166,7 @@ export function makeRenderer(s) {
     }
     if (pen) { const [px, py] = ctx.getTransform().transformPoint ? [ctx.getTransform().a * pen[0] + ctx.getTransform().e, ctx.getTransform().d * pen[1] + ctx.getTransform().f] : pen; drawHand(ctx, pen[0], pen[1], T, 1, py > s.captionStyle.y - 470); }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    paintOverlay(ctx, ST, s.width, s.height, fno);
+    ST._progress = T / s.duration; paintOverlay(ctx, ST, s.width, s.height, fno);
     const cr = sh.credit ?? s.credit ?? (s._sat && sh.elements?.some(e => e.type === 'satmap' || e.type === 'globe') ? s._sat.credit : null); if (cr) credit(ctx, s, cr);
     // shot transition (style grammar): drawn over the first `td` seconds of every shot except the first
     const tr = sh.transition ?? ST.transition, td = sh.transitionDur ?? ST.transitionDur ?? 0.45;
@@ -179,7 +183,9 @@ export function makeRenderer(s) {
     }
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
-    if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
+    if (cue && ST.captionKaraoke) { const st = s.captionStyle, k = (T - cue.start) / Math.max(0.2, (cue.end - cue.start) * 0.92);
+      karaokeCaption(ctx, cue.text, s.width / 2, st.y, k, {size: st.size, hi: ST.captionKaraoke, ink: s.captions?.color || ST.caption?.color, maxW: s.width - 80}); }
+    else if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
       ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', fs) : `600 ${fs}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       const tw = ctx.measureText(cue.text).width, bw = tw + fs * 1.1, bh = fs * 1.7; ctx.save(); ctx.translate(s.width / 2, cy);
       if (ST.captionBox === 'note') { ctx.rotate(((cue.start * 7) % 3 - 1) * 0.015); ctx.fillStyle = '#FFF2A8'; ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4; ctx.fillRect(-bw / 2, -bh / 2, bw, bh); ctx.shadowBlur = 0; ctx.fillStyle = '#1F2A44'; }

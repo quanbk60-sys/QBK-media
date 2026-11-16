@@ -196,6 +196,26 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
 
+## Phong cách bản tin vẽ tay (`ban-tin`, `lib/news.mjs`)
+Nền giấy kem, icon nét mực mảnh vẽ dần (không bàn tay), điểm đỏ cam `red` và xanh `navy`/`blue`, vạch tiến độ đỏ→xanh trên cùng (tự chạy theo thời lượng), phụ đề karaoke Mali Bold (phần đã đọc chuyển đỏ), cảnh cắt cứng. Thẻ kiến thức: `studio/references/ai-beat-tin-tuc/card.md`. Phim mẫu: `projects/_demo-ban-tin/` (`build_scene.py`).
+
+- Nhịp chuẩn của mẫu: **mỗi cảnh 4–5 s**, mỗi cảnh có `headline` (gõ chữ, dòng nguồn xám), rồi 2–5 yếu tố bật ra cách nhau 0,4–1,8 s. Vùng nội dung y 345–1210; phụ đề ở y 1340, đừng đặt gì từ 1300 đến 1380.
+- Icon nét (`type: "prop"`, nên có `draw: {at, dur: 0.5–1.0, hand: false}`): `chip` (`label`, `size`, `color`, `inner`), `people` (`n`, `size`), `lineChart` (`trend` down/up, `value` "-10%", `note`, `w`, `h`, `color`), `barChart` (`values` 0..1 **đúng tỉ lệ số thật**, `labels`), `donut` (`pct`, `label`), `timeline` (`from`, `to`, `progress`, `ticks`, `flag`), `bank` (`label`), `chatWindow`, `calendar` (`top`, `day`), `check`, `arrowCurve` (`dx`, `dy`, `bend`, `dashed`, `color`), `flame`, `laptop` (`screen`), `money`, `scribbleCircle` (`w`, `h`), `underline` (`w`), `qmark`, `signpost`, `rocket`.
+
+| Phần tử (`type`) | Thuộc tính |
+|---|---|
+| `headline` | `text` (gõ chữ, `cps` 34), `source` ("Nguồn: … · ngày"), `x` 100, `y` 282, `size` 57 |
+| `card` | thẻ ảnh: `path`, `credit` (**bắt buộc**), `label` (chữ viết tay dưới ảnh), `w` 400, `ratio`, `rotate`, `focus`, `tape: false`, `frame` `polaroid`/`screen`. Thẻ chữ (không `path`): `site`, `title`, `lines` (một đoạn; `*cụm từ*` được gạch chân đỏ lúc `markAt`), `textSize`, `titleSize`. `enter: "slide-up"` trượt lên. **Không làm giả ảnh chụp bài báo**: thẻ chữ ghi "(tóm tắt)" kèm nguồn |
+| `stamp` | con dấu đỏ đập xuống: `text`, `rotate` (-0,32), `size`, `color` |
+| `badge` | huy hiệu tròn: `text`, `r`, `color` |
+| `bubble` | bóng thoại viền xanh: `text`, `w`, `tail` [dx, dy] |
+| `counter` | số chạy rồi dừng: `from`, `to`, `dur` (0,9), `prefix`, `suffix`, `decimals`, `size` 112, `color` |
+| `label` | chữ viết tay gõ dần: `text` (`\n` xuống dòng), `size` 52, `color` (`ink`, `red`, `blue`, `gray`), `align`, `underline: true`, `typing: false`, `font: "sans"` |
+| `box` | hộp số liệu tô nhạt, viền vẽ dần: `text`, `sub`, `w` 690, `h` 200, `color` (`red`/`blue`); không `text` thì thành thanh (vẽ cột ngang đúng tỉ lệ) |
+| `qbox` | hộp câu hỏi đánh số (kết video): `n`, `text`, `w` 820, `h` 160 |
+
+Mọi phần tử nhận `from`, `to`, `exit: "fade"`. Nhạc nền nên rất nhỏ (`gain` 0,05–0,08). Giọng: khoảng 210 âm tiết/phút (Gemini Charon tăng tốc 1,09 lần).
+
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).
 - Đạo cụ mới: thêm hàm vào `PROPS` trong `lib/props.mjs`. **Chỉ dùng các lệnh Canvas mà `Recorder` hỗ trợ**: path, arc, ellipse, rect, roundRect, fill, stroke, fillText, save/restore, translate/rotate/scale. **Không dùng `clip`.**

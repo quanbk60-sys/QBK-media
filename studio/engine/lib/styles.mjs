@@ -2,6 +2,7 @@
 // scales line weight, paints a background treatment, styles captions and optionally applies a post filter.
 // Use in scene.json: "style": "bang-phan". List: node catalog.mjs
 import {COLORS, rng} from './math.mjs';
+import {paintPaper, paintProgress} from './news.mjs';
 
 export const STYLES = {
   'giay-muc':   { stroke: 'wobble', boil: true, transition: 'fade', hand: true,label: 'Giấy mực', genres: 'ngụ ngôn, lịch sử VN, kể chuyện', bg: '#F3EADB', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
@@ -36,6 +37,9 @@ export const STYLES = {
   'thi-nghiem': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'cut',label: 'Thí nghiệm cổ', genres: 'khoa học đời thường, cách làm, mẹo dân gian, đồ vật (khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng)', bg: '#E9E6E0', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
                  layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
+  'ban-tin':    { stroke: 'sketch', drawMode: 'stroke', hand: false, transition: 'cut', label: 'Bản tin vẽ tay', genres: 'tin tức, công nghệ, kinh tế, giải thích sự kiện (nền giấy, icon nét mảnh, thẻ ảnh dán băng keo, phụ đề karaoke)', bg: '#F1EDE3', deco: 'paper-news', ink: '#1C1C1E', body: '#FFFFFF', lineScale: 0.9,
+                 palette: {red: '#FC5636', navy: '#2464EC', gold: '#F0B429', green: '#3E9B5F', water: '#9DB7E8', waterDeep: '#2464EC', paper: '#F1EDE3', sky: '#DCE4F2'},
+                 caption: {color: '#232326', stroke: '#F8F4EC'}, captionFont: '{size}px QBKCaption', captionKaraoke: '#F0553A', captionSize: 46, captionY: 1340, captionMaxWidth: 700, progress: true, titleFont: 'Hand'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 
@@ -61,6 +65,7 @@ export function paintBackground(ctx, st, W, H, frameNo) {
     case 'burst': ctx.save(); ctx.translate(W / 2, H * 0.42); for (let i = 0; i < 18; i++) { ctx.rotate(Math.PI / 9); if (i % 2) continue; ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(H, -150); ctx.lineTo(H, 150); ctx.closePath(); ctx.fill(); } ctx.restore(); break;
     case 'frame': ctx.lineWidth = 14; ctx.strokeStyle = '#B23A2E'; ctx.strokeRect(24, 24, W - 48, H - 48); ctx.lineWidth = 4; ctx.strokeStyle = '#3B2414'; ctx.strokeRect(46, 46, W - 92, H - 92);
       for (let i = 0; i < 900; i++) { ctx.fillStyle = `rgba(90,60,30,${(r() * 0.05).toFixed(3)})`; ctx.fillRect(r() * W, r() * H, 2, 2); } break;
+    case 'paper-news': paintPaper(ctx, W, H); break;
     case 'vignette': { const g = ctx.createRadialGradient(W / 2, H * 0.45, H * 0.2, W / 2, H * 0.45, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); break; }
   }
 }
@@ -78,5 +83,6 @@ export function paintOverlay(ctx, st, W, H, frameNo) {
     ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 2; const x = (frameNo * 53) % W; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 8, H); ctx.stroke();
     ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, 70); ctx.fillRect(0, H - 70, W, 70);
   }
+  if (st.progress) paintProgress(ctx, W, st._progress ?? 0);
   if (st.deco === 'letterbox') { ctx.fillStyle = '#0E0D0B'; ctx.fillRect(0, 0, W, 230); ctx.fillRect(0, H - 380, W, 380); }
 }

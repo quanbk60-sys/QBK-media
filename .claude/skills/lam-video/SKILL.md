@@ -66,6 +66,7 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Hoạt hình vui, meme | `pop` |
 | Bí ẩn, chuyện lạ | `phim-cam` |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
+| Tin tức, công nghệ, kinh tế, giải thích sự kiện, tiểu sử doanh nhân | `ban-tin` (bản tin vẽ tay; xem `studio/references/ai-beat-tin-tuc/card.md`, demo `projects/_demo-ban-tin/build_scene.py`) |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 

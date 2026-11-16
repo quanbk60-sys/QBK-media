@@ -54,6 +54,7 @@ function strokePaths(ctx, paths, mode, w, color, seed) {
     case 'woodcut': pass(w * 1.55, 1, 0.6, 0); break;
     case 'plotter': pass(Math.max(1.5, w * 0.55), 1, 0, 0); break;
     case 'clean': pass(w * 1.35, 1, 0, 0); break;
+    case 'sketch': pass(w, 1, 0.5, 0); break; // ban-tin: one thin, slightly uneven ink line
     case 'neon': ctx.save(); ctx.shadowColor = color; ctx.shadowBlur = w * 3; pass(w * 1.1, 0.9, 0, 0); ctx.restore(); pass(Math.max(1, w * 0.35), 0.9, 0, 0); break;
     default: pass(w, 1, 0, 0);
   }
