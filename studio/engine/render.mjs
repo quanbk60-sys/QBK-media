@@ -4,7 +4,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {spawn, spawnSync} from 'node:child_process';
-import {loadScene, makeRenderer, fitCaptions, preloadImages} from './lib/scene.mjs';
+import {loadScene, makeRenderer, fitCaptions, preloadImages, closeClips} from './lib/scene.mjs';
+import {clipAudio} from './lib/clip.mjs';
 import {mixTrack, writeWav, SR} from './lib/audio.mjs';
 
 const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
@@ -19,10 +20,10 @@ const R = makeRenderer(s), frames = Math.round((to - from) * s.fps), drawFlags =
 const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${s.width}x${s.height}`, '-r', `${s.fps}`, '-i', '-', ...(s.outHeight ? ['-vf', `split[a][b];[a]scale=${s.width}:${s.outHeight}:force_original_aspect_ratio=increase,crop=${s.width}:${s.outHeight},boxblur=60:2,eq=brightness=-0.08:saturation=0.9[bg];[bg][b]overlay=0:${(s.outHeight - s.height) / 2}`] : []), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19', '-preset', 'medium', tmpV], {stdio: ['pipe', 'inherit', 'inherit']});
 const t0 = Date.now();
 for (let i = 0; i < frames; i++) {
-  const T = from + i / s.fps, r = R.frame(T); drawFlags.push(r.drawing);
+  const T = from + i / s.fps; await R.prepare(T); const r = R.frame(T); drawFlags.push(r.drawing);
   if (!ff.stdin.write(R.cv.data())) await new Promise(res => ff.stdin.once('drain', res));
 }
-ff.stdin.end(); await new Promise(res => ff.on('close', res));
+ff.stdin.end(); closeClips(s); await new Promise(res => ff.on('close', res));
 
 // sound: explicit shot sfx + auto events (steps, hammer) + pen scribble while drawing
 const events = [];
@@ -42,6 +43,12 @@ if (s.narration?.path) {
 if (s.music?.path) {
   const idx = inputs.filter(x => x === '-i').length; inputs.push('-stream_loop', '-1', '-i', path.join(s.base, s.music.path));
   filters.push(`[${idx}:a]aresample=${SR},volume=${s.music.gain ?? 0.08}[mus]`, `${mixIn}[mus]amix=inputs=2:duration=first:normalize=0[mix2]`); mixIn = '[mix2]';
+}
+// original sound of clips with "volume" > 0 (rain, waves, crowd…), placed at their time in the scene
+for (const c of clipAudio(s)) {
+  const a = Math.max(c.at, from), b = Math.min(c.at + c.dur, to); if (b <= a) continue;
+  const idx = inputs.filter(x => x === '-i').length; inputs.push(...(c.loop ? ['-stream_loop', '-1'] : []), '-ss', `${c.in + (a - c.at)}`, '-t', `${b - a}`, '-i', c.file);
+  filters.push(`[${idx}:a]aresample=${SR},afade=t=in:d=0.25,afade=t=out:st=${Math.max(0, b - a - 0.3)}:d=0.3,adelay=${Math.round((a - from) * 1000)}:all=1,volume=${c.volume}[ca${idx}]`, `${mixIn}[ca${idx}]amix=inputs=2:duration=first:normalize=0[cm${idx}]`); mixIn = `[cm${idx}]`;
 }
 const fargs = filters.length ? ['-filter_complex', filters.join(';'), '-map', '0:v', '-map', mixIn] : ['-map', '0:v', '-map', '1:a'];
 const res = spawnSync('ffmpeg', ['-v', 'error', '-y', ...inputs, ...fargs, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-t', `${to - from}`, mp4], {stdio: 'inherit'});

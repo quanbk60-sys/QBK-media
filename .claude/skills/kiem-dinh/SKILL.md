@@ -24,6 +24,7 @@ Trích khung hình ở **mỗi lần đổi shot**, cộng 1 khung giữa mỗi 
 - Nhân vật đúng trang phục ở mọi cảnh.
 - Không cảnh nào đứng yên quá 2,5 giây (so `scene.json` với lời đọc).
 - Hook 3 giây đầu có chữ lớn và chuyển động.
+- Có phần tử `clip`: mỗi clip có trong `clips/clips.json`, giấy phép là CC0, PD, CC BY, CC BY-SA hoặc Pexels; `credit` hiện rõ trên hình; nội dung đúng với lời đọc (không dùng cảnh khác nơi, khác thời làm bằng chứng); hình không vỡ, không quá mờ; tổng thời lượng video thật ≤ khoảng 30%. Thiếu giấy phép là lỗi chặn, trả `dao-dien`.
 
 ## 4. Âm thanh → `dung-phim` hoặc `long-tieng`
 - `volumedetect`: max trong khoảng −3 đến −0,5 dB, không bị vỡ tiếng.

@@ -22,6 +22,7 @@ Chữ trên ảnh bìa phải đọc được khi thu nhỏ: ≤4 từ, cỡ 160
 4. **Bình luận ghim**: một câu hỏi khơi thảo luận, giống câu kết của video.
 5. **Lịch đăng gợi ý**: khung giờ khán giả Việt Nam hay xem (tối 19–22h, trưa 11–13h), ghi rõ đây là gợi ý chung, không phải số liệu riêng của kênh.
 6. **Ghi chú nguồn**: những dữ kiện đã kiểm chứng và nguồn chính, để trả lời bình luận nếu có người hỏi.
+7. **Ghi nguồn video thật** (nếu `clips/clips.json` có): mỗi clip một dòng `Tên · tác giả · giấy phép · link trang`, đặt trong mô tả YouTube Shorts và trong ghi chú nguồn. Với CC BY và CC BY-SA, ghi nguồn là điều kiện bắt buộc của giấy phép.
 
 ## Quy tắc
 - **Không tự đăng** và không đăng nhập tài khoản của người dùng.

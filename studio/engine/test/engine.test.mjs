@@ -37,3 +37,11 @@ test('v2 props accept their parameters', () => {
     const R = new Recorder(); PROPS[n](R, p, 1.3); if (p.progress !== 0) assert.ok(R.ops.length > 0, n);
   }
 });
+test('clip elements need an existing file, a credit and known tone/frame', () => {
+  const sh = el => ({cast: {}, shots: [{start: 0, end: 1, elements: [{type: 'clip', ...el}]}]});
+  validate(sh({path: 'a.mp4', credit: 'x · CC0 · Wikimedia Commons'})); // no base: file check skipped
+  assert.throws(() => validate(sh({path: 'a.mp4'})), /credit/);
+  assert.throws(() => validate(sh({path: 'a.mp4', credit: 'x', tone: 'neon'})), /tone/);
+  assert.throws(() => validate(sh({path: 'a.mp4', credit: 'x', frame: 'oval'})), /frame/);
+  assert.throws(() => validate({base: os.tmpdir(), ...sh({path: 'missing-qbk.mp4', credit: 'x'})}), /missing clip/);
+});

@@ -49,6 +49,14 @@ Xem skill `am-thanh`. Mỗi shot nên có 0–2 sfx, đặt **đúng khoảnh kh
 ## Liên tục giữa các cảnh
 Giữ nguyên `cast` cho cả phim: trang phục là bản nhận diện của nhân vật. Hướng di chuyển giữ thống nhất, ví dụ quân ta tiến sang phải, giặc từ phải sang trái.
 
+## Video thật (`clip`)
+Cảnh nào hình thật kể tốt hơn hình vẽ (con vật, thiên nhiên, núi lửa, vũ trụ, thành phố, phim tư liệu cũ) thì chèn đoạn video thật:
+1. Tìm: `python3 studio/tools/clips.py search "<từ khóa tiếng Anh>" --min 4`. Chỉ kết quả có giấy phép dùng được (CC0, PD, CC BY, CC BY-SA) mới hiện ra. Đọc `title`, `desc` để chọn đúng nội dung, đúng nơi chốn, đúng thời đại; bỏ cảnh bạo lực, tai nạn, người bị quay lén.
+2. Tải và cắt: `python3 studio/tools/clips.py get projects/<slug>/clips <id> --start S --dur D --name ten-ngan` (thêm `--audio` nếu muốn giữ tiếng gốc). Thông tin giấy phép ghi vào `clips/clips.json`.
+3. Đặt vào `scene.json` bằng phần tử `clip` (SCENE_FORMAT.md, mục `clip`). Video ngang dùng `full: "fit"` hoặc khung `polaroid`/`film`; chỉ dùng `full: true` khi video dọc hoặc ≥ 1080p. Chọn `tone` cho hợp phong cách. Người que có thể đứng cạnh khung, chỉ tay hoặc bình luận.
+4. Tối đa khoảng 30% thời lượng là video thật. Video thật **không được làm bằng chứng cho dữ kiện mà nó không thể hiện** (ví dụ cảnh trâu bất kỳ không phải "trâu ở Đông Anh năm 1950"); khi chỉ là minh họa thì để `note` "*hình minh họa".
+5. TikTok, YouTube, phim, bản tin của người khác **không bao giờ** được ghép vào phim, dù tải được.
+
 ## Khi engine thiếu thứ cần dùng
 Nếu cần tư thế hoặc đạo cụ chưa có: ghi danh sách cụ thể (tên, mô tả, tham số) vào `art-requests.md` và báo Nhà sản xuất để giao `hoa-si`. Trong lúc chờ, tạm dùng phương án gần nhất để phim vẫn dựng được.
 

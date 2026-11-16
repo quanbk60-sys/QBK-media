@@ -10,6 +10,8 @@ import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
+import {validateClip, prepareClip, drawClip, closeClips} from './clip.mjs';
+export {closeClips};
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -50,6 +52,7 @@ export function validate(s) {
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
       else if (validateGeo(s, e, where, err)) {}
+      else if (validateClip(s, e, where, err)) { e.y ??= e.full === true ? 960 : 820; }
       else if (e.type === 'image') { if (!fs.existsSync(path.join(s.base, e.path))) err(`${where}: missing image ${e.path}`); }
       else err(`${where}: unknown type "${e.type}"`);
     }
@@ -114,8 +117,14 @@ function recordElement(s, e, t, sceneT) {
 export function makeRenderer(s) {
   const cv = createCanvas(s.width, s.height), ctx = cv.getContext('2d');
   const events = []; let lastContact = new Map();
+  const shotAt = T => s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1);
+  // async part of a frame: decode the video frames that clip elements show at time T (call before frame(T))
+  async function prepare(T) {
+    const sh = shotAt(T), t = T - sh.start;
+    for (const e of sh.elements || []) if (e.type === 'clip' && t >= (e.from ?? 0) && (e.to === undefined || t < e.to)) await prepareClip(s, e, t);
+  }
   function frame(T) {
-    const sh = s.shots.find(x => T >= x.start && T < x.end) || s.shots.at(-1);
+    const sh = shotAt(T);
     const t = T - sh.start;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const ST = s.styleDef, fno = Math.round(T * s.fps); ST._fno = fno;
@@ -131,6 +140,7 @@ export function makeRenderer(s) {
       if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
       if (e.geo) { e._view = view; e._s = s; }
       if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
+      if (e.type === 'clip') { drawClip(ctx, e, t, s, transform(e, t), sh.end - sh.start); continue; }
       if (e.type === 'image') {
         const im = images.get(path.join(s.base, e.path)); const {x, y, sc, rot, a} = transform(e, t); const w = (e.w || im.width) * sc, h = w * im.height / im.width;
         ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.rotate(rot); ctx.drawImage(im, -w / 2, -h / 2, w, h); ctx.restore(); continue;
@@ -180,7 +190,9 @@ export function makeRenderer(s) {
       ctx.fillText(shown, ST.captionTypewriter ? -tw / 2 + ctx.measureText(shown).width / 2 : 0, 2); ctx.restore(); }
     else
     if (cue) { const st = s.captionStyle; ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', st.size) : `600 ${st.size}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; const fill = (s.captions?.color) || ST.caption?.color || st.color;
+      // over a full-frame video clip: white text, dark outline (paper-coloured outline would glow on footage)
+      const onVideo = sh.elements?.some(e => e.type === 'clip' && e.full && t >= (e.from ?? 0) && (e.to === undefined || t < e.to));
+      ctx.lineWidth = ST.captionStrokeW ?? 10; ctx.lineJoin = 'round'; ctx.strokeStyle = onVideo ? 'rgba(10,10,10,.85)' : ST.caption?.stroke || 'rgba(243,234,219,.9)'; const cy = ST.captionOnBar ? s.height - 190 : st.y; const fill = (s.captions?.color) || (onVideo ? '#FFFFFF' : ST.caption?.color || st.color);
       if (ST.captionHighlight) { // word by word, the longest word (the keyword) in highlight colour
         const text = ST.captionWords ? cue.text.toUpperCase() : cue.text, words = text.split(' '), sp = ctx.measureText(' ').width;
         // keyword: a word written *like this* in the captions file, otherwise the longest non-filler word
@@ -195,7 +207,7 @@ export function makeRenderer(s) {
       } else { ctx.strokeText(cue.text, s.width / 2, cy); ctx.fillStyle = fill; ctx.fillText(cue.text, s.width / 2, cy); } }
     return {drawing};
   }
-  return {cv, ctx, frame, events};
+  return {cv, ctx, frame, prepare, events};
 }
 
 // Split captions that would wrap into two timed halves at the space nearest the middle (proportional timing).

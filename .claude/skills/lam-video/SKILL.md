@@ -110,6 +110,6 @@ App: https://claude.ai/artifact/2J5Sxe49ijwPqjBbP3nccx (mã nguồn `studio/app/
 
 ## Công cụ của studio
 - Engine `studio/engine/`: `render.mjs`, `catalog.mjs`, `SCENE_FORMAT.md`. Video mẫu 9 phong cách: `studio/engine/examples/styles/`.
-- `studio/tools/`: `tts.py`, `align.py`, `retime.py` (đổi tốc độ giọng và co giãn cả scene theo), `cutout.py`.
+- `studio/tools/`: `tts.py`, `align.py`, `retime.py` (đổi tốc độ giọng và co giãn cả scene theo), `cutout.py`, `clips.py` (tìm và tải video thật có giấy phép tự do từ Wikimedia Commons, NASA, Internet Archive, Pexels; chèn vào phim bằng phần tử `clip`, xem skill `phan-canh` mục "Video thật").
 - `studio/topics.md` (chủ đề), `studio/lessons.md` (bài học).
 - Phim mẫu: `projects/rua-va-tho/` (đầy đủ quy trình), `projects/bach-dang-938/`.

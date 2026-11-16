@@ -101,6 +101,30 @@ Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu t
 ### `image` (tùy chọn, khi buộc phải dùng ảnh ngoài)
 `{"type": "image", "path": "art/x.png", "x": 540, "y": 900, "w": 800}` (neo ở tâm).
 
+### `clip`: đoạn video thật
+Đoạn phim tư liệu có giấy phép tự do, tải bằng `studio/tools/clips.py` vào `projects/<slug>/clips/`. Người que, đạo cụ, chữ vẫn vẽ đè lên được. Dùng khi hình thật kể chuyện tốt hơn hình vẽ (thiên nhiên, con vật, núi lửa, tên lửa, thành phố, phim tư liệu cũ). Mỗi video **tối đa khoảng 30% thời lượng** là video thật; phần còn lại vẫn vẽ bằng code để giữ chất kênh.
+
+```json
+{"type": "clip", "path": "clips/trau-hue.mp4", "in": 2, "x": 540, "y": 620, "w": 860, "ratio": 0.62,
+ "credit": "lightwrite · CC BY-SA 2.0 · Wikimedia Commons"}
+```
+
+| Thuộc tính | Ý nghĩa |
+|---|---|
+| `path`, `credit` | **Bắt buộc.** `credit` chép nguyên dòng `credit` trong `clips/clips.json` (tác giả · giấy phép · nguồn); engine in nó nhỏ dưới khung |
+| `in` | giây bắt đầu trong file (mặc định 0). Thời gian chạy theo `from` của phần tử |
+| `speed` | 1 bình thường, 0,5 quay chậm, 2 tua nhanh |
+| `loop` | mặc định `true` (hết file thì quay lại); `false` giữ khung cuối |
+| `full` | `true`: phủ kín khung 9:16 (chỉ dùng cho video **dọc** hoặc độ phân giải ≥ 1080p, vì cắt rất nhiều). `"fit"`: **cách nên dùng cho video ngang**: cả khung hình 16:9 nét ở giữa (`y`, mặc định 820), nền là chính video đó phóng to làm mờ. `dim` (0,15 với `true`), `vignette`, `blur` (28) |
+| khung (khi không `full`) | `x`, `y` (tâm, mặc định 540, 820), `w` (900), `ratio` (cao/rộng; mặc định theo video), `frame`: `polaroid` (mặc định, thẻ ảnh rơi xuống rồi nghiêng nhẹ) · `film` (dải phim có lỗ) · `rounded` · `none`; `rotate`, `scale`, `track`, `enter`, `exit` như mọi phần tử |
+| `tone` | chỉnh màu cho hợp phong cách: `none` (mặc định) · `paper` (dịu, ấm, hợp `giay-muc`, `so-tay`) · `sepia` (chuyện xưa) · `bw` · `old` (đen trắng có hạt, phim tư liệu) · `vivid` (`pop`) · `night` (`phim-cam`, `ban-do-toi`) |
+| `kenburns` | mức đẩy máy chậm trong suốt phần tử (1,06 với `full`, 1 với khung); `kenburnsOut: true` kéo ra; `focus` [fx, fy] điểm giữ khi đẩy |
+| `volume` | 0 (mặc định, tắt tiếng gốc). 0,1–0,3 để nghe tiếng mưa, sóng, đám đông dưới giọng đọc; file phải tải bằng `clips.py ... --audio` |
+
+- Phụ đề tự đổi sang chữ trắng viền đen khi có clip `full` trong shot.
+- Render chậm hơn shot vẽ một chút (giải mã video): khoảng 1,5 s máy cho 1 s phim.
+- Video ngang 640×360 hiện ở `w` 860 hơi mềm; nên tải ≥ 720p (`clips.py get … --height 1280`, mặc định).
+
 ## Trang phục (`cast`)
 `headband`, `hat` (`official` | `crown` | `helmet` | `cone` | `cap`), `hatColor`, `beard`, `sash` (+ `sashX: false` để chỉ có một dải đai), `belt`, `cape`, `robe`, `robeTrim`, `body`, `shoes`, `prop` (`spear` | `sword` | `dagger` | `hammer` | `oar` | `flag` | `scroll` | `seal`), `propColor`.
 

@@ -1,0 +1,19 @@
+{
+  "width": 1080, "height": 1920, "fps": 30, "style": "giay-muc",
+  "cast": {"a": {"headband": "red"}},
+  "captions": {"items": [{"start": 0.2, "end": 2.8, "text": "Trâu nước bên sông Hương"}, {"start": 3.0, "end": 6.4, "text": "Video thật ghép cùng người que vẽ tay"}, {"start": 6.6, "end": 8.8, "text": "Khung phim cũ, tông nâu"}]},
+  "shots": [
+    {"start": 0, "end": 3, "elements": [
+      {"type": "clip", "path": "clips/trau-hue.mp4", "full": "fit", "tone": "paper", "credit": "lightwrite · CC BY-SA 2.0 · Wikimedia Commons"},
+      {"type": "text", "text": "CON TRÂU", "x": 540, "y": 380, "size": 150, "color": "#ffffff", "enter": "pop"}
+    ]},
+    {"start": 3, "end": 6.6, "elements": [
+      {"type": "prop", "name": "ground", "x": 540, "y": 1330, "params": {"w": 1000}},
+      {"type": "clip", "path": "clips/trau-hue.mp4", "in": 2, "x": 540, "y": 620, "w": 860, "ratio": 0.62, "credit": "lightwrite · CC BY-SA 2.0 · Wikimedia Commons"},
+      {"type": "actor", "cast": "a", "x": 820, "y": 1330, "scale": 0.5, "facing": -1, "draw": {"at": 0.4, "dur": 1.0}, "acting": [{"t": 0, "pose": "point", "expr": "happy"}]}
+    ]},
+    {"start": 6.6, "end": 9, "elements": [
+      {"type": "clip", "path": "clips/trau-hue.mp4", "in": 0, "speed": 0.7, "tone": "sepia", "frame": "film", "x": 540, "y": 760, "w": 900, "ratio": 0.6, "kenburns": 1.12, "credit": "lightwrite · CC BY-SA 2.0 · Wikimedia Commons"}
+    ]}
+  ]
+}
