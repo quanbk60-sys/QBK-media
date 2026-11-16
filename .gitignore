@@ -7,3 +7,7 @@ projects/*/output/check*
 projects/*/output/.*
 studio/engine/examples/styles/out/
 studio/engine3d/node_modules/
+
+# graphify: file tam va bo dem (chi commit ket qua cuoi)
+graphify-out/.*
+graphify-out/cache/
