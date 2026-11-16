@@ -213,6 +213,24 @@ Vùng an toàn: chữ và nhãn cách mép trái phải 40 px (tự né). Phụ 
 | `ebig` | chữ to nhiều dòng: `lines` [{`text`, `size`, `color`, `spacing`, `font: "bold"`, `gap`}], `x`, `y`, `align`, `stagger` |
 | `estat` | số liệu: `label`, `value` ("43,8 ha": tự đếm lên, giữ dấu phẩy), `count` (giây đếm; 0 = không đếm), `note` (dòng nhỏ dưới), `size` (110), `color` |
 
+## Phong cách BĐS Hành trình tiện ích (`bds-hanh-trinh`, `lib/hanhtrinh.mjs`)
+"Ở đây đi đâu, mất bao lâu": một chuyến bay liên tục trên vệ tinh tối, đèn rọi theo tuyến đường, thẻ đếm km rồi phút, chuyên mục có màu riêng, vòng tổng kết. Dùng chung phần tử của `ve-tinh`, `bds-tien-ich`, `bds-earth` (`grade`, `outline`, `route` neon, `zoomblur`, `tilt`). Thẻ: `studio/references/bds-hanh-trinh-tien-ich/card.md`. Demo: `projects/nam-long-2-earth/build_scene.py` (hàm `leg()` dựng một nhịp điểm đến).
+- Shot liền nhau giữ cùng tâm view để nhìn như một chuyến bay; đổi tầm xa lớn thì `transition: 'zoomblur'`.
+- Màu (`color`): `du`/`mua` cam, `viec`/`van` xanh dương, `y` đỏ hồng, `giao` xanh lá, `ket` tím, `ring` vàng chanh, `amber` vàng cam, hoặc mã hex. Font: `HTCond` (Oswald Bold), `HTScript` (Dancing Script).
+
+| Phần tử (`type`) | Thuộc tính |
+|---|---|
+| `spot` | đèn rọi: `points` [{`geo`, `r`}], `routes` [{`path`, `from`, `grow`, `r`}] (khoét sáng dọc tuyến đang chạy, khớp thời gian với `route`), `dark` (0,5–0,62), `r`, `routeR` |
+| `homepin` | ghim dự án cam icon nhà: `geo`, `label`, `size`, `labelSize`, `ring` (vòng lô), `lift`, `instant: true` (hiện sẵn) |
+| `catpin` | ghim điểm đến: `geo`, `icon` (POI_ICONS), `color`, `label`, `ldx` (dời nhãn ngang), `side: "below"`, `size`, `labelSize` |
+| `infocard` | thẻ dưới: `cat`, `name`, `sub`, `color`, `km` (đếm lên), `unit` ("KM", "HA"…), `min`, `countAt`, `countDur`, `minAt`, `y`, `nameSize` |
+| `tabs` | thanh chuyên mục: `items` [{`key`, `text`, `color`}], `active`, `y` (236) |
+| `chaptitle` | chữ chương: `lead` (viết tay), `text` (chữ đậm hẹp phát sáng), `tail`, `color`, `y`, `size`, `leadSize` |
+| `ringzone` | vòng tổng kết: `geo` hoặc `x, y`, `r` (px), `dark` (0,82), `color` |
+| `legend` | danh sách: `items` [{`text`, `value`, `color`}], `y`, `rowH`, `stagger` |
+| `chips` | chip địa chỉ: `items` [chuỗi], `y` |
+| `titleglow` | tiêu đề vàng cam: `text`, `y`, `size` |
+
 ## Phong cách BĐS (`bds`, `lib/bds.mjs`)
 Video giới thiệu bất động sản: mở đầu trên ảnh vệ tinh → ảnh thật của dự án (thông số, tiện ích) → từng địa điểm lân cận có tuyến đường, km, phút → thẻ kêu gọi. Phần vị trí học từ skill `map-location-video` (thẻ `studio/references/vi-tri-ket-noi-bds/card.md`).
 Builder: `"poiMode": "zoom"` → mỗi địa điểm: ghim, máy lao xuống nghiêng 3D sát điểm (`closeZoom` 17,4, `closeTilt` 55, riêng từng điểm được), rồi kéo ra; `order` thêm `summary` (thẻ "Vị trí kết nối" liệt kê km, phút tới mọi địa điểm, `summaryTitle`) và `descend` (bay xuống sát mái tòa nhà: `descendZoom`, `descendTilt`, `descendCenter`, `descendTitle` [2 dòng], `descendSub`); ảnh đầu sau bản đồ tự lao vào; `"walk": {"xfade": 0.8}` nối các ảnh liền một mạch. `"sfx": false` bỏ mọi tiếng hiệu ứng. `"narration": false` bỏ lời đọc và phụ đề; `"music": {"generate": true, "mood": "chill|warm|bright", "bpm", "seed", "gain"}` tự sáng tác nhạc nền bằng `studio/tools/music.py` dài đúng video. Ảnh có `"cam": {fwd, side, up, yaw:[đầu,cuối], pitch, hand, bob, ease, zoom, focus}` thành cảnh quay cầm tay (`bdsClip`, ưu tiên dùng thay `move`: không làm cong tường). **Không viết tay scene này**: điền `projects/<slug>/bds.json` (mẫu `studio/references/vi-tri-ket-noi-bds/bds.example.json`) rồi chạy `python3 studio/tools/bds_build.py projects/<slug>`. Builder lấy tuyến OSRM, tính zoom, tải ảnh vệ tinh, viết `scene.json`. Kiểm tra: `node studio/engine/check_layout.mjs scene.json --sheet sheet.png` (phải 0 lỗi).

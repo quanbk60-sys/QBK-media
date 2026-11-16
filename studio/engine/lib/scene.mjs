@@ -13,6 +13,7 @@ import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo
 import {prepareBds} from './bds.mjs';
 import {GROUND_TYPES, preloadOverlays, preloadClips, prepareClips} from './tienich.mjs';
 import './earth.mjs';
+import './hanhtrinh.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -20,6 +21,8 @@ GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/NotoSans.ttf'), 'Sans');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-Black.otf'), 'QBKBlack');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-ExtraBoldItalic.otf'), 'QBKItalic');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Inter-Bold.otf'), 'QBKBold');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Oswald-Bold.ttf'), 'HTCond');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/DancingScript-SemiBold.ttf'), 'HTScript');
 
 export function loadScene(file) {
   const base = path.dirname(path.resolve(file));

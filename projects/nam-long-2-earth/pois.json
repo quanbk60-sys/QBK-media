@@ -1,0 +1,57 @@
+{
+ "project": {
+  "name": "Nam Long II Central Lake",
+  "lat": 9.995905,
+  "lon": 105.782672
+ },
+ "pois": [
+  {
+   "name": "Chợ nổi Cái Răng",
+   "lat": 10.004,
+   "lon": 105.7468,
+   "cat": "du-lich",
+   "icon": "water",
+   "color": "orange"
+  },
+  {
+   "name": "Đại học Cần Thơ",
+   "lat": 10.02989,
+   "lon": 105.76968,
+   "cat": "giao-duc",
+   "icon": "school",
+   "color": "green"
+  },
+  {
+   "name": "Bảo tàng Cần Thơ",
+   "lat": 10.0352,
+   "lon": 105.7867,
+   "cat": "van-hoa",
+   "icon": "bank",
+   "color": "blue"
+  },
+  {
+   "name": "Bến Ninh Kiều",
+   "lat": 10.0349,
+   "lon": 105.78903,
+   "cat": "van-hoa",
+   "icon": "star",
+   "color": "blue"
+  },
+  {
+   "name": "Cầu Cần Thơ",
+   "lat": 10.035,
+   "lon": 105.8125,
+   "cat": "ket-noi",
+   "icon": "bridge",
+   "color": "purple"
+  },
+  {
+   "name": "Sân bay quốc tế Cần Thơ",
+   "lat": 10.085277,
+   "lon": 105.711944,
+   "cat": "ket-noi",
+   "icon": "plane",
+   "color": "purple"
+  }
+ ]
+}

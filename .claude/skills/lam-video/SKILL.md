@@ -23,6 +23,7 @@ Bạn là **Nhà sản xuất**. Đọc yêu cầu, **chọn một dây chuyền
 | `thi-nghiem` | Thí nghiệm 3D · khoa học | 3D thực tế `studio/engine3d/render3d.mjs` | Khoa học đời thường, cách làm, mẹo dân gian |
 | `bds-tien-ich`, `bds` | BĐS | Vệ tinh nghiêng 3D (engine 2D `lib/tienich.mjs`). **Quy trình: skill `video-bds`** | Bất động sản |
 | `bds-earth` | BĐS · Google Earth tối | Vệ tinh tối, viền neon tự chạy, chuyển cảnh zoom nhòe (engine 2D `lib/earth.mjs`, mẫu `projects/_mau-bds-earth/`). Có lời đọc, không phụ đề. **Quy trình: skill `video-bds`** | Bất động sản |
+| `bds-hanh-trinh` | BĐS · Hành trình tiện ích | Vệ tinh tối, đèn rọi theo tuyến, thẻ đếm km rồi phút, chuyên mục màu, vòng 10 phút (engine 2D `lib/hanhtrinh.mjs`, mẫu `projects/nam-long-2-earth/`). Có lời đọc, không phụ đề. **Quy trình: skill `video-bds`** | Bất động sản |
 | `kien-thuc-dong-vat` | Kiến thức động vật · hoạt hình | Con vật vẽ bằng code (engine 2D) | Động vật |
 Không dùng người que, không làm người thật.
 
