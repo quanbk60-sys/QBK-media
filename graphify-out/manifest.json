@@ -1,0 +1,1706 @@
+{
+  ".claude/skills/directing-stickman-videos/agents/openai.yaml": {
+    "mtime": 1794832301.731699,
+    "seen": 1794833042.551011,
+    "ast_hash": "2a35f6e45bf9b35837d7c24b270c6d53",
+    "semantic_hash": "2a35f6e45bf9b35837d7c24b270c6d53"
+  },
+  ".claude/skills/directing-stickman-videos/assets/a6/reference-manifest.json": {
+    "mtime": 1794832301.7410095,
+    "seen": 1794833042.5510192,
+    "ast_hash": "1a9bca5159d1a7f9c645ee034068c439",
+    "semantic_hash": "1a9bca5159d1a7f9c645ee034068c439"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b1/approved-baseline.json": {
+    "mtime": 1794832301.7570095,
+    "seen": 1794833042.5510223,
+    "ast_hash": "18b8a361a21260aa18c54a8000f953cf",
+    "semantic_hash": "18b8a361a21260aa18c54a8000f953cf"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b1/approved-production-standard.json": {
+    "mtime": 1794832301.7570095,
+    "seen": 1794833042.5510242,
+    "ast_hash": "eed14a9cf18dc28b3a3f4c1ecf49411d",
+    "semantic_hash": "eed14a9cf18dc28b3a3f4c1ecf49411d"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b2/approved-style-board.json": {
+    "mtime": 1794832301.7709277,
+    "seen": 1794833042.5510254,
+    "ast_hash": "6c16689e7ececa018ae90911e49b2e60",
+    "semantic_hash": "6c16689e7ececa018ae90911e49b2e60"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b3/reference-manifest.json": {
+    "mtime": 1794832301.771436,
+    "seen": 1794833042.5510266,
+    "ast_hash": "4901e96f1529f4a970d025f7ea14347c",
+    "semantic_hash": "4901e96f1529f4a970d025f7ea14347c"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b4/approved-style.json": {
+    "mtime": 1794832301.771436,
+    "seen": 1794833042.551028,
+    "ast_hash": "b26546fca53528b7d4af7bebc49619b9",
+    "semantic_hash": "b26546fca53528b7d4af7bebc49619b9"
+  },
+  ".claude/skills/directing-stickman-videos/examples/b1/project.json": {
+    "mtime": 1794832301.869126,
+    "seen": 1794833042.5510292,
+    "ast_hash": "5394d64b5030414bfb919dde668d6563",
+    "semantic_hash": "5394d64b5030414bfb919dde668d6563"
+  },
+  ".claude/skills/directing-stickman-videos/package.json": {
+    "mtime": 1794832301.869126,
+    "seen": 1794833042.55103,
+    "ast_hash": "5c79e0e6012909eaf702e880905b0c8d",
+    "semantic_hash": "5c79e0e6012909eaf702e880905b0c8d"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/a6_finish.py": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5510314,
+    "ast_hash": "155a8094dd2c964d0f05cf9e4418eb8b",
+    "semantic_hash": "155a8094dd2c964d0f05cf9e4418eb8b"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/a6_reference_check.py": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510323,
+    "ast_hash": "8903078dc0a2dd5a58e01ceefd43b346",
+    "semantic_hash": "8903078dc0a2dd5a58e01ceefd43b346"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/align_captions.py": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510333,
+    "ast_hash": "dde4946c973b9a4700bcc4c7ba6e24e5",
+    "semantic_hash": "dde4946c973b9a4700bcc4c7ba6e24e5"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/autopilot-core.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510345,
+    "ast_hash": "b1c920926669863e3aafdb376d1849c6",
+    "semantic_hash": "b1c920926669863e3aafdb376d1849c6"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/autopilot-render.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510354,
+    "ast_hash": "f588cd4c6ba9b122d0457fafe5dcfa9f",
+    "semantic_hash": "f588cd4c6ba9b122d0457fafe5dcfa9f"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/autopilot.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510364,
+    "ast_hash": "8212185bdb087914562e7e8718a387a8",
+    "semantic_hash": "8212185bdb087914562e7e8718a387a8"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/b3-graphics.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510375,
+    "ast_hash": "f3418bb002b5e39f6d051491d039f497",
+    "semantic_hash": "f3418bb002b5e39f6d051491d039f497"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/b4-opening-audio-check.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510385,
+    "ast_hash": "bfff76343067c33173d6e5ae6567def7",
+    "semantic_hash": "bfff76343067c33173d6e5ae6567def7"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/b4-production-check.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510395,
+    "ast_hash": "066a9067c2c93a07b1ccbc20d54403ee",
+    "semantic_hash": "066a9067c2c93a07b1ccbc20d54403ee"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/b4-runtime.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510404,
+    "ast_hash": "d651d181e0c0b26be83cdd1bef21c68c",
+    "semantic_hash": "d651d181e0c0b26be83cdd1bef21c68c"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/b4-style-lock.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510416,
+    "ast_hash": "65044d1dd8744da08f8f800fe9b4512b",
+    "semantic_hash": "65044d1dd8744da08f8f800fe9b4512b"
+  },
+  ".claude/skills/directing-stickman-videos/scripts/gemini-media.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510426,
+    "ast_hash": "79cfd7fb3cffec649584d8835340e80d",
+    "semantic_hash": "79cfd7fb3cffec649584d8835340e80d"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b3-reference-pack.test.mjs": {
+    "mtime": 1794832301.8717904,
+    "seen": 1794833042.5510435,
+    "ast_hash": "8f2a3e13c1b08f892f62b4852e30bec3",
+    "semantic_hash": "8f2a3e13c1b08f892f62b4852e30bec3"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b3-runtime.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.551045,
+    "ast_hash": "aa48168219c24fa8ad16228050508930",
+    "semantic_hash": "aa48168219c24fa8ad16228050508930"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b4-audio-policy.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.551046,
+    "ast_hash": "c7aa631637a9a07db00b95f0a91bdb8e",
+    "semantic_hash": "c7aa631637a9a07db00b95f0a91bdb8e"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b4-opening-audio-check.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.5510468,
+    "ast_hash": "f0c127e1bf59cb100f2a3d04b721e73d",
+    "semantic_hash": "f0c127e1bf59cb100f2a3d04b721e73d"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b4-opening-policy.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.551048,
+    "ast_hash": "03cbbdaab42a5ff0bed15a07cf6f32d9",
+    "semantic_hash": "03cbbdaab42a5ff0bed15a07cf6f32d9"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b4-production-check.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.5510488,
+    "ast_hash": "779270ecf37636501a16f249f50c35ac",
+    "semantic_hash": "779270ecf37636501a16f249f50c35ac"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b4-runtime.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.5510497,
+    "ast_hash": "59894d94e97c6fe8372b287d85f29cba",
+    "semantic_hash": "59894d94e97c6fe8372b287d85f29cba"
+  },
+  ".claude/skills/directing-stickman-videos/tests/b4-style-lock.test.mjs": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.5510507,
+    "ast_hash": "49b0cca04b081b4855c4f4746d36a177",
+    "semantic_hash": "49b0cca04b081b4855c4f4746d36a177"
+  },
+  ".claude/skills/directing-stickman-videos/tests/fixtures/a6-coastal-station.plan.json": {
+    "mtime": 1794832301.8724582,
+    "seen": 1794833042.5510519,
+    "ast_hash": "29660be8ce9a9e3c185981faa46774dc",
+    "semantic_hash": "29660be8ce9a9e3c185981faa46774dc"
+  },
+  ".claude/skills/directing-stickman-videos/tests/fixtures/a6-night-library.plan.json": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5510526,
+    "ast_hash": "07b603b482681000d9020321be027b63",
+    "semantic_hash": "07b603b482681000d9020321be027b63"
+  },
+  ".claude/skills/directing-stickman-videos/tests/runtime.test.mjs": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5510535,
+    "ast_hash": "fb76d06a565619abc677e4472907e485",
+    "semantic_hash": "fb76d06a565619abc677e4472907e485"
+  },
+  ".claude/skills/directing-stickman-videos/tests/test_a6_references.py": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.551055,
+    "ast_hash": "06a38d9d6723f360e801861b5f4b9954",
+    "semantic_hash": "06a38d9d6723f360e801861b5f4b9954"
+  },
+  "projects/_demo-b1/output/checkpoint.json": {
+    "mtime": 1794832301.876202,
+    "seen": 1794833042.551056,
+    "ast_hash": "d7438ec3e7012ada7c6d932981ea2669",
+    "semantic_hash": "d7438ec3e7012ada7c6d932981ea2669"
+  },
+  "projects/_demo-b1/output/preview-report.json": {
+    "mtime": 1794832301.8762357,
+    "seen": 1794833042.5510569,
+    "ast_hash": "3b90d9f1fc45a85285145848cb2c30ea",
+    "semantic_hash": "3b90d9f1fc45a85285145848cb2c30ea"
+  },
+  "projects/_demo-b1/project.json": {
+    "mtime": 1794832301.8770094,
+    "seen": 1794833042.5510578,
+    "ast_hash": "5394d64b5030414bfb919dde668d6563",
+    "semantic_hash": "5394d64b5030414bfb919dde668d6563"
+  },
+  "projects/bach-dang-938/art/failed/00-cast-attempt1.request.json": {
+    "mtime": 1794832301.9010096,
+    "seen": 1794833042.551059,
+    "ast_hash": "7df51875fd1d514bd553e4e4d8bbf63e",
+    "semantic_hash": "7df51875fd1d514bd553e4e4d8bbf63e"
+  },
+  "projects/bach-dang-938/art/failed/00-cast-attempt2.request.json": {
+    "mtime": 1794832301.9072075,
+    "seen": 1794833042.55106,
+    "ast_hash": "696049b5155ece8f990658c40a45e2bc",
+    "semantic_hash": "696049b5155ece8f990658c40a45e2bc"
+  },
+  "projects/bach-dang-938/art/failed/00-cast-attempt3.request.json": {
+    "mtime": 1794832301.9072075,
+    "seen": 1794833042.5510612,
+    "ast_hash": "735e1c57a7d639beaa6b8035d00c9c3f",
+    "semantic_hash": "735e1c57a7d639beaa6b8035d00c9c3f"
+  },
+  "projects/bach-dang-938/audio/tts-attempt1-failed.request.json": {
+    "mtime": 1794832301.9883378,
+    "seen": 1794833042.5510626,
+    "ast_hash": "a9c1c3bd2ceb2ff0278f05d8f584a204",
+    "semantic_hash": "a9c1c3bd2ceb2ff0278f05d8f584a204"
+  },
+  "projects/bach-dang-938/captions-audio.json": {
+    "mtime": 1794832301.9883378,
+    "seen": 1794833042.5510638,
+    "ast_hash": "7fe1ad984e30960347382c83ff17b473",
+    "semantic_hash": "7fe1ad984e30960347382c83ff17b473"
+  },
+  "projects/bach-dang-938/checkpoint.json": {
+    "mtime": 1794832301.9883378,
+    "seen": 1794833042.5510645,
+    "ast_hash": "a0513f039f66aec11881edb5d15ec1f7",
+    "semantic_hash": "a0513f039f66aec11881edb5d15ec1f7"
+  },
+  "projects/bach-dang-938/output/checkpoint.json": {
+    "mtime": 1794832301.9970095,
+    "seen": 1794833042.5510657,
+    "ast_hash": "5084f9a9b0bf10d944fd7740a0b7afd4",
+    "semantic_hash": "5084f9a9b0bf10d944fd7740a0b7afd4"
+  },
+  "projects/bach-dang-938/output/preview-report.json": {
+    "mtime": 1794832302.0044174,
+    "seen": 1794833042.5510678,
+    "ast_hash": "4d09615e070eee21d5fdeb7fcbe57bcb",
+    "semantic_hash": "4d09615e070eee21d5fdeb7fcbe57bcb"
+  },
+  "projects/bach-dang-938/project.json": {
+    "mtime": 1794832302.0210094,
+    "seen": 1794833042.5510688,
+    "ast_hash": "d339d79f733ff5e324471ce01ef4e066",
+    "semantic_hash": "d339d79f733ff5e324471ce01ef4e066"
+  },
+  "projects/bach-dang-938/scene.json": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5510697,
+    "ast_hash": "7e7b6a13ba0cdfac61e4e67e38c3cbf9",
+    "semantic_hash": "7e7b6a13ba0cdfac61e4e67e38c3cbf9"
+  },
+  "projects/bach-dang-938/tools/align.py": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5510707,
+    "ast_hash": "a19746fbbdd7eac3ae8be41ddb7247fc",
+    "semantic_hash": "a19746fbbdd7eac3ae8be41ddb7247fc"
+  },
+  "projects/bach-dang-938/tools/build_project.py": {
+    "mtime": 1794832302.027854,
+    "seen": 1794833042.5510716,
+    "ast_hash": "8d4d9c23bf6273b17ff0bc18a6a27b54",
+    "semantic_hash": "8d4d9c23bf6273b17ff0bc18a6a27b54"
+  },
+  "projects/bach-dang-938/tools/cutout.py": {
+    "mtime": 1794832302.027854,
+    "seen": 1794833042.5510728,
+    "ast_hash": "621690605f84f23307f35e2e60a7a200",
+    "semantic_hash": "621690605f84f23307f35e2e60a7a200"
+  },
+  "projects/bach-dang-ve-tinh/build_scene.py": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.5510738,
+    "ast_hash": "c540bda7de2292722d69510c62031e55",
+    "semantic_hash": "c540bda7de2292722d69510c62031e55"
+  },
+  "projects/bach-dang-ve-tinh/captions-audio.json": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.5510747,
+    "ast_hash": "83095e557bf495d866fb4f0aa3e40dff",
+    "semantic_hash": "83095e557bf495d866fb4f0aa3e40dff"
+  },
+  "projects/bach-dang-ve-tinh/checkpoint.json": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.551076,
+    "ast_hash": "abf2aae662750e3c574f1ec811cc2b40",
+    "semantic_hash": "abf2aae662750e3c574f1ec811cc2b40"
+  },
+  "projects/bach-dang-ve-tinh/fetch_sat.sh": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.551077,
+    "ast_hash": "b9104c052ed8ce90012abbc9b081ebb5",
+    "semantic_hash": "b9104c052ed8ce90012abbc9b081ebb5"
+  },
+  "projects/bach-dang-ve-tinh/photos/commons.json": {
+    "mtime": 1794832302.0659966,
+    "seen": 1794833042.5510778,
+    "ast_hash": "eaa4fa9fe7c9b76321c500bbc57423ab",
+    "semantic_hash": "eaa4fa9fe7c9b76321c500bbc57423ab"
+  },
+  "projects/bach-dang-ve-tinh/scene.json": {
+    "mtime": 1794832302.0659966,
+    "seen": 1794833042.5510788,
+    "ast_hash": "93f37e6ff27a468f1fcd26b1cce91c20",
+    "semantic_hash": "93f37e6ff27a468f1fcd26b1cce91c20"
+  },
+  "projects/lam-da-co-dai/build_scene3d.py": {
+    "mtime": 1794832302.0717785,
+    "seen": 1794833042.55108,
+    "ast_hash": "07797bc897ea2b65e766b623a7a81090",
+    "semantic_hash": "07797bc897ea2b65e766b623a7a81090"
+  },
+  "projects/lam-da-co-dai/captions-audio.json": {
+    "mtime": 1794832302.0717785,
+    "seen": 1794833042.551081,
+    "ast_hash": "9be3b577dcf575db95301b0e69f2995d",
+    "semantic_hash": "9be3b577dcf575db95301b0e69f2995d"
+  },
+  "projects/lam-da-co-dai/scene3d.json": {
+    "mtime": 1794832302.0930095,
+    "seen": 1794833042.551082,
+    "ast_hash": "970a3ae14d6c5635817556700525d528",
+    "semantic_hash": "970a3ae14d6c5635817556700525d528"
+  },
+  "projects/quang-cao-app/captions-audio.json": {
+    "mtime": 1794832302.0976517,
+    "seen": 1794833042.551083,
+    "ast_hash": "41e276d28f2301fd8f523eafdfb80343",
+    "semantic_hash": "41e276d28f2301fd8f523eafdfb80343"
+  },
+  "projects/quang-cao-app/mockdb/app/crew.json": {
+    "mtime": 1794832302.0992343,
+    "seen": 1794833042.5510838,
+    "ast_hash": "64d141aa2f2eabac0dfc23c92c5fb2b7",
+    "semantic_hash": "64d141aa2f2eabac0dfc23c92c5fb2b7"
+  },
+  "projects/quang-cao-app/mockdb/app/stats.json": {
+    "mtime": 1794832302.0992844,
+    "seen": 1794833042.5510845,
+    "ast_hash": "3a3df2c7f85c06c0c52c6a700b671c76",
+    "semantic_hash": "3a3df2c7f85c06c0c52c6a700b671c76"
+  },
+  "projects/quang-cao-app/mockdb/app/styles.json": {
+    "mtime": 1794832302.0992844,
+    "seen": 1794833042.5510855,
+    "ast_hash": "4dde7b2e81e66ea3b67b10adf8620a89",
+    "semantic_hash": "4dde7b2e81e66ea3b67b10adf8620a89"
+  },
+  "projects/quang-cao-app/mockdb/app/trends.json": {
+    "mtime": 1794832302.0992844,
+    "seen": 1794833042.5510867,
+    "ast_hash": "25f3b9350f7d7a7118b720f4c2a4b51d",
+    "semantic_hash": "25f3b9350f7d7a7118b720f4c2a4b51d"
+  },
+  "projects/quang-cao-app/mockdb/app/voices.json": {
+    "mtime": 1794832302.0992844,
+    "seen": 1794833042.5510876,
+    "ast_hash": "69a8e64e814abab6b6d30c0194d4cad1",
+    "semantic_hash": "69a8e64e814abab6b6d30c0194d4cad1"
+  },
+  "projects/quang-cao-app/mockdb/videos/bach-dang-ve-tinh.json": {
+    "mtime": 1794832302.1050096,
+    "seen": 1794833042.5510883,
+    "ast_hash": "c25deb64df4a4c3163ad9ba0c402c452",
+    "semantic_hash": "c25deb64df4a4c3163ad9ba0c402c452"
+  },
+  "projects/quang-cao-app/mockdb/videos/lam-da-co-dai.json": {
+    "mtime": 1794832302.1094713,
+    "seen": 1794833042.5510895,
+    "ast_hash": "0160c6c398910de1dcc002ad68113110",
+    "semantic_hash": "0160c6c398910de1dcc002ad68113110"
+  },
+  "projects/quang-cao-app/mockdb/videos/tranh-dong-ho.json": {
+    "mtime": 1794832302.1094713,
+    "seen": 1794833042.5510905,
+    "ast_hash": "29b642d7510e01f341b80f0a96376aba",
+    "semantic_hash": "29b642d7510e01f341b80f0a96376aba"
+  },
+  "projects/quang-cao-app/record_ad.mjs": {
+    "mtime": 1794832302.1210096,
+    "seen": 1794833042.5510912,
+    "ast_hash": "bfeb8d78208f006e525c09a5c17a7ff2",
+    "semantic_hash": "bfeb8d78208f006e525c09a5c17a7ff2"
+  },
+  "projects/rua-va-tho/captions-audio.json": {
+    "mtime": 1794832302.1258416,
+    "seen": 1794833042.5510921,
+    "ast_hash": "a7cd7e17e09e64c76440c6b1fb69322f",
+    "semantic_hash": "a7cd7e17e09e64c76440c6b1fb69322f"
+  },
+  "projects/rua-va-tho/checkpoint.json": {
+    "mtime": 1794832302.1258416,
+    "seen": 1794833042.5510933,
+    "ast_hash": "50b85b7d52fffe8f9f2cb1bc86c68d66",
+    "semantic_hash": "50b85b7d52fffe8f9f2cb1bc86c68d66"
+  },
+  "projects/rua-va-tho/scene.json": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.5510943,
+    "ast_hash": "eb3285bef778628a348f303a92047966",
+    "semantic_hash": "eb3285bef778628a348f303a92047966"
+  },
+  "projects/rua-va-tho/thumb.json": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.551095,
+    "ast_hash": "b12f531413c987c055638f2d754bfd21",
+    "semantic_hash": "b12f531413c987c055638f2d754bfd21"
+  },
+  "projects/rung-amazon/build_scene.py": {
+    "mtime": 1794832302.2022026,
+    "seen": 1794833042.5510962,
+    "ast_hash": "fdd06eb15ad3606fa7085d6d8b8f41e1",
+    "semantic_hash": "fdd06eb15ad3606fa7085d6d8b8f41e1"
+  },
+  "projects/rung-amazon/captions-audio.json": {
+    "mtime": 1794832302.2022026,
+    "seen": 1794833042.5510972,
+    "ast_hash": "ec4627d861c6b29e8d600d5b6c3a5f1d",
+    "semantic_hash": "ec4627d861c6b29e8d600d5b6c3a5f1d"
+  },
+  "projects/rung-amazon/checkpoint.json": {
+    "mtime": 1794832302.2022026,
+    "seen": 1794833042.5511038,
+    "ast_hash": "311813b9469dd91708498d147502fefd",
+    "semantic_hash": "311813b9469dd91708498d147502fefd"
+  },
+  "projects/rung-amazon/scene.json": {
+    "mtime": 1794832302.2410095,
+    "seen": 1794833042.5511048,
+    "ast_hash": "ecafff29100b59067dce6e1308663ca9",
+    "semantic_hash": "ecafff29100b59067dce6e1308663ca9"
+  },
+  "studio/codeart/ngo-quyen.mjs": {
+    "mtime": 1794832302.2539227,
+    "seen": 1794833042.5511057,
+    "ast_hash": "6ef4bb48d4f00125c0265c8ca25e87b2",
+    "semantic_hash": "6ef4bb48d4f00125c0265c8ca25e87b2"
+  },
+  "studio/codeart/package.json": {
+    "mtime": 1794832302.2610095,
+    "seen": 1794833042.551107,
+    "ast_hash": "847996d84475ab66169fee3251d3a381",
+    "semantic_hash": "847996d84475ab66169fee3251d3a381"
+  },
+  "studio/codeart/rig-demo.mjs": {
+    "mtime": 1794832302.2610095,
+    "seen": 1794833042.551108,
+    "ast_hash": "10322304a1cfd9c22a34484c5c34003b",
+    "semantic_hash": "10322304a1cfd9c22a34484c5c34003b"
+  },
+  "studio/docs/app-design/canvas.json": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5511088,
+    "ast_hash": "0f71ba52bd902e71f0391cc273bb6ef5",
+    "semantic_hash": "0f71ba52bd902e71f0391cc273bb6ef5"
+  },
+  "studio/engine/catalog.mjs": {
+    "mtime": 1794832302.2679083,
+    "seen": 1794833042.5511098,
+    "ast_hash": "e3d77b495512c163953abd53ef4f84a4",
+    "semantic_hash": "e3d77b495512c163953abd53ef4f84a4"
+  },
+  "studio/engine/examples/amazon-kit.json": {
+    "mtime": 1794832302.2679083,
+    "seen": 1794833042.5511107,
+    "ast_hash": "04fc3b5a647ecec37772471c9319d7ec",
+    "semantic_hash": "04fc3b5a647ecec37772471c9319d7ec"
+  },
+  "studio/engine/examples/rua-tho-kit.json": {
+    "mtime": 1794832302.2680018,
+    "seen": 1794833042.5511117,
+    "ast_hash": "dda651e4618f89d776d6c8fe1667bc01",
+    "semantic_hash": "dda651e4618f89d776d6c8fe1667bc01"
+  },
+  "studio/engine/examples/styles/00-giay-muc.json": {
+    "mtime": 1794832302.2680018,
+    "seen": 1794833042.5511127,
+    "ast_hash": "6137f68ced93402c8b0ccc4fbeb07073",
+    "semantic_hash": "6137f68ced93402c8b0ccc4fbeb07073"
+  },
+  "studio/engine/examples/styles/01-bang-phan.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511134,
+    "ast_hash": "542ffac27db8afc7ca481ff422ab208a",
+    "semantic_hash": "542ffac27db8afc7ca481ff422ab208a"
+  },
+  "studio/engine/examples/styles/02-ban-ve.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511146,
+    "ast_hash": "1742d31b763a062a75a04cdeb6e131ef",
+    "semantic_hash": "1742d31b763a062a75a04cdeb6e131ef"
+  },
+  "studio/engine/examples/styles/03-so-tay.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.551117,
+    "ast_hash": "b704351d366b098dea1b47ac2995071f",
+    "semantic_hash": "b704351d366b098dea1b47ac2995071f"
+  },
+  "studio/engine/examples/styles/04-pop.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511181,
+    "ast_hash": "84ecc1b5363d6fa6b59edc8e4154d18e",
+    "semantic_hash": "84ecc1b5363d6fa6b59edc8e4154d18e"
+  },
+  "studio/engine/examples/styles/05-dan-gian.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511189,
+    "ast_hash": "0665f43b467f286d4bd80455ee37f681",
+    "semantic_hash": "0665f43b467f286d4bd80455ee37f681"
+  },
+  "studio/engine/examples/styles/06-phim-cam.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511198,
+    "ast_hash": "376dabfba186c6c256324f6c705c27c0",
+    "semantic_hash": "376dabfba186c6c256324f6c705c27c0"
+  },
+  "studio/engine/examples/styles/07-phac-thao.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511208,
+    "ast_hash": "13e4cb838ee91cb5aa6d3bd29db78bf8",
+    "semantic_hash": "13e4cb838ee91cb5aa6d3bd29db78bf8"
+  },
+  "studio/engine/examples/styles/08-ban-do-toi.json": {
+    "mtime": 1794832302.26807,
+    "seen": 1794833042.5511217,
+    "ast_hash": "0e1edc977ff32dcdf8cfb457bf553ff7",
+    "semantic_hash": "0e1edc977ff32dcdf8cfb457bf553ff7"
+  },
+  "studio/engine/lib/audio.mjs": {
+    "mtime": 1794832302.3050096,
+    "seen": 1794833042.5511227,
+    "ast_hash": "c1e76d0dd1e65e543f1d2491b338d662",
+    "semantic_hash": "c1e76d0dd1e65e543f1d2491b338d662"
+  },
+  "studio/engine/lib/character.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511236,
+    "ast_hash": "0bf71cf433e833f4ebe492ec5c850b56",
+    "semantic_hash": "0bf71cf433e833f4ebe492ec5c850b56"
+  },
+  "studio/engine/lib/geo.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511248,
+    "ast_hash": "10942b898c2c2a0595aebf092148ffc4",
+    "semantic_hash": "10942b898c2c2a0595aebf092148ffc4"
+  },
+  "studio/engine/lib/hand.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511255,
+    "ast_hash": "c8e964bd32a3fb0bceb678f657403b1a",
+    "semantic_hash": "c8e964bd32a3fb0bceb678f657403b1a"
+  },
+  "studio/engine/lib/math.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511265,
+    "ast_hash": "12677caf904b8090e8dce4337e7713af",
+    "semantic_hash": "12677caf904b8090e8dce4337e7713af"
+  },
+  "studio/engine/lib/props.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511274,
+    "ast_hash": "484631bcb8e6687c1b21921a7cf4d1a0",
+    "semantic_hash": "484631bcb8e6687c1b21921a7cf4d1a0"
+  },
+  "studio/engine/lib/recorder.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511284,
+    "ast_hash": "66c6eaac850b952e95955364cc9c62b0",
+    "semantic_hash": "66c6eaac850b952e95955364cc9c62b0"
+  },
+  "studio/engine/lib/scene.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511293,
+    "ast_hash": "7b5ccf7f89b49ea790366976029e7b73",
+    "semantic_hash": "7b5ccf7f89b49ea790366976029e7b73"
+  },
+  "studio/engine/lib/styles.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511303,
+    "ast_hash": "9de9db06f037fd3fdd3d6079272c7ccf",
+    "semantic_hash": "9de9db06f037fd3fdd3d6079272c7ccf"
+  },
+  "studio/engine/package.json": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511312,
+    "ast_hash": "aa7c66e5d6064ecbe3548a8489de9176",
+    "semantic_hash": "aa7c66e5d6064ecbe3548a8489de9176"
+  },
+  "studio/engine/render.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5511322,
+    "ast_hash": "75d2e5fe80cb29036b1eef8b5d741872",
+    "semantic_hash": "75d2e5fe80cb29036b1eef8b5d741872"
+  },
+  "studio/engine/test/engine.test.mjs": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.551133,
+    "ast_hash": "2272a2c185867b865b32cd10b35b18fd",
+    "semantic_hash": "2272a2c185867b865b32cd10b35b18fd"
+  },
+  "studio/engine3d/lib3d.js": {
+    "mtime": 1794832302.3129973,
+    "seen": 1794833042.5511339,
+    "ast_hash": "1f6613d36c58b3bf286ff55c3e6edddf",
+    "semantic_hash": "1f6613d36c58b3bf286ff55c3e6edddf"
+  },
+  "studio/engine3d/package.json": {
+    "mtime": 1794832302.3129973,
+    "seen": 1794833042.5511348,
+    "ast_hash": "8e889e06baaa36f6451f53920732b2c0",
+    "semantic_hash": "8e889e06baaa36f6451f53920732b2c0"
+  },
+  "studio/engine3d/render3d.mjs": {
+    "mtime": 1794832302.3129973,
+    "seen": 1794833042.5511374,
+    "ast_hash": "6428162a17bb0de8c659da18c3ead78e",
+    "semantic_hash": "6428162a17bb0de8c659da18c3ead78e"
+  },
+  "studio/references/ban-do-dia-chinh-tri/analysis.json": {
+    "mtime": 1794832302.313353,
+    "seen": 1794833042.5511386,
+    "ast_hash": "1405ab270d916303b21cec55a29d6003",
+    "semantic_hash": "1405ab270d916303b21cec55a29d6003"
+  },
+  "studio/references/phac-thao-sepia/analysis.json": {
+    "mtime": 1794832302.3133767,
+    "seen": 1794833042.5511394,
+    "ast_hash": "dec5df6e56e4307be1970e6443231000",
+    "semantic_hash": "dec5df6e56e4307be1970e6443231000"
+  },
+  "studio/references/ve-tay-but-chi/analysis.json": {
+    "mtime": 1794832302.3330095,
+    "seen": 1794833042.5511403,
+    "ast_hash": "bc4740d5a2a402fd56d6bd60e2bd5c82",
+    "semantic_hash": "bc4740d5a2a402fd56d6bd60e2bd5c82"
+  },
+  "studio/tools/align.py": {
+    "mtime": 1794832302.3450096,
+    "seen": 1794833042.5511413,
+    "ast_hash": "9f70050c89510bb8e851d0853d5a887a",
+    "semantic_hash": "9f70050c89510bb8e851d0853d5a887a"
+  },
+  "studio/tools/analyze_ref.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5511425,
+    "ast_hash": "a3e866a2b34502e1bdbffc3d25b09637",
+    "semantic_hash": "a3e866a2b34502e1bdbffc3d25b09637"
+  },
+  "studio/tools/commons.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5511432,
+    "ast_hash": "57c7a0b465959882f8ac3f80a336df50",
+    "semantic_hash": "57c7a0b465959882f8ac3f80a336df50"
+  },
+  "studio/tools/cutout.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5511441,
+    "ast_hash": "621690605f84f23307f35e2e60a7a200",
+    "semantic_hash": "621690605f84f23307f35e2e60a7a200"
+  },
+  "studio/tools/retime.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5511453,
+    "ast_hash": "2af1733f72116b772e7ee03572c338dd",
+    "semantic_hash": "2af1733f72116b772e7ee03572c338dd"
+  },
+  "studio/tools/satgrid.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.551146,
+    "ast_hash": "0c796cb5462299eda3e175979ffe0d8a",
+    "semantic_hash": "0c796cb5462299eda3e175979ffe0d8a"
+  },
+  "studio/tools/satmap.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.551147,
+    "ast_hash": "bbd6265e768bc3da757ecdfb8e44dcab",
+    "semantic_hash": "bbd6265e768bc3da757ecdfb8e44dcab"
+  },
+  "studio/tools/tiktok.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5511477,
+    "ast_hash": "76833bda138154b85de933662287cc5f",
+    "semantic_hash": "76833bda138154b85de933662287cc5f"
+  },
+  "studio/tools/tts.py": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.551149,
+    "ast_hash": "347a817c72fa8c8e8e0b278434415fc3",
+    "semantic_hash": "347a817c72fa8c8e8e0b278434415fc3"
+  },
+  ".claude/agents/bien-kich.md": {
+    "mtime": 1794832301.7312133,
+    "seen": 1794833042.5511498,
+    "ast_hash": "dec09c2c3d2b9571fae8ad118376804f",
+    "semantic_hash": "dec09c2c3d2b9571fae8ad118376804f"
+  },
+  ".claude/agents/dao-dien.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.551151,
+    "ast_hash": "8ba99a97be62f85f39c44518a38bb136",
+    "semantic_hash": "8ba99a97be62f85f39c44518a38bb136"
+  },
+  ".claude/agents/dung-phim.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.5511522,
+    "ast_hash": "e9624e78dc120262d54be69e6b8b55dc",
+    "semantic_hash": "e9624e78dc120262d54be69e6b8b55dc"
+  },
+  ".claude/agents/hoa-si.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.551153,
+    "ast_hash": "5461a3cfc964514af10f28d58a62d2be",
+    "semantic_hash": "5461a3cfc964514af10f28d58a62d2be"
+  },
+  ".claude/agents/kiem-dinh.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.551154,
+    "ast_hash": "9ceafbdec62cba4936fe980003a7c910",
+    "semantic_hash": "9ceafbdec62cba4936fe980003a7c910"
+  },
+  ".claude/agents/long-tieng.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.5511549,
+    "ast_hash": "aa72a8e8c5b021e52b19aaa382f88ef0",
+    "semantic_hash": "aa72a8e8c5b021e52b19aaa382f88ef0"
+  },
+  ".claude/agents/nghien-cuu-mau.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.551156,
+    "ast_hash": "2dc2c9f7598eecc56d0c4f521d3e97ec",
+    "semantic_hash": "2dc2c9f7598eecc56d0c4f521d3e97ec"
+  },
+  ".claude/agents/phat-hanh.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.551157,
+    "ast_hash": "a6dec7469ac23145b391162c0948581a",
+    "semantic_hash": "a6dec7469ac23145b391162c0948581a"
+  },
+  ".claude/agents/san-trend.md": {
+    "mtime": 1794832301.7313027,
+    "seen": 1794833042.551158,
+    "ast_hash": "d17aa85e418d181c08e59c059ea554bc",
+    "semantic_hash": "d17aa85e418d181c08e59c059ea554bc"
+  },
+  ".claude/skills/am-thanh/SKILL.md": {
+    "mtime": 1794832301.7315884,
+    "seen": 1794833042.5511587,
+    "ast_hash": "3cd9da575e3de28c4440450f140e3635",
+    "semantic_hash": "3cd9da575e3de28c4440450f140e3635"
+  },
+  ".claude/skills/directing-stickman-videos/SKILL.md": {
+    "mtime": 1794832301.731699,
+    "seen": 1794833042.5511599,
+    "ast_hash": "8882d9789046d3c5a74bf586507ac85d",
+    "semantic_hash": "8882d9789046d3c5a74bf586507ac85d"
+  },
+  ".claude/skills/directing-stickman-videos/UPSTREAM.md": {
+    "mtime": 1794832301.731699,
+    "seen": 1794833042.5511608,
+    "ast_hash": "74374db2c89a2d2a711924a17fb56d7d",
+    "semantic_hash": "74374db2c89a2d2a711924a17fb56d7d"
+  },
+  ".claude/skills/directing-stickman-videos/assets/a6/SOURCE-NOTES.md": {
+    "mtime": 1794832301.7319007,
+    "seen": 1794833042.5511618,
+    "ast_hash": "bfc715d1a2a4dbf7e0246e3077ddb110",
+    "semantic_hash": "bfc715d1a2a4dbf7e0246e3077ddb110"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b1/ATTRIBUTION.md": {
+    "mtime": 1794832301.7410095,
+    "seen": 1794833042.551163,
+    "ast_hash": "b9e88f6286b2bb1cda8f88e2463fa63d",
+    "semantic_hash": "b9e88f6286b2bb1cda8f88e2463fa63d"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b1/LUCIDE-LICENSE.txt": {
+    "mtime": 1794832301.7466464,
+    "seen": 1794833042.5511653,
+    "ast_hash": "457562d70a4702c994473da969e9b24b",
+    "semantic_hash": "457562d70a4702c994473da969e9b24b"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b4/style-lock.txt": {
+    "mtime": 1794832301.8450096,
+    "seen": 1794833042.5511663,
+    "ast_hash": "f77801a5e1462b42188962daebd7497c",
+    "semantic_hash": "f77801a5e1462b42188962daebd7497c"
+  },
+  ".claude/skills/directing-stickman-videos/assets/fonts/OFL-Caveat.txt": {
+    "mtime": 1794832301.8610096,
+    "seen": 1794833042.5511672,
+    "ast_hash": "525519490b88aea436895ef8f704dd3e",
+    "semantic_hash": "525519490b88aea436895ef8f704dd3e"
+  },
+  ".claude/skills/directing-stickman-videos/assets/fonts/OFL-NotoSans.txt": {
+    "mtime": 1794832301.8610096,
+    "seen": 1794833042.5511682,
+    "ast_hash": "380094cdc7458bab481f424b39f49151",
+    "semantic_hash": "380094cdc7458bab481f424b39f49151"
+  },
+  ".claude/skills/directing-stickman-videos/references/a6-finishing.md": {
+    "mtime": 1794832301.869126,
+    "seen": 1794833042.5511694,
+    "ast_hash": "80a23c89f7b74a4971ee01c65e0016ae",
+    "semantic_hash": "80a23c89f7b74a4971ee01c65e0016ae"
+  },
+  ".claude/skills/directing-stickman-videos/references/a6-reference-prompts.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511715,
+    "ast_hash": "26a5ee78ac6bca969923cd0450d0d79d",
+    "semantic_hash": "26a5ee78ac6bca969923cd0450d0d79d"
+  },
+  ".claude/skills/directing-stickman-videos/references/amber-noir.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511725,
+    "ast_hash": "2efdbc76db6c5c2f09fe507045d63653",
+    "semantic_hash": "2efdbc76db6c5c2f09fe507045d63653"
+  },
+  ".claude/skills/directing-stickman-videos/references/autopilot-production-qa.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511737,
+    "ast_hash": "f35c337a836b786544d2de3b427848f4",
+    "semantic_hash": "f35c337a836b786544d2de3b427848f4"
+  },
+  ".claude/skills/directing-stickman-videos/references/autopilot-runtime.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511746,
+    "ast_hash": "95240f684d12741b0c0faba94c11a224",
+    "semantic_hash": "95240f684d12741b0c0faba94c11a224"
+  },
+  ".claude/skills/directing-stickman-videos/references/autopilot-sound-system.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511756,
+    "ast_hash": "8de58e2a9ac8404e7129fecf6898f6ca",
+    "semantic_hash": "8de58e2a9ac8404e7129fecf6898f6ca"
+  },
+  ".claude/skills/directing-stickman-videos/references/autopilot.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511768,
+    "ast_hash": "5d96caea91f0c5b37eba536d473c65f5",
+    "semantic_hash": "5d96caea91f0c5b37eba536d473c65f5"
+  },
+  ".claude/skills/directing-stickman-videos/references/b1-minimal-handdrawn.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511775,
+    "ast_hash": "fd8332469a486abfb7e30c90c6738d85",
+    "semantic_hash": "fd8332469a486abfb7e30c90c6738d85"
+  },
+  ".claude/skills/directing-stickman-videos/references/b1-production-qa.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511785,
+    "ast_hash": "88bfcd23fd98ee0ef25c705e46b6ac20",
+    "semantic_hash": "88bfcd23fd98ee0ef25c705e46b6ac20"
+  },
+  ".claude/skills/directing-stickman-videos/references/b2-colorful-handdrawn.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511794,
+    "ast_hash": "5a76f5dc0a72c0ed8b6c4c3122261043",
+    "semantic_hash": "5a76f5dc0a72c0ed8b6c4c3122261043"
+  },
+  ".claude/skills/directing-stickman-videos/references/b3-television.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511806,
+    "ast_hash": "84aa62463300e251db080884bb3b47a0",
+    "semantic_hash": "84aa62463300e251db080884bb3b47a0"
+  },
+  ".claude/skills/directing-stickman-videos/references/b4-audio-direction.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511816,
+    "ast_hash": "a1a763575cfb01bb040269d2f2ad6045",
+    "semantic_hash": "a1a763575cfb01bb040269d2f2ad6045"
+  },
+  ".claude/skills/directing-stickman-videos/references/b4-opening-direction.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511825,
+    "ast_hash": "007567ff03e7583f51a364e59f9275fe",
+    "semantic_hash": "007567ff03e7583f51a364e59f9275fe"
+  },
+  ".claude/skills/directing-stickman-videos/references/b4-repeatability-check.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511837,
+    "ast_hash": "5f1968626aac5bcc99045ff84bc3e55a",
+    "semantic_hash": "5f1968626aac5bcc99045ff84bc3e55a"
+  },
+  ".claude/skills/directing-stickman-videos/references/b4-survival-storytelling.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511847,
+    "ast_hash": "9eebe359ac11ba8e54a42a21c9798c35",
+    "semantic_hash": "9eebe359ac11ba8e54a42a21c9798c35"
+  },
+  ".claude/skills/directing-stickman-videos/references/cozy-storytelling.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511856,
+    "ast_hash": "84346eb07579296934487c3247a5ea58",
+    "semantic_hash": "84346eb07579296934487c3247a5ea58"
+  },
+  ".claude/skills/directing-stickman-videos/references/examples.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511868,
+    "ast_hash": "125a363f1cf376b9fe18f268d54d9ec5",
+    "semantic_hash": "125a363f1cf376b9fe18f268d54d9ec5"
+  },
+  ".claude/skills/directing-stickman-videos/references/getting-started.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511878,
+    "ast_hash": "db044c3b39204d340b323f354a197db8",
+    "semantic_hash": "db044c3b39204d340b323f354a197db8"
+  },
+  ".claude/skills/directing-stickman-videos/references/historical-cartoon.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511885,
+    "ast_hash": "a2693568c155f0d17165811c83d0d31d",
+    "semantic_hash": "a2693568c155f0d17165811c83d0d31d"
+  },
+  ".claude/skills/directing-stickman-videos/references/mode-execution-boundaries.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511894,
+    "ast_hash": "b4ab14a0957f503abb9219fe16c7be70",
+    "semantic_hash": "b4ab14a0957f503abb9219fe16c7be70"
+  },
+  ".claude/skills/directing-stickman-videos/references/omni-flash-prompt-contract.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511906,
+    "ast_hash": "d7fb146399176cb0f4471fe24f9796ca",
+    "semantic_hash": "d7fb146399176cb0f4471fe24f9796ca"
+  },
+  ".claude/skills/directing-stickman-videos/references/prehistoric-dark-comedy.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511916,
+    "ast_hash": "0b3d1b99b014144d64c94adaa43b1d99",
+    "semantic_hash": "0b3d1b99b014144d64c94adaa43b1d99"
+  },
+  ".claude/skills/directing-stickman-videos/references/storyboard-template.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511925,
+    "ast_hash": "e7848e3749b411e954f29d1a6585fd0a",
+    "semantic_hash": "e7848e3749b411e954f29d1a6585fd0a"
+  },
+  ".claude/skills/directing-stickman-videos/references/style-catalog.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511937,
+    "ast_hash": "6d147190dd0132367d57613171f95c72",
+    "semantic_hash": "6d147190dd0132367d57613171f95c72"
+  },
+  ".claude/skills/directing-stickman-videos/references/thumbnail-publishing-kit.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511944,
+    "ast_hash": "7ec59ccef6d6f7d07f7fd5d5c871ee3d",
+    "semantic_hash": "7ec59ccef6d6f7d07f7fd5d5c871ee3d"
+  },
+  ".claude/skills/directing-stickman-videos/references/voice-continuity.md": {
+    "mtime": 1794832301.8693185,
+    "seen": 1794833042.5511956,
+    "ast_hash": "23c85243c5ffd45fe1d5d0cb8497ff5e",
+    "semantic_hash": "23c85243c5ffd45fe1d5d0cb8497ff5e"
+  },
+  ".claude/skills/dung-phim/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5511963,
+    "ast_hash": "764e0e23190601f424647a6584c1d3d9",
+    "semantic_hash": "764e0e23190601f424647a6584c1d3d9"
+  },
+  ".claude/skills/hoc-mau/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5511975,
+    "ast_hash": "6880d195353d4ea65fcd8be5f40f1d63",
+    "semantic_hash": "6880d195353d4ea65fcd8be5f40f1d63"
+  },
+  ".claude/skills/kiem-dinh/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5511985,
+    "ast_hash": "0250e85a8d0cef65385137d71b3bf66b",
+    "semantic_hash": "0250e85a8d0cef65385137d71b3bf66b"
+  },
+  ".claude/skills/lam-video/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5511992,
+    "ast_hash": "8f495cfd90eb406ff2085955877f93ba",
+    "semantic_hash": "8f495cfd90eb406ff2085955877f93ba"
+  },
+  ".claude/skills/long-tieng/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5512002,
+    "ast_hash": "8a3fcffba4c913bff77d345c3d589e2b",
+    "semantic_hash": "8a3fcffba4c913bff77d345c3d589e2b"
+  },
+  ".claude/skills/phan-canh/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5512013,
+    "ast_hash": "ecbd022584ce79741f3f1d1b3dbb6f0d",
+    "semantic_hash": "ecbd022584ce79741f3f1d1b3dbb6f0d"
+  },
+  ".claude/skills/phat-hanh/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.551202,
+    "ast_hash": "ab0c193bc1f0924514896922447cea60",
+    "semantic_hash": "ab0c193bc1f0924514896922447cea60"
+  },
+  ".claude/skills/san-trend/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.551203,
+    "ast_hash": "e5bb08baee591d8d37d32b4971c90d64",
+    "semantic_hash": "e5bb08baee591d8d37d32b4971c90d64"
+  },
+  ".claude/skills/ve-bang-code/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5512059,
+    "ast_hash": "163d8519eb8f3d7d793a4edeabe4fc83",
+    "semantic_hash": "163d8519eb8f3d7d793a4edeabe4fc83"
+  },
+  ".claude/skills/viet-kich-ban/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.5512068,
+    "ast_hash": "cf3cd3501b3884c3d8dc19253a2f38eb",
+    "semantic_hash": "cf3cd3501b3884c3d8dc19253a2f38eb"
+  },
+  ".claude/skills/y-tuong-chu-de/SKILL.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.551208,
+    "ast_hash": "3a2b181592108511786923c195255a19",
+    "semantic_hash": "3a2b181592108511786923c195255a19"
+  },
+  "CLAUDE.md": {
+    "mtime": 1794832301.8729064,
+    "seen": 1794833042.551209,
+    "ast_hash": "1021e654d98d5a1b3964ac4cbca12cf3",
+    "semantic_hash": "1021e654d98d5a1b3964ac4cbca12cf3"
+  },
+  "projects/bach-dang-938/audio/narration.txt": {
+    "mtime": 1794832301.9810095,
+    "seen": 1794833042.55121,
+    "ast_hash": "e8f38eb39af33e970dd43149ea2704bc",
+    "semantic_hash": "e8f38eb39af33e970dd43149ea2704bc"
+  },
+  "projects/bach-dang-938/audio/silences.txt": {
+    "mtime": 1794832301.9883378,
+    "seen": 1794833042.551211,
+    "ast_hash": "739b66a8173cce44361e9f8f0c6ae450",
+    "semantic_hash": "739b66a8173cce44361e9f8f0c6ae450"
+  },
+  "projects/bach-dang-938/captions-phrases.txt": {
+    "mtime": 1794832301.9883378,
+    "seen": 1794833042.5512118,
+    "ast_hash": "855ee19ef04a8705348f847d9d4f8403",
+    "semantic_hash": "855ee19ef04a8705348f847d9d4f8403"
+  },
+  "projects/bach-dang-938/fonts/OFL-PatrickHand.txt": {
+    "mtime": 1794832301.9883378,
+    "seen": 1794833042.5512128,
+    "ast_hash": "9784abf2e290b15f7cf540f9667ac065",
+    "semantic_hash": "9784abf2e290b15f7cf540f9667ac065"
+  },
+  "projects/bach-dang-938/narration-draft.txt": {
+    "mtime": 1794832301.988493,
+    "seen": 1794833042.5512135,
+    "ast_hash": "ce254cd0ac9a549089e5f445a694657b",
+    "semantic_hash": "ce254cd0ac9a549089e5f445a694657b"
+  },
+  "projects/bach-dang-938/prompts/00-cast.full.txt": {
+    "mtime": 1794832302.0210094,
+    "seen": 1794833042.5512147,
+    "ast_hash": "2a2a68b61b0bee0b94f4878a338820a9",
+    "semantic_hash": "2a2a68b61b0bee0b94f4878a338820a9"
+  },
+  "projects/bach-dang-938/prompts/00-cast.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512156,
+    "ast_hash": "b84a8cf6d1ebe8b3af7be1ce644b7bbe",
+    "semantic_hash": "b84a8cf6d1ebe8b3af7be1ce644b7bbe"
+  },
+  "projects/bach-dang-938/prompts/01-warship.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512164,
+    "ast_hash": "e979c8b2d29786a8a586da1bdfd526d4",
+    "semantic_hash": "e979c8b2d29786a8a586da1bdfd526d4"
+  },
+  "projects/bach-dang-938/prompts/02-shore-soldier.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512173,
+    "ast_hash": "ec5a5d2b1e0a53b14f2962ef07eb6ea9",
+    "semantic_hash": "ec5a5d2b1e0a53b14f2962ef07eb6ea9"
+  },
+  "projects/bach-dang-938/prompts/03-assassination.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512185,
+    "ast_hash": "795f8436ce1874c31f444b3e59a0a9aa",
+    "semantic_hash": "795f8436ce1874c31f444b3e59a0a9aa"
+  },
+  "projects/bach-dang-938/prompts/04-seal.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512195,
+    "ast_hash": "c10b0c09fd7851b2c9c1e0bebeecdea6",
+    "semantic_hash": "c10b0c09fd7851b2c9c1e0bebeecdea6"
+  },
+  "projects/bach-dang-938/prompts/05-ngo-quyen-march.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512204,
+    "ast_hash": "11bc5f95d9554403d728974eb25e81bf",
+    "semantic_hash": "11bc5f95d9554403d728974eb25e81bf"
+  },
+  "projects/bach-dang-938/prompts/06-kieu-cornered.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512211,
+    "ast_hash": "d88f0e21b9564a42eb492f079f2645d9",
+    "semantic_hash": "d88f0e21b9564a42eb492f079f2645d9"
+  },
+  "projects/bach-dang-938/prompts/07-kieu-letter.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512223,
+    "ast_hash": "67c41fd5770401003858fad72daa236f",
+    "semantic_hash": "67c41fd5770401003858fad72daa236f"
+  },
+  "projects/bach-dang-938/prompts/_style.txt": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.551223,
+    "ast_hash": "5ce95bdbc048c1c8e89c39ee7f585bc8",
+    "semantic_hash": "5ce95bdbc048c1c8e89c39ee7f585bc8"
+  },
+  "projects/bach-dang-938/prompts/gemini-app-prompts.md": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.551224,
+    "ast_hash": "54ec5d6858bb16f9a02fe4f499808366",
+    "semantic_hash": "54ec5d6858bb16f9a02fe4f499808366"
+  },
+  "projects/bach-dang-938/script.md": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.5512252,
+    "ast_hash": "72dbf2984c3b3491b54a73a7a301931c",
+    "semantic_hash": "72dbf2984c3b3491b54a73a7a301931c"
+  },
+  "projects/bach-dang-938/sources.md": {
+    "mtime": 1794832302.026922,
+    "seen": 1794833042.551226,
+    "ast_hash": "cc267ba8fad5e608b7ac9e2e5a93ca72",
+    "semantic_hash": "cc267ba8fad5e608b7ac9e2e5a93ca72"
+  },
+  "projects/bach-dang-ve-tinh/brief.md": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.5512269,
+    "ast_hash": "0ff5f491f9101853dcaa2b8ff28f3055",
+    "semantic_hash": "0ff5f491f9101853dcaa2b8ff28f3055"
+  },
+  "projects/bach-dang-ve-tinh/captions-phrases.txt": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.5512278,
+    "ast_hash": "53f0a1462d248fa445004c5d60099bc1",
+    "semantic_hash": "53f0a1462d248fa445004c5d60099bc1"
+  },
+  "projects/bach-dang-ve-tinh/narration.txt": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.551229,
+    "ast_hash": "63e9eaba7c694f52c2f382536d594bd0",
+    "semantic_hash": "63e9eaba7c694f52c2f382536d594bd0"
+  },
+  "projects/bach-dang-ve-tinh/notes.md": {
+    "mtime": 1794832302.0279522,
+    "seen": 1794833042.5512297,
+    "ast_hash": "359465f6847551b45d4ccc34d20c04b2",
+    "semantic_hash": "359465f6847551b45d4ccc34d20c04b2"
+  },
+  "projects/bach-dang-ve-tinh/publish.md": {
+    "mtime": 1794832302.0659966,
+    "seen": 1794833042.5512307,
+    "ast_hash": "ec47ad80ec14c0e7342ce2d5087e1a59",
+    "semantic_hash": "ec47ad80ec14c0e7342ce2d5087e1a59"
+  },
+  "projects/bach-dang-ve-tinh/qa.md": {
+    "mtime": 1794832302.0659966,
+    "seen": 1794833042.5512319,
+    "ast_hash": "afbc178bf9d131f0c678c49997f33f51",
+    "semantic_hash": "afbc178bf9d131f0c678c49997f33f51"
+  },
+  "projects/bach-dang-ve-tinh/script.md": {
+    "mtime": 1794832302.0659966,
+    "seen": 1794833042.5512328,
+    "ast_hash": "afc773d70f857dc038a7734f5b577905",
+    "semantic_hash": "afc773d70f857dc038a7734f5b577905"
+  },
+  "projects/bach-dang-ve-tinh/sources.md": {
+    "mtime": 1794832302.0659966,
+    "seen": 1794833042.5512338,
+    "ast_hash": "cd1a08fb45ecf427784e0a1a7cd5a455",
+    "semantic_hash": "cd1a08fb45ecf427784e0a1a7cd5a455"
+  },
+  "projects/lam-da-co-dai/brief.md": {
+    "mtime": 1794832302.0717785,
+    "seen": 1794833042.5512345,
+    "ast_hash": "bd3847837390fe268d96eb67ee0de53e",
+    "semantic_hash": "bd3847837390fe268d96eb67ee0de53e"
+  },
+  "projects/quang-cao-app/brief.md": {
+    "mtime": 1794832302.0976517,
+    "seen": 1794833042.5512357,
+    "ast_hash": "9c7faa8069ac444a989238842b43a644",
+    "semantic_hash": "9c7faa8069ac444a989238842b43a644"
+  },
+  "projects/quang-cao-app/captions-phrases.txt": {
+    "mtime": 1794832302.0976517,
+    "seen": 1794833042.5512364,
+    "ast_hash": "88264fa6420b42b0c16741bca4f48aa2",
+    "semantic_hash": "88264fa6420b42b0c16741bca4f48aa2"
+  },
+  "projects/quang-cao-app/fonts/OFL-BeVietnamPro.txt": {
+    "mtime": 1794832302.0976517,
+    "seen": 1794833042.5512373,
+    "ast_hash": "096973f6dff6990644564e1c44da3db9",
+    "semantic_hash": "096973f6dff6990644564e1c44da3db9"
+  },
+  "projects/quang-cao-app/narration.txt": {
+    "mtime": 1794832302.1094713,
+    "seen": 1794833042.5512383,
+    "ast_hash": "d9e3bfc0f7563c60ac6c53b14cc636ed",
+    "semantic_hash": "d9e3bfc0f7563c60ac6c53b14cc636ed"
+  },
+  "projects/rua-va-tho/brief.md": {
+    "mtime": 1794832302.1210096,
+    "seen": 1794833042.5512393,
+    "ast_hash": "26eb4352894eb9e455d67d71ac27019d",
+    "semantic_hash": "26eb4352894eb9e455d67d71ac27019d"
+  },
+  "projects/rua-va-tho/captions-phrases.txt": {
+    "mtime": 1794832302.1258416,
+    "seen": 1794833042.5512402,
+    "ast_hash": "31b834657a46799599cb1358020aa9c3",
+    "semantic_hash": "31b834657a46799599cb1358020aa9c3"
+  },
+  "projects/rua-va-tho/narration.txt": {
+    "mtime": 1794832302.1258416,
+    "seen": 1794833042.5512412,
+    "ast_hash": "bf739eb0f26a5da41671a418867cf8e8",
+    "semantic_hash": "bf739eb0f26a5da41671a418867cf8e8"
+  },
+  "projects/rua-va-tho/publish.md": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.5512424,
+    "ast_hash": "58033fea7a4ac060083edde4c20525c0",
+    "semantic_hash": "58033fea7a4ac060083edde4c20525c0"
+  },
+  "projects/rua-va-tho/qa.md": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.551243,
+    "ast_hash": "fe26b587e3f057c2090a418764da05f8",
+    "semantic_hash": "fe26b587e3f057c2090a418764da05f8"
+  },
+  "projects/rua-va-tho/script.md": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.551244,
+    "ast_hash": "ac72c1cd25a65bca61af14ff6e763001",
+    "semantic_hash": "ac72c1cd25a65bca61af14ff6e763001"
+  },
+  "projects/rua-va-tho/sources.md": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.5512447,
+    "ast_hash": "5bb792e2cfb66bb2f701f630f7a15b1b",
+    "semantic_hash": "5bb792e2cfb66bb2f701f630f7a15b1b"
+  },
+  "projects/rung-amazon/brief.md": {
+    "mtime": 1794832302.1970096,
+    "seen": 1794833042.551246,
+    "ast_hash": "6eee4d06ba36eac580a8aaef32f3c83c",
+    "semantic_hash": "6eee4d06ba36eac580a8aaef32f3c83c"
+  },
+  "projects/rung-amazon/captions-phrases.txt": {
+    "mtime": 1794832302.2022026,
+    "seen": 1794833042.5512466,
+    "ast_hash": "397455506fbc0c18b8c91fbb7435c2d7",
+    "semantic_hash": "397455506fbc0c18b8c91fbb7435c2d7"
+  },
+  "projects/rung-amazon/narration.txt": {
+    "mtime": 1794832302.2022026,
+    "seen": 1794833042.5512476,
+    "ast_hash": "02b66ce3ff625a323febfc53130f04e8",
+    "semantic_hash": "02b66ce3ff625a323febfc53130f04e8"
+  },
+  "projects/rung-amazon/notes.md": {
+    "mtime": 1794832302.2022026,
+    "seen": 1794833042.5512486,
+    "ast_hash": "9f503cfa8066c8182f75628a25fe8c3c",
+    "semantic_hash": "9f503cfa8066c8182f75628a25fe8c3c"
+  },
+  "projects/rung-amazon/publish.md": {
+    "mtime": 1794832302.2410095,
+    "seen": 1794833042.5512497,
+    "ast_hash": "2e3c0d2d6d1513e01c4b169968c2d84b",
+    "semantic_hash": "2e3c0d2d6d1513e01c4b169968c2d84b"
+  },
+  "projects/rung-amazon/qa.md": {
+    "mtime": 1794832302.2410095,
+    "seen": 1794833042.5512507,
+    "ast_hash": "abffebdb9772a5be3917215d3371bc91",
+    "semantic_hash": "abffebdb9772a5be3917215d3371bc91"
+  },
+  "projects/rung-amazon/script.md": {
+    "mtime": 1794832302.2410095,
+    "seen": 1794833042.5512514,
+    "ast_hash": "0e16409c1baa42bd43a84ac561fbe19a",
+    "semantic_hash": "0e16409c1baa42bd43a84ac561fbe19a"
+  },
+  "projects/rung-amazon/sources.md": {
+    "mtime": 1794832302.2410095,
+    "seen": 1794833042.5512524,
+    "ast_hash": "4e5ded85d4294edd379ba2ccd3d01994",
+    "semantic_hash": "4e5ded85d4294edd379ba2ccd3d01994"
+  },
+  "studio/app/qbk-studio.html": {
+    "mtime": 1794832302.2452228,
+    "seen": 1794833042.5512533,
+    "ast_hash": "f54016f50b8392151d5c28db0951f446",
+    "semantic_hash": "f54016f50b8392151d5c28db0951f446"
+  },
+  "studio/codeart/OFL-PatrickHand.txt": {
+    "mtime": 1794832302.2490096,
+    "seen": 1794833042.5512543,
+    "ast_hash": "9784abf2e290b15f7cf540f9667ac065",
+    "semantic_hash": "9784abf2e290b15f7cf540f9667ac065"
+  },
+  "studio/docs/app-design/BaoCao.dc.html": {
+    "mtime": 1794832302.2660396,
+    "seen": 1794833042.551255,
+    "ast_hash": "7b43267aba8ca99c3d869b8ba5375475",
+    "semantic_hash": "7b43267aba8ca99c3d869b8ba5375475"
+  },
+  "studio/docs/app-design/DangBai.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512562,
+    "ast_hash": "dec0ae08a92478f8b25cf402c4b583f4",
+    "semantic_hash": "dec0ae08a92478f8b25cf402c4b583f4"
+  },
+  "studio/docs/app-design/DoanPhim.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512571,
+    "ast_hash": "2440d9d9cbf23c8644b98bbb36cd1bbc",
+    "semantic_hash": "2440d9d9cbf23c8644b98bbb36cd1bbc"
+  },
+  "studio/docs/app-design/DuyetVideo.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.551258,
+    "ast_hash": "7b99e1f2c6c6650d9f069c7607cd4450",
+    "semantic_hash": "7b99e1f2c6c6650d9f069c7607cd4450"
+  },
+  "studio/docs/app-design/Main.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512588,
+    "ast_hash": "28d2b027f5f28d57b54c417b0d6d6529",
+    "semantic_hash": "28d2b027f5f28d57b54c417b0d6d6529"
+  },
+  "studio/docs/app-design/README.md": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.55126,
+    "ast_hash": "c2267a5a56d004b6460039b414dd2e4a",
+    "semantic_hash": "c2267a5a56d004b6460039b414dd2e4a"
+  },
+  "studio/docs/app-design/TaoVideo.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512607,
+    "ast_hash": "50e71337352210c170a6d59190a1bfcf",
+    "semantic_hash": "50e71337352210c170a6d59190a1bfcf"
+  },
+  "studio/docs/app-design/ThuVienMau.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512617,
+    "ast_hash": "37b965676e7e73a7dcb577f24b1226f2",
+    "semantic_hash": "37b965676e7e73a7dcb577f24b1226f2"
+  },
+  "studio/docs/app-design/Trend.dc.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512624,
+    "ast_hash": "19eac1584e6e84928a9fc8184e2196a8",
+    "semantic_hash": "19eac1584e6e84928a9fc8184e2196a8"
+  },
+  "studio/docs/so-do.html": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512638,
+    "ast_hash": "2d4ae765ac0ee8e7ae8915a67bcb9b5b",
+    "semantic_hash": "2d4ae765ac0ee8e7ae8915a67bcb9b5b"
+  },
+  "studio/engine/SCENE_FORMAT.md": {
+    "mtime": 1794832302.2661698,
+    "seen": 1794833042.5512645,
+    "ast_hash": "42c985c94848164ef0f731b72b9a3202",
+    "semantic_hash": "42c985c94848164ef0f731b72b9a3202"
+  },
+  "studio/engine/fonts/OFL-Inter.txt": {
+    "mtime": 1794832302.3050096,
+    "seen": 1794833042.5512655,
+    "ast_hash": "d0500719b7ab0a60885be95f4f44306b",
+    "semantic_hash": "d0500719b7ab0a60885be95f4f44306b"
+  },
+  "studio/engine/fonts/OFL-NotoSans.txt": {
+    "mtime": 1794832302.3050096,
+    "seen": 1794833042.5512662,
+    "ast_hash": "380094cdc7458bab481f424b39f49151",
+    "semantic_hash": "380094cdc7458bab481f424b39f49151"
+  },
+  "studio/engine/fonts/OFL-PatrickHand.txt": {
+    "mtime": 1794832302.3050096,
+    "seen": 1794833042.5512674,
+    "ast_hash": "9784abf2e290b15f7cf540f9667ac065",
+    "semantic_hash": "9784abf2e290b15f7cf540f9667ac065"
+  },
+  "studio/engine3d/README.md": {
+    "mtime": 1794832302.3118465,
+    "seen": 1794833042.5512683,
+    "ast_hash": "6db3369fa8b3d8064b3e36ffdb63615e",
+    "semantic_hash": "6db3369fa8b3d8064b3e36ffdb63615e"
+  },
+  "studio/engine3d/page.html": {
+    "mtime": 1794832302.3129973,
+    "seen": 1794833042.5512693,
+    "ast_hash": "05513d92a0ba5cd77f83ee8e51f6b241",
+    "semantic_hash": "05513d92a0ba5cd77f83ee8e51f6b241"
+  },
+  "studio/lessons.md": {
+    "mtime": 1794832302.3129973,
+    "seen": 1794833042.5512705,
+    "ast_hash": "f558fafb4fcabf02f7a6e9b975efd092",
+    "semantic_hash": "f558fafb4fcabf02f7a6e9b975efd092"
+  },
+  "studio/references/README.md": {
+    "mtime": 1794832302.3129973,
+    "seen": 1794833042.5512714,
+    "ast_hash": "e909106193bc3bd50ebe61125390059c",
+    "semantic_hash": "e909106193bc3bd50ebe61125390059c"
+  },
+  "studio/references/ban-do-dia-chinh-tri/card.md": {
+    "mtime": 1794832302.3133767,
+    "seen": 1794833042.5512722,
+    "ast_hash": "b2283df4ec6ac6046b2e250a4d2c9846",
+    "semantic_hash": "b2283df4ec6ac6046b2e250a4d2c9846"
+  },
+  "studio/references/index.md": {
+    "mtime": 1794832302.3133767,
+    "seen": 1794833042.551273,
+    "ast_hash": "fff8b3ddd3117413c7e64fd06e0283a8",
+    "semantic_hash": "fff8b3ddd3117413c7e64fd06e0283a8"
+  },
+  "studio/references/phac-thao-sepia/card.md": {
+    "mtime": 1794832302.3203769,
+    "seen": 1794833042.5512743,
+    "ast_hash": "c38d773b406f22dd41589a7bb336bd5f",
+    "semantic_hash": "c38d773b406f22dd41589a7bb336bd5f"
+  },
+  "studio/references/thi-nghiem-co/card.md": {
+    "mtime": 1794832302.325842,
+    "seen": 1794833042.5512755,
+    "ast_hash": "03d0e8c8020f4e7b8a06d69b4f596057",
+    "semantic_hash": "03d0e8c8020f4e7b8a06d69b4f596057"
+  },
+  "studio/references/ve-tay-but-chi/card.md": {
+    "mtime": 1794832302.3373756,
+    "seen": 1794833042.5512764,
+    "ast_hash": "67cc7cb8d36378a35486bf0975dd2467",
+    "semantic_hash": "67cc7cb8d36378a35486bf0975dd2467"
+  },
+  "studio/references/ve-tinh-anh-that/card.md": {
+    "mtime": 1794832302.3373756,
+    "seen": 1794833042.5512774,
+    "ast_hash": "1e24b9b85307e9245e922eda09acfd4f",
+    "semantic_hash": "1e24b9b85307e9245e922eda09acfd4f"
+  },
+  "studio/topics.md": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5512784,
+    "ast_hash": "1559a43b6fc12a8ed993dd609c00c63c",
+    "semantic_hash": "1559a43b6fc12a8ed993dd609c00c63c"
+  },
+  "studio/trends/2026-11-08.md": {
+    "mtime": 1794832302.351526,
+    "seen": 1794833042.5512793,
+    "ast_hash": "d440b2af758fc7de593113de36752329",
+    "semantic_hash": "d440b2af758fc7de593113de36752329"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b1/approved-2026-10-23.mp4": {
+    "mtime": 1794832301.7570095,
+    "seen": 1794833042.5512805,
+    "ast_hash": "676ab91233fb89fdbcd33470aa4a7658",
+    "semantic_hash": "676ab91233fb89fdbcd33470aa4a7658"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b3/accepted-chair-motion.mp4": {
+    "mtime": 1794832301.7709277,
+    "seen": 1794833042.5512812,
+    "ast_hash": "502e6cc90e4e31ea71535c2099e9f5a0",
+    "semantic_hash": "502e6cc90e4e31ea71535c2099e9f5a0"
+  },
+  ".claude/skills/directing-stickman-videos/assets/b3/accepted-dog-motion.mp4": {
+    "mtime": 1794832301.771436,
+    "seen": 1794833042.5512822,
+    "ast_hash": "e4bf0d35c959c842b240cb7945c5b3e9",
+    "semantic_hash": "e4bf0d35c959c842b240cb7945c5b3e9"
+  },
+  ".claude/skills/directing-stickman-videos/examples/b1/narration.m4a": {
+    "mtime": 1794832301.8669586,
+    "seen": 1794833042.551283,
+    "ast_hash": "e5c64e6215b334864252bee1c3c3c740",
+    "semantic_hash": "e5c64e6215b334864252bee1c3c3c740"
+  },
+  "projects/_demo-b1/narration.m4a": {
+    "mtime": 1794832301.8738005,
+    "seen": 1794833042.551284,
+    "ast_hash": "e5c64e6215b334864252bee1c3c3c740",
+    "semantic_hash": "e5c64e6215b334864252bee1c3c3c740"
+  },
+  "projects/_demo-b1/output/preview.mp4": {
+    "mtime": 1794832301.8770094,
+    "seen": 1794833042.551285,
+    "ast_hash": "59b09fe53e09664e164a3ce8eac6c747",
+    "semantic_hash": "59b09fe53e09664e164a3ce8eac6c747"
+  },
+  "projects/bach-dang-938/art/source/01-warship-gemini-video.mp4": {
+    "mtime": 1794832301.9810095,
+    "seen": 1794833042.5512857,
+    "ast_hash": "125971e264ea7a3dd630faa7f111fd49",
+    "semantic_hash": "125971e264ea7a3dd630faa7f111fd49"
+  },
+  "projects/bach-dang-938/output-code/preview.mp4": {
+    "mtime": 1794832301.9970095,
+    "seen": 1794833042.5512867,
+    "ast_hash": "0da3c6a17e2fbbe73e60e5258fb325c1",
+    "semantic_hash": "0da3c6a17e2fbbe73e60e5258fb325c1"
+  },
+  "projects/bach-dang-938/output/preview.mp4": {
+    "mtime": 1794832302.0210094,
+    "seen": 1794833042.551288,
+    "ast_hash": "69053dce3325f0ddf351d9dc69670979",
+    "semantic_hash": "69053dce3325f0ddf351d9dc69670979"
+  },
+  "projects/bach-dang-ve-tinh/output/bach-dang-ve-tinh.mp4": {
+    "mtime": 1794832302.0490096,
+    "seen": 1794833042.5512886,
+    "ast_hash": "73c28bc0f25518794860c065b30ce4c9",
+    "semantic_hash": "73c28bc0f25518794860c065b30ce4c9"
+  },
+  "projects/lam-da-co-dai/output/lam-da-co-dai-3d.mp4": {
+    "mtime": 1794832302.0890095,
+    "seen": 1794833042.5512896,
+    "ast_hash": "2ef58cb56c199d7d5bd3ca441c15268a",
+    "semantic_hash": "2ef58cb56c199d7d5bd3ca441c15268a"
+  },
+  "projects/quang-cao-app/mockdb/blobs/58370b0a56ed67d5faf63282f0bdb885.webm": {
+    "mtime": 1794832302.1015728,
+    "seen": 1794833042.5512905,
+    "ast_hash": "8681ac8e5fca2e28c230ec2419981332",
+    "semantic_hash": "8681ac8e5fca2e28c230ec2419981332"
+  },
+  "projects/quang-cao-app/output/quang-cao-qbk-studio.mp4": {
+    "mtime": 1794832302.1170094,
+    "seen": 1794833042.551292,
+    "ast_hash": "cceaae51f8a55d896d206c191812d9af",
+    "semantic_hash": "cceaae51f8a55d896d206c191812d9af"
+  },
+  "projects/rua-va-tho/output/final.mp4": {
+    "mtime": 1794832302.1770096,
+    "seen": 1794833042.551293,
+    "ast_hash": "5d19bf0829b64f6570d96346c6ec307b",
+    "semantic_hash": "5d19bf0829b64f6570d96346c6ec307b"
+  },
+  "projects/rua-va-tho/output/preview.mp4": {
+    "mtime": 1794832302.1930096,
+    "seen": 1794833042.5512938,
+    "ast_hash": "5aff69e88c07fc7c158a2b93361c77e2",
+    "semantic_hash": "5aff69e88c07fc7c158a2b93361c77e2"
+  },
+  "projects/rung-amazon/output/final.mp4": {
+    "mtime": 1794832302.2370095,
+    "seen": 1794833042.551295,
+    "ast_hash": "a34ee777e99faac6dc46211ff387c4e6",
+    "semantic_hash": "a34ee777e99faac6dc46211ff387c4e6"
+  },
+  "studio/app/voices/voice-Achernar.mp4": {
+    "mtime": 1794832302.2458181,
+    "seen": 1794833042.5512958,
+    "ast_hash": "3a340ea556491420666440254900d120",
+    "semantic_hash": "3a340ea556491420666440254900d120"
+  },
+  "studio/app/voices/voice-Achird.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5512967,
+    "ast_hash": "d91dbd3a8f4fe07e09a5624ed565075a",
+    "semantic_hash": "d91dbd3a8f4fe07e09a5624ed565075a"
+  },
+  "studio/app/voices/voice-Algenib.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5512974,
+    "ast_hash": "95ee1b6806c6b2c36009abd4e8a21256",
+    "semantic_hash": "95ee1b6806c6b2c36009abd4e8a21256"
+  },
+  "studio/app/voices/voice-Aoede.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5512986,
+    "ast_hash": "62d4c29cd666f00f29fbbc5d8d35040d",
+    "semantic_hash": "62d4c29cd666f00f29fbbc5d8d35040d"
+  },
+  "studio/app/voices/voice-Autonoe.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5512993,
+    "ast_hash": "2e2a09209b39b41a454144139d734d2d",
+    "semantic_hash": "2e2a09209b39b41a454144139d734d2d"
+  },
+  "studio/app/voices/voice-Bodi.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5513003,
+    "ast_hash": "d76ce73b214dab6ebf97548835b3fc83",
+    "semantic_hash": "d76ce73b214dab6ebf97548835b3fc83"
+  },
+  "studio/app/voices/voice-Callirrhoe.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.551301,
+    "ast_hash": "a69ecde477d05ae9883b5a5dea953ab6",
+    "semantic_hash": "a69ecde477d05ae9883b5a5dea953ab6"
+  },
+  "studio/app/voices/voice-Charon.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5513022,
+    "ast_hash": "92b45fac45090817addf1818b44ecf2a",
+    "semantic_hash": "92b45fac45090817addf1818b44ecf2a"
+  },
+  "studio/app/voices/voice-Fenrir.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5513031,
+    "ast_hash": "0213a5e057ba815c3bebaba6e1246e18",
+    "semantic_hash": "0213a5e057ba815c3bebaba6e1246e18"
+  },
+  "studio/app/voices/voice-Kore.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.551304,
+    "ast_hash": "20c3e93e9f75ac4c6378fd686ffe0b32",
+    "semantic_hash": "20c3e93e9f75ac4c6378fd686ffe0b32"
+  },
+  "studio/app/voices/voice-Leda.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5513053,
+    "ast_hash": "b7c720d46b872bb0fb04e9bd58715d9b",
+    "semantic_hash": "b7c720d46b872bb0fb04e9bd58715d9b"
+  },
+  "studio/app/voices/voice-Puck.mp4": {
+    "mtime": 1794832302.2474086,
+    "seen": 1794833042.5513062,
+    "ast_hash": "0560669c53afdb8e0b76aee29b5cc56f",
+    "semantic_hash": "0560669c53afdb8e0b76aee29b5cc56f"
+  },
+  "studio/app/voices/voice-Sadaltager.mp4": {
+    "mtime": 1794832302.2490096,
+    "seen": 1794833042.5513072,
+    "ast_hash": "51e1ce2d2ebc3bfa146358a5d526f97c",
+    "semantic_hash": "51e1ce2d2ebc3bfa146358a5d526f97c"
+  },
+  "studio/app/voices/voice-Schedar.mp4": {
+    "mtime": 1794832302.2490096,
+    "seen": 1794833042.551308,
+    "ast_hash": "901f80e6316c56a00ef394a846dd2add",
+    "semantic_hash": "901f80e6316c56a00ef394a846dd2add"
+  },
+  "studio/app/voices/voice-Sulafat.mp4": {
+    "mtime": 1794832302.2490096,
+    "seen": 1794833042.551309,
+    "ast_hash": "2c8098aca217538d32ee43e064f21348",
+    "semantic_hash": "2c8098aca217538d32ee43e064f21348"
+  },
+  "studio/app/voices/voice-Zephyr.mp4": {
+    "mtime": 1794832302.2490096,
+    "seen": 1794833042.5513098,
+    "ast_hash": "d74711c6c724367de228cb8bdb5fbdf9",
+    "semantic_hash": "d74711c6c724367de228cb8bdb5fbdf9"
+  },
+  "studio/codeart/out/ngo-quyen.mp4": {
+    "mtime": 1794832302.2570095,
+    "seen": 1794833042.551311,
+    "ast_hash": "41a9d0a67f914e25da20851cafbc2d8a",
+    "semantic_hash": "41a9d0a67f914e25da20851cafbc2d8a"
+  },
+  "studio/codeart/out/rig-demo.mp4": {
+    "mtime": 1794832302.2610095,
+    "seen": 1794833042.5513122,
+    "ast_hash": "7084a851a67485ef70b9220faea533e8",
+    "semantic_hash": "7084a851a67485ef70b9220faea533e8"
+  },
+  "studio/engine/examples/styles/style-sampler.mp4": {
+    "mtime": 1794832302.2770095,
+    "seen": 1794833042.551313,
+    "ast_hash": "4aed85efb846b085dc1481f5acfb0f80",
+    "semantic_hash": "4aed85efb846b085dc1481f5acfb0f80"
+  }
+}
