@@ -9,6 +9,7 @@ import {PROPS} from './props.mjs';
 import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
+import {BDS_TYPES, validateBds, drawBds, preloadBds, postFx} from './bds.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
@@ -17,6 +18,7 @@ GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/NotoSans.ttf'), 'Sans');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-Black.otf'), 'QBKBlack');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-ExtraBoldItalic.otf'), 'QBKItalic');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Inter-Bold.otf'), 'QBKBold');
+for (const [f, n] of [['Montserrat-900.ttf', 'BDSM900'], ['Montserrat-800.ttf', 'BDSM800'], ['Montserrat-800i.ttf', 'BDSM800i'], ['Montserrat-500i.ttf', 'BDSM500i'], ['RobotoCondensed-700.ttf', 'BDSRC']]) GlobalFonts.registerFromPath(path.join(ROOT, 'fonts', f), n);
 
 export function loadScene(file) {
   const base = path.dirname(path.resolve(file));
@@ -50,6 +52,7 @@ export function validate(s) {
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
       else if (validateGeo(s, e, where, err)) {}
+      else if (validateBds(s, e, where, err)) {}
       else if (e.type === 'image') { if (!fs.existsSync(path.join(s.base, e.path))) err(`${where}: missing image ${e.path}`); }
       else err(`${where}: unknown type "${e.type}"`);
     }
@@ -91,7 +94,7 @@ function transform(e, t) {
 const images = new Map();
 async function img(s, p) { const { loadImage } = await import('@napi-rs/canvas'); const f = path.join(s.base, p); if (!images.has(f)) images.set(f, await loadImage(f)); return images.get(f); }
 
-export async function preloadImages(s) { await preloadGeo(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
+export async function preloadImages(s) { await preloadGeo(s); await preloadBds(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
 
 function recordElement(s, e, t, sceneT) {
   const R = new Recorder(); const {x, y, sc, rot} = transform(e, t);
@@ -128,7 +131,8 @@ export function makeRenderer(s) {
     const view = sampleView(sh.view, t);
     for (const [idx, e] of (sh.elements || []).entries()) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
-      if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
+      if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); if (e.type === 'satmap' && (sh.zoomBlur || sh.blur)) postFx(ctx, cv, s, sh, t); continue; }
+      if (BDS_TYPES.includes(e.type)) { ctx.save(); drawBds(ctx, e, t, s, view); ctx.restore(); if (e.type === 'bgphoto' && (sh.zoomBlur || sh.blur)) postFx(ctx, cv, s, sh, t); continue; }
       if (e.geo) { e._view = view; e._s = s; }
       if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
       if (e.type === 'image') {

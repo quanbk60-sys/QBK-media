@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `bds-drone` | `bds-capcut` | `bds-navy` | `bds-geo` (4 phong cách bản đồ bất động sản, xem mục "Phong cách BĐS") | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -171,6 +171,33 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
+
+## Phong cách BĐS (`bds-drone`, `bds-capcut`, `bds-navy`, `bds-geo`; `lib/bds.mjs`)
+Học từ 4 video TikTok bất động sản (người dùng gửi 17/11/2026). Thẻ kiến thức: `studio/references/bds-*/card.md`. Scene mẫu: `studio/engine/examples/bds/` (`build_scenes.py`, `build_drone.py`; render `node render.mjs examples/bds/<tên>.json`). Mẫu gốc không có phụ đề: muốn giống hệt thì đặt `"captions": {"items": []}`.
+
+Dùng chung hạ tầng của `ve-tinh` (`satmap`, `view`, `geo`) và thêm:
+- **Nghiêng / xoay bản đồ 3D**: trong mỗi khóa `view` thêm `tilt` (độ, 0–60; đỉnh khung lùi xa), `rot` (độ, xoay bản đồ quanh tâm), `pivot` (px, hạ tâm khung nhìn xuống dưới giữa khung), `horizon` (px, phía trên dòng này không vẽ bản đồ, để phần tử `sky` vẽ trời). Mọi phần tử theo `geo` tự bám theo phối cảnh.
+- **Nhòe khi zoom nhanh**: `"zoomBlur": 1.4` ở cấp shot (mạnh theo tốc độ zoom), hoặc `"blur": [{"t": 0, "amount": 0.1}, {"t": 0.5, "amount": 0}]`. Chỉ nền (satmap/bgphoto) bị nhòe, chữ và ghim vẫn nét.
+- **Bản đồ navy**: `satmap.py <dir> --source navy --level …` (nền Esri World Dark Gray, tự xóa chữ in sẵn, tô màu nước #105283, đất #063360, đường xanh thép).
+- Điểm: `geo` [lat,lon] | `ip` [u,v] (phân số trên ảnh nền `bgphoto`, bám ảnh khi ảnh trôi) | `x`,`y`. Đường/vùng: `path` [[lat,lon]…] | `ipts` | `pts`. Hầu hết phần tử có `from`, `to`, `delay`, `alpha`.
+
+| Phần tử | Thuộc tính |
+|---|---|
+| `sky` | trời + mây tích + sương xa trên `horizon` (flycam giả lập từ vệ tinh nghiêng): `clouds`, `seed`, `drift`, `haze`, `top`/`mid`/`low` (màu) |
+| `bgphoto` | ảnh nền toàn khung (ảnh flycam thật): `path`, `track` [{t, zoom, fx, fy}], `grade` (màu phủ), `gradeAlpha` |
+| `neon` | `variant`: `neon` (xanh ngọc phát sáng, có luồng sáng chạy, bds-drone), `laser` (tia xanh dương thon hai đầu, lõi trắng, lóe sáng, bds-capcut), `road` (đường cyan, bds-geo). `grow {at,dur}`, `width`, `color`, `smooth`, `pulses`, `len` (laser) |
+| `pin` | `variant`: `gold` (ghim vàng ánh kim, nhãn vàng nghiêng), `yellow` (ghim vàng phẳng, nhãn vàng viền đen), `red` (ghim đỏ + 2 vòng đất; `label` thành hộp đỏ chữ trắng, xuống dòng bằng `\n`), `orange` (ghim nhỏ quán ăn), `target` (đĩa trắng chấm đỏ, nhãn "Vị trí lô đất"). `icon`: house, school, book, cart, food, cross, bowl, coffee, building, hotel, plane, hospital, star, person, tree, court. `label`, `labelSize`, `labelDx`, `labelDy`, `size`, `ground: false`, `ripple: false` |
+| `card` | thẻ ảnh. `variant`: `bracket` (khung trắng mở dần, ảnh, thanh tên xanh, đường dẫn xuống đất; `dx`,`dy` vị trí thẻ so với điểm), `navy` (thẻ kính viền sáng, chữ vàng dưới ảnh, cột sáng xuống chấm đất; `stick`, `frame`, `textColor`, `badge`), `bubble` (ảnh tròn đuôi trắng; `r`, `tail`), `doc` (giấy tờ viền đỏ trượt lên; `w`). `path` ảnh, `label`, `w`, `h`, `focus` |
+| `tagbox` | nhãn chữ. `variant`: `glass` (hộp kính viền cyan + cột sáng, bds-navy), `road` (hộp trắng chữ xanh, vạch xanh trái + đường dẫn, bds-capcut), `red`, `yellow` (nhãn quốc lộ), `dark` ("VỊ TRÍ LÔ ĐẤT"). `text`, `size`, `stick`, `rotate`, `dx`, `dy` |
+| `btext` | chữ tự do: tiêu đề, tên sông, watermark. `text` (`*từ*` = `keyColor`, `\n` xuống dòng), `font` (`M900` Montserrat Black, `M800`, `M800i` nghiêng, `M500i`, `RC` Roboto Condensed, `inter`), `size`, `color`, `strokeW`, `stroke`, `shadowBlur`, `letter`, `rotate`, `along` [[lat,lon],[lat,lon]] (xoay theo hướng sông/đường), `enter` (fade, pop, slide, rise, type, none), `upper` |
+| `arrow` | `variant`: `green` (thân trắng→xanh lá, đầu xanh, bds-navy), `dash` (khúc trắng dày viền đen, bds-geo), `ydash` (nét đứt vàng mảnh, bds-capcut). `grow`, `label` (chữ chạy dọc mũi tên), `labelAt`, `labelOff`, `labelSize`, `smooth` |
+| `ring` | `variant`: `thin` (vòng bán kính vàng mảnh), `radar` (vùng vàng + quạt quét + chữ cong `label`, `labelAngle`). `radiusM` (mét, theo bản đồ) hoặc `r` (px), `enterDur` |
+| `lot` | lô đất: `variant` `blue` (xanh phát sáng, diện tích vàng), `yellow` (vàng, diện tích cyan nghiêng + `sub` hồng "TC"), `magenta`. `pts`/`path`, `area`, `sub`, `areaSize`, `textRotate`, `textDx`, `textDy`, `dims` [{edge, text, side, off}] (đường kích thước có vạch chặn) |
+| `boundary` | ranh giới hành chính / vùng: `path` hoặc `polys` (nhiều mảnh), `color` (#3DFF63), `width`, `glow`, `grow`, `fill`, `fillAlpha`, `fillAt`, `hatch` (gạch chéo), `innerGlow`, `label`, `labelGeo`, `labelSize`, `labelAt`, `rungs` (thanh ngang kiểu cầu), `core`, `open`, `smooth: false` |
+| `icon` | biểu tượng lớn (máy bay sân bay, sao trung tâm): `icon`, `size`, `color`, `rotate`, `outline`, `label` |
+| `tint` | phủ màu toàn khung: `color`, `alpha` hoặc `track` [{t, alpha}] (mờ dần về đen cuối phim), `blend` |
+
+Dữ liệu vị trí thật: ranh giới, đường, công trình lấy từ OpenStreetMap qua Nominatim (`polygon_geojson=1`, ghi © OpenStreetMap contributors); khoảng cách tính bằng haversine từ toạ độ. Nhãn tiện ích chung chung và số đo lô đất trong scene mẫu chỉ là minh hoạ.
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).

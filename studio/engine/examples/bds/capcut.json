@@ -1,0 +1,573 @@
+{
+ "style": "bds-capcut",
+ "satmap": "sat-capcut/satmap.json",
+ "captions": {
+  "items": []
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 2.6,
+   "zoomBlur": 1.4,
+   "view": [
+    {
+     "t": 0,
+     "lat": 16.06,
+     "lon": 108.21,
+     "zoom": 11.4
+    },
+    {
+     "t": 2.4,
+     "lat": 16.05935,
+     "lon": 108.2132,
+     "zoom": 16.5,
+     "ease": "in"
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "btext",
+     "text": "VỊ TRÍ *NHÀ PHỐ* TẠI *ĐÀ NẴNG*",
+     "x": 540,
+     "y": 232,
+     "font": "M900",
+     "size": 58,
+     "keyColor": "#FFD21F",
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    },
+    {
+     "type": "btext",
+     "text": "Bài tập phong cách",
+     "x": 540,
+     "y": 318,
+     "font": "M500i",
+     "size": 62,
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "whoosh",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 2.6,
+   "end": 10.4,
+   "view": [
+    {
+     "t": 0,
+     "lat": 16.05935,
+     "lon": 108.2132,
+     "zoom": 16.5
+    },
+    {
+     "t": 7.8,
+     "lat": 16.059549999999998,
+     "lon": 108.2132,
+     "zoom": 16.62
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "ring",
+     "geo": [
+      16.05935,
+      108.2132
+     ],
+     "radiusM": 400,
+     "from": 1.8,
+     "enterDur": 0.6
+    },
+    {
+     "type": "neon",
+     "variant": "laser",
+     "path": [
+      [
+       16.0571,
+       108.201
+      ],
+      [
+       16.0583,
+       108.208
+      ],
+      [
+       16.0594,
+       108.214
+      ],
+      [
+       16.0603,
+       108.219
+      ],
+      [
+       16.0611,
+       108.2238
+      ]
+     ],
+     "grow": {
+      "at": 0.6,
+      "dur": 0.7
+     },
+     "from": 0.6,
+     "width": 13
+    },
+    {
+     "type": "tagbox",
+     "variant": "road",
+     "text": "Nguyễn Văn Linh",
+     "geo": [
+      16.05955,
+      108.2112
+     ],
+     "stick": 150,
+     "from": 1.0
+    },
+    {
+     "type": "pin",
+     "variant": "gold",
+     "geo": [
+      16.05935,
+      108.2132
+     ],
+     "icon": "house",
+     "label": "Vị trí đất",
+     "from": 0.1,
+     "size": 1.05
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.0617,
+      108.2117
+     ],
+     "icon": "cart",
+     "label": "Siêu thị",
+     "from": 3.0,
+     "size": 0.72,
+     "labelSize": 24
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.0577,
+      108.211
+     ],
+     "icon": "school",
+     "label": "Trường học",
+     "from": 3.45,
+     "size": 0.72,
+     "labelSize": 24
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.0583,
+      108.2156
+     ],
+     "icon": "food",
+     "label": "Nhà hàng",
+     "from": 3.9,
+     "size": 0.72,
+     "labelSize": 24
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.0559,
+      108.2133
+     ],
+     "icon": "school",
+     "label": "Trường học",
+     "from": 4.35,
+     "size": 0.72,
+     "labelSize": 24
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.057,
+      108.2176
+     ],
+     "icon": "food",
+     "label": "Nhà hàng",
+     "from": 4.8,
+     "size": 0.72,
+     "labelSize": 24
+    },
+    {
+     "type": "btext",
+     "text": "VỊ TRÍ *NHÀ PHỐ* TẠI *ĐÀ NẴNG*",
+     "x": 540,
+     "y": 232,
+     "font": "M900",
+     "size": 58,
+     "keyColor": "#FFD21F",
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    },
+    {
+     "type": "btext",
+     "text": "Bài tập phong cách",
+     "x": 540,
+     "y": 318,
+     "font": "M500i",
+     "size": 62,
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 0.6,
+     "kind": "whoosh",
+     "gain": 0.35
+    },
+    {
+     "t": 1.8,
+     "kind": "chime",
+     "gain": 0.2
+    },
+    {
+     "t": 3.0,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 3.45,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 3.9,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 4.35,
+     "kind": "pop",
+     "gain": 0.3
+    },
+    {
+     "t": 4.8,
+     "kind": "pop",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 10.4,
+   "end": 15.4,
+   "zoomBlur": 1.6,
+   "view": [
+    {
+     "t": 0,
+     "lat": 16.05935,
+     "lon": 108.2132,
+     "zoom": 16.62
+    },
+    {
+     "t": 0.9,
+     "lat": 16.05935,
+     "lon": 108.2132,
+     "zoom": 19.2,
+     "ease": "in"
+    },
+    {
+     "t": 5,
+     "lat": 16.05935,
+     "lon": 108.2132,
+     "zoom": 19.32
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "lot",
+     "variant": "blue",
+     "pts": [
+      [
+       410,
+       720
+      ],
+      [
+       670,
+       720
+      ],
+      [
+       670,
+       1240
+      ],
+      [
+       410,
+       1240
+      ]
+     ],
+     "area": "100m²",
+     "from": 1.1,
+     "dims": [
+      {
+       "edge": 2,
+       "text": "5m",
+       "side": 1
+      },
+      {
+       "edge": 1,
+       "text": "20m",
+       "side": 1
+      }
+     ]
+    },
+    {
+     "type": "btext",
+     "text": "VỊ TRÍ *NHÀ PHỐ* TẠI *ĐÀ NẴNG*",
+     "x": 540,
+     "y": 232,
+     "font": "M900",
+     "size": 58,
+     "keyColor": "#FFD21F",
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    },
+    {
+     "type": "btext",
+     "text": "Bài tập phong cách",
+     "x": 540,
+     "y": 318,
+     "font": "M500i",
+     "size": 62,
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0,
+     "kind": "whoosh",
+     "gain": 0.5
+    },
+    {
+     "t": 1.1,
+     "kind": "tap",
+     "gain": 0.3
+    },
+    {
+     "t": 1.9,
+     "kind": "tap",
+     "gain": 0.3
+    },
+    {
+     "t": 2.35,
+     "kind": "tap",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 15.4,
+   "end": 22.4,
+   "zoomBlur": 1.2,
+   "view": [
+    {
+     "t": 0,
+     "lat": 16.05935,
+     "lon": 108.2132,
+     "zoom": 19.3
+    },
+    {
+     "t": 1.0,
+     "lat": 16.0625,
+     "lon": 108.2185,
+     "zoom": 14.3,
+     "ease": "out"
+    },
+    {
+     "t": 5.6,
+     "lat": 16.0625,
+     "lon": 108.2185,
+     "zoom": 14.35
+    },
+    {
+     "t": 7,
+     "lat": 16.06,
+     "lon": 108.215,
+     "zoom": 12.6
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "pin",
+     "variant": "gold",
+     "geo": [
+      16.05935,
+      108.2132
+     ],
+     "icon": "house",
+     "label": "Vị trí đất",
+     "from": 1.0,
+     "size": 0.95,
+     "to": 6.0
+    },
+    {
+     "type": "arrow",
+     "variant": "ydash",
+     "path": [
+      [
+       16.05935,
+       108.2132
+      ],
+      [
+       16.0606,
+       108.2205
+      ],
+      [
+       16.0613,
+       108.2274
+      ]
+     ],
+     "smooth": true,
+     "grow": {
+      "at": 1.6,
+      "dur": 0.8
+     },
+     "from": 1.6,
+     "to": 6.0
+    },
+    {
+     "type": "card",
+     "variant": "bubble",
+     "path": "photos/dragon-bridge-diff.jpg",
+     "geo": [
+      16.0613,
+      108.2274
+     ],
+     "r": 140,
+     "tail": 110,
+     "from": 2.3,
+     "to": 6.0,
+     "focus": [
+      0.42,
+      0.5
+     ]
+    },
+    {
+     "type": "arrow",
+     "variant": "ydash",
+     "path": [
+      [
+       16.05935,
+       108.2132
+      ],
+      [
+       16.067,
+       108.219
+      ],
+      [
+       16.0719,
+       108.2267
+      ]
+     ],
+     "smooth": true,
+     "grow": {
+      "at": 3.0,
+      "dur": 0.8
+     },
+     "from": 3.0,
+     "to": 6.0
+    },
+    {
+     "type": "card",
+     "variant": "bubble",
+     "path": "photos/cau-song-han.jpg",
+     "geo": [
+      16.0719,
+      108.2267
+     ],
+     "r": 140,
+     "tail": 110,
+     "from": 3.7,
+     "to": 6.0
+    },
+    {
+     "type": "btext",
+     "text": "VỊ TRÍ *NHÀ PHỐ* TẠI *ĐÀ NẴNG*",
+     "x": 540,
+     "y": 232,
+     "font": "M900",
+     "size": 58,
+     "keyColor": "#FFD21F",
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    },
+    {
+     "type": "btext",
+     "text": "Bài tập phong cách",
+     "x": 540,
+     "y": 318,
+     "font": "M500i",
+     "size": 62,
+     "enter": "none",
+     "shadowBlur": 14,
+     "shadowColor": "rgba(0,0,0,.65)"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0,
+     "kind": "whoosh",
+     "gain": 0.45
+    },
+    {
+     "t": 2.3,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 3.7,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 6.0,
+     "kind": "whoosh",
+     "gain": 0.4
+    }
+   ]
+  }
+ ]
+}

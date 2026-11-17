@@ -36,6 +36,15 @@ export const STYLES = {
   'thi-nghiem': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'cut',label: 'Thí nghiệm cổ', genres: 'khoa học đời thường, cách làm, mẹo dân gian, đồ vật (khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng)', bg: '#E9E6E0', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
                  layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
+  // 4 phong cách bản đồ bất động sản học từ mẫu TikTok (lib/bds.mjs, thẻ studio/references/bds-*/card.md). Mẫu gốc không có phụ đề: đặt "captions": {"items": []} để giống hệt.
+  'bds-drone':  {label: 'BĐS flycam neon', genres: 'bất động sản: nhà phố, đất nền trong đô thị (ảnh flycam, kẻ đường neon, ghim vàng, thẻ ảnh tiện ích)', bg: '#0B1620', deco: 'none', ink: '#FFFFFF', body: '#1A1F26', transition: 'cut',
+                 caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.9)'}, captionFont: '{size}px BDSM900', captionStrokeW: 10, titleFont: 'Sans'},
+  'bds-capcut': {label: 'BĐS vệ tinh CapCut', genres: 'bất động sản: vị trí lô đất, tiện ích quanh, kích thước thửa (vệ tinh tối, tiêu đề trắng vàng, tia laser xanh)', bg: '#05080C', deco: 'none', ink: '#FFFFFF', body: '#1A1F26', transition: 'cut',
+                 caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.9)'}, captionFont: '{size}px BDSM900', captionStrokeW: 10, titleFont: 'Sans'},
+  'bds-navy':   {label: 'BĐS bản đồ navy 3D', genres: 'bất động sản: dự án căn hộ, kết nối vùng, khoảng cách tới tiện ích (bản đồ vector xanh navy nghiêng 3D)', bg: '#063360', deco: 'none', ink: '#FFFFFF', body: '#0F3F70', transition: 'cut',
+                 caption: {color: '#FFFFFF', stroke: 'rgba(3,25,50,.92)'}, captionFont: '{size}px BDSM800i', captionStrokeW: 10, titleFont: 'Sans'},
+  'bds-geo':    {label: 'BĐS vệ tinh Geolayers', genres: 'bất động sản: đất nền tỉnh, quy hoạch, ranh giới hành chính, bán kính tiện ích (vệ tinh sáng, ranh giới neon, nhãn đỏ)', bg: '#0A120A', deco: 'none', ink: '#FFFFFF', body: '#1A1F26', transition: 'cut',
+                 caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.9)'}, captionFont: '{size}px BDSRC', captionStrokeW: 10, titleFont: 'Sans'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 

@@ -21,16 +21,30 @@ const worldPx = z => 256 * 2 ** z;
 export function sampleView(keys, t) {
   if (!keys?.length) return null;
   const K = keys.map(k => ({...k, m: merc(k.lat, k.lon)}));
-  if (t <= K[0].t) return {c: K[0].m, zoom: K[0].zoom, lat: K[0].lat};
-  const i = K.findIndex(k => k.t > t); if (i < 0) { const k = K.at(-1); return {c: k.m, zoom: k.zoom, lat: k.lat}; }
-  const a = K[i - 1], b = K[i], u = (t - a.t) / (b.t - a.t), e = b.ease === 'linear' ? u : ease(u);
+  const ex = (a, b, e) => ({tilt: (a.tilt ?? 0) + ((b.tilt ?? a.tilt ?? 0) - (a.tilt ?? 0)) * e, rot: (a.rot ?? 0) + ((b.rot ?? a.rot ?? 0) - (a.rot ?? 0)) * e, horizon: a.horizon ?? b.horizon, pivot: (a.pivot ?? 0) + ((b.pivot ?? a.pivot ?? 0) - (a.pivot ?? 0)) * e});
+  if (t <= K[0].t) return {c: K[0].m, zoom: K[0].zoom, lat: K[0].lat, ...ex(K[0], K[0], 0)};
+  const i = K.findIndex(k => k.t > t); if (i < 0) { const k = K.at(-1); return {c: k.m, zoom: k.zoom, lat: k.lat, ...ex(k, k, 0)}; }
+  const a = K[i - 1], b = K[i], u = (t - a.t) / (b.t - a.t), e = b.ease === 'linear' ? u : b.ease === 'in' ? u * u * u : b.ease === 'out' ? 1 - (1 - u) ** 3 : ease(u);
   const Z = a.zoom + (b.zoom - a.zoom) * e; let c;
-  if (b.zoom > a.zoom + 0.01) { const f = 2 ** (a.zoom - Z) * (1 - e); c = [b.m[0] - (b.m[0] - a.m[0]) * f, b.m[1] - (b.m[1] - a.m[1]) * f]; }
-  else if (a.zoom > b.zoom + 0.01) { const g = 2 ** (b.zoom - Z) * e; c = [a.m[0] + (b.m[0] - a.m[0]) * g, a.m[1] + (b.m[1] - a.m[1]) * g]; }
-  else c = [a.m[0] + (b.m[0] - a.m[0]) * e, a.m[1] + (b.m[1] - a.m[1]) * e];
-  return {c, zoom: Z, lat: a.lat + (b.lat - a.lat) * e};
+  if (Math.abs(b.zoom - a.zoom) > 0.3) { // keep the zoom-in destination / zoom-out origin gliding smoothly
+    const fix = b.zoom > a.zoom ? b.m : a.m, other = b.zoom > a.zoom ? a.m : b.m, zFix = b.zoom > a.zoom ? b.zoom : a.zoom, zOther = b.zoom > a.zoom ? a.zoom : b.zoom;
+    const k = 2 ** (zOther - Z), w = b.zoom > a.zoom ? 1 - e : e; // screen offset of fix point shrinks with zoom
+    c = [fix[0] + (other[0] - fix[0]) * k * w, fix[1] + (other[1] - fix[1]) * k * w];
+  } else c = [a.m[0] + (b.m[0] - a.m[0]) * e, a.m[1] + (b.m[1] - a.m[1]) * e];
+  return {c, zoom: Z, lat: a.lat + (b.lat - a.lat) * e, ...ex(a, b, e)};
 }
-export const project = (v, s, lat, lon) => { const m = merc(lat, lon), W = worldPx(v.zoom); return [s.width / 2 + (m[0] - v.c[0]) * W, s.height / 2 + (m[1] - v.c[1]) * W]; };
+// 3D look: rotate the map (rot, degrees) then tilt the ground plane (tilt, degrees; top recedes)
+const PD = s => s.height * 1.15;
+export function warp(v, s, x, y) {
+  if (!v || (!v.rot && !v.tilt)) return [x, y];
+  const pv = v.pivot || 0; let dx = x - s.width / 2, dy = y - s.height / 2; // the view centre lands on the pivot (pv px below frame centre)
+  if (v.rot) { const a = v.rot * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a); [dx, dy] = [dx * c - dy * sn, dx * sn + dy * c]; }
+  if (v.tilt) { const a = v.tilt * Math.PI / 180, D = PD(s), f = D / Math.max(D * 0.15, D - dy * Math.sin(a)); dx *= f; dy *= Math.cos(a) * f; }
+  return [s.width / 2 + dx, s.height / 2 + pv + dy];
+}
+export const flatProject = (v, s, lat, lon) => { const m = merc(lat, lon), W = worldPx(v.zoom); return [s.width / 2 + (m[0] - v.c[0]) * W, s.height / 2 + (m[1] - v.c[1]) * W]; };
+export const project = (v, s, lat, lon) => { const [x, y] = flatProject(v, s, lat, lon); return warp(v, s, x, y); };
+export const metersPx = (v, lat) => worldPx(v.zoom) / (40075016.7 * Math.cos(lat * Math.PI / 180));
 
 // ---------- assets ----------
 const cache = new Map();
@@ -72,10 +86,7 @@ function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
 function fitFont(ctx, text, family, size, maxW) { let sz = size; do { ctx.font = `${sz}px ${family}`; if (ctx.measureText(text).width <= maxW) break; sz -= 2; } while (sz > 20); return sz; }
 
 // ---------- painters ----------
-function satmap(ctx, e, t, s, v) {
-  const sat = s._sat; if (!sat || !v) return;
-  ctx.save(); ctx.globalAlpha = fadeA({...e, enter: e.enter ?? 'none'}, t); ctx.imageSmoothingQuality = 'high';
-  ctx.fillStyle = '#05080C'; ctx.fillRect(0, 0, s.width, s.height);
+function satFlat(ctx, sat, v, s) {
   const Wv = worldPx(v.zoom);
   // draw only levels that cover the whole frame (no visible seams between imagery of different dates);
   // the sharpest covering level wins, a partial sharper level is used only when nothing covers.
@@ -87,6 +98,37 @@ function satmap(ctx, e, t, s, v) {
     const Wz = worldPx(l.z), k = Wv / Wz, dx = s.width / 2 + (l.x0 / Wz - v.c[0]) * Wv, dy = s.height / 2 + (l.y0 / Wz - v.c[1]) * Wv;
     if (dx > s.width || dy > s.height || dx + l.w * k < 0 || dy + l.h * k < 0) continue;
     if (l.world) for (const off of [-1, 0, 1]) ctx.drawImage(l.img, dx + off * Wv, dy, l.w * k, l.h * k); else ctx.drawImage(l.img, dx, dy, l.w * k, l.h * k);
+  }
+}
+let warpCv = null;
+function satmap(ctx, e, t, s, v) {
+  const sat = s._sat; if (!sat || !v) return;
+  ctx.save(); ctx.globalAlpha = fadeA({...e, enter: e.enter ?? 'none'}, t); ctx.imageSmoothingQuality = 'high';
+  ctx.fillStyle = e.bg || '#05080C'; ctx.fillRect(0, 0, s.width, s.height);
+  if (!v.rot && !v.tilt) satFlat(ctx, sat, v, s);
+  else { // render the flat map large, then rotate + tilt it row by row
+    const a = (v.tilt || 0) * Math.PI / 180, D = PD(s), sn = Math.sin(a), cs = Math.cos(a);
+    const srcY = yy => yy * D / (D * cs + yy * sn), fAt = y => D / (D - y * sn);
+    const pv = v.pivot || 0, y0s = Math.max(0, v.horizon ?? 0), top = srcY(y0s - s.height / 2 - pv), bot = srcY(s.height / 2 - pv), wTop = s.width / fAt(top);
+    const OW = Math.ceil(Math.max(wTop, s.width) * 1.0 + 40), OH = Math.ceil(bot - top + 40), side = Math.ceil(Math.hypot(OW, OH));
+    const ws = e.warpScale ?? (side > 3600 ? 3600 / side : 1), S2 = Math.ceil(side * ws); // big far-reaching views are resampled from a smaller map
+    if (!warpCv || warpCv.width !== S2) warpCv = createCanvas(S2, S2);
+    const oc = warpCv.getContext('2d'); oc.setTransform(1, 0, 0, 1, 0, 0); oc.fillStyle = e.bg || '#05080C'; oc.fillRect(0, 0, S2, S2);
+    oc.translate(S2 / 2, (side / 2 - (top + bot) / 2) * ws); oc.rotate((v.rot || 0) * Math.PI / 180); oc.translate(-S2 / 2, -S2 / 2);
+    satFlat(oc, sat, {...v, zoom: v.zoom + Math.log2(ws)}, {width: S2, height: S2});
+    oc.setTransform(1, 0, 0, 1, 0, 0);
+    // perspective resample in JS (drawImage(canvas) per strip would snapshot the big canvas each call and run out of memory)
+    const cy0 = side / 2 - (top + bot) / 2, W = s.width, Hh = s.height, src = oc.getImageData(0, 0, S2, S2).data, out = ctx.createImageData(W, Hh), o = out.data;
+    for (let y = y0s; y < Hh; y++) {
+      const y0 = srcY(y - Hh / 2 - pv), w = W / fAt(y0), sy = (cy0 + y0) * ws, iy = Math.floor(sy), fy = sy - iy; if (iy < 0 || iy >= S2 - 1) continue;
+      const sx0 = (side / 2 - w / 2) * ws, dx = w / W * ws, r0 = iy * S2, r1 = r0 + S2;
+      for (let x = 0, q = y * W * 4; x < W; x++, q += 4) {
+        const sx = sx0 + x * dx, ix = sx | 0; if (ix < 0 || ix >= S2 - 1) continue; const fx = sx - ix;
+        const a = (r0 + ix) * 4, b = a + 4, c = (r1 + ix) * 4, d = c + 4, w00 = (1 - fx) * (1 - fy), w10 = fx * (1 - fy), w01 = (1 - fx) * fy, w11 = fx * fy;
+        o[q] = src[a] * w00 + src[b] * w10 + src[c] * w01 + src[d] * w11; o[q + 1] = src[a + 1] * w00 + src[b + 1] * w10 + src[c + 1] * w01 + src[d + 1] * w11; o[q + 2] = src[a + 2] * w00 + src[b + 2] * w10 + src[c + 2] * w01 + src[d + 2] * w11; o[q + 3] = 255;
+      }
+    }
+    ctx.putImageData(out, 0, 0, 0, y0s, W, Hh - y0s);
   }
   if (e.dim) { ctx.fillStyle = `rgba(0,0,0,${e.dim})`; ctx.fillRect(0, 0, s.width, s.height); }
   ctx.restore();
@@ -252,5 +294,6 @@ function clouds(ctx, e, t, s) {
 function note(ctx, e, t, s) { ctx.save(); ctx.globalAlpha = fadeA(e, t) * 0.85; ctx.font = `${e.size ?? 22}px ${F.bold}`; ctx.fillStyle = '#D5D9DF'; ctx.textAlign = e.align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(e.text, e.x ?? 66, e.y ?? 1330); ctx.restore(); }
 export function credit(ctx, s, text, y = 120, align = 'right') { ctx.save(); ctx.font = `18px ${F.bold}`; ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(text, align === 'right' ? s.width - 40 : 40, y); ctx.restore(); }
 
+export {local, fadeA, grow, pos, rr, fitFont, chaikin, partial, line, pinShape, ICONS};
 const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade};
 export function drawGeo(ctx, e, t, s, v, shotDur) { e._shotDur = shotDur; PAINT[e.type](ctx, e, t, s, v); }

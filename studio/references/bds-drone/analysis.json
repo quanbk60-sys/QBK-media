@@ -1,0 +1,52 @@
+{
+ "video": "v2.mp4",
+ "duration_s": 16.8,
+ "size": "576x1024",
+ "fps": "30/1",
+ "crop": [
+  0,
+  0
+ ],
+ "cuts": 0,
+ "cut_times": [],
+ "avg_shot_s": 16.8,
+ "palette": [
+  {
+   "hex": "#517286",
+   "share": 0.24
+  },
+  {
+   "hex": "#39505E",
+   "share": 0.223
+  },
+  {
+   "hex": "#768B9E",
+   "share": 0.171
+  },
+  {
+   "hex": "#5687A5",
+   "share": 0.16
+  },
+  {
+   "hex": "#9AAAAD",
+   "share": 0.121
+  },
+  {
+   "hex": "#62A2B3",
+   "share": 0.083
+  }
+ ],
+ "brightness": 0.47,
+ "colourfulness": 0.22,
+ "audio": {
+  "sound_ratio": 1.0,
+  "mean_db": -11.0,
+  "max_db": 0.0
+ },
+ "files": {
+  "contact": "contact.png",
+  "frames": [
+   "f00.png"
+  ]
+ }
+}

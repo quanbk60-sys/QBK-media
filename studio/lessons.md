@@ -26,6 +26,11 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Bản đăng: nén lại khoảng 1,65 Mbps và chuẩn hóa âm lượng về −14 LUFS (ảnh vệ tinh làm file gốc nặng 70MB). Không commit file gốc. *(Bạch Đằng ve-tinh)*
 - Mô tả đăng bài không được nói quá kịch bản (ví dụ "cả ba trận đều dùng cọc" là sai). *(Bạch Đằng ve-tinh)*
 
+## Phong cách BĐS (`bds-*`, mẫu người dùng gửi 17/11/2026)
+- Người dùng muốn **giống mẫu 100%**: giữ đúng màu đo được, font Montserrat/Roboto Condensed, nhịp hiện đồ hoạ và bố cục của từng mẫu (xem 4 thẻ `studio/references/bds-*`). Mẫu gốc không có phụ đề.
+- Mọi vị trí, khoảng cách, ranh giới phải lấy từ toạ độ thật (OSM qua Nominatim, ảnh vệ tinh) và ghi trong `sources.md`; số đo lô, quy hoạch, sổ chỉ dùng tài liệu người dùng đưa.
+- Bản đồ nghiêng: tâm `view` nằm tại `pivot`; dò hướng `rot` sao cho trục đường chính chạy thẳng lên (đặt ghim thử ở 2 đầu đường rồi xem ảnh).
+
 ## Phong cách phải khác nhau thật (người dùng, 09/11/2026)
 - "Các phong cách giống hệt nhau, chỉ khác nền" là lỗi. Mỗi phong cách có ngữ pháp riêng (nét, cách tô, cách hiện hình, chuyển cảnh, phụ đề), xem SCENE_FORMAT.md, mục "Ngữ pháp phong cách". Đạo diễn còn phải đổi cả bố cục và nhịp cho hợp phong cách.
 - Học từ mẫu 3D thực tế thì dựng bằng `studio/engine3d/`, không thay bằng nét vẽ trên giấy. Video làm đá bản nét vẽ đã bị người dùng chê "khác hoàn toàn mẫu".

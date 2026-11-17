@@ -7,3 +7,6 @@ projects/*/output/check*
 projects/*/output/.*
 studio/engine/examples/styles/out/
 studio/engine3d/node_modules/
+studio/engine/examples/bds/output/
+__pycache__/
+studio/engine/examples/bds/sat-*/

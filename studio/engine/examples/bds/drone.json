@@ -1,0 +1,292 @@
+{
+ "style": "bds-drone",
+ "satmap": "sat-drone/satmap.json",
+ "captions": {
+  "items": []
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 16.0,
+   "view": [
+    {
+     "t": 0,
+     "lat": 16.0587,
+     "lon": 108.2105,
+     "zoom": 17.3,
+     "tilt": 55,
+     "rot": -76,
+     "pivot": 500,
+     "horizon": 540,
+     "ease": "linear"
+    },
+    {
+     "t": 16,
+     "lat": 16.059091000000002,
+     "lon": 108.2128,
+     "zoom": 17.3,
+     "tilt": 55,
+     "rot": -76,
+     "pivot": 500,
+     "horizon": 540,
+     "ease": "linear"
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap",
+     "shade": false
+    },
+    {
+     "type": "sky",
+     "clouds": 7
+    },
+    {
+     "type": "tint",
+     "color": "#0B3E5E",
+     "track": [
+      {
+       "t": 0,
+       "alpha": 0
+      },
+      {
+       "t": 1.8,
+       "alpha": 0
+      },
+      {
+       "t": 2.6,
+       "alpha": 0.2
+      }
+     ]
+    },
+    {
+     "type": "neon",
+     "path": [
+      [
+       16.05846,
+       108.204
+      ],
+      [
+       16.05906,
+       108.2105
+      ],
+      [
+       16.05976,
+       108.214
+      ],
+      [
+       16.06066,
+       108.219
+      ],
+      [
+       16.06128,
+       108.2238
+      ]
+     ],
+     "grow": {
+      "at": 1.8,
+      "dur": 1.2
+     },
+     "from": 1.8,
+     "width": 9,
+     "smooth": true
+    },
+    {
+     "type": "neon",
+     "path": [
+      [
+       16.05,
+       108.2232
+      ],
+      [
+       16.056,
+       108.2236
+      ],
+      [
+       16.0611,
+       108.2239
+      ],
+      [
+       16.068,
+       108.224
+      ],
+      [
+       16.074,
+       108.2236
+      ]
+     ],
+     "grow": {
+      "at": 2.2,
+      "dur": 1.0
+     },
+     "from": 2.2,
+     "width": 7,
+     "smooth": true,
+     "pulses": 1
+    },
+    {
+     "type": "card",
+     "variant": "bracket",
+     "path": "photos/dragon-bridge-diff.jpg",
+     "geo": [
+      16.06112,
+      108.2246
+     ],
+     "label": "Cầu Rồng",
+     "dx": -170,
+     "dy": -260,
+     "from": 3.2,
+     "to": 6.6,
+     "focus": [
+      0.45,
+      0.55
+     ]
+    },
+    {
+     "type": "card",
+     "variant": "bracket",
+     "path": "photos/cau-song-han.jpg",
+     "geo": [
+      16.0719,
+      108.2267
+     ],
+     "label": "Cầu Sông Hàn",
+     "dx": 170,
+     "dy": -250,
+     "from": 4.5,
+     "to": 6.6
+    },
+    {
+     "type": "pin",
+     "variant": "gold",
+     "geo": [
+      16.06,
+      108.2163
+     ],
+     "icon": "house",
+     "label": "Căn nhà",
+     "size": 1.0
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.0648,
+      108.22
+     ],
+     "icon": "cart",
+     "label": "Siêu thị",
+     "from": 7.5,
+     "size": 0.85,
+     "labelSize": 32
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.056,
+      108.2195
+     ],
+     "icon": "school",
+     "label": "Trường học",
+     "from": 8.2,
+     "size": 0.85,
+     "labelSize": 32
+    },
+    {
+     "type": "pin",
+     "variant": "yellow",
+     "geo": [
+      16.0567,
+      108.2128
+     ],
+     "icon": "food",
+     "label": "Nhà hàng",
+     "from": 8.8,
+     "size": 1.0,
+     "labelSize": 30
+    },
+    {
+     "type": "btext",
+     "text": "*Nhà Phố* Gần *Cầu Rồng*\nChỉ *900m*\nĐi Bộ Vài Phút ???",
+     "x": 540,
+     "y": 520,
+     "font": "M900",
+     "size": 60,
+     "keyColor": "#FFD21F",
+     "strokeW": 3,
+     "stroke": "#3A2A00",
+     "shadowBlur": 12,
+     "enter": "none",
+     "to": 2.2
+    },
+    {
+     "type": "btext",
+     "text": "QBK MEDIA",
+     "x": 190,
+     "y": 1545,
+     "font": "M900",
+     "size": 30,
+     "alpha": 0.85,
+     "enter": "none",
+     "shadowBlur": 6
+    },
+    {
+     "type": "tint",
+     "color": "#000000",
+     "track": [
+      {
+       "t": 0,
+       "alpha": 0
+      },
+      {
+       "t": 15.0,
+       "alpha": 0
+      },
+      {
+       "t": 16.0,
+       "alpha": 1
+      }
+     ]
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.8,
+     "kind": "whoosh",
+     "gain": 0.5
+    },
+    {
+     "t": 3.2,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 4.5,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 6.5,
+     "kind": "whoosh",
+     "gain": 0.3
+    },
+    {
+     "t": 7.5,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 8.2,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 8.8,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  }
+ ]
+}

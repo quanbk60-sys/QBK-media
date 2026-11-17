@@ -67,6 +67,11 @@ Người dùng gửi video hoặc ảnh mẫu thì giao `nghien-cuu-mau` (nhiề
 | Bí ẩn, chuyện lạ | `phim-cam` |
 | Khoa học đời thường, cách làm, mẹo dân gian, đồ vật | `thi-nghiem`: **dựng bằng `studio/engine3d/` (3D thực tế; lần đầu chạy `npm ci` trong thư mục đó)**, không dùng người que hay nét vẽ. Xem `studio/engine3d/README.md`, phim mẫu `projects/lam-da-co-dai/` |
 | Địa lý, chiến trận có địa điểm thật, công trình, dự án (ảnh vệ tinh + ảnh thật, không người que) | `ve-tinh` (cần mạng tới Esri và upload.wikimedia.org; xem `studio/references/ve-tinh-anh-that/card.md`) |
+| **Bất động sản**: nhà phố, đất nền đô thị (flycam + kẻ đường neon) | `bds-drone` |
+| **Bất động sản**: vị trí lô + tiện ích + kích thước thửa (vệ tinh tối, tiêu đề cố định) | `bds-capcut` |
+| **Bất động sản**: dự án căn hộ, kết nối vùng, khoảng cách (bản đồ navy nghiêng 3D, có lời đọc) | `bds-navy` |
+| **Bất động sản**: đất nền tỉnh, quy hoạch, ranh giới hành chính, bán kính tiện ích (vệ tinh sáng) | `bds-geo` |
+| (4 phong cách BĐS: `lib/bds.mjs`, mục "Phong cách BĐS" trong SCENE_FORMAT.md, thẻ `studio/references/bds-*/card.md`, scene mẫu `studio/engine/examples/bds/`) | |
 Đạo diễn được chọn khác nếu hợp chủ đề hơn, nhưng phải ghi lý do vào `notes.md`. Nên xen kẽ phong cách giữa các video liền nhau để kênh không đơn điệu.
 
 
