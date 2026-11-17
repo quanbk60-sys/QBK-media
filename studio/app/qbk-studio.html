@@ -373,7 +373,6 @@ a.link{color:var(--navy)}
   V.home = () => {
     const waiting = S.videos.filter(v => v.status === "cho-duyet");
     const working = S.videos.filter(v => v.status === "dang-lam" || v.status === "dang-sua");
-    const ready = S.videos.filter(v => v.status === "da-duyet" && !v.archived);
     const pending = S.requests.filter(r => r.status === "moi" || r.status === "tra-loi");
     const asks = S.requests.filter(r => r.status === "can-hoi");
     const made = S.videos.length, posted = S.videos.filter(v => v.status === "da-dang").length;
@@ -388,9 +387,8 @@ a.link{color:var(--navy)}
       ${pending.length ? `<h2>Yêu cầu đã gửi</h2><div class="list">${pending.map(r => `<div class="li"><div class="grow"><b style="font-weight:600">${esc(r.topic)}</b><div class="small">${r.guest && !S.guest ? '<span class="pill p-navy">Khách</span> ' : ""}${r.genre ? esc(r.genre) + " · " : ""}${esc(styleName(r.style))}${r.attachments?.length ? ` · ${r.attachments.length} tệp` : ""} · ${r.status === "tra-loi" ? "đã trả lời, chờ đoàn phim làm tiếp" : "chờ đoàn phim nhận"} · làm khoảng ${dur(etaTotal(r.style, r.length))}</div></div><span class="pill p-mute">${r.status === "tra-loi" ? "Đã trả lời" : "Mới"}</span></div>`).join("")}</div>
         <p class="small">Đoàn phim được gọi ngay khi bạn gửi. Nếu yêu cầu nằm ở đây quá 10 phút, nhắn "chạy đi" cho Claude.</p>` : ""}
       ${working.length ? `<h2>Đang làm</h2>${working.map(v => videoCard(v)).join("")}` : ""}
-      ${ready.length ? `<h2>Chờ đăng</h2>${ready.map(v => videoCard(v)).join("")}` : ""}
       ${libVideos().length ? `<a class="card row between" href="#lib" style="text-decoration:none;color:inherit"><span class="row" style="gap:10px">${svg("lib")}<span class="col" style="gap:0"><b style="font-size:14px">Thư viện</b><span class="small">${libVideos().filter(v => !v.archived).length} video theo ${new Set(libVideos().filter(v => !v.archived).map(v => v.style)).size} phong cách${libVideos().some(v => v.archived) ? " · " + libVideos().filter(v => v.archived).length + " lưu trữ" : ""}</span></span></span><span aria-hidden="true">›</span></a>` : ""}
-      ${S.ready && !waiting.length && !working.length && !ready.length && !pending.length ? `<div class="empty">Chưa có video nào đang làm. Bấm "Làm video mới".</div>` : ""}
+      ${S.ready && !waiting.length && !working.length && !pending.length && !asks.length ? `<div class="empty">Không có video nào đang làm hay chờ duyệt. Video đã xong nằm trong Thư viện.</div>` : ""}
 `;
   };
 
