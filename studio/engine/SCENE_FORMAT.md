@@ -177,7 +177,7 @@ Học từ 4 video TikTok bất động sản (người dùng gửi 17/11/2026).
 
 Dùng chung hạ tầng của `ve-tinh` (`satmap`, `view`, `geo`) và thêm:
 - **Nghiêng / xoay bản đồ 3D**: trong mỗi khóa `view` thêm `tilt` (độ, 0–60; đỉnh khung lùi xa), `rot` (độ, xoay bản đồ quanh tâm), `pivot` (px, hạ tâm khung nhìn xuống dưới giữa khung), `horizon` (px, phía trên dòng này không vẽ bản đồ, để phần tử `sky` vẽ trời). Mọi phần tử theo `geo` tự bám theo phối cảnh.
-- **Nhòe khi zoom nhanh**: `"zoomBlur": 1.4` ở cấp shot (mạnh theo tốc độ zoom), hoặc `"blur": [{"t": 0, "amount": 0.1}, {"t": 0.5, "amount": 0}]`. Chỉ nền (satmap/bgphoto) bị nhòe, chữ và ghim vẫn nét.
+- **Nhòe khi zoom nhanh** (mặc định tắt; người dùng không thích, 17/11/2026): `"zoomBlur": 1.4` ở cấp shot (mạnh theo tốc độ zoom), hoặc `"blur": [{"t": 0, "amount": 0.1}, {"t": 0.5, "amount": 0}]`. Chỉ nền (satmap/bgphoto) bị nhòe, chữ và ghim vẫn nét.
 - **Bản đồ navy**: `satmap.py <dir> --source navy --level …` (nền Esri World Dark Gray, tự xóa chữ in sẵn, tô màu nước #105283, đất #063360, đường xanh thép).
 - Điểm: `geo` [lat,lon] | `ip` [u,v] (phân số trên ảnh nền `bgphoto`, bám ảnh khi ảnh trôi) | `x`,`y`. Đường/vùng: `path` [[lat,lon]…] | `ipts` | `pts`. Hầu hết phần tử có `from`, `to`, `delay`, `alpha`.
 
@@ -185,7 +185,7 @@ Dùng chung hạ tầng của `ve-tinh` (`satmap`, `view`, `geo`) và thêm:
 |---|---|
 | `sky` | trời + mây tích + sương xa trên `horizon` (flycam giả lập từ vệ tinh nghiêng): `clouds`, `seed`, `drift`, `haze`, `top`/`mid`/`low` (màu) |
 | `bgphoto` | ảnh nền toàn khung (ảnh flycam thật): `path`, `track` [{t, zoom, fx, fy}], `grade` (màu phủ), `gradeAlpha` |
-| `neon` | `variant`: `neon` (xanh ngọc phát sáng, có luồng sáng chạy, bds-drone), `laser` (tia xanh dương thon hai đầu, lõi trắng, lóe sáng, bds-capcut), `road` (đường cyan, bds-geo). `grow {at,dur}`, `width`, `color`, `smooth`, `pulses`, `len` (laser) |
+| `neon` | `variant`: `neon` (xanh ngọc phát sáng, bds-drone; `flow: true` thêm luồng sáng chạy), `laser` (tia xanh dương thon hai đầu, lõi trắng, bds-capcut; `flare: true` thêm chớp sáng), `road` (đường cyan, bds-geo). `grow {at,dur}`, `width`, `color`, `smooth`, `pulses`, `len` (laser) |
 | `pin` | `variant`: `gold` (ghim vàng ánh kim, nhãn vàng nghiêng), `yellow` (ghim vàng phẳng, nhãn vàng viền đen), `red` (ghim đỏ + 2 vòng đất; `label` thành hộp đỏ chữ trắng, xuống dòng bằng `\n`), `orange` (ghim nhỏ quán ăn), `target` (đĩa trắng chấm đỏ, nhãn "Vị trí lô đất"). `icon`: house, school, book, cart, food, cross, bowl, coffee, building, hotel, plane, hospital, star, person, tree, court. `label`, `labelSize`, `labelDx`, `labelDy`, `size`, `ground: false`, `ripple: false` |
 | `card` | thẻ ảnh. `variant`: `bracket` (khung trắng mở dần, ảnh, thanh tên xanh, đường dẫn xuống đất; `dx`,`dy` vị trí thẻ so với điểm), `navy` (thẻ kính viền sáng, chữ vàng dưới ảnh, cột sáng xuống chấm đất; `stick`, `frame`, `textColor`, `badge`), `bubble` (ảnh tròn đuôi trắng; `r`, `tail`), `doc` (giấy tờ viền đỏ trượt lên; `w`). `path` ảnh, `label`, `w`, `h`, `focus` |
 | `tagbox` | nhãn chữ. `variant`: `glass` (hộp kính viền cyan + cột sáng, bds-navy), `road` (hộp trắng chữ xanh, vạch xanh trái + đường dẫn, bds-capcut), `red`, `yellow` (nhãn quốc lộ), `dark` ("VỊ TRÍ LÔ ĐẤT"). `text`, `size`, `stick`, `rotate`, `dx`, `dy` |

@@ -29,6 +29,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 ## Phong cách BĐS (`bds-*`, mẫu người dùng gửi 17/11/2026)
 - Người dùng muốn **giống mẫu 100%**: giữ đúng màu đo được, font Montserrat/Roboto Condensed, nhịp hiện đồ hoạ và bố cục của từng mẫu (xem 4 thẻ `studio/references/bds-*`). Mẫu gốc không có phụ đề.
 - Mọi vị trí, khoảng cách, ranh giới phải lấy từ toạ độ thật (OSM qua Nominatim, ảnh vệ tinh) và ghi trong `sources.md`; số đo lô, quy hoạch, sổ chỉ dùng tài liệu người dùng đưa.
+- Người dùng **không thích "phần xẹt xẹt"**: không dùng sfx `whoosh`, không bật `zoomBlur`/`blur`, không bật luồng sáng chạy (`flow`) hay chớp laser (`flare`). *(17/11/2026)*
 - Bản đồ nghiêng: tâm `view` nằm tại `pivot`; dò hướng `rot` sao cho trục đường chính chạy thẳng lên (đặt ghim thử ở 2 đầu đường rồi xem ảnh).
 
 ## Phong cách phải khác nhau thật (người dùng, 09/11/2026)

@@ -23,6 +23,6 @@ def drone(save):
            title, WM(1545, 190),
            {'type': 'tint', 'color': '#000000', 'track': [{'t': 0, 'alpha': 0}, {'t': 15.0, 'alpha': 0}, {'t': 16.0, 'alpha': 1}]}]
     shot = {'start': 0, 'end': 16.0, 'view': [V(0, 108.2105), V(16, 108.2128)], 'elements': els,
-            'sfx': [{'t': 1.8, 'kind': 'whoosh', 'gain': 0.5}, {'t': 3.2, 'kind': 'pop', 'gain': 0.4}, {'t': 4.5, 'kind': 'pop', 'gain': 0.4}, {'t': 6.5, 'kind': 'whoosh', 'gain': 0.3},
+            'sfx': [{'t': 3.2, 'kind': 'pop', 'gain': 0.4}, {'t': 4.5, 'kind': 'pop', 'gain': 0.4}, 
                     {'t': 7.5, 'kind': 'pop', 'gain': 0.4}, {'t': 8.2, 'kind': 'pop', 'gain': 0.4}, {'t': 8.8, 'kind': 'pop', 'gain': 0.4}]}
     save('drone.json', {'style': 'bds-drone', 'satmap': 'sat-drone/satmap.json', 'captions': NOCAP, 'shots': [shot]})

@@ -8,7 +8,6 @@
   {
    "start": 0,
    "end": 2.6,
-   "zoomBlur": 1.4,
    "view": [
     {
      "t": 0,
@@ -53,13 +52,7 @@
      "shadowColor": "rgba(0,0,0,.65)"
     }
    ],
-   "sfx": [
-    {
-     "t": 0.1,
-     "kind": "whoosh",
-     "gain": 0.5
-    }
-   ]
+   "sfx": []
   },
   {
    "start": 2.6,
@@ -244,11 +237,6 @@
      "gain": 0.4
     },
     {
-     "t": 0.6,
-     "kind": "whoosh",
-     "gain": 0.35
-    },
-    {
      "t": 1.8,
      "kind": "chime",
      "gain": 0.2
@@ -283,7 +271,6 @@
   {
    "start": 10.4,
    "end": 15.4,
-   "zoomBlur": 1.6,
    "view": [
     {
      "t": 0,
@@ -372,11 +359,6 @@
    ],
    "sfx": [
     {
-     "t": 0,
-     "kind": "whoosh",
-     "gain": 0.5
-    },
-    {
      "t": 1.1,
      "kind": "tap",
      "gain": 0.3
@@ -396,7 +378,6 @@
   {
    "start": 15.4,
    "end": 22.4,
-   "zoomBlur": 1.2,
    "view": [
     {
      "t": 0,
@@ -548,11 +529,6 @@
    ],
    "sfx": [
     {
-     "t": 0,
-     "kind": "whoosh",
-     "gain": 0.45
-    },
-    {
      "t": 2.3,
      "kind": "pop",
      "gain": 0.4
@@ -560,11 +536,6 @@
     {
      "t": 3.7,
      "kind": "pop",
-     "gain": 0.4
-    },
-    {
-     "t": 6.0,
-     "kind": "whoosh",
      "gain": 0.4
     }
    ]

@@ -8,7 +8,6 @@
   {
    "start": 0,
    "end": 4.2,
-   "zoomBlur": 1.3,
    "view": [
     {
      "t": 0,
@@ -2144,11 +2143,6 @@
    ],
    "sfx": [
     {
-     "t": 0,
-     "kind": "whoosh",
-     "gain": 0.45
-    },
-    {
      "t": 2.0,
      "kind": "chime",
      "gain": 0.2
@@ -2158,7 +2152,6 @@
   {
    "start": 4.2,
    "end": 8.4,
-   "zoomBlur": 1.3,
    "view": [
     {
      "t": 0,
@@ -2804,11 +2797,6 @@
    ],
    "sfx": [
     {
-     "t": 0,
-     "kind": "whoosh",
-     "gain": 0.45
-    },
-    {
      "t": 1.2,
      "kind": "pop",
      "gain": 0.4
@@ -2887,11 +2875,6 @@
     }
    ],
    "sfx": [
-    {
-     "t": 0.3,
-     "kind": "whoosh",
-     "gain": 0.35
-    },
     {
      "t": 1.6,
      "kind": "pop",
@@ -3050,23 +3033,11 @@
      "labelDy": -40
     }
    ],
-   "sfx": [
-    {
-     "t": 0.4,
-     "kind": "whoosh",
-     "gain": 0.35
-    },
-    {
-     "t": 1.6,
-     "kind": "whoosh",
-     "gain": 0.35
-    }
-   ]
+   "sfx": []
   },
   {
    "start": 20.6,
    "end": 26.0,
-   "zoomBlur": 1.4,
    "view": [
     {
      "t": 0,
@@ -3141,11 +3112,6 @@
     }
    ],
    "sfx": [
-    {
-     "t": 0,
-     "kind": "whoosh",
-     "gain": 0.45
-    },
     {
      "t": 1.3,
      "kind": "chime",

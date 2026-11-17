@@ -109,7 +109,7 @@ function neon(ctx, e, t, s, v) {
     const shape = k => { ctx.beginPath(); body.forEach(([x, y, an, tp], i) => { const r = w * k * tp; const px = x - Math.sin(an) * r, py = y + Math.cos(an) * r; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); for (let i = body.length - 1; i >= 0; i--) { const [x, y, an, tp] = body[i], r = w * k * tp; ctx.lineTo(x + Math.sin(an) * r, y - Math.cos(an) * r); } ctx.closePath(); ctx.fill(); };
     ctx.shadowColor = c; ctx.shadowBlur = w * 3; ctx.fillStyle = c; ctx.globalAlpha = a * 0.55; shape(1.6); ctx.globalAlpha = a; shape(0.95);
     ctx.shadowBlur = w; ctx.shadowColor = '#BFE3FF'; ctx.fillStyle = '#E8F6FF'; shape(0.38); ctx.shadowBlur = 0;
-    const flare = pointAt(Q, 0.5 + 0.35 * Math.sin(local(e, t) * 2.2)), fg = ctx.createRadialGradient(flare.x, flare.y, 0, flare.x, flare.y, w * 5); fg.addColorStop(0, 'rgba(255,255,255,.9)'); fg.addColorStop(0.3, 'rgba(120,190,255,.35)'); fg.addColorStop(1, 'rgba(46,139,255,0)'); ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(flare.x, flare.y, w * 5, 0, 7); ctx.fill();
+    if (e.flare) { const flare = pointAt(Q, 0.5 + 0.35 * Math.sin(local(e, t) * 2.2)), fg = ctx.createRadialGradient(flare.x, flare.y, 0, flare.x, flare.y, w * 5); fg.addColorStop(0, 'rgba(255,255,255,.9)'); fg.addColorStop(0.3, 'rgba(120,190,255,.35)'); fg.addColorStop(1, 'rgba(46,139,255,0)'); ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(flare.x, flare.y, w * 5, 0, 7); ctx.fill(); }
     ctx.restore(); return;
   }
   const c = e.color || (variant === 'road' ? '#86F4F2' : '#2DF5C6'), w = e.width ?? (variant === 'road' ? 9 : 7), Q = partial(P, g).pts;
@@ -118,8 +118,8 @@ function neon(ctx, e, t, s, v) {
   ctx.strokeStyle = c; ctx.shadowColor = c; ctx.shadowBlur = w * 4; ctx.globalAlpha = a * 0.35; ctx.lineWidth = w * 3.2; stroke(ctx, Q);
   ctx.globalAlpha = a * 0.85; ctx.shadowBlur = w * 2; ctx.lineWidth = w; stroke(ctx, Q);
   ctx.shadowBlur = 0; ctx.globalAlpha = a * 0.9; ctx.strokeStyle = '#E9FFFA'; ctx.lineWidth = w * 0.35; stroke(ctx, Q);
-  if (e.flow !== false) { const L = pathLen(Q), sp = e.flowSpeed ?? 0.55, k = local(e, t); for (let j = 0; j < (e.pulses ?? 2); j++) { const u = ((k * sp + j / (e.pulses ?? 2)) % 1), R = sub(Q, Math.max(0, u - 160 / Math.max(L, 1)), u); if (R.length < 2) continue; ctx.globalAlpha = a; ctx.shadowColor = '#FFFFFF'; ctx.shadowBlur = w * 3; ctx.strokeStyle = '#F4FFFD'; ctx.lineWidth = w * 1.1; stroke(ctx, R); } }
-  if (g < 1) { const hd = Q.at(-1); ctx.globalAlpha = a; ctx.shadowColor = '#fff'; ctx.shadowBlur = 30; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(hd[0], hd[1], w * 0.9, 0, 7); ctx.fill(); }
+  if (e.flow) { const L = pathLen(Q), sp = e.flowSpeed ?? 0.55, k = local(e, t); for (let j = 0; j < (e.pulses ?? 2); j++) { const u = ((k * sp + j / (e.pulses ?? 2)) % 1), R = sub(Q, Math.max(0, u - 160 / Math.max(L, 1)), u); if (R.length < 2) continue; ctx.globalAlpha = a; ctx.shadowColor = '#FFFFFF'; ctx.shadowBlur = w * 3; ctx.strokeStyle = '#F4FFFD'; ctx.lineWidth = w * 1.1; stroke(ctx, R); } }
+  if (g < 1 && e.flow) { const hd = Q.at(-1); ctx.globalAlpha = a; ctx.shadowColor = '#fff'; ctx.shadowBlur = 30; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(hd[0], hd[1], w * 0.9, 0, 7); ctx.fill(); }
   ctx.restore();
 }
 
