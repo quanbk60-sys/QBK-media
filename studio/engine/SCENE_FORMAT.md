@@ -19,7 +19,7 @@ node render.mjs ../../projects/<slug>/scene.json              # cả phim → ou
 | UI TikTok/Shorts | > 1550, x > 960 | Để trống (mô tả, nút bấm che) |
 
 ## Phong cách (`style`)
-`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`).
+`"style": "giay-muc"` (mặc định) | `bang-phan` | `ban-ve` | `so-tay` | `pop` | `dan-gian` | `phim-cam` | `phac-thao` | `ban-do-toi` | `ve-tinh` (ảnh vệ tinh thật + ảnh thật, xem mục cuối) | `thi-nghiem` (khung 16:9 giữa màn trên nền mờ, chữ 2–3 từ có từ khóa vàng; khung vẽ 1080×608, render tự ghép 1080×1920; từ khóa chọn bằng `*từ*` trong phụ đề; thẻ `studio/references/thi-nghiem-co/card.md`). | `cat-dan` (phim tài liệu cắt dán giấy kiểu Vox: ảnh thật halftone, giấy báo, dấu mộc, dây đỏ; xem mục "Phong cách cắt dán").
 
 Phong cách tự đổi nền, màu mực, màu thân nhân vật, bảng màu tên (`red`, `navy`…), độ dày nét, kiểu chữ tiêu đề, phụ đề và bộ lọc màu (đen trắng, sepia). Không cần đổi gì trong nhân vật hay đạo cụ. Định nghĩa nằm trong `lib/styles.mjs`; thêm phong cách mới thì thêm một mục vào `STYLES`.
 
@@ -126,7 +126,7 @@ Bổ sung v2 (Rùa và Thỏ):
 - Scene mẫu: `examples/rua-tho-kit.json`.
 
 ## Âm thanh (`sfx`)
-`{"t": 0.3, "kind": "drum", "gain": 0.5}` với `kind` thuộc: pop, tap, whoosh, step, drum, gong, splash, crack, scribble, chime, thud, wind, hammer, cheer (`dur` cho wind và scribble).
+`{"t": 0.3, "kind": "drum", "gain": 0.5}` với `kind` thuộc: pop, tap, whoosh, step, drum, gong, splash, crack, scribble, chime, thud, wind, hammer, cheer, paper (giấy trượt), tape (băng dính) (`dur` cho wind và scribble).
 
 Một số âm được tạo **tự động**: tiếng bút khi bàn tay vẽ, tiếng bước chân khi `walk` hoặc `run`, tiếng búa khi `hammer`.
 
@@ -171,6 +171,35 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.
+
+## Phong cách cắt dán (`cat-dan`, `lib/collage.mjs`)
+Phim tài liệu cắt dán giấy kiểu Vox. Cách kể và luật bố cục: skill `tai-lieu-cat-dan`. Thẻ: `studio/references/vox-tai-lieu/card.md`. Phim mẫu: `projects/_demo-cat-dan/scene.json`.
+
+- Nền mặc định là giấy báo cũ (cột chữ mờ, vết cà phê, vân giấy). Phụ đề in trên dải giấy xé, font Oswald. Chuyển cảnh mặc định `cut`; thêm `"transition": "tear"` (tờ giấy xé lên).
+- Mọi phần tử chuyển động kiểu stop-motion 12 hình/giây, rung nhẹ khi đã nằm yên (`still: true` để tắt). Thuộc tính chung: `x`, `y` (tâm), `rotate`, `scale`, `alpha`, `from`, `to`, `exit: "fade"`, `enter` (`slide` · `drop` · `pop` · `stamp` · `fade` · `none`), `enterDur`, `dir` (cho `slide`: `left`/`right`/`up`/`down`, mặc định theo phía của `x`), `seed` (đổi hình mép cắt).
+- Tiếng giấy tự động khi mỗi mảnh vào cảnh (`paper`, `tape`, `thud`, `tap`, `scribble`). Tắt cả phim: `"paperSfx": false`; tắt một phần tử: `"sfx": false`.
+- Font: `QBKHead` (Oswald Bold, chữ cô đặc), `QBKType` (IBM Plex Mono, chữ đánh máy). Cả hai có đủ dấu tiếng Việt.
+
+| Phần tử (`type`) | Thuộc tính |
+|---|---|
+| `plate` | nền toàn khung: `kind` = `newsprint` · `tan` · `map` (bản đồ cổ mờ) · `cork` (bảng ghim) · `grid` (giấy kẻ ô) · `white` · `kraft` · `red` · `black`, `seed`. Đặt đầu danh sách, `enter: "none"` |
+| `cutout` | ảnh thật in halftone, cắt kéo viền trắng: `path`, `w`, `h` (cắt khung, mặc định theo tỉ lệ ảnh), `focus` [fx,fy], `shape` (`cut` · `torn` · `circle` · `alpha` cho PNG đã tách nền), `border` (12), `borderColor`, `offset` (`red`/`yellow`: bóng màu lệch sau ảnh), `offsetBy` [dx,dy], `tone` (`ink` · `red` · `navy`; `yellow` = nền vàng), `bg`, `dot` (cỡ chấm), `contrast` (1,35), `halftone: false` (ảnh xám hạt thay chấm), `censor` [fx, fy, fw, fh] (dải đen che mắt, tọa độ 0..1 trong ảnh), `credit` (**bắt buộc** với ảnh ngoài). Không có ảnh: `silhouette` (`person` · `building` · `house`) + `fill` |
+| `scrap` | giấy xé có chữ: `text` (`\n` xuống dòng), `size` (64), `w`, `h`, `color` (`paper` · `news` · `white` · `red` · `yellow` · `black` · `kraft`), `textColor`, `font` (`head` · `type`), `upper: false`, `edge` (`torn` · `cut`), `sides` |
+| `headline` | chữ cô đặc khổng lồ: `text`, `size` (150), `bg` (dải màu sau mọi dòng) hoặc `highlight` (`true` = dòng cuối, số hoặc mảng chỉ số dòng; dải vàng quét qua), `color`, `align`, `maxW` |
+| `strip` | dải chữ đánh máy, gõ từng chữ: `text`, `size` (34), `w`, `color`, `typing: false`, `typeDur` |
+| `stampbox` | dấu mộc đỏ: `text`, `size` (64), `color`, `rotate` (-0,12) |
+| `tape` | băng dính: `w` (170), `h`, `rotate`, `color: "red"` |
+| `tack` | đinh ghim: `color`, `size` |
+| `yarn` | dây đỏ võng giữa các ghim, tự kéo: `points` [[x,y],…], `grow: {at, dur}`, `sag` (26), `width`, `pins: false`, `pinColor` |
+| `scribble` | nét bút dạ đỏ tự vẽ: `kind` (`circle` · `underline` · `arrow` · `cross` · `check` · `bracket`), `x`, `y`, `w`, `h`, `points` (cho `arrow`), `bend`, `grow: {at, dur}`, `color`, `width`, `note` (chữ viết tay cạnh nét), `noteX`, `noteY`, `noteSize` |
+| `bigstat` | số lớn đếm lên: `value` ("1.288", "45%", "200.000$"), `size` (230), `color`, `count: false`, `countDur`, `label` (nhãn dải giấy đen), `labelColor`, `underline: false` |
+| `timeline` | đường chấm + năm đỏ so le: `y`, `x0`, `x1`, `items` [{`year`, `text`, `up`, `color`, `x`}], `stagger` (0,45), `gap` (110), `size` (96) |
+| `icons` | lưới biểu tượng: `n`, `cols`, `icon` (`person` · `house` · `coin`), `size` (70), `gap`, `highlight` [chỉ số], hoặc `highlightFrom` + `highlightAt`, `hlColor`, `caption` ("= 3 trên 10"), `stagger` |
+| `shape` | hình hình học giấy màu (poster duotone): `kind` (`triangle` · `circle` · `rect` · `bar` · `burst`), `w`, `h`, `color` |
+| `doc` | tài liệu: `w`, `h`, `title`, `lines` (14), `highlight` [dòng], `text` (chữ trên dòng tô), `hlColor`, `hlAt` |
+| `chart` | biểu đồ tối giản: `kind` (`line` · `bar`), `values`, `max`, `labels`, `color`, `hl` (cột đỏ), `barColor`, `ghost` (đường xám so sánh), `w`, `h`, `grow` |
+
+Render nhanh (khoảng 1,3 s máy cho 1 s phim). Ảnh halftone được tính một lần cho mỗi ảnh và kích thước.
 
 ## Mở rộng engine
 - Tư thế mới: thêm vào `POSES` trong `lib/character.mjs` (góc tính bằng radian, 0 là thõng xuống, số dương là xoay về hướng mặt).

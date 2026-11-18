@@ -2,6 +2,7 @@
 // scales line weight, paints a background treatment, styles captions and optionally applies a post filter.
 // Use in scene.json: "style": "bang-phan". List: node catalog.mjs
 import {COLORS, rng} from './math.mjs';
+import {paintPaper} from './collage.mjs';
 
 export const STYLES = {
   'giay-muc':   { stroke: 'wobble', boil: true, transition: 'fade', hand: true,label: 'Giấy mực', genres: 'ngụ ngôn, lịch sử VN, kể chuyện', bg: '#F3EADB', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
@@ -36,6 +37,9 @@ export const STYLES = {
   'thi-nghiem': { stroke: 'clean', drawMode: 'fade', hand: false, transition: 'cut',label: 'Thí nghiệm cổ', genres: 'khoa học đời thường, cách làm, mẹo dân gian, đồ vật (khung 16:9 giữa, nền mờ, chữ 2–3 từ có từ khóa vàng)', bg: '#E9E6E0', deco: 'none', ink: '#2A2723', body: '#FFFFFF',
                  layout: 'blurband', captionWords: 3, captionHighlight: '#FFE14D',
                  caption: {color: '#FFFFFF', stroke: 'rgba(0,0,0,.92)'}, captionFont: '{size}px QBKBlack', captionStrokeW: 9, titleFont: 'Sans'},
+  'cat-dan':   { stroke: 'clean', drawMode: 'pop', hand: false, transition: 'cut', label: 'Cắt dán tài liệu', genres: 'tài liệu, vụ án, bí ẩn, lịch sử, tiền và quyền lực, thảm họa (ảnh thật halftone cắt dán trên giấy báo, kiểu Vox)', bg: '#E6DCC6', deco: 'newsprint', ink: '#1B1916', body: '#EFE8D8', lineScale: 1.1,
+                 palette: {red: '#D7261E', gold: '#F2C230', navy: '#2B2B2B', green: '#6B6A5E', paper: '#E6DCC6', sky: '#D6C4A0'},
+                 captionBox: 'paper', captionFont: '{size}px QBKHead', caption: {color: '#1B1916', stroke: 'rgba(0,0,0,0)'}, titleFont: 'Sans'},
 };
 export const STYLE_NAMES = Object.keys(STYLES);
 
@@ -61,6 +65,7 @@ export function paintBackground(ctx, st, W, H, frameNo) {
     case 'burst': ctx.save(); ctx.translate(W / 2, H * 0.42); for (let i = 0; i < 18; i++) { ctx.rotate(Math.PI / 9); if (i % 2) continue; ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(H, -150); ctx.lineTo(H, 150); ctx.closePath(); ctx.fill(); } ctx.restore(); break;
     case 'frame': ctx.lineWidth = 14; ctx.strokeStyle = '#B23A2E'; ctx.strokeRect(24, 24, W - 48, H - 48); ctx.lineWidth = 4; ctx.strokeStyle = '#3B2414'; ctx.strokeRect(46, 46, W - 92, H - 92);
       for (let i = 0; i < 900; i++) { ctx.fillStyle = `rgba(90,60,30,${(r() * 0.05).toFixed(3)})`; ctx.fillRect(r() * W, r() * H, 2, 2); } break;
+    case 'newsprint': paintPaper(ctx, W, H, 'newsprint', 1); break;
     case 'vignette': { const g = ctx.createRadialGradient(W / 2, H * 0.45, H * 0.2, W / 2, H * 0.45, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); break; }
   }
 }

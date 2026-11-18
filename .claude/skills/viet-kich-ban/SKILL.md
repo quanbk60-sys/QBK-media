@@ -18,6 +18,8 @@ description: Viết kịch bản lời đọc tiếng Việt cho video ngắn 9:
 Tiếng Việt đọc khoảng **3,0–3,3 âm tiết mỗi giây**. 60 giây cần khoảng 190 âm tiết, 90 giây khoảng 280. Con số như "938" đọc thành nhiều âm tiết.
 
 ## Cấu trúc
+> Brief chọn phong cách `cat-dan` (tài liệu cắt dán kiểu Vox): viết theo mục 2 của skill `tai-lieu-cat-dan` (mở lạnh bằng ngày + địa điểm + hành động, kết bằng câu treo), thay cho cấu trúc dưới đây.
+
 1. **Hook (0–4 giây):** nghịch lý, câu hỏi hoặc tình huống. Không mở đầu bằng "Xin chào các bạn".
 2. **Bối cảnh:** ai, ở đâu, khi nào. Ngắn gọn.
 3. **Xung đột hoặc bí mật:** điều người xem chưa biết.

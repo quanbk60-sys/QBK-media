@@ -10,6 +10,7 @@ import {drawHand} from './hand.mjs';
 import {SFX_KINDS} from './audio.mjs';
 import {getStyle, paintBackground, paintOverlay} from './styles.mjs';
 import {GEO_TYPES, validateGeo, drawGeo, sampleView, project, credit, preloadGeo} from './geo.mjs';
+import {COLLAGE_TYPES, validateCollage, drawCollage, preloadCollage, collageSfx, paperCaption, tearTransition} from './collage.mjs';
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/PatrickHand-Regular.ttf'), 'Hand');
@@ -17,6 +18,8 @@ GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/NotoSans.ttf'), 'Sans');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-Black.otf'), 'QBKBlack');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/InterDisplay-ExtraBoldItalic.otf'), 'QBKItalic');
 GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Inter-Bold.otf'), 'QBKBold');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/Oswald-Bold.ttf'), 'QBKHead');
+GlobalFonts.registerFromPath(path.join(ROOT, 'fonts/IBMPlexMono-Medium.ttf'), 'QBKType');
 
 export function loadScene(file) {
   const base = path.dirname(path.resolve(file));
@@ -34,6 +37,7 @@ export function loadScene(file) {
   s.captionItems = items.map(c => ({start: c.start + lead, end: c.end + lead, text: c.text}));
   if (!s.duration) s.duration = Math.max(...s.shots.map(x => x.end), ...s.captionItems.map(c => c.end + 0.4), 1);
   validate(s);
+  collageSfx(s);
   return s;
 }
 
@@ -50,6 +54,7 @@ export function validate(s) {
       else if (e.type === 'prop') { if (!PROPS[e.name]) err(`${where}: unknown prop "${e.name}"`); }
       else if (e.type === 'text') { if (!e.text) err(`${where}: text required`); }
       else if (validateGeo(s, e, where, err)) {}
+      else if (validateCollage(s, e, where, err)) {}
       else if (e.type === 'image') { if (!fs.existsSync(path.join(s.base, e.path))) err(`${where}: missing image ${e.path}`); }
       else err(`${where}: unknown type "${e.type}"`);
     }
@@ -91,7 +96,7 @@ function transform(e, t) {
 const images = new Map();
 async function img(s, p) { const { loadImage } = await import('@napi-rs/canvas'); const f = path.join(s.base, p); if (!images.has(f)) images.set(f, await loadImage(f)); return images.get(f); }
 
-export async function preloadImages(s) { await preloadGeo(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
+export async function preloadImages(s) { await preloadGeo(s); await preloadCollage(s); for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'image') await img(s, e.path); }
 
 function recordElement(s, e, t, sceneT) {
   const R = new Recorder(); const {x, y, sc, rot} = transform(e, t);
@@ -129,6 +134,7 @@ export function makeRenderer(s) {
     for (const [idx, e] of (sh.elements || []).entries()) {
       if (t < (e.from ?? 0) || (e.to !== undefined && t >= e.to)) continue;
       if (GEO_TYPES.includes(e.type)) { ctx.save(); drawGeo(ctx, e, t, s, view, sh.end - sh.start); ctx.restore(); continue; }
+      if (COLLAGE_TYPES.includes(e.type)) { ctx.save(); drawCollage(ctx, e, t, s); ctx.restore(); continue; }
       if (e.geo) { e._view = view; e._s = s; }
       if (e.draw && (ST.drawMode === 'pop' || ST.drawMode === 'fade') && !e._dm) { const at = e.draw.at ?? e.from ?? 0; e._dm = true; e.enter = e.enter || ST.drawMode; e.enterDur = e.enterDur || (ST.drawMode === 'pop' ? 0.45 : 0.7); e.from = Math.max(e.from ?? 0, at); delete e.draw; }
       if (e.type === 'image') {
@@ -164,12 +170,14 @@ export function makeRenderer(s) {
       else if (tr === 'scan') { const y = H * ease(k); ctx.fillStyle = bgc; ctx.fillRect(0, y, W, H - y); ctx.strokeStyle = ST.ink; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
       else if (tr === 'iris') { ctx.fillStyle = '#000'; ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(W / 2, H * 0.45, Math.hypot(W, H) * 0.6 * ease(k), 0, Math.PI * 2, true); ctx.fill('evenodd'); }
       else if (tr === 'page') { const x = W * (1 - ease(k)) * 1.3; ctx.fillStyle = bgc; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(x - 260, H); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 0.25; ctx.strokeStyle = '#000'; ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 260, H); ctx.stroke(); }
+      else if (tr === 'tear') { ctx.restore(); ctx.save(); tearTransition(ctx, s, k); }
       else if (tr === 'smudge') { const r = rng(fno); ctx.globalAlpha = 1 - k; ctx.fillStyle = bgc; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = (1 - k) * 0.5; ctx.fillStyle = ST.ink; for (let i = 0; i < 40; i++) ctx.fillRect(r() * W, r() * H, 80 + r() * 200, 3); }
       ctx.restore();
     }
     // captions (screen space)
     const cue = s.captionItems.find(c => T >= c.start && T < c.end);
-    if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
+    if (cue && ST.captionBox === 'paper') paperCaption(ctx, s, cue, s.captionStyle.size, s.captionStyle.y);
+    else if (cue && ST.captionBox) { const st = s.captionStyle; const cy = ST.captionOnBar ? s.height - 190 : st.y, fs = ST.captionBox === 'intertitle' ? st.size * 0.9 : st.size;
       ctx.font = ST.captionFont ? ST.captionFont.replace('{size}', fs) : `600 ${fs}px Sans`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       const tw = ctx.measureText(cue.text).width, bw = tw + fs * 1.1, bh = fs * 1.7; ctx.save(); ctx.translate(s.width / 2, cy);
       if (ST.captionBox === 'note') { ctx.rotate(((cue.start * 7) % 3 - 1) * 0.015); ctx.fillStyle = '#FFF2A8'; ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4; ctx.fillRect(-bw / 2, -bh / 2, bw, bh); ctx.shadowBlur = 0; ctx.fillStyle = '#1F2A44'; }

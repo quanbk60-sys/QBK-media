@@ -37,3 +37,16 @@ test('v2 props accept their parameters', () => {
     const R = new Recorder(); PROPS[n](R, p, 1.3); if (p.progress !== 0) assert.ok(R.ops.length > 0, n);
   }
 });
+test('cat-dan collage elements render every type without errors', async () => {
+  const {loadScene, makeRenderer, fitCaptions, preloadImages} = await import('../lib/scene.mjs');
+  const {COLLAGE_TYPES} = await import('../lib/collage.mjs');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'catdan-')), f = path.join(dir, 'scene.json');
+  const els = [{type: 'plate', kind: 'map'}, {type: 'cutout', silhouette: 'person', w: 200, h: 260, censor: [0.5, 0.2, 0.6]}, {type: 'scrap', text: 'Ngày 1', color: 'news'}, {type: 'tape'}, {type: 'stampbox', text: 'Mật'},
+    {type: 'strip', text: 'HỒ SƠ'}, {type: 'tack'}, {type: 'yarn', points: [[100, 100], [500, 400]]}, {type: 'scribble', kind: 'arrow', note: 'đây'}, {type: 'bigstat', value: '1.288', label: 'NĂM'},
+    {type: 'timeline', items: [{year: '938'}, {year: '1288', text: 'Trận 3'}]}, {type: 'icons', n: 12, highlight: [2]}, {type: 'shape', kind: 'burst'}, {type: 'headline', text: 'Kế cũ', highlight: true}, {type: 'doc', title: 'Biên bản'}, {type: 'chart', kind: 'bar', values: [1, 3, 2]}];
+  assert.deepStrictEqual([...new Set(els.map(e => e.type))].sort(), [...COLLAGE_TYPES].sort());
+  fs.writeFileSync(f, JSON.stringify({style: 'cat-dan', captions: {items: [{start: 0, end: 2, text: 'Thử phụ đề'}]}, shots: [{start: 0, end: 1, elements: els}, {start: 1, end: 2, transition: 'tear', elements: [{type: 'headline', text: 'Hai'}]}]}));
+  const s = loadScene(f); fitCaptions(s); await preloadImages(s); const R = makeRenderer(s);
+  for (const T of [0.1, 0.5, 0.95, 1.1, 1.9]) R.frame(T);
+  assert.ok(s.shots[0].sfx.some(x => x.kind === 'paper') && s.shots[0].sfx.some(x => x.kind === 'thud'));
+});

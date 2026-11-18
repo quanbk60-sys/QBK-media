@@ -14,6 +14,7 @@ Trích một khung hình đẹp nhất (nhân vật chính rõ mặt, hành đ�
 cd studio/engine && node render.mjs ../../projects/<slug>/thumb.json --name thumb && ffmpeg -v error -y -ss 0.9 -i ../../projects/<slug>/output/thumb.mp4 -frames:v 1 ../../projects/<slug>/output/thumbnail.png
 ```
 Chữ trên ảnh bìa phải đọc được khi thu nhỏ: ≤4 từ, cỡ 160 trở lên, màu tương phản.
+Video phong cách `cat-dan`: dựng ảnh bìa theo mục 5 của skill `tai-lieu-cat-dan` (chủ thể halftone lớn, tối đa 2 khối chữ 3 chữ trên dải đỏ hoặc vàng, một vòng bút đỏ).
 
 ## `publish.md`
 1. **5 tiêu đề** (≤60 ký tự), mỗi cái một kiểu: câu hỏi, con số, nghịch lý, cảm xúc, thẳng thắn. **Không giật tít sai sự thật.**

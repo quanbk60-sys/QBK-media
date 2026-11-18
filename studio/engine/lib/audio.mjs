@@ -3,11 +3,11 @@ import fs from 'node:fs';
 import {rng, clamp} from './math.mjs';
 export const SR = 44100;
 
-export const SFX_KINDS = ['pop', 'tap', 'whoosh', 'step', 'drum', 'gong', 'splash', 'crack', 'scribble', 'chime', 'thud', 'wind', 'hammer', 'cheer'];
+export const SFX_KINDS = ['pop', 'tap', 'whoosh', 'step', 'drum', 'gong', 'splash', 'crack', 'scribble', 'chime', 'thud', 'wind', 'hammer', 'cheer', 'paper', 'tape'];
 
 export function synth(kind, dur) {
   const r = rng(kind.length * 977 + Math.round((dur || 0) * 100)), noise = () => r() * 2 - 1;
-  const D = dur || {pop: 0.12, tap: 0.08, whoosh: 0.35, step: 0.18, drum: 0.7, gong: 2.2, splash: 0.9, crack: 0.5, scribble: 1, chime: 1.2, thud: 0.35, wind: 2, hammer: 0.25, cheer: 1.5}[kind] || 0.3;
+  const D = dur || {pop: 0.12, tap: 0.08, whoosh: 0.35, step: 0.18, drum: 0.7, gong: 2.2, splash: 0.9, crack: 0.5, scribble: 1, chime: 1.2, thud: 0.35, wind: 2, hammer: 0.25, cheer: 1.5, paper: 0.28, tape: 0.22}[kind] || 0.3;
   const n = Math.round(D * SR), out = new Float32Array(n);
   let lp = 0, lp2 = 0, prev = 0;
   for (let i = 0; i < n; i++) {
@@ -26,6 +26,8 @@ export function synth(kind, dur) {
       case 'hammer': v = (Math.sin(2 * Math.PI * 240 * t) * 0.6 + w * 0.4) * Math.exp(-t * 35) * 0.8; break;
       case 'scribble': { lp += 0.35 * (w - lp); const hp = lp - prev; prev = lp; v = hp * (0.55 + 0.45 * Math.abs(Math.sin(t * 23))) * 1.6; break; }
       case 'wind': lp += 0.02 * (w - lp); lp2 += 0.05 * (lp - lp2); v = lp2 * 6 * Math.sin(Math.PI * clamp(t / D)) * (0.7 + 0.3 * Math.sin(t * 1.3)); break;
+      case 'paper': { lp += 0.5 * (w - lp); const hp = w - lp; v = (hp * 0.7 + lp * 0.3) * Math.sin(Math.PI * clamp(t / D)) * (r() < 0.12 ? 1.6 : 0.8) * 0.55; break; }
+      case 'tape': { const hp = w - lp; lp += 0.3 * (w - lp); v = hp * (Math.sin(t * 420) > 0 ? 1 : 0.35) * Math.exp(-t * 9) * 0.5; break; }
       case 'cheer': lp += 0.2 * (w - lp); v = lp * (0.6 + 0.4 * Math.sin(t * 13) * Math.sin(t * 7)) * Math.sin(Math.PI * clamp(t / D)) * 0.9; break;
     }
     out[i] = v;

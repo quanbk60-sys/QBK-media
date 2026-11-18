@@ -16,6 +16,7 @@ description: Đạo diễn. Biến kịch bản và giọng đọc đã căn th�
 - `phac-thao`: cảnh dài, tĩnh, camera đẩy chậm. Phụ đề tự nằm trong dải đen dưới.
 - `ban-do-toi`: chữ kiểu infographic, có dòng "NGUỒN:".
 - `phim-cam`: chữ đặt trong khung kiểu phim câm.
+- `cat-dan`: mỗi nhịp lời đọc 2–3 s là một shot, camera khóa, một vật chính, các mảnh giấy vào lần lượt. Làm theo mục 3 của skill `tai-lieu-cat-dan`, phần tử ở mục "Phong cách cắt dán" của `SCENE_FORMAT.md`.
 Xem mẫu ở `studio/engine/examples/styles/`.
 
 ## Cách chia shot
