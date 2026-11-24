@@ -93,31 +93,19 @@ d = shot(16, elements=[V('dem-mat-tien', 0.0, kenburns=1.06),
                        ct('16 Nguyễn\nĐình Chiểu', 'Quán Cóc', size=84, to=tchieu - 0.1),
                        soft_tag('CÁCH BẾN NINH KIỀU CHƯA TỚI 500 M', 1300, t500, size=36, to=tchieu - 0.1),
                        ct('Ngó phố\nlên đèn', 'Chiều chiều ngồi đây', size=96, from_=tchieu)])
-# 16-22 các món: ảnh món hiện nhẹ lần lượt trên nền video khách ngồi quán (tối đi, màu ấm), video chạy liên tục
-MENU = [(16, 'chan-ga', 'CHÂN GÀ CHIÊN'), (17, 'oc', 'ỐC'), (18, 'kho-muc-2', 'KHÔ MỰC CHIÊN TIÊU'), (19, 'khoai-cao', 'KHOAI CAO CHIÊN NƯỚC MẮM'),
-        (20, 'kho-qua', 'KHỔ QUA CHÀ BÔNG'), (21, 'bo-luc-lac-2', 'BÒ LÚC LẮC'), (22, 'hot-vit-lon-2', 'HỘT VỊT LỘN XÀO ME')]
-base = T(16); dish_els = []
-for k, (i, img, name) in enumerate(MENU):
-    a = T(i) - base; b = (T(i + 1) - base) if k < len(MENU) - 1 else None
-    if img == 'oc': b = T(18) - base + 0.25          # "dĩa ốc" ngắn: giữ thêm chút
-    if img == 'kho-muc-2': a = T(18) - base + 0.25
-    dish_els.append(photo(f'menu/{img}.jpg', x=540, y=880, w=720, ratio=1.0, focus=[0.5, 0.62], soft=True, enterDur=0.5, kenburns=1.06,
-                          rotate=(-0.025 if k % 2 == 0 else 0.025), caption=name, **{'from': round(a, 2), **({'to': round(b + 0.15, 2)} if b else {})}))
-d = shot(23, elements=[V('mua-khach', 0.0, dim=0.5, kenburns=1.03), *dish_els])
-# 23-25 "Trời mưa cũng chẳng sao, ngồi nghe mưa với bạn bè là vui rồi." — video mưa, sáng dần (tiếp tục cùng clip)
-d0 = T(23) - T(16)
-d = shot(26, elements=[V('mua-khach', d0, kenburns=1.04, track=[{'t': 0, 'dim': 0.5}, {'t': 0.9, 'dim': 0.0}], enterDur=0.01),
-                       ct('Nghe mưa', 'Trời mưa cũng chẳng sao', 'với bạn bè', from_=0.6)])
-# 26-30 khuyến mãi: nền video ban ngày (vỉa hè, ghế vàng), ảnh quà hiện nhẹ, chữ mờ dần
-tq1, tq2 = T(27) - T(26), T(29) - T(26)
-d = shot(31, elements=[V('ngay-di-toi', 1.0, dim=0.45, kenburns=1.03),
+# 16-18 "Trời mưa cũng chẳng sao, ngồi nghe mưa với bạn bè là vui rồi." — video khách ngồi quán đêm mưa
+d = shot(19, elements=[V('mua-khach', 2.0, kenburns=1.04),
+                       ct('Nghe mưa', 'Trời mưa cũng chẳng sao', 'với bạn bè', from_=0.5)])
+# 19-23 khuyến mãi: nền video ban ngày (vỉa hè, ghế vàng), ảnh quà hiện nhẹ, chữ mờ dần
+tq1, tq2 = T(20) - T(19), T(22) - T(19)
+d = shot(24, elements=[V('ngay-di-toi', 1.0, dim=0.45, kenburns=1.03),
                        ct('Có quà nè', 'Từ 22/11 đến 6/12', size=96, to=tq1 - 0.05),
                        ct('500K', 'Hóa đơn', 'tặng dĩa bò viên', size=130, from_=tq1, to=tq2 - 0.05),
                        photo('qua-bo-vien.jpg', y=1020, w=640, ratio=0.85, focus=[0.5, 0.55], soft=True, enterDur=0.6, rotate=-0.025, **{'from': tq1 + 0.3, 'to': tq2 + 0.1}),
                        ct('1,5 TRIỆU', 'Hóa đơn', 'tặng dĩa sườn bò', size=120, from_=tq2),
                        photo('qua-suon-bo.jpg', y=1020, w=640, ratio=0.85, focus=[0.5, 0.5], soft=True, enterDur=0.6, rotate=0.025, **{'from': tq2 + 0.3})])
-# 31-32 "Rảnh thì ghé Quán Cóc ngồi chơi nha." + màn kết trên video đêm
-d = shot(None, elements=[V('dem-mat-tien', 6.3, kenburns=1.05, dim=0.25),
+# 24-25 "Rảnh thì ghé Quán Cóc ngồi chơi nha." + màn kết trên video đêm
+d = shot(None, elements=[V('mua-khach', 15.0, kenburns=1.05, dim=0.35),
                          ct('Quán Cóc', 'Rảnh thì ghé ngồi chơi nha', size=130, y=360),
                          soft_tag('16 NGUYỄN ĐÌNH CHIỂU, P. NINH KIỀU', 1120, 1.2, size=40),
                          soft_tag('ĐT 0938 543 698', 1230, 1.6, size=46),

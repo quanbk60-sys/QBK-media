@@ -4,7 +4,7 @@
 1. Tối nay rảnh không? Ghé Quán Cóc ngồi nghe mưa, ngó phố lên đèn 🌙
 2. Quán Cóc Ninh Kiều: ăn 500k tặng dĩa bò viên, 1 triệu rưỡi tặng dĩa sườn bò!
 3. Chỉ đường từ Bến Ninh Kiều tới Quán Cóc, chưa tới 500 mét
-4. Khô mực chiên tiêu, khoai cao chiên nước mắm… góc Nguyễn Đình Chiểu – Ngô Gia Tự
+4. Góc Nguyễn Đình Chiểu – Ngô Gia Tự, ngồi nghe mưa với bạn bè
 5. Cạ cứng Cần Thơ ơi, khuyến mãi tới 6/12 thôi nha!
 
 ## Mô tả TikTok

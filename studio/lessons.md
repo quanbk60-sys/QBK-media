@@ -6,6 +6,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - Video quảng cáo hoặc nội dung trẻ trung: thu thử 2–3 giọng với `--style` (ví dụ "hyped Gen Z TikTok food reviewer, Southern accent"), cho Gemini nghe và chấm, rồi chọn. Quán Cóc chọn **Laomedeia** (giọng nữ) thay cho Puck, người dùng chê Puck chưa đủ trẻ trung. Tempo 1,05 vì giọng có chỉ dẫn đã nhanh. *(Quán Cóc vòng 1)*
 - Chỉ dẫn kiểu "hyped, super energetic" làm giọng gấp và giả. Người dùng thích **thư thả, như trò chuyện với bạn, không phải MC**, không tăng tốc; nếu bản thu có khoảng lặng dài thì rút xuống khoảng 0,5 s thay vì tăng tempo. Lời ít dấu chấm than. *(Quán Cóc vòng 2)*
 - `tts.py --style`: các giọng Aoede và Sulafat **đọc luôn câu chỉ dẫn tiếng Anh**. Luôn chép lại bằng Gemini để soát trước khi dùng; Laomedeia không bị. *(Quán Cóc vòng 3)*
+- Laomedeia bị người dùng chê "khó nghe" (vòng 4). Giọng nữ êm, ấm đang dùng: **Despina**; giọng nam dự phòng: Umbriel. Chỉ dẫn `--style` nên ngắn (một câu) để giảm rủi ro bị đọc thành lời. *(Quán Cóc vòng 4)*
 - Giọng Gemini Bodi ở tốc độ gốc **quá chậm**. Mặc định tăng tốc **1,2 lần** bằng `studio/tools/retime.py` (giữ cao độ). *(Rùa và Thỏ, góp ý của người dùng)*
 
 ## Âm thanh

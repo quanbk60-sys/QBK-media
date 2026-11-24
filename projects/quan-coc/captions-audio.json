@@ -1,167 +1,132 @@
 [
  {
-  "start": 0.31,
-  "end": 1.35,
+  "start": 0.23,
+  "end": 1.18,
   "text": "Tối nay rảnh không?"
  },
  {
-  "start": 1.35,
-  "end": 3.69,
+  "start": 1.18,
+  "end": 2.78,
   "text": "Ghé Cần Thơ, lai rai chút nè."
  },
  {
-  "start": 3.69,
-  "end": 5.44,
+  "start": 2.78,
+  "end": 3.73,
   "text": "Từ Bến Ninh Kiều,"
  },
  {
-  "start": 5.44,
-  "end": 6.82,
+  "start": 3.73,
+  "end": 4.88,
   "text": "chạy lên Hai Bà Trưng,"
  },
  {
-  "start": 6.82,
-  "end": 8.37,
+  "start": 4.88,
+  "end": 5.58,
   "text": "dọc bờ sông."
  },
  {
-  "start": 8.37,
-  "end": 10.15,
+  "start": 5.58,
+  "end": 7.13,
   "text": "Tới Ngô Gia Tự thì quẹo trái."
  },
  {
-  "start": 10.15,
-  "end": 11.2,
+  "start": 7.13,
+  "end": 8.19,
   "text": "Chạy thẳng,"
  },
  {
-  "start": 11.2,
-  "end": 12.54,
+  "start": 8.19,
+  "end": 9.58,
   "text": "qua đường Hòa Bình."
  },
  {
-  "start": 12.54,
-  "end": 13.91,
+  "start": 9.58,
+  "end": 10.99,
   "text": "Tới góc Nguyễn Đình Chiểu,"
  },
  {
-  "start": 13.91,
-  "end": 15.12,
+  "start": 10.99,
+  "end": 12.49,
   "text": "ngó qua tay phải..."
  },
  {
-  "start": 15.12,
-  "end": 15.76,
+  "start": 12.49,
+  "end": 13.85,
   "text": "là tới rồi."
  },
  {
-  "start": 15.76,
-  "end": 17.21,
+  "start": 13.85,
+  "end": 14.44,
   "text": "Quán Cóc,"
  },
  {
-  "start": 17.21,
-  "end": 18.62,
+  "start": 14.44,
+  "end": 16.52,
   "text": "số 16 Nguyễn Đình Chiểu."
  },
  {
-  "start": 18.62,
-  "end": 21.23,
+  "start": 16.52,
+  "end": 20.14,
   "text": "Cách bến chưa tới 500 mét."
  },
  {
-  "start": 21.23,
-  "end": 22.28,
+  "start": 20.14,
+  "end": 21.55,
   "text": "Chiều chiều ngồi đây,"
  },
  {
-  "start": 22.28,
-  "end": 23.43,
+  "start": 21.55,
+  "end": 23.42,
   "text": "ngó phố lên đèn."
  },
  {
-  "start": 23.43,
-  "end": 25.22,
-  "text": "Gọi dĩa chân gà chiên,"
- },
- {
-  "start": 25.22,
-  "end": 25.92,
-  "text": "dĩa ốc,"
- },
- {
-  "start": 25.92,
-  "end": 27.15,
-  "text": "khô mực chiên tiêu."
- },
- {
-  "start": 27.15,
-  "end": 29.04,
-  "text": "Thêm khoai cao chiên nước mắm,"
- },
- {
-  "start": 29.04,
-  "end": 30.25,
-  "text": "khổ qua chà bông,"
- },
- {
-  "start": 30.25,
-  "end": 31.13,
-  "text": "bò lúc lắc,"
- },
- {
-  "start": 31.13,
-  "end": 33.28,
-  "text": "hột vịt lộn xào me."
- },
- {
-  "start": 33.28,
-  "end": 34.38,
+  "start": 23.42,
+  "end": 24.7,
   "text": "Trời mưa cũng chẳng sao,"
  },
  {
-  "start": 34.38,
-  "end": 36.14,
+  "start": 24.7,
+  "end": 27.45,
   "text": "ngồi nghe mưa với bạn bè"
  },
  {
-  "start": 36.14,
-  "end": 36.79,
+  "start": 27.45,
+  "end": 28.18,
   "text": "là vui rồi."
  },
  {
-  "start": 36.79,
-  "end": 40.37,
+  "start": 28.18,
+  "end": 32.66,
   "text": "À, từ 22/11 tới 6/12,"
  },
  {
-  "start": 40.37,
-  "end": 42.1,
+  "start": 32.66,
+  "end": 35.39,
   "text": "hóa đơn 500 nghìn,"
  },
  {
-  "start": 42.1,
-  "end": 43.35,
+  "start": 35.39,
+  "end": 37.93,
   "text": "quán tặng một dĩa bò viên."
  },
  {
-  "start": 43.35,
-  "end": 45.28,
+  "start": 37.93,
+  "end": 39.43,
   "text": "Hóa đơn 1 triệu rưỡi,"
  },
  {
-  "start": 45.28,
-  "end": 46.8,
+  "start": 39.43,
+  "end": 41.81,
   "text": "tặng một dĩa sườn bò."
  },
  {
-  "start": 46.8,
-  "end": 47.86,
+  "start": 41.81,
+  "end": 42.79,
   "text": "Rảnh thì ghé Quán Cóc"
  },
  {
-  "start": 47.86,
-  "end": 48.81,
+  "start": 42.79,
+  "end": 43.44,
   "text": "ngồi chơi nha."
  }
 ]

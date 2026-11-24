@@ -16,3 +16,8 @@
 - "Bỏ luôn dòng dưới 18 tuổi" → bỏ hẳn mọi dòng cảnh báo trên video (theo yêu cầu người dùng; Nhà sản xuất đã báo luật quảng cáo bia yêu cầu cảnh báo, người dùng tự quyết).
 - "Đổi thành phong cách chill" → đạo diễn + lồng tiếng + âm thanh: lời viết lại kiểu rủ rê nhẹ nhàng; giọng Laomedeia với chỉ dẫn chill; nhạc lo-fi tự tổng hợp 76 BPM (`make_music_chill.py`), không sfx; chữ hiện mờ dần, không gõ chữ, không sticker; video phủ màu ấm + viền tối.
 - "Xoay quanh mấy video mình gửi nhiều hơn" → đạo diễn: sau phần vệ tinh, toàn bộ phần sau dựng trên 3 video: đi tới quán (ban ngày), mặt tiền đêm, khách ngồi quán mưa (làm nền cho dàn món, rồi sáng lên ở câu "nghe mưa"), vỉa hè ban ngày làm nền khuyến mãi, mặt tiền đêm cho màn kết.
+
+## Vòng 4 (24/11/2026)
+- "Bỏ giới thiệu món đi" → bỏ câu đọc dàn món và cảnh ảnh món; video giờ chỉ còn chỉ đường, quán, mưa, khuyến mãi, kết.
+- "Giọng khó nghe quá, đổi giọng khác" → thu thử Despina, Callirrhoe, Umbriel, Achird (chỉ dẫn ngắn: thư thả, ấm, như kể bạn nghe); chọn **Despina** (nữ, êm, ấm). Dự phòng giọng nam: Umbriel.
+- Màn kết đổi sang khúc sau của video khách ngồi quán đêm mưa, để không lặp đoạn video đêm.
