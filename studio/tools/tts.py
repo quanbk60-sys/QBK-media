@@ -29,3 +29,5 @@ else:  # raw PCM L16
     with wave.open(out, 'wb') as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(raw)
 print(json.dumps({"output": out, "model": model, "voice": voice, "usage": data.get('usageMetadata')}))
+if '--style' in args:
+    print('CẢNH BÁO: --style có thể bị đọc thành lời ở đầu file. Bắt buộc chép NGUYÊN VĂN 10 giây đầu (Gemini) và cắt bỏ nếu có, rồi mới căn phụ đề.', file=sys.stderr)

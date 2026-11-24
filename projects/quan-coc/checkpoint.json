@@ -2,18 +2,20 @@
  "slug": "quan-coc",
  "stage": "cho-duyet",
  "style": "ve-tinh + chill (video quay thật)",
- "round": 4,
+ "round": 5,
  "tts": {
   "model": "gemini-3.8-flash-tts",
   "voice": "Despina",
   "tempo": 1.0,
   "style": "thư thả, ấm",
   "pause_cap_s": 0.6,
-  "duration_s": 43.65,
-  "backup_voice": "Umbriel"
+  "duration_s": 35.64,
+  "backup_voice": "Umbriel",
+  "trim_start_s": 8.62,
+  "note": "cắt câu chỉ dẫn tiếng Anh bị đọc ở đầu"
  },
  "video": "output/quan-coc.mp4",
- "duration_s": 46.8,
+ "duration_s": 38.8,
  "thumbnail": "output/thumbnail.png",
  "publish": "publish.md",
  "music": "audio/music.wav (make_music_chill.py)"

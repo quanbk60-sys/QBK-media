@@ -21,3 +21,6 @@
 - "Bỏ giới thiệu món đi" → bỏ câu đọc dàn món và cảnh ảnh món; video giờ chỉ còn chỉ đường, quán, mưa, khuyến mãi, kết.
 - "Giọng khó nghe quá, đổi giọng khác" → thu thử Despina, Callirrhoe, Umbriel, Achird (chỉ dẫn ngắn: thư thả, ấm, như kể bạn nghe); chọn **Despina** (nữ, êm, ấm). Dự phòng giọng nam: Umbriel.
 - Màn kết đổi sang khúc sau của video khách ngồi quán đêm mưa, để không lặp đoạn video đêm.
+
+## Vòng 5 (24/11/2026)
+- "Sao đoạn đầu lại tiếng Anh" → lồng tiếng: Despina đọc luôn câu chỉ dẫn `--style` (0–7,6 s); bước soát vòng 4 nhờ Gemini chấm nên không phát hiện. Đã cắt bỏ, chép nguyên văn toàn bộ (khớp kịch bản), căn lại phụ đề (trước đó lệch khoảng 8 s), render lại. Video 38,8 s. Sửa gốc: tts.py in cảnh báo khi dùng --style; lessons.md ghi cách soát bằng chép nguyên văn.
