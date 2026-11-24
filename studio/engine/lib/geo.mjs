@@ -202,8 +202,8 @@ function photo(ctx, e, t, s) {
     ctx.restore(); if (e.shade !== false) shade(ctx, {}, t, s); if (e.credit) credit(ctx, s, e.credit, s.height - 330, 'left'); return;
   }
   const W = e.w ?? 760, ratio = e.ratio ?? (im.height / im.width), H = W * ratio, B = e.border ?? 16, CB = e.credit ? 44 : B;
-  const q = clamp(k / 0.55), sl = {left: [-900, 0], right: [900, 0], up: [0, 260]}[e.slide || 'up'], [x0p, y0] = [e.x ?? s.width / 2, e.y ?? 960], x = x0p + (1 - backOut(q)) * sl[0], y = y0 + (1 - backOut(q)) * sl[1], rot = (e.rotate ?? -0.03) + (1 - ease(q)) * 0.12;
-  ctx.save(); ctx.globalAlpha = a * clamp(q * 2.5); ctx.translate(x, y); ctx.rotate(rot);
+  const q = clamp(k / (e.enterDur ?? 0.55)), bo = e.soft ? ease(q) : backOut(q), sl = {left: [-900, 0], right: [900, 0], up: [0, e.soft ? 90 : 260]}[e.slide || 'up'], [x0p, y0] = [e.x ?? s.width / 2, e.y ?? 960], x = x0p + (1 - bo) * sl[0], y = y0 + (1 - bo) * sl[1], rot = (e.rotate ?? -0.03) + (1 - ease(q)) * (e.soft ? 0.03 : 0.12);
+  ctx.save(); ctx.globalAlpha = a * clamp(q * (e.soft ? 1.2 : 2.5)); ctx.translate(x, y); ctx.rotate(rot);
   ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 34; ctx.shadowOffsetY = 12; ctx.fillStyle = e.frameColor ? col(e.frameColor) : '#F7F5F0'; ctx.fillRect(-W / 2 - B, -H / 2 - B, W + 2 * B, H + B + CB); ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
   ctx.save(); ctx.beginPath(); ctx.rect(-W / 2, -H / 2, W, H); ctx.clip();
   const sc = Math.max(W / im.width, H / im.height) * kb, iw = im.width * sc, ih = im.height * sc, fx = e.focus?.[0] ?? 0.5, fy = e.focus?.[1] ?? 0.5;
@@ -337,7 +337,10 @@ function video(ctx, e, t, s) {
   const im = v.im, kb = 1 + ((e.kenburns ?? 1.0) - 1) * clamp(k / 4), sc = Math.max(s.width / im.width, s.height / im.height) * kb, w = im.width * sc, h = im.height * sc;
   ctx.save(); ctx.globalAlpha = fadeA({...e, enterDur: e.enterDur ?? 0.15}, t);
   ctx.drawImage(im, (s.width - w) * (e.focus?.[0] ?? 0.5), (s.height - h) * (e.focus?.[1] ?? 0.5), w, h);
-  if (e.dim) { ctx.fillStyle = `rgba(0,0,0,${e.dim})`; ctx.fillRect(0, 0, s.width, s.height); }
+  if (e.track) { const tr = sampleTrack(e.track, t, ['dim']); if (tr.dim !== undefined) e._dim = tr.dim; }
+  const dim = e._dim ?? e.dim; if (dim) { ctx.fillStyle = `rgba(0,0,0,${dim})`; ctx.fillRect(0, 0, s.width, s.height); }
+  if (e.tint) { ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = e.tint; ctx.fillRect(0, 0, s.width, s.height); ctx.globalCompositeOperation = 'source-over'; }
+  if (e.vignette) { const g = ctx.createRadialGradient(s.width / 2, s.height / 2, s.height * 0.3, s.width / 2, s.height / 2, s.height * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${e.vignette})`); ctx.fillStyle = g; ctx.fillRect(0, 0, s.width, s.height); }
   ctx.restore(); if (e.shade) shade(ctx, {top: 0.5, bottom: 0.6}, t, s);
 }
 

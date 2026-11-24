@@ -11,3 +11,8 @@
 - "Bỏ phần uống không lái xe" → bỏ câu đọc và ô trên màn kết; dòng nhỏ chỉ còn "Người dưới 18 tuổi không sử dụng rượu bia".
 - "Bỏ nhãn tới rồi đó" → bỏ sticker trên video.
 - "Giọng chậm lại xíu, đọc tự nhiên hơn" → lồng tiếng: thu lại Laomedeia với chỉ dẫn "trò chuyện với bạn, thư thả, không phải MC", không tăng tốc, rút khoảng lặng dài hơn 0,5 s. Lời bớt dấu chấm than, "tin nóng" thành "có tin vui".
+
+## Vòng 3 (24/11/2026)
+- "Bỏ luôn dòng dưới 18 tuổi" → bỏ hẳn mọi dòng cảnh báo trên video (theo yêu cầu người dùng; Nhà sản xuất đã báo luật quảng cáo bia yêu cầu cảnh báo, người dùng tự quyết).
+- "Đổi thành phong cách chill" → đạo diễn + lồng tiếng + âm thanh: lời viết lại kiểu rủ rê nhẹ nhàng; giọng Laomedeia với chỉ dẫn chill; nhạc lo-fi tự tổng hợp 76 BPM (`make_music_chill.py`), không sfx; chữ hiện mờ dần, không gõ chữ, không sticker; video phủ màu ấm + viền tối.
+- "Xoay quanh mấy video mình gửi nhiều hơn" → đạo diễn: sau phần vệ tinh, toàn bộ phần sau dựng trên 3 video: đi tới quán (ban ngày), mặt tiền đêm, khách ngồi quán mưa (làm nền cho dàn món, rồi sáng lên ở câu "nghe mưa"), vỉa hè ban ngày làm nền khuyến mãi, mặt tiền đêm cho màn kết.

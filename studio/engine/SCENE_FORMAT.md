@@ -173,9 +173,9 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 | `coupon` | phiếu quà: `top` (điều kiện), `bottom` (quà), `w`, `h`, `band`, `bg`, `slide: "right"` |
 | `confetti` | pháo giấy rơi: `n`, `colors`, `seed` |
 | `cutout` | ảnh tách nền PNG (viền trắng làm sẵn): `path`, `x`, `y`, `w`, `ax`, `ay` (điểm neo 0..1), `slide` (left/right/bottom/top/none), `rotate`, `bob: false`, `kenburns` |
-| `video` | video quay thật phủ kín khung: `path` = thư mục khung hình (`ffmpeg -i clip.mp4 -vf fps=30 -q:v 3 DIR/f_%05d.jpg`), `start` (giây trong clip), `speed`, `kenburns`, `dim`, `shade: true` |
+| `video` | video quay thật phủ kín khung: `path` = thư mục khung hình (`ffmpeg -i clip.mp4 -vf fps=30 -q:v 3 DIR/f_%05d.jpg`), `start` (giây trong clip), `speed`, `kenburns`, `dim` (hoặc `track` [{t, dim}] để sáng/tối dần), `tint` (màu rgba phủ kiểu soft-light, ví dụ màu ấm), `vignette` 0..1, `shade: true` |
 
-Màu có tên thêm: `habeco` (vàng), `crimson`, `teal`, `brown`, `cream`. `photo` có thêm `frameColor` và `slide` (`left`/`right`/`up`). Phim mẫu quảng cáo quán: `projects/quan-coc/`.
+Màu có tên thêm: `habeco` (vàng), `crimson`, `teal`, `brown`, `cream`. `photo` có thêm `frameColor`, `slide` (`left`/`right`/`up`), `soft: true` (hiện nhẹ không nảy, hợp phong cách chill), `enterDur`. Phim mẫu quảng cáo quán: `projects/quan-coc/`.
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.

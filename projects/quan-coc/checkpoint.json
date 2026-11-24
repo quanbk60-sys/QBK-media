@@ -1,19 +1,19 @@
 {
  "slug": "quan-coc",
  "stage": "cho-duyet",
- "style": "ve-tinh + bang-hieu-quan",
- "round": 2,
+ "style": "ve-tinh + chill (video quay thật)",
+ "round": 3,
  "tts": {
   "model": "gemini-3.8-flash-tts",
   "voice": "Laomedeia",
   "tempo": 1.0,
-  "style": "trò chuyện thư thả",
-  "pause_cap_s": 0.5,
-  "duration_s": 46.65
+  "style": "chill, thư thả",
+  "pause_cap_s": 0.65,
+  "duration_s": 48.81
  },
  "video": "output/quan-coc.mp4",
- "duration_s": 49.8,
+ "duration_s": 52.2,
  "thumbnail": "output/thumbnail.png",
  "publish": "publish.md",
- "music": "audio/music.wav (tự tổng hợp)"
+ "music": "audio/music.wav (make_music_chill.py)"
 }
