@@ -3,12 +3,13 @@
 // Các phần tử này vẽ thẳng lên canvas (ảnh raster), không qua Recorder, nên không có hiệu ứng bàn tay vẽ.
 // Định dạng: SCENE_FORMAT.md, mục "Phong cách vệ tinh".
 import fs from 'node:fs';
+import {spawnSync} from 'node:child_process';
 import path from 'node:path';
-import {createCanvas, loadImage} from '@napi-rs/canvas';
+import {createCanvas, loadImage, Image} from '@napi-rs/canvas';
 import {clamp, ease, backOut, sampleTrack, rng} from './math.mjs';
 
 export const ORANGE = '#FF8A1F', WHITE = '#FFFFFF', DARK = '#111418';
-export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade', 'backdrop', 'sticker', 'coupon', 'confetti'];
+export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade', 'backdrop', 'sticker', 'coupon', 'confetti', 'cutout', 'video'];
 const col = c => ({orange: ORANGE, white: WHITE, dark: DARK, blue: '#3FB6FF', red: '#E5484D', yellow: '#FFD23F', green: '#46C46B', habeco: '#FFD400', crimson: '#C8102E', teal: '#0B8C7A', brown: '#6B3A1E', cream: '#FFF6D6'}[c] || c || ORANGE);
 const F = {black: 'QBKBlack', italic: 'QBKItalic', bold: 'QBKBold'};
 
@@ -44,7 +45,7 @@ async function loadSat(s) {
 export async function preloadGeo(s) {
   s._sat = await loadSat(s);
   s._photos = new Map();
-  for (const sh of s.shots) for (const e of sh.elements || []) if (e.type === 'photo' && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
+  for (const sh of s.shots) for (const e of sh.elements || []) if ((e.type === 'photo' || e.type === 'cutout') && !s._photos.has(e.path)) s._photos.set(e.path, await loadImage(path.join(s.base, e.path)));
   if (s.shots.some(sh => (sh.elements || []).some(e => e.type === 'globe'))) {
     const w = s._sat?.levels.filter(l => l.world).at(-1); if (!w) throw new Error('globe cần một mức "world" trong satmap.json (satmap.py --level 4:world)');
     const cv = createCanvas(w.w, w.h), c = cv.getContext('2d'); c.drawImage(w.img, 0, 0);
@@ -54,7 +55,8 @@ export async function preloadGeo(s) {
 export function validateGeo(s, e, where, err) {
   if (!GEO_TYPES.includes(e.type)) return false;
   if (['satmap', 'globe'].includes(e.type) && !s.satmap) err(`${where}: scene cần "satmap": "đường/dẫn/satmap.json"`);
-  if (e.type === 'photo' && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
+  if ((e.type === 'photo' || e.type === 'cutout') && !fs.existsSync(path.join(s.base, e.path || ''))) err(`${where}: missing photo ${e.path}`);
+  if (e.type === 'video' && !fs.existsSync(path.join(s.base, e.path || '', 'f_00001.jpg'))) err(`${where}: video cần thư mục khung hình ${e.path}/f_00001.jpg (ffmpeg -i clip.mp4 -vf fps=30 -q:v 3 DIR/f_%05d.jpg)`);
   if (e.type === 'route' && !(e.path?.length >= 2)) err(`${where}: route cần path [[lat,lon],...]`);
   return true;
 }
@@ -310,5 +312,34 @@ function confetti(ctx, e, t, s) {
   ctx.restore();
 }
 
-const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade, backdrop, sticker, coupon, confetti};
+// ảnh tách nền (PNG trong suốt): đặt theo điểm neo, bay vào từ một phía, nhún nhẹ, đổ bóng
+function cutout(ctx, e, t, s) {
+  const im = s._photos.get(e.path), k = local(e, t), a = fadeA({...e, enter: 'none'}, t), q = clamp(k / (e.enterDur ?? 0.45)); if (q <= 0) return;
+  const W = e.w ?? 900, H = W * im.height / im.width, ax = e.ax ?? 0.5, ay = e.ay ?? 0.5;
+  const sl = {left: [-W - 200, 0], right: [W + 200, 0], bottom: [0, H + 200], top: [0, -H - 200], none: [0, 0]}[e.slide || 'bottom'], b = backOut(q);
+  const bob = e.bob === false ? 0 : Math.sin(k * 2.2) * 8, sc = 1 + ((e.kenburns ?? 1.05) - 1) * clamp(k / 3);
+  ctx.save(); ctx.globalAlpha = a; ctx.translate((e.x ?? 540) + (1 - b) * sl[0], (e.y ?? 1920) + (1 - b) * sl[1] + bob); ctx.rotate((e.rotate ?? 0) + (1 - b) * (e.spin ?? 0.15)); ctx.scale(sc, sc);
+  if (e.shadow !== false) { ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18; }
+  ctx.drawImage(im, -W * ax, -H * ay, W, H); ctx.restore();
+}
+// video quay thật: thư mục khung hình JPG 30 fps (f_00001.jpg…), phủ kín khung; start = giây trong clip, speed
+const vcache = new Map();
+function video(ctx, e, t, s) {
+  const k = local(e, t), dir = path.join(s.base, e.path), fps = e.fps ?? 30;
+  if (!vcache.has(dir)) vcache.set(dir, {n: fs.readdirSync(dir).filter(f => f.startsWith('f_')).length, i: -1, im: null});
+  const v = vcache.get(dir), i = Math.min(v.n, Math.max(1, Math.floor(((e.start ?? 0) + Math.max(0, k) * (e.speed ?? 1)) * fps) + 1));
+  if (i !== v.i) { // giải mã đồng bộ bằng ffmpeg (Image của napi-rs giải mã bất đồng bộ nên khung đầu bị đen)
+    const f = path.join(dir, `f_${String(i).padStart(5, '0')}.jpg`), meta = v.w ? v : (() => { const im = new Image(); im.src = fs.readFileSync(f); return {w: im.width, h: im.height}; })();
+    v.w = meta.w; v.h = meta.h;
+    const raw = spawnSync('ffmpeg', ['-v', 'error', '-i', f, '-f', 'rawvideo', '-pix_fmt', 'rgba', '-'], {maxBuffer: 64 << 20}).stdout;
+    if (!v.cv) v.cv = createCanvas(v.w, v.h);
+    const c = v.cv.getContext('2d'), id = c.createImageData(v.w, v.h); id.data.set(raw); c.putImageData(id, 0, 0); v.im = v.cv; v.i = i; }
+  const im = v.im, kb = 1 + ((e.kenburns ?? 1.0) - 1) * clamp(k / 4), sc = Math.max(s.width / im.width, s.height / im.height) * kb, w = im.width * sc, h = im.height * sc;
+  ctx.save(); ctx.globalAlpha = fadeA({...e, enterDur: e.enterDur ?? 0.15}, t);
+  ctx.drawImage(im, (s.width - w) * (e.focus?.[0] ?? 0.5), (s.height - h) * (e.focus?.[1] ?? 0.5), w, h);
+  if (e.dim) { ctx.fillStyle = `rgba(0,0,0,${e.dim})`; ctx.fillRect(0, 0, s.width, s.height); }
+  ctx.restore(); if (e.shade) shade(ctx, {top: 0.5, bottom: 0.6}, t, s);
+}
+
+const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade, backdrop, sticker, coupon, confetti, cutout, video};
 export function drawGeo(ctx, e, t, s, v, shotDur) { e._shotDur = shotDur; PAINT[e.type](ctx, e, t, s, v); }

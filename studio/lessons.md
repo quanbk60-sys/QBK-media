@@ -3,9 +3,11 @@
 Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất thêm bài học mới sau mỗi vòng góp ý của người dùng. Mỗi dòng là một quy tắc ngắn, ghi kèm nguồn.
 
 ## Giọng đọc
+- Video quảng cáo hoặc nội dung trẻ trung: thu thử 2–3 giọng với `--style` (ví dụ "hyped Gen Z TikTok food reviewer, Southern accent"), cho Gemini nghe và chấm, rồi chọn. Quán Cóc chọn **Laomedeia** (giọng nữ) thay cho Puck, người dùng chê Puck chưa đủ trẻ trung. Tempo 1,05 vì giọng có chỉ dẫn đã nhanh. *(Quán Cóc vòng 1)*
 - Giọng Gemini Bodi ở tốc độ gốc **quá chậm**. Mặc định tăng tốc **1,2 lần** bằng `studio/tools/retime.py` (giữ cao độ). *(Rùa và Thỏ, góp ý của người dùng)*
 
 ## Âm thanh
+- **Không dùng sfx tổng hợp từ tiếng ồn** (`whoosh`, `cheer`, `crack`, `splash`, `wind`): người dùng nghe thành "xẹt xẹt khó chịu". Dùng `pop`, `chime`, thỉnh thoảng `drum`. Muốn có nhịp thì thêm nhạc nền tự tổng hợp không có tiếng ồn (mẫu `projects/quan-coc/make_music.py`, gain 0,16). *(Quán Cóc vòng 1)*
 - **Không dùng tiếng bút sột soạt** khi bàn tay vẽ (engine đã mặc định `scribbleGain: 0`). *(Rùa và Thỏ)*
 - Tiếng `pop` không được đặt trùng đầu câu thoại quan trọng. Đặt sớm hơn khoảng 0,15 giây. *(QA Rùa và Thỏ)*
 

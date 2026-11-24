@@ -8,3 +8,5 @@ projects/*/output/.*
 studio/engine/examples/styles/out/
 studio/engine3d/node_modules/
 projects/quan-coc/output/final.mp4
+projects/quan-coc/video/*/
+projects/quan-coc/audio/cand-*.wav

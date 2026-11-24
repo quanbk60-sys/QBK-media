@@ -172,6 +172,8 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 | `sticker` | nhãn dán: `lines` [{`text`, `size`, `color`, `font` (italic/bold)}], `x`, `y`, `bg`, `outline`, `shape` (`box`/`pill`/`burst`), `rotate`, `shake: true` (lắc mạnh lúc hiện), `wobble: false` |
 | `coupon` | phiếu quà: `top` (điều kiện), `bottom` (quà), `w`, `h`, `band`, `bg`, `slide: "right"` |
 | `confetti` | pháo giấy rơi: `n`, `colors`, `seed` |
+| `cutout` | ảnh tách nền PNG (viền trắng làm sẵn): `path`, `x`, `y`, `w`, `ax`, `ay` (điểm neo 0..1), `slide` (left/right/bottom/top/none), `rotate`, `bob: false`, `kenburns` |
+| `video` | video quay thật phủ kín khung: `path` = thư mục khung hình (`ffmpeg -i clip.mp4 -vf fps=30 -q:v 3 DIR/f_%05d.jpg`), `start` (giây trong clip), `speed`, `kenburns`, `dim`, `shade: true` |
 
 Màu có tên thêm: `habeco` (vàng), `crimson`, `teal`, `brown`, `cream`. `photo` có thêm `frameColor` và `slide` (`left`/`right`/`up`). Phim mẫu quảng cáo quán: `projects/quan-coc/`.
 
