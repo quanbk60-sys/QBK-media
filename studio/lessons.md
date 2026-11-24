@@ -4,6 +4,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 
 ## Giọng đọc
 - Video quảng cáo hoặc nội dung trẻ trung: thu thử 2–3 giọng với `--style` (ví dụ "hyped Gen Z TikTok food reviewer, Southern accent"), cho Gemini nghe và chấm, rồi chọn. Quán Cóc chọn **Laomedeia** (giọng nữ) thay cho Puck, người dùng chê Puck chưa đủ trẻ trung. Tempo 1,05 vì giọng có chỉ dẫn đã nhanh. *(Quán Cóc vòng 1)*
+- Chỉ dẫn kiểu "hyped, super energetic" làm giọng gấp và giả. Người dùng thích **thư thả, như trò chuyện với bạn, không phải MC**, không tăng tốc; nếu bản thu có khoảng lặng dài thì rút xuống khoảng 0,5 s thay vì tăng tempo. Lời ít dấu chấm than. *(Quán Cóc vòng 2)*
 - Giọng Gemini Bodi ở tốc độ gốc **quá chậm**. Mặc định tăng tốc **1,2 lần** bằng `studio/tools/retime.py` (giữ cao độ). *(Rùa và Thỏ, góp ý của người dùng)*
 
 ## Âm thanh
@@ -36,5 +37,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*
 
 ## Quảng cáo quán ăn, quán nhậu
+- Giới thiệu món: ảnh món toàn khung, zoom chậm, tên món chữ lớn. Người dùng chê kiểu sticker tách nền bay nhảy, cắt quá nhanh. Không gắn nhãn thừa lên video quay thật ("Tới rồi đó!"). *(Quán Cóc vòng 2)*
+- Người dùng bỏ câu "đã uống rượu bia không lái xe"; chỉ giữ dòng nhỏ "Người dưới 18 tuổi không sử dụng rượu bia". *(Quán Cóc vòng 2)*
 - Lời đọc nói về món và quà, không rủ "đi nhậu"; luôn có cảnh báo "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe". Mẫu: `projects/quan-coc/`. *(Quán Cóc, 24/11/2026)*
 - Người dùng muốn giọng "không như AI": viết lời như nói chuyện (nè, nha, hen; câu ngắn; có câu đùa) và dùng `tts.py --style` để chỉ dẫn cách nói. Chép lại bằng Gemini để soát trước khi dựng. *(Quán Cóc)*

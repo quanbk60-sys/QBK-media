@@ -39,7 +39,7 @@ def stk(_lines, **kw):
 shots = []
 def shot(i1, **kw):
     start = shots[-1]['end'] if shots else 0
-    end = T(i1) if i1 is not None else round(caps[-1]['end'] + LEAD + 2.6, 2)
+    end = T(i1) if i1 is not None else round(caps[-1]['end'] + LEAD + 3.0, 2)
     shots.append({'start': start, 'end': end, **kw}); return round(end - start, 2)
 
 # ===== PHẦN 1: VỆ TINH =====
@@ -82,12 +82,10 @@ d = shot(12, view=view((0, 10.0364, 105.7876, 17.6), (1.3, 10.03712, 105.78712, 
                    title('Góc Nguyễn\nĐình Chiểu', 'Tới', size=96, typeDur=0.6)],
          sfx=[pop(t_ph + 0.1, 0.35)])
 # 12 "Tới rồi đó!" — video thật: đi tới góc quán
-d = shot(13, elements=[vid('ngay-di-toi', 24.0, kenburns=1.04),
-                       stk(['TỚI RỒI ĐÓ!'], shape='burst', x=540, y=430, bg='habeco', outline='crimson', rotate=-0.08, shake=True, lines=[{'text': 'TỚI', 'size': 100, 'color': 'crimson'}, {'text': 'RỒI ĐÓ!', 'size': 100, 'color': 'crimson'}], **{'from': 0.05})],
-         sfx=[{'t': 0.05, 'kind': 'chime', 'gain': 0.35}])
+d = shot(13, elements=[vid('ngay-di-toi', 24.0, kenburns=1.04)], sfx=[{'t': 0.05, 'kind': 'chime', 'gain': 0.3}])
 
 # ===== PHẦN 2: BẢNG HIỆU QUÁN =====
-WARN = {'type': 'note', 'text': 'Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe', 'x': 540, 'align': 'center', 'y': 1880, 'size': 22}
+WARN = {'type': 'note', 'text': 'Người dưới 18 tuổi không sử dụng rượu bia', 'x': 540, 'align': 'center', 'y': 1880, 'size': 22}
 # 13-15 "Quán Cóc, số 16 Nguyễn Đình Chiểu, chưa tới 500 mét từ bến." — video đêm
 t16, t500 = T(14) - T(13), T(15) - T(13)
 d = shot(16, elements=[vid('dem-mat-tien', 0.8, kenburns=1.06, shade=True),
@@ -102,21 +100,18 @@ d = shot(18, elements=[{'type': 'backdrop', 'color': 'habeco', 'color2': 'white'
                        stk(['MÓN BÌNH DÂN'], x=540, y=330, bg='crimson', rotate=-0.05, lines=[{'text': 'MÓN BÌNH DÂN', 'size': 96, 'color': 'habeco'}], **{'from': 0.05}),
                        stk(['CUỐN!'], shape='burst', x=820, y=620, bg='teal', outline='white', rotate=0.12, shake=True, lines=[{'text': 'MÓN NÀO', 'size': 46}, {'text': 'CŨNG CUỐN!', 'size': 46, 'color': 'habeco'}], **{'from': t_cuon}), WARN],
          sfx=[pop(0.1), pop(t_cuon, 0.35)])
-# 18-25 dàn món: ảnh tách nền viền trắng bay vào trên nền màu, cắt theo nhịp lời
-def dish2(img, name, color, pattern, bg, slide, extra=(), **kw):
-    return dict(elements=[{'type': 'backdrop', 'color': color, 'color2': 'white', 'pattern': pattern, 'patternAlpha': 0.2},
-                          cut(img, slide=slide, rotate=kw.get('rot', -0.04), **kw.get('cutkw', {})),
-                          stk(name, x=540, y=kw.get('ny', 330), bg=bg, rotate=kw.get('nrot', -0.04), lines=[{'text': n, 'size': kw.get('nsize', 92)} for n in name], **{'from': 0.05}),
-                          *extra, WARN], sfx=[pop(0.05)])
-d = shot(19, **dish2('chan-ga', ['CHÂN GÀ CHIÊN'], 'teal', 'dots', 'crimson', 'left', nsize=84))
-d = shot(20, **dish2('oc', ['ỐC NÈ!'], 'crimson', 'stripes', 'teal', 'right', nsize=110, rot=0.05))
-d = shot(21, **dish2('kho-muc-2', ['KHÔ MỰC', 'CHIÊN TIÊU'], 'habeco', 'rays', 'crimson', 'bottom', nsize=88, cutkw={'w': 820, 'y': 1060}))
-d = shot(22, **dish2('khoai-mon', ['KHOAI MÔN CHIÊN'], 'teal', 'rays', 'crimson', 'left', nsize=80,
-                     extra=[stk(['GIÒN RỤM!'], shape='burst', x=850, y=700, bg='habeco', outline='crimson', rotate=0.14, shake=True, lines=[{'text': 'GIÒN', 'size': 58, 'color': 'crimson'}, {'text': 'RỤM!', 'size': 58, 'color': 'crimson'}], **{'from': 0.5})]))
-d = shot(23, **dish2('kho-qua', ['KHỔ QUA', 'CHÀ BÔNG'], 'crimson', 'dots', 'teal', 'right', nsize=88, cutkw={'y': 1080},
-                     extra=[stk(['MÁT RƯỢI!'], shape='burst', x=240, y=720, bg='white', outline='teal', rotate=-0.14, shake=True, lines=[{'text': 'MÁT', 'size': 56, 'color': 'teal'}, {'text': 'RƯỢI!', 'size': 56, 'color': 'teal'}], **{'from': T(22) - T(22) + 0.6})]))
-d = shot(24, **dish2('bo-luc-lac-2', ['BÒ LÚC LẮC'], 'habeco', 'stripes', 'crimson', 'left', nsize=96))
-d = shot(25, **dish2('hot-vit-lon-2', ['HỘT VỊT LỘN', 'XÀO ME'], 'teal', 'rays', 'crimson', 'bottom', nsize=84, cutkw={'w': 760, 'y': 1080}))
+# 18-25 dàn món: ảnh món toàn khung (nền xám studio), zoom chậm, tên món chữ lớn ở khoảng trống phía trên
+def menu(img, name, kicker, focus=(0.5, 0.62), kb=1.12, extra=()):
+    return dict(elements=[photo(f'menu/{img}.jpg', full=True, focus=list(focus), kenburns=kb, dim=0, enterDur=0.12, shade=False),
+                          title(name, kicker, size=100, y=330, typeDur=0.35, kickerColor='habeco'), *extra, WARN], sfx=[pop(0.05, 0.22)])
+t_oc_end = T(20) + 0.2
+d = shot(19, **menu('chan-ga', 'Chân gà\nchiên', 'Nhâm nhi'))
+start = shots[-1]['end']; shots.append({'start': start, 'end': round(t_oc_end, 2), **menu('oc', 'Ốc', 'Thêm dĩa', focus=(0.5, 0.6))})
+d = shot(21, **menu('kho-muc-2', 'Khô mực\nchiên tiêu', 'Giòn tan', focus=(0.5, 0.6)))
+d = shot(22, **menu('khoai-cao', 'Khoai cao chiên\nnước mắm', 'Mằn mặn, giòn giòn', focus=(0.45, 0.62)))
+d = shot(23, **menu('kho-qua', 'Khổ qua\nchà bông', 'Mát rượi', focus=(0.5, 0.6)))
+d = shot(24, **menu('bo-luc-lac-2', 'Bò lúc lắc', 'Đậm đà', focus=(0.5, 0.6)))
+d = shot(25, **menu('hot-vit-lon-2', 'Hột vịt lộn\nxào me', 'Chua chua ngọt ngọt', focus=(0.5, 0.65)))
 # 25 "kể hoài không hết!" — ảnh món cũ bay vào dồn dập
 d = shot(26, elements=[{'type': 'backdrop', 'color': 'crimson', 'color2': 'habeco', 'pattern': 'rays', 'patternAlpha': 0.25, 'spin': 0.5},
                        photo('dau-hu-sa.jpg', x=300, y=760, w=430, ratio=1.0, frameColor='white', rotate=-0.1, slide='left'),
@@ -127,7 +122,7 @@ d = shot(26, elements=[{'type': 'backdrop', 'color': 'crimson', 'color2': 'habec
 # 26-27 "Mà khoan, tin nóng! Từ 22/11 tới 6/12,"
 t_ngay = T(27) - T(26)
 d = shot(28, elements=[{'type': 'backdrop', 'color': 'crimson', 'color2': 'habeco', 'pattern': 'rays', 'patternAlpha': 0.25, 'spin': 0.4},
-                       stk(['TIN NÓNG!'], shape='burst', x=540, y=620, bg='habeco', outline='white', rotate=-0.08, shake=True, lines=[{'text': 'TIN', 'size': 120, 'color': 'crimson'}, {'text': 'NÓNG!', 'size': 120, 'color': 'crimson'}], **{'from': 0.0}),
+                       stk(['TIN VUI!'], shape='burst', x=540, y=620, bg='habeco', outline='white', rotate=-0.08, shake=True, lines=[{'text': 'TIN', 'size': 120, 'color': 'crimson'}, {'text': 'VUI!', 'size': 120, 'color': 'crimson'}], **{'from': 0.0}),
                        stk(['22/11 – 6/12'], x=540, y=1150, bg='white', color='crimson', outline='crimson', rotate=0.03, lines=[{'text': 'TỪ 22/11', 'size': 90, 'color': 'crimson'}, {'text': 'ĐẾN 6/12', 'size': 90, 'color': 'crimson'}], **{'from': t_ngay}), WARN],
          sfx=[{'t': 0.0, 'kind': 'drum', 'gain': 0.4}, pop(0.08, 0.35), pop(t_ngay, 0.35)])
 # 28-29 "hóa đơn 500 nghìn, tặng liền một dĩa bò viên."
@@ -144,17 +139,18 @@ d = shot(32, elements=[{'type': 'backdrop', 'color': 'teal', 'color2': 'habeco',
                        {'type': 'coupon', 'x': 540, 'y': 1230, 'w': 900, 'h': 300, 'top': 'HÓA ĐƠN 1.500K', 'bottom': 'TẶNG 1 DĨA SƯỜN BÒ', 'slide': 'right', 'from': 0.0},
                        {'type': 'confetti', 'from': t_tang, 'n': 80, 'seed': 4}, WARN],
          sfx=[pop(0.05), pop(t_tang - 0.1, 0.35), {'t': t_tang, 'kind': 'chime', 'gain': 0.3}])
-# 32 "Rủ cạ cứng đi liền đi!" — video khách ngồi quán đêm mưa
-d = shot(33, elements=[vid('mua-khach', 4.0, kenburns=1.05),
-                       stk(['RỦ CẠ CỨNG', 'ĐI LIỀN!'], x=540, y=360, bg='crimson', rotate=-0.05, shake=True, lines=[{'text': 'RỦ CẠ CỨNG', 'size': 92, 'color': 'habeco'}, {'text': 'ĐI LIỀN!', 'size': 92}], **{'from': 0.05}), WARN],
-         sfx=[pop(0.05, 0.35)])
-# 33-34 "Mà nhớ nha, có uống thì đừng lái xe đó!" + màn kết
+# 32 "Rủ cạ cứng" — video khách ngồi quán đêm mưa
+start = shots[-1]['end']; END_SPEECH = round(caps[-1]['end'] + LEAD + 0.15, 2)
+shots.append({'start': start, 'end': END_SPEECH, 'elements': [vid('mua-khach', 4.0, kenburns=1.05),
+                       stk(['RỦ CẠ CỨNG'], x=540, y=360, bg='crimson', rotate=-0.05, shake=True, lines=[{'text': 'RỦ CẠ CỨNG', 'size': 92, 'color': 'habeco'}], **{'from': 0.05}), WARN],
+         'sfx': [pop(0.05, 0.35)]})
+# 33 "ghé Quán Cóc liền nha!" + màn kết
 d = shot(None, elements=[photo('hoang-hon.jpg', full=True, focus=[0.4, 0.5], kenburns=1.08, dim=0.35),
                          stk([{'text': 'QUÁN NHẬU', 'size': 44, 'font': 'italic'}, {'text': 'CÓC', 'size': 150, 'color': 'habeco'}], x=540, y=330, bg='teal', rotate=-0.05, **{'from': 0.0}),
                          stk(['16 NGUYỄN ĐÌNH CHIỂU'], x=540, y=560, bg='crimson', rotate=0.02, lines=[{'text': '16 NGUYỄN ĐÌNH CHIỂU', 'size': 50}, {'text': 'P. NINH KIỀU, CẦN THƠ', 'size': 36, 'font': 'bold'}], **{'from': 0.2}),
                          stk(['0938 543 698'], shape='pill', x=540, y=760, bg='habeco', color='crimson', outline='white', rotate=-0.02, lines=[{'text': 'ĐT 0938 543 698', 'size': 56, 'color': 'crimson'}], **{'from': 0.4}),
                          stk(['KM'], x=540, y=930, bg='white', outline='crimson', rotate=0.03, lines=[{'text': 'KHUYẾN MÃI 22/11 – 6/12', 'size': 40, 'color': 'crimson'}], **{'from': 0.6}),
-                         stk(['ĐÃ UỐNG RƯỢU BIA', 'KHÔNG LÁI XE'], x=540, y=1200, bg='crimson', rotate=0, wobble=False, lines=[{'text': 'ĐÃ UỐNG RƯỢU BIA', 'size': 46}, {'text': 'KHÔNG LÁI XE', 'size': 46, 'color': 'habeco'}], **{'from': 0.8}),
+                         stk(['HẸN'], x=540, y=1180, bg='crimson', rotate=-0.03, lines=[{'text': 'GHÉ LIỀN NHA!', 'size': 64, 'color': 'habeco'}], **{'from': 0.8}),
                          {'type': 'note', 'text': 'Người dưới 18 tuổi không sử dụng rượu bia', 'x': 540, 'align': 'center', 'y': 1880, 'size': 24}],
          sfx=[pop(0.05), pop(0.25), pop(0.45), pop(0.65)])
 

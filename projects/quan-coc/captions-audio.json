@@ -1,177 +1,172 @@
 [
  {
-  "start": 0.24,
-  "end": 1.57,
-  "text": "Ê ê! Tới Cần Thơ mà"
+  "start": 0.0,
+  "end": 1.69,
+  "text": "Ê, tới Cần Thơ mà"
  },
  {
-  "start": 1.57,
-  "end": 2.96,
+  "start": 1.69,
+  "end": 3.96,
   "text": "chưa biết chỗ nào lai rai ngon hả?"
  },
  {
-  "start": 2.96,
-  "end": 4.37,
+  "start": 3.96,
+  "end": 4.78,
   "text": "Đứng yên đó,"
  },
  {
-  "start": 4.37,
-  "end": 5.54,
-  "text": "tui chỉ cho nè!"
+  "start": 4.78,
+  "end": 6.3,
+  "text": "để tui chỉ cho."
  },
  {
-  "start": 5.54,
-  "end": 6.83,
+  "start": 6.3,
+  "end": 7.01,
   "text": "Từ Bến Ninh Kiều,"
  },
  {
-  "start": 6.83,
-  "end": 7.64,
+  "start": 7.01,
+  "end": 8.69,
   "text": "chạy lên Hai Bà Trưng,"
  },
  {
-  "start": 7.64,
-  "end": 8.12,
+  "start": 8.69,
+  "end": 9.3,
   "text": "dọc bờ sông."
  },
  {
-  "start": 8.12,
-  "end": 9.68,
-  "text": "Tới Ngô Gia Tự, quẹo trái."
+  "start": 9.3,
+  "end": 11.66,
+  "text": "Tới Ngô Gia Tự thì quẹo trái."
  },
  {
-  "start": 9.68,
-  "end": 10.28,
+  "start": 11.66,
+  "end": 12.03,
   "text": "Chạy thẳng,"
  },
  {
-  "start": 10.28,
-  "end": 11.18,
+  "start": 12.03,
+  "end": 12.94,
   "text": "băng qua đường Hòa Bình."
  },
  {
-  "start": 11.18,
-  "end": 12.51,
+  "start": 12.94,
+  "end": 14.42,
   "text": "Tới góc Nguyễn Đình Chiểu,"
  },
  {
-  "start": 12.51,
-  "end": 13.23,
+  "start": 14.42,
+  "end": 15.57,
   "text": "ngó qua tay phải..."
  },
  {
-  "start": 13.23,
-  "end": 14.42,
+  "start": 15.57,
+  "end": 17.1,
   "text": "Tới rồi đó!"
  },
  {
-  "start": 14.42,
-  "end": 15.04,
+  "start": 17.1,
+  "end": 17.86,
   "text": "Quán Cóc,"
  },
  {
-  "start": 15.04,
-  "end": 16.36,
+  "start": 17.86,
+  "end": 19.47,
   "text": "số 16 Nguyễn Đình Chiểu,"
  },
  {
-  "start": 16.36,
-  "end": 18.19,
-  "text": "chưa tới 500 mét từ bến."
+  "start": 19.47,
+  "end": 22.81,
+  "text": "cách bến chưa tới 500 mét."
  },
  {
-  "start": 18.19,
-  "end": 19.01,
-  "text": "Món bình dân mà"
+  "start": 22.81,
+  "end": 23.73,
+  "text": "Món bình dân thôi,"
  },
  {
-  "start": 19.01,
-  "end": 20.12,
-  "text": "món nào cũng cuốn nha!"
+  "start": 23.73,
+  "end": 25.32,
+  "text": "mà món nào cũng cuốn."
  },
  {
-  "start": 20.12,
-  "end": 21.47,
-  "text": "Chân gà chiên nè,"
+  "start": 25.32,
+  "end": 26.49,
+  "text": "Chân gà chiên nè."
  },
  {
-  "start": 21.47,
-  "end": 22.13,
-  "text": "ốc nè,"
+  "start": 26.49,
+  "end": 26.83,
+  "text": "Ốc nè."
  },
  {
-  "start": 22.13,
-  "end": 23.4,
-  "text": "khô mực chiên tiêu nè!"
+  "start": 26.83,
+  "end": 27.99,
+  "text": "Khô mực chiên tiêu nè."
  },
  {
-  "start": 23.4,
-  "end": 24.51,
-  "text": "Khoai môn chiên giòn rụm,"
+  "start": 27.99,
+  "end": 29.4,
+  "text": "Khoai cao chiên nước mắm."
  },
  {
-  "start": 24.51,
-  "end": 25.88,
-  "text": "khổ qua chà bông mát rượi."
+  "start": 29.4,
+  "end": 31.31,
+  "text": "Khổ qua chà bông, mát rượi."
  },
  {
-  "start": 25.88,
-  "end": 26.85,
-  "text": "Bò lúc lắc,"
+  "start": 31.31,
+  "end": 32.15,
+  "text": "Bò lúc lắc."
  },
  {
-  "start": 26.85,
-  "end": 27.89,
-  "text": "hột vịt lộn xào me..."
+  "start": 32.15,
+  "end": 33.53,
+  "text": "Hột vịt lộn xào me..."
  },
  {
-  "start": 27.89,
-  "end": 28.85,
-  "text": "kể hoài không hết!"
+  "start": 33.53,
+  "end": 34.34,
+  "text": "kể hoài không hết."
  },
  {
-  "start": 28.85,
-  "end": 29.85,
-  "text": "Mà khoan, tin nóng!"
+  "start": 34.34,
+  "end": 36.75,
+  "text": "À mà khoan, có tin vui nè!"
  },
  {
-  "start": 29.85,
-  "end": 32.4,
+  "start": 36.75,
+  "end": 38.9,
   "text": "Từ 22/11 tới 6/12,"
  },
  {
-  "start": 32.4,
-  "end": 33.85,
+  "start": 38.9,
+  "end": 40.53,
   "text": "hóa đơn 500 nghìn,"
  },
  {
-  "start": 33.85,
-  "end": 34.92,
+  "start": 40.53,
+  "end": 42.02,
   "text": "tặng liền một dĩa bò viên."
  },
  {
-  "start": 34.92,
-  "end": 35.96,
+  "start": 42.02,
+  "end": 43.19,
   "text": "Hóa đơn 1 triệu rưỡi,"
  },
  {
-  "start": 35.96,
-  "end": 37.16,
-  "text": "tặng luôn một dĩa sườn bò!"
+  "start": 43.19,
+  "end": 44.89,
+  "text": "tặng luôn một dĩa sườn bò."
  },
  {
-  "start": 37.16,
-  "end": 38.84,
-  "text": "Rủ cạ cứng đi liền đi!"
+  "start": 44.89,
+  "end": 45.48,
+  "text": "Rủ cạ cứng"
  },
  {
-  "start": 38.84,
-  "end": 40.13,
-  "text": "Mà nhớ nha, có uống"
- },
- {
-  "start": 40.13,
-  "end": 41.13,
-  "text": "thì đừng lái xe đó!"
+  "start": 45.48,
+  "end": 46.65,
+  "text": "ghé Quán Cóc liền nha!"
  }
 ]

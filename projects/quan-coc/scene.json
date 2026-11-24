@@ -22,7 +22,7 @@
  "shots": [
   {
    "start": 0,
-   "end": 1.72,
+   "end": 1.84,
    "view": [
     {
      "t": 0,
@@ -31,7 +31,7 @@
      "zoom": 2.3
     },
     {
-     "t": 1.72,
+     "t": 1.84,
      "lat": 10.1,
      "lon": 105.8,
      "zoom": 5.4
@@ -61,8 +61,8 @@
    ]
   },
   {
-   "start": 1.72,
-   "end": 3.11,
+   "start": 1.84,
+   "end": 4.11,
    "view": [
     {
      "t": 0,
@@ -71,7 +71,7 @@
      "zoom": 5.4
     },
     {
-     "t": 1.72,
+     "t": 1.84,
      "lat": 10.04,
      "lon": 105.78,
      "zoom": 11.2
@@ -99,8 +99,8 @@
    ]
   },
   {
-   "start": 3.11,
-   "end": 5.69,
+   "start": 4.11,
+   "end": 6.45,
    "view": [
     {
      "t": 0,
@@ -109,7 +109,7 @@
      "zoom": 11.2
     },
     {
-     "t": 1.39,
+     "t": 2.27,
      "lat": 10.0345,
      "lon": 105.7885,
      "zoom": 16.2
@@ -137,15 +137,15 @@
    ],
    "sfx": [
     {
-     "t": 1.41,
+     "t": 0.82,
      "kind": "pop",
      "gain": 0.3
     }
    ]
   },
   {
-   "start": 5.69,
-   "end": 8.27,
+   "start": 6.45,
+   "end": 9.45,
    "view": [
     {
      "t": 0,
@@ -154,7 +154,7 @@
      "zoom": 16.2
     },
     {
-     "t": 2.58,
+     "t": 2.34,
      "lat": 10.035,
      "lon": 105.7884,
      "zoom": 17.2
@@ -199,8 +199,8 @@
      "smooth": false,
      "head": "dot",
      "grow": {
-      "at": 1.09,
-      "dur": 1.29
+      "at": 0.51,
+      "dur": 1.63
      }
     },
     {
@@ -212,7 +212,7 @@
      ],
      "dx": 30,
      "align": "left",
-     "from": 1.29,
+     "from": 0.71,
      "size": 32
     },
     {
@@ -223,7 +223,7 @@
       105.7897
      ],
      "align": "left",
-     "from": 2.0999999999999996,
+     "from": 2.3899999999999997,
      "bg": "blue",
      "color": "white",
      "size": 26
@@ -233,7 +233,7 @@
      "title": "Bến Ninh Kiều",
      "y": 300,
      "size": 104,
-     "to": 1.24,
+     "to": 0.6599999999999999,
      "kicker": "Từ"
     },
     {
@@ -243,7 +243,7 @@
      "size": 104,
      "kicker": "Chạy lên",
      "sub": "dọc bờ sông",
-     "from": 1.29
+     "from": 0.71
     }
    ],
    "sfx": [
@@ -255,8 +255,8 @@
    ]
   },
   {
-   "start": 8.27,
-   "end": 9.83,
+   "start": 9.45,
+   "end": 11.81,
    "view": [
     {
      "t": 0,
@@ -265,7 +265,7 @@
      "zoom": 17.2
     },
     {
-     "t": 2.58,
+     "t": 3.0,
      "lat": 10.0355,
      "lon": 105.7882,
      "zoom": 17.3
@@ -321,7 +321,7 @@
      "head": "arrow",
      "grow": {
       "at": 0.3,
-      "dur": 2.23
+      "dur": 2.65
      }
     },
     {
@@ -367,8 +367,8 @@
    ]
   },
   {
-   "start": 9.83,
-   "end": 11.33,
+   "start": 11.81,
+   "end": 13.09,
    "view": [
     {
      "t": 0,
@@ -377,7 +377,7 @@
      "zoom": 17.3
     },
     {
-     "t": 1.56,
+     "t": 2.36,
      "lat": 10.0364,
      "lon": 105.7876,
      "zoom": 17.6
@@ -457,7 +457,7 @@
      "head": "arrow",
      "grow": {
       "at": 0.2,
-      "dur": 1.31
+      "dur": 2.11
      }
     },
     {
@@ -469,7 +469,7 @@
      ],
      "dx": -20,
      "align": "right",
-     "from": 0.5999999999999996,
+     "from": 0.3699999999999992,
      "bg": "blue",
      "color": "white",
      "size": 30
@@ -485,8 +485,8 @@
    ]
   },
   {
-   "start": 11.33,
-   "end": 13.38,
+   "start": 13.09,
+   "end": 15.72,
    "view": [
     {
      "t": 0,
@@ -501,7 +501,7 @@
      "zoom": 18.6
     },
     {
-     "t": 1.5,
+     "t": 1.28,
      "lat": 10.03712,
      "lon": 105.78712,
      "zoom": 18.75
@@ -577,7 +577,7 @@
      ],
      "align": "left",
      "dx": 30,
-     "from": 1.33,
+     "from": 1.4800000000000004,
      "bg": "orange",
      "color": "white",
      "size": 32
@@ -594,7 +594,7 @@
      "labelSize": 44,
      "labelBg": "teal",
      "labelColor": "white",
-     "from": 1.4300000000000002
+     "from": 1.5800000000000005
     },
     {
      "type": "title",
@@ -607,57 +607,34 @@
    ],
    "sfx": [
     {
-     "t": 1.43,
+     "t": 1.58,
      "kind": "pop",
      "gain": 0.35
     }
    ]
   },
   {
-   "start": 13.38,
-   "end": 14.57,
+   "start": 15.72,
+   "end": 17.25,
    "elements": [
     {
      "type": "video",
      "path": "video/ngay-di-toi",
      "start": 24.0,
      "kenburns": 1.04
-    },
-    {
-     "type": "sticker",
-     "shape": "burst",
-     "x": 540,
-     "y": 430,
-     "bg": "habeco",
-     "outline": "crimson",
-     "rotate": -0.08,
-     "shake": true,
-     "lines": [
-      {
-       "text": "TỚI",
-       "size": 100,
-       "color": "crimson"
-      },
-      {
-       "text": "RỒI ĐÓ!",
-       "size": 100,
-       "color": "crimson"
-      }
-     ],
-     "from": 0.05
     }
    ],
    "sfx": [
     {
      "t": 0.05,
      "kind": "chime",
-     "gain": 0.35
+     "gain": 0.3
     }
    ]
   },
   {
-   "start": 14.57,
-   "end": 18.34,
+   "start": 17.25,
+   "end": 22.96,
    "elements": [
     {
      "type": "video",
@@ -698,7 +675,7 @@
        "size": 54
       }
      ],
-     "from": 0.6199999999999992
+     "from": 0.7600000000000016
     },
     {
      "type": "sticker",
@@ -715,11 +692,11 @@
        "color": "crimson"
       }
      ],
-     "from": 1.9400000000000013
+     "from": 2.370000000000001
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -733,20 +710,20 @@
      "gain": 0.35
     },
     {
-     "t": 0.62,
+     "t": 0.76,
      "kind": "pop",
      "gain": 0.3
     },
     {
-     "t": 1.94,
+     "t": 2.37,
      "kind": "pop",
      "gain": 0.3
     }
    ]
   },
   {
-   "start": 18.34,
-   "end": 20.27,
+   "start": 22.96,
+   "end": 25.47,
    "elements": [
     {
      "type": "backdrop",
@@ -805,11 +782,11 @@
        "color": "habeco"
       }
      ],
-     "from": 0.8200000000000003
+     "from": 0.9199999999999982
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -823,49 +800,41 @@
      "gain": 0.3
     },
     {
-     "t": 0.82,
+     "t": 0.92,
      "kind": "pop",
      "gain": 0.35
     }
    ]
   },
   {
-   "start": 20.27,
-   "end": 21.62,
+   "start": 25.47,
+   "end": 26.64,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "teal",
-     "color2": "white",
-     "pattern": "dots",
-     "patternAlpha": 0.2
-    },
-    {
-     "type": "cutout",
-     "path": "photos/cut/chan-ga-s.png",
-     "x": 540,
-     "y": 1010,
-     "w": 880,
-     "slide": "left",
-     "rotate": -0.04
-    },
-    {
-     "type": "sticker",
-     "x": 540,
-     "y": 330,
-     "bg": "crimson",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "CHÂN GÀ CHIÊN",
-       "size": 84
-      }
+     "type": "photo",
+     "path": "photos/menu/chan-ga.jpg",
+     "full": true,
+     "focus": [
+      0.5,
+      0.62
      ],
-     "from": 0.05
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
+    },
+    {
+     "type": "title",
+     "title": "Chân gà\nchiên",
+     "y": 330,
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Nhâm nhi"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -876,47 +845,39 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 21.62,
-   "end": 22.28,
+   "start": 26.64,
+   "end": 27.18,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "crimson",
-     "color2": "white",
-     "pattern": "stripes",
-     "patternAlpha": 0.2
-    },
-    {
-     "type": "cutout",
-     "path": "photos/cut/oc-s.png",
-     "x": 540,
-     "y": 1010,
-     "w": 880,
-     "slide": "right",
-     "rotate": 0.05
-    },
-    {
-     "type": "sticker",
-     "x": 540,
-     "y": 330,
-     "bg": "teal",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "ỐC NÈ!",
-       "size": 110
-      }
+     "type": "photo",
+     "path": "photos/menu/oc.jpg",
+     "full": true,
+     "focus": [
+      0.5,
+      0.6
      ],
-     "from": 0.05
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
+    },
+    {
+     "type": "title",
+     "title": "Ốc",
+     "y": 330,
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Thêm dĩa"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -927,51 +888,39 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 22.28,
-   "end": 23.55,
+   "start": 27.18,
+   "end": 28.14,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "habeco",
-     "color2": "white",
-     "pattern": "rays",
-     "patternAlpha": 0.2
-    },
-    {
-     "type": "cutout",
-     "path": "photos/cut/kho-muc-2-s.png",
-     "x": 540,
-     "y": 1060,
-     "w": 820,
-     "slide": "bottom",
-     "rotate": -0.04
-    },
-    {
-     "type": "sticker",
-     "x": 540,
-     "y": 330,
-     "bg": "crimson",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "KHÔ MỰC",
-       "size": 88
-      },
-      {
-       "text": "CHIÊN TIÊU",
-       "size": 88
-      }
+     "type": "photo",
+     "path": "photos/menu/kho-muc-2.jpg",
+     "full": true,
+     "focus": [
+      0.5,
+      0.6
      ],
-     "from": 0.05
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
+    },
+    {
+     "type": "title",
+     "title": "Khô mực\nchiên tiêu",
+     "y": 330,
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Giòn tan"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -982,70 +931,39 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 23.55,
-   "end": 24.66,
+   "start": 28.14,
+   "end": 29.55,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "teal",
-     "color2": "white",
-     "pattern": "rays",
-     "patternAlpha": 0.2
+     "type": "photo",
+     "path": "photos/menu/khoai-cao.jpg",
+     "full": true,
+     "focus": [
+      0.45,
+      0.62
+     ],
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
     },
     {
-     "type": "cutout",
-     "path": "photos/cut/khoai-mon-s.png",
-     "x": 540,
-     "y": 1010,
-     "w": 880,
-     "slide": "left",
-     "rotate": -0.04
-    },
-    {
-     "type": "sticker",
-     "x": 540,
+     "type": "title",
+     "title": "Khoai cao chiên\nnước mắm",
      "y": 330,
-     "bg": "crimson",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "KHOAI MÔN CHIÊN",
-       "size": 80
-      }
-     ],
-     "from": 0.05
-    },
-    {
-     "type": "sticker",
-     "shape": "burst",
-     "x": 850,
-     "y": 700,
-     "bg": "habeco",
-     "outline": "crimson",
-     "rotate": 0.14,
-     "shake": true,
-     "lines": [
-      {
-       "text": "GIÒN",
-       "size": 58,
-       "color": "crimson"
-      },
-      {
-       "text": "RỤM!",
-       "size": 58,
-       "color": "crimson"
-      }
-     ],
-     "from": 0.5
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Mằn mặn, giòn giòn"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1056,74 +974,39 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 24.66,
-   "end": 26.03,
+   "start": 29.55,
+   "end": 31.46,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "crimson",
-     "color2": "white",
-     "pattern": "dots",
-     "patternAlpha": 0.2
+     "type": "photo",
+     "path": "photos/menu/kho-qua.jpg",
+     "full": true,
+     "focus": [
+      0.5,
+      0.6
+     ],
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
     },
     {
-     "type": "cutout",
-     "path": "photos/cut/kho-qua-s.png",
-     "x": 540,
-     "y": 1080,
-     "w": 880,
-     "slide": "right",
-     "rotate": -0.04
-    },
-    {
-     "type": "sticker",
-     "x": 540,
+     "type": "title",
+     "title": "Khổ qua\nchà bông",
      "y": 330,
-     "bg": "teal",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "KHỔ QUA",
-       "size": 88
-      },
-      {
-       "text": "CHÀ BÔNG",
-       "size": 88
-      }
-     ],
-     "from": 0.05
-    },
-    {
-     "type": "sticker",
-     "shape": "burst",
-     "x": 240,
-     "y": 720,
-     "bg": "white",
-     "outline": "teal",
-     "rotate": -0.14,
-     "shake": true,
-     "lines": [
-      {
-       "text": "MÁT",
-       "size": 56,
-       "color": "teal"
-      },
-      {
-       "text": "RƯỢI!",
-       "size": 56,
-       "color": "teal"
-      }
-     ],
-     "from": 0.6
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Mát rượi"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1134,47 +1017,39 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 26.03,
-   "end": 27.0,
+   "start": 31.46,
+   "end": 32.3,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "habeco",
-     "color2": "white",
-     "pattern": "stripes",
-     "patternAlpha": 0.2
-    },
-    {
-     "type": "cutout",
-     "path": "photos/cut/bo-luc-lac-2-s.png",
-     "x": 540,
-     "y": 1010,
-     "w": 880,
-     "slide": "left",
-     "rotate": -0.04
-    },
-    {
-     "type": "sticker",
-     "x": 540,
-     "y": 330,
-     "bg": "crimson",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "BÒ LÚC LẮC",
-       "size": 96
-      }
+     "type": "photo",
+     "path": "photos/menu/bo-luc-lac-2.jpg",
+     "full": true,
+     "focus": [
+      0.5,
+      0.6
      ],
-     "from": 0.05
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
+    },
+    {
+     "type": "title",
+     "title": "Bò lúc lắc",
+     "y": 330,
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Đậm đà"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1185,51 +1060,39 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 27.0,
-   "end": 28.04,
+   "start": 32.3,
+   "end": 33.68,
    "elements": [
     {
-     "type": "backdrop",
-     "color": "teal",
-     "color2": "white",
-     "pattern": "rays",
-     "patternAlpha": 0.2
-    },
-    {
-     "type": "cutout",
-     "path": "photos/cut/hot-vit-lon-2-s.png",
-     "x": 540,
-     "y": 1080,
-     "w": 760,
-     "slide": "bottom",
-     "rotate": -0.04
-    },
-    {
-     "type": "sticker",
-     "x": 540,
-     "y": 330,
-     "bg": "crimson",
-     "rotate": -0.04,
-     "lines": [
-      {
-       "text": "HỘT VỊT LỘN",
-       "size": 84
-      },
-      {
-       "text": "XÀO ME",
-       "size": 84
-      }
+     "type": "photo",
+     "path": "photos/menu/hot-vit-lon-2.jpg",
+     "full": true,
+     "focus": [
+      0.5,
+      0.65
      ],
-     "from": 0.05
+     "kenburns": 1.12,
+     "dim": 0,
+     "enterDur": 0.12,
+     "shade": false
+    },
+    {
+     "type": "title",
+     "title": "Hột vịt lộn\nxào me",
+     "y": 330,
+     "size": 100,
+     "typeDur": 0.35,
+     "kickerColor": "habeco",
+     "kicker": "Chua chua ngọt ngọt"
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1240,13 +1103,13 @@
     {
      "t": 0.05,
      "kind": "pop",
-     "gain": 0.3
+     "gain": 0.22
     }
    ]
   },
   {
-   "start": 28.04,
-   "end": 29.0,
+   "start": 33.68,
+   "end": 34.49,
    "elements": [
     {
      "type": "backdrop",
@@ -1314,7 +1177,7 @@
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1340,8 +1203,8 @@
    ]
   },
   {
-   "start": 29.0,
-   "end": 32.55,
+   "start": 34.49,
+   "end": 39.05,
    "elements": [
     {
      "type": "backdrop",
@@ -1367,7 +1230,7 @@
        "color": "crimson"
       },
       {
-       "text": "NÓNG!",
+       "text": "VUI!",
        "size": 120,
        "color": "crimson"
       }
@@ -1394,11 +1257,11 @@
        "color": "crimson"
       }
      ],
-     "from": 1.0
+     "from": 2.4099999999999966
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1417,15 +1280,15 @@
      "gain": 0.35
     },
     {
-     "t": 1.0,
+     "t": 2.41,
      "kind": "pop",
      "gain": 0.35
     }
    ]
   },
   {
-   "start": 32.55,
-   "end": 35.07,
+   "start": 39.05,
+   "end": 42.17,
    "elements": [
     {
      "type": "backdrop",
@@ -1446,7 +1309,7 @@
      ],
      "frameColor": "white",
      "rotate": -0.04,
-     "from": 1.3500000000000028
+     "from": 1.5300000000000025
     },
     {
      "type": "coupon",
@@ -1460,12 +1323,12 @@
     },
     {
      "type": "confetti",
-     "from": 1.4500000000000028,
+     "from": 1.6300000000000026,
      "n": 60
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1479,20 +1342,20 @@
      "gain": 0.3
     },
     {
-     "t": 1.35,
+     "t": 1.53,
      "kind": "pop",
      "gain": 0.35
     },
     {
-     "t": 1.4500000000000028,
+     "t": 1.6300000000000026,
      "kind": "chime",
      "gain": 0.3
     }
    ]
   },
   {
-   "start": 35.07,
-   "end": 37.31,
+   "start": 42.17,
+   "end": 45.04,
    "elements": [
     {
      "type": "backdrop",
@@ -1513,7 +1376,7 @@
      ],
      "frameColor": "white",
      "rotate": 0.04,
-     "from": 0.9399999999999992
+     "from": 1.0700000000000016
     },
     {
      "type": "coupon",
@@ -1528,13 +1391,13 @@
     },
     {
      "type": "confetti",
-     "from": 1.0399999999999991,
+     "from": 1.1700000000000017,
      "n": 80,
      "seed": 4
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1548,20 +1411,20 @@
      "gain": 0.3
     },
     {
-     "t": 0.94,
+     "t": 1.07,
      "kind": "pop",
      "gain": 0.35
     },
     {
-     "t": 1.0399999999999991,
+     "t": 1.1700000000000017,
      "kind": "chime",
      "gain": 0.3
     }
    ]
   },
   {
-   "start": 37.31,
-   "end": 38.99,
+   "start": 45.04,
+   "end": 46.95,
    "elements": [
     {
      "type": "video",
@@ -1581,17 +1444,13 @@
        "text": "RỦ CẠ CỨNG",
        "size": 92,
        "color": "habeco"
-      },
-      {
-       "text": "ĐI LIỀN!",
-       "size": 92
       }
      ],
      "from": 0.05
     },
     {
      "type": "note",
-     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
      "x": 540,
      "align": "center",
      "y": 1880,
@@ -1607,8 +1466,8 @@
    ]
   },
   {
-   "start": 38.99,
-   "end": 43.88,
+   "start": 46.95,
+   "end": 49.8,
    "elements": [
     {
      "type": "photo",
@@ -1697,18 +1556,13 @@
     {
      "type": "sticker",
      "x": 540,
-     "y": 1200,
+     "y": 1180,
      "bg": "crimson",
-     "rotate": 0,
-     "wobble": false,
+     "rotate": -0.03,
      "lines": [
       {
-       "text": "ĐÃ UỐNG RƯỢU BIA",
-       "size": 46
-      },
-      {
-       "text": "KHÔNG LÁI XE",
-       "size": 46,
+       "text": "GHÉ LIỀN NHA!",
+       "size": 64,
        "color": "habeco"
       }
      ],
