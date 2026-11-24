@@ -1,0 +1,17 @@
+{
+ "slug": "quan-coc",
+ "stage": "cho-duyet",
+ "style": "ve-tinh + bang-hieu-quan",
+ "round": 0,
+ "tts": {
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "tempo": 1.1,
+  "style_prompt": true,
+  "duration_s": 42.11
+ },
+ "video": "output/quan-coc.mp4",
+ "duration_s": 44.9,
+ "thumbnail": "output/thumbnail.png",
+ "publish": "publish.md"
+}

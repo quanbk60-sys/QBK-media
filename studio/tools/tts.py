@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Gemini TTS → WAV. Usage: tts.py TEXT_FILE OUT.wav [--model gemini-3.8-flash-tts] [--voice Bodi]
+"""Gemini TTS → WAV. Usage: tts.py TEXT_FILE OUT.wav [--model gemini-3.8-flash-tts] [--voice Bodi] [--style "chỉ dẫn cách nói"]
+--style: câu chỉ dẫn (tiếng Anh ổn định hơn) đặt trước lời đọc, ví dụ "Read like a playful young friend, casual, not a narrator:".
 The API key is injected by the session's network proxy (Network secret for generativelanguage.googleapis.com,
 header x-goog-api-key). Never paste keys; GEMINI_API_KEY may hold a placeholder."""
 import base64, json, os, sys, urllib.request, wave
@@ -9,6 +10,7 @@ def opt(k, d):
 text_file, out = args[0], args[1]
 model, voice = opt('--model', 'gemini-3.8-flash-tts'), opt('--voice', 'Bodi')
 text = ' '.join(open(text_file, encoding='utf8').read().split())
+if '--style' in args: text = opt('--style', '').rstrip(': ') + ':\n' + text
 body = {"contents": [{"role": "user", "parts": [{"text": text}]}],
         "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
 req = urllib.request.Request(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",

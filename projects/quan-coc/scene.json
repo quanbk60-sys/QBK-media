@@ -1,0 +1,1685 @@
+{
+ "width": 1080,
+ "height": 1920,
+ "fps": 30,
+ "style": "ve-tinh",
+ "satmap": "sat/satmap.json",
+ "textFollowsCamera": true,
+ "narration": {
+  "path": "audio/narration.wav",
+  "lead": 0.15
+ },
+ "captions": {
+  "path": "captions-audio.json",
+  "lead": 0.15,
+  "y": 1530,
+  "size": 60
+ },
+ "shots": [
+  {
+   "start": 0,
+   "end": 1.49,
+   "view": [
+    {
+     "t": 0,
+     "lat": 14,
+     "lon": 112,
+     "zoom": 2.3
+    },
+    {
+     "t": 1.49,
+     "lat": 10.1,
+     "lon": 105.8,
+     "zoom": 5.4
+    }
+   ],
+   "elements": [
+    {
+     "type": "stars"
+    },
+    {
+     "type": "globe"
+    },
+    {
+     "type": "title",
+     "title": "Cần Thơ",
+     "y": 300,
+     "kicker": "Ê, tới",
+     "from": 0
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 1.49,
+   "end": 3.16,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.1,
+     "lon": 105.8,
+     "zoom": 5.4
+    },
+    {
+     "t": 1.49,
+     "lat": 10.04,
+     "lon": 105.78,
+     "zoom": 11.2
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "clouds",
+     "n": 5,
+     "y0": 700,
+     "y1": 1300,
+     "opacity": 0.7
+    },
+    {
+     "type": "title",
+     "title": "Lai rai\nchỗ nào ngon?",
+     "y": 300,
+     "size": 104,
+     "typeDur": 0.6,
+     "kicker": "Mà chưa biết"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "whoosh",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 3.16,
+   "end": 4.57,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.04,
+     "lon": 105.78,
+     "zoom": 11.2
+    },
+    {
+     "t": 1.67,
+     "lat": 10.0345,
+     "lon": 105.7885,
+     "zoom": 15.6
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "clouds",
+     "n": 4,
+     "y0": 800,
+     "y1": 1300,
+     "to": 0.9,
+     "opacity": 0.6
+    },
+    {
+     "type": "title",
+     "title": "Để tui chỉ!",
+     "y": 300,
+     "size": 120,
+     "kicker": "Đứng yên đó"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.45
+    },
+    {
+     "t": 0.75,
+     "kind": "pop",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 4.57,
+   "end": 5.99,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.0345,
+     "lon": 105.7885,
+     "zoom": 15.6
+    },
+    {
+     "t": 1.41,
+     "lat": 10.0343,
+     "lon": 105.7887,
+     "zoom": 17.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "marker",
+     "geo": [
+      10.03369,
+      105.78843
+     ],
+     "label": "BẾN NINH KIỀU",
+     "side": 1,
+     "from": 0.1
+    },
+    {
+     "type": "title",
+     "title": "Bến Ninh Kiều",
+     "y": 300,
+     "size": 112,
+     "kicker": "Xuất phát"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.1,
+     "kind": "pop",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 5.99,
+   "end": 8.35,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.0343,
+     "lon": 105.7887,
+     "zoom": 17.0
+    },
+    {
+     "t": 1.42,
+     "lat": 10.035,
+     "lon": 105.7884,
+     "zoom": 17.2
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "marker",
+     "geo": [
+      10.03369,
+      105.78843
+     ],
+     "size": 1.1,
+     "enter": "none",
+     "pulse": false
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03369,
+       105.78843
+      ],
+      [
+       10.0343,
+       105.78868
+      ],
+      [
+       10.03474,
+       105.78895
+      ],
+      [
+       10.03495,
+       105.78906
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false,
+     "head": "dot",
+     "grow": {
+      "at": 0.15,
+      "dur": 1.02
+     }
+    },
+    {
+     "type": "tag",
+     "text": "HAI BÀ TRƯNG",
+     "geo": [
+      10.03425,
+      105.78875
+     ],
+     "dx": 30,
+     "align": "left",
+     "from": 0.3,
+     "size": 32
+    },
+    {
+     "type": "tag",
+     "text": "BỜ SÔNG HẬU",
+     "geo": [
+      10.0338,
+      105.7896
+     ],
+     "align": "left",
+     "from": 1.3,
+     "bg": "blue",
+     "color": "white",
+     "size": 26
+    },
+    {
+     "type": "title",
+     "title": "Hai Bà Trưng",
+     "y": 300,
+     "size": 110,
+     "kicker": "Chạy lên",
+     "sub": "dọc bờ sông"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.15,
+     "kind": "whoosh",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 8.35,
+   "end": 9.89,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.035,
+     "lon": 105.7884,
+     "zoom": 17.2
+    },
+    {
+     "t": 2.36,
+     "lat": 10.0355,
+     "lon": 105.7882,
+     "zoom": 17.3
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03369,
+       105.78843
+      ],
+      [
+       10.0343,
+       105.78868
+      ],
+      [
+       10.03474,
+       105.78895
+      ],
+      [
+       10.03495,
+       105.78906
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03495,
+       105.78906
+      ],
+      [
+       10.0357,
+       105.78834
+      ],
+      [
+       10.03633,
+       105.78776
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false,
+     "head": "arrow",
+     "grow": {
+      "at": 0.35,
+      "dur": 1.96
+     }
+    },
+    {
+     "type": "tag",
+     "text": "QUẸO TRÁI",
+     "geo": [
+      10.03495,
+      105.78906
+     ],
+     "dx": 40,
+     "align": "left",
+     "from": 0.05,
+     "bg": "orange",
+     "color": "white",
+     "size": 34
+    },
+    {
+     "type": "tag",
+     "text": "NGÔ GIA TỰ",
+     "geo": [
+      10.0358,
+      105.78826
+     ],
+     "dx": 34,
+     "align": "left",
+     "from": 0.6,
+     "size": 32
+    },
+    {
+     "type": "title",
+     "title": "Quẹo trái",
+     "y": 300,
+     "size": 120,
+     "kicker": "Tới Ngô Gia Tự"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "pop",
+     "gain": 0.4
+    }
+   ]
+  },
+  {
+   "start": 9.89,
+   "end": 11.73,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.0355,
+     "lon": 105.7882,
+     "zoom": 17.3
+    },
+    {
+     "t": 1.54,
+     "lat": 10.0364,
+     "lon": 105.7876,
+     "zoom": 17.6
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03369,
+       105.78843
+      ],
+      [
+       10.0343,
+       105.78868
+      ],
+      [
+       10.03474,
+       105.78895
+      ],
+      [
+       10.03495,
+       105.78906
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03495,
+       105.78906
+      ],
+      [
+       10.0357,
+       105.78834
+      ],
+      [
+       10.03633,
+       105.78776
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03633,
+       105.78776
+      ],
+      [
+       10.03673,
+       105.78743
+      ],
+      [
+       10.03694,
+       105.7872
+      ],
+      [
+       10.03715,
+       105.787
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false,
+     "head": "arrow",
+     "grow": {
+      "at": 0.25,
+      "dur": 1.24
+     }
+    },
+    {
+     "type": "tag",
+     "text": "ĐƯỜNG HÒA BÌNH",
+     "geo": [
+      10.0359,
+      105.7871
+     ],
+     "dx": -20,
+     "align": "right",
+     "from": 0.9,
+     "bg": "blue",
+     "color": "white",
+     "size": 30
+    },
+    {
+     "type": "title",
+     "title": "Băng qua\nHòa Bình",
+     "y": 300,
+     "size": 104,
+     "typeDur": 0.6,
+     "kicker": "Chạy thẳng"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.2,
+     "kind": "whoosh",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 11.73,
+   "end": 14.83,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.0364,
+     "lon": 105.7876,
+     "zoom": 17.6
+    },
+    {
+     "t": 1.6,
+     "lat": 10.03712,
+     "lon": 105.78712,
+     "zoom": 18.6
+    },
+    {
+     "t": 1.84,
+     "lat": 10.03712,
+     "lon": 105.78712,
+     "zoom": 18.75
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03369,
+       105.78843
+      ],
+      [
+       10.0343,
+       105.78868
+      ],
+      [
+       10.03474,
+       105.78895
+      ],
+      [
+       10.03495,
+       105.78906
+      ],
+      [
+       10.0357,
+       105.78834
+      ],
+      [
+       10.03633,
+       105.78776
+      ],
+      [
+       10.03673,
+       105.78743
+      ],
+      [
+       10.03694,
+       105.7872
+      ],
+      [
+       10.03715,
+       105.787
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false,
+     "head": "arrow"
+    },
+    {
+     "type": "tag",
+     "text": "NGUYỄN ĐÌNH CHIỂU",
+     "geo": [
+      10.03692,
+      105.78672
+     ],
+     "align": "right",
+     "dx": -10,
+     "from": 0.2,
+     "size": 30
+    },
+    {
+     "type": "tag",
+     "text": "BÊN TAY PHẢI",
+     "geo": [
+      10.037,
+      105.78718
+     ],
+     "align": "left",
+     "dx": 30,
+     "from": 1.2199999999999989,
+     "bg": "orange",
+     "color": "white",
+     "size": 32
+    },
+    {
+     "type": "marker",
+     "geo": [
+      10.03723,
+      105.78712
+     ],
+     "label": "QUÁN CÓC",
+     "side": 0,
+     "size": 2.0,
+     "labelSize": 44,
+     "labelBg": "teal",
+     "labelColor": "white",
+     "from": 1.769999999999999
+    },
+    {
+     "type": "title",
+     "title": "Góc Nguyễn\nĐình Chiểu",
+     "y": 300,
+     "size": 96,
+     "to": 1.8699999999999988,
+     "typeDur": 0.6,
+     "kicker": "Tới"
+    },
+    {
+     "type": "title",
+     "title": "Tới rồi đó!",
+     "y": 300,
+     "size": 120,
+     "kicker": "Quán Cóc",
+     "from": 1.9699999999999989
+    }
+   ],
+   "sfx": [
+    {
+     "t": 1.2199999999999989,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 1.769999999999999,
+     "kind": "chime",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 14.83,
+   "end": 17.97,
+   "view": [
+    {
+     "t": 0,
+     "lat": 10.03712,
+     "lon": 105.78712,
+     "zoom": 18.75
+    },
+    {
+     "t": 3.1,
+     "lat": 10.0349,
+     "lon": 105.788,
+     "zoom": 17.0
+    }
+   ],
+   "elements": [
+    {
+     "type": "satmap"
+    },
+    {
+     "type": "route",
+     "path": [
+      [
+       10.03369,
+       105.78843
+      ],
+      [
+       10.0343,
+       105.78868
+      ],
+      [
+       10.03474,
+       105.78895
+      ],
+      [
+       10.03495,
+       105.78906
+      ],
+      [
+       10.0357,
+       105.78834
+      ],
+      [
+       10.03633,
+       105.78776
+      ],
+      [
+       10.03673,
+       105.78743
+      ],
+      [
+       10.03694,
+       105.7872
+      ],
+      [
+       10.03715,
+       105.787
+      ]
+     ],
+     "color": "orange",
+     "width": 13,
+     "smooth": false,
+     "head": "arrow"
+    },
+    {
+     "type": "marker",
+     "geo": [
+      10.03369,
+      105.78843
+     ],
+     "size": 1.2,
+     "pulse": false,
+     "label": "BẾN",
+     "side": 1,
+     "labelSize": 26
+    },
+    {
+     "type": "marker",
+     "geo": [
+      10.03723,
+      105.78712
+     ],
+     "label": "QUÁN CÓC",
+     "side": -1,
+     "size": 1.6,
+     "labelBg": "teal",
+     "labelColor": "white",
+     "enter": "none"
+    },
+    {
+     "type": "stats",
+     "y": 1290,
+     "w": 800,
+     "from": 0.3,
+     "items": [
+      {
+       "icon": "ruler",
+       "value": "~500 M",
+       "label": "từ Bến Ninh Kiều"
+      },
+      {
+       "icon": "flag",
+       "value": "1 LẦN QUẸO",
+       "label": "trái vô Ngô Gia Tự"
+      }
+     ],
+     "valueSize": 56
+    },
+    {
+     "type": "title",
+     "title": "Cái vèo\nlà tới",
+     "y": 300,
+     "size": 118,
+     "typeDur": 0.5,
+     "kicker": "Chừng 500 mét"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.3,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 0.6,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 1.6500000000000004,
+     "kind": "whoosh",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 17.97,
+   "end": 19.73,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "teal",
+     "enter": "wipe"
+    },
+    {
+     "type": "photo",
+     "path": "photos/goc-quan.jpg",
+     "full": true,
+     "focus": [
+      0.72,
+      0.36
+     ],
+     "kenburns": 1.1,
+     "dim": 0.05,
+     "enterDur": 0.25,
+     "from": 0.18
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 330,
+     "bg": "teal",
+     "rotate": -0.06,
+     "from": 0.25,
+     "lines": [
+      {
+       "text": "QUÁN NHẬU",
+       "size": 44,
+       "font": "italic"
+      },
+      {
+       "text": "CÓC",
+       "size": 150,
+       "color": "habeco"
+      }
+     ]
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 1270,
+     "size": 52,
+     "bg": "crimson",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "16 NGUYỄN ĐÌNH CHIỂU",
+       "size": 54
+      }
+     ],
+     "from": 0.7100000000000009
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "whoosh",
+     "gain": 0.5
+    },
+    {
+     "t": 0.3,
+     "kind": "pop",
+     "gain": 0.5
+    },
+    {
+     "t": 0.7100000000000009,
+     "kind": "pop",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 19.73,
+   "end": 21.39,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "habeco",
+     "color2": "white",
+     "pattern": "rays",
+     "patternAlpha": 0.35
+    },
+    {
+     "type": "photo",
+     "path": "photos/mat-tien-habeco.jpg",
+     "y": 900,
+     "w": 820,
+     "ratio": 0.95,
+     "focus": [
+      0.3,
+      0.45
+     ],
+     "frameColor": "white",
+     "rotate": -0.04
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 330,
+     "bg": "crimson",
+     "rotate": -0.05,
+     "lines": [
+      {
+       "text": "MÓN NHẬU",
+       "size": 96
+      },
+      {
+       "text": "BÌNH DÂN",
+       "size": 96,
+       "color": "habeco"
+      }
+     ],
+     "from": 0.15
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.2,
+     "kind": "pop",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 21.39,
+   "end": 22.91,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "crimson",
+     "color2": "white",
+     "pattern": "stripes",
+     "patternAlpha": 0.18
+    },
+    {
+     "type": "photo",
+     "path": "photos/bo-luc-lac.jpg",
+     "y": 880,
+     "w": 840,
+     "ratio": 1.05,
+     "focus": [
+      0.5,
+      0.55
+     ],
+     "frameColor": "white",
+     "rotate": -0.03,
+     "slide": "up"
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 1290,
+     "bg": "brown",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "BÒ LÚC LẮC",
+       "size": 76
+      },
+      {
+       "text": "KHOAI TÂY",
+       "size": 76
+      }
+     ],
+     "from": 0.2
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.25,
+     "kind": "pop",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 22.91,
+   "end": 24.93,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "teal",
+     "color2": "white",
+     "pattern": "dots",
+     "patternAlpha": 0.18
+    },
+    {
+     "type": "photo",
+     "path": "photos/kho-muc.jpg",
+     "y": 880,
+     "w": 840,
+     "ratio": 1.0,
+     "focus": [
+      0.6,
+      0.5
+     ],
+     "frameColor": "white",
+     "rotate": -0.03,
+     "slide": "right"
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 1290,
+     "bg": "crimson",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "KHÔ MỰC",
+       "size": 76
+      },
+      {
+       "text": "CHIÊN TIÊU",
+       "size": 76
+      }
+     ],
+     "from": 0.2
+    },
+    {
+     "type": "sticker",
+     "shape": "burst",
+     "x": 830,
+     "y": 560,
+     "bg": "habeco",
+     "color": "crimson",
+     "outline": "crimson",
+     "rotate": 0.12,
+     "shake": true,
+     "lines": [
+      {
+       "text": "GIÒN",
+       "size": 64,
+       "color": "crimson"
+      },
+      {
+       "text": "RỤM!",
+       "size": 64,
+       "color": "crimson"
+      }
+     ],
+     "from": 1.129999999999999
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.25,
+     "kind": "pop",
+     "gain": 0.45
+    },
+    {
+     "t": 1.129999999999999,
+     "kind": "crack",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 24.93,
+   "end": 27.0,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "habeco",
+     "color2": "crimson",
+     "pattern": "dots",
+     "patternAlpha": 0.12
+    },
+    {
+     "type": "photo",
+     "path": "photos/hot-vit-lon.jpg",
+     "x": 380,
+     "y": 620,
+     "w": 560,
+     "ratio": 1.0,
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "frameColor": "white",
+     "rotate": -0.07,
+     "slide": "left"
+    },
+    {
+     "type": "photo",
+     "path": "photos/dau-hu-sa.jpg",
+     "x": 690,
+     "y": 1060,
+     "w": 560,
+     "ratio": 1.0,
+     "focus": [
+      0.55,
+      0.55
+     ],
+     "frameColor": "white",
+     "rotate": 0.06,
+     "slide": "right",
+     "from": 1.0199999999999996
+    },
+    {
+     "type": "sticker",
+     "x": 400,
+     "y": 960,
+     "bg": "crimson",
+     "rotate": -0.04,
+     "lines": [
+      {
+       "text": "HỘT VỊT LỘN XÀO ME",
+       "size": 52
+      }
+     ],
+     "from": 0.2
+    },
+    {
+     "type": "sticker",
+     "x": 650,
+     "y": 1390,
+     "bg": "teal",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "ĐẬU HŨ CHIÊN SẢ",
+       "size": 52
+      }
+     ],
+     "from": 1.2199999999999995
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.25,
+     "kind": "pop",
+     "gain": 0.45
+    },
+    {
+     "t": 1.0199999999999996,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 1.2199999999999995,
+     "kind": "pop",
+     "gain": 0.45
+    }
+   ]
+  },
+  {
+   "start": 27.0,
+   "end": 28.5,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "crimson",
+     "color2": "white",
+     "pattern": "rays",
+     "patternAlpha": 0.18
+    },
+    {
+     "type": "photo",
+     "path": "photos/ngheu-thai.jpg",
+     "y": 880,
+     "w": 840,
+     "ratio": 1.0,
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "frameColor": "white",
+     "rotate": -0.03,
+     "slide": "up"
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 1290,
+     "bg": "teal",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "NGHÊU NẤU THÁI",
+       "size": 70
+      }
+     ],
+     "from": 0.2
+    },
+    {
+     "type": "sticker",
+     "shape": "burst",
+     "x": 250,
+     "y": 520,
+     "bg": "habeco",
+     "outline": "crimson",
+     "rotate": -0.14,
+     "shake": true,
+     "lines": [
+      {
+       "text": "HẾT",
+       "size": 66,
+       "color": "crimson"
+      },
+      {
+       "text": "SẨY!",
+       "size": 66,
+       "color": "crimson"
+      }
+     ],
+     "from": 0.9
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.25,
+     "kind": "pop",
+     "gain": 0.45
+    },
+    {
+     "t": 0.9,
+     "kind": "chime",
+     "gain": 0.35
+    }
+   ]
+  },
+  {
+   "start": 28.5,
+   "end": 32.92,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "crimson",
+     "color2": "habeco",
+     "pattern": "rays",
+     "patternAlpha": 0.25,
+     "spin": 0.4
+    },
+    {
+     "type": "sticker",
+     "shape": "burst",
+     "x": 540,
+     "y": 620,
+     "bg": "habeco",
+     "outline": "white",
+     "rotate": -0.08,
+     "shake": true,
+     "lines": [
+      {
+       "text": "TIN",
+       "size": 120,
+       "color": "crimson"
+      },
+      {
+       "text": "NÓNG!",
+       "size": 120,
+       "color": "crimson"
+      }
+     ],
+     "from": 0.0
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 1150,
+     "bg": "white",
+     "color": "crimson",
+     "outline": "crimson",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "TỪ 22/11",
+       "size": 90,
+       "color": "crimson"
+      },
+      {
+       "text": "ĐẾN 6/12",
+       "size": 90,
+       "color": "crimson"
+      }
+     ],
+     "from": 1.3099999999999987
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "drum",
+     "gain": 0.5
+    },
+    {
+     "t": 0.08,
+     "kind": "pop",
+     "gain": 0.5
+    },
+    {
+     "t": 1.3099999999999987,
+     "kind": "pop",
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "start": 32.92,
+   "end": 35.82,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "habeco",
+     "color2": "white",
+     "pattern": "rays",
+     "patternAlpha": 0.35
+    },
+    {
+     "type": "photo",
+     "path": "photos/qua-bo-vien.jpg",
+     "y": 700,
+     "w": 760,
+     "ratio": 0.9,
+     "focus": [
+      0.5,
+      0.55
+     ],
+     "frameColor": "white",
+     "rotate": -0.04,
+     "from": 1.3299999999999996
+    },
+    {
+     "type": "coupon",
+     "x": 540,
+     "y": 1230,
+     "w": 900,
+     "h": 300,
+     "top": "HÓA ĐƠN 500K",
+     "bottom": "TẶNG 1 DĨA BÒ VIÊN",
+     "from": 0.0
+    },
+    {
+     "type": "confetti",
+     "from": 1.4299999999999997,
+     "n": 60
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "whoosh",
+     "gain": 0.45
+    },
+    {
+     "t": 1.3299999999999996,
+     "kind": "pop",
+     "gain": 0.5
+    },
+    {
+     "t": 1.4299999999999997,
+     "kind": "cheer",
+     "gain": 0.25
+    }
+   ]
+  },
+  {
+   "start": 35.82,
+   "end": 38.37,
+   "elements": [
+    {
+     "type": "backdrop",
+     "color": "teal",
+     "color2": "habeco",
+     "pattern": "rays",
+     "patternAlpha": 0.2
+    },
+    {
+     "type": "photo",
+     "path": "photos/qua-suon-bo.jpg",
+     "y": 700,
+     "w": 760,
+     "ratio": 0.9,
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "frameColor": "white",
+     "rotate": 0.04,
+     "from": 0.909999999999998
+    },
+    {
+     "type": "coupon",
+     "x": 540,
+     "y": 1230,
+     "w": 900,
+     "h": 300,
+     "top": "HÓA ĐƠN 1.500K",
+     "bottom": "TẶNG 1 DĨA SƯỜN BÒ",
+     "slide": "right",
+     "from": 0.0
+    },
+    {
+     "type": "confetti",
+     "from": 1.009999999999998,
+     "n": 80,
+     "seed": 4
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 22
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.0,
+     "kind": "whoosh",
+     "gain": 0.45
+    },
+    {
+     "t": 0.909999999999998,
+     "kind": "pop",
+     "gain": 0.5
+    },
+    {
+     "t": 1.009999999999998,
+     "kind": "cheer",
+     "gain": 0.3
+    }
+   ]
+  },
+  {
+   "start": 38.37,
+   "end": 44.86,
+   "elements": [
+    {
+     "type": "photo",
+     "path": "photos/hoang-hon.jpg",
+     "full": true,
+     "focus": [
+      0.4,
+      0.5
+     ],
+     "kenburns": 1.08,
+     "dim": 0.35
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 330,
+     "bg": "teal",
+     "rotate": -0.05,
+     "from": 0.0,
+     "lines": [
+      {
+       "text": "QUÁN NHẬU",
+       "size": 44,
+       "font": "italic"
+      },
+      {
+       "text": "CÓC",
+       "size": 150,
+       "color": "habeco"
+      }
+     ]
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 560,
+     "bg": "crimson",
+     "rotate": 0.02,
+     "lines": [
+      {
+       "text": "16 NGUYỄN ĐÌNH CHIỂU",
+       "size": 50
+      },
+      {
+       "text": "P. NINH KIỀU, CẦN THƠ",
+       "size": 36,
+       "font": "bold"
+      }
+     ],
+     "from": 0.25
+    },
+    {
+     "type": "sticker",
+     "shape": "pill",
+     "x": 540,
+     "y": 760,
+     "bg": "habeco",
+     "color": "crimson",
+     "outline": "white",
+     "rotate": -0.02,
+     "lines": [
+      {
+       "text": "ĐT 0938 543 698",
+       "size": 56,
+       "color": "crimson"
+      }
+     ],
+     "from": 0.5
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 930,
+     "bg": "white",
+     "outline": "crimson",
+     "rotate": 0.03,
+     "lines": [
+      {
+       "text": "KHUYẾN MÃI 22/11 – 6/12",
+       "size": 40,
+       "color": "crimson"
+      }
+     ],
+     "from": 0.75
+    },
+    {
+     "type": "sticker",
+     "x": 540,
+     "y": 1200,
+     "bg": "crimson",
+     "rotate": 0,
+     "wobble": false,
+     "lines": [
+      {
+       "text": "ĐÃ UỐNG RƯỢU BIA",
+       "size": 46
+      },
+      {
+       "text": "KHÔNG LÁI XE",
+       "size": 46,
+       "color": "habeco"
+      }
+     ],
+     "from": 1.6400000000000006
+    },
+    {
+     "type": "note",
+     "text": "Người dưới 18 tuổi không sử dụng rượu bia",
+     "x": 540,
+     "align": "center",
+     "y": 1880,
+     "size": 24
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0.05,
+     "kind": "whoosh",
+     "gain": 0.4
+    },
+    {
+     "t": 0.1,
+     "kind": "pop",
+     "gain": 0.45
+    },
+    {
+     "t": 0.35,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 0.6,
+     "kind": "pop",
+     "gain": 0.4
+    },
+    {
+     "t": 1.6400000000000006,
+     "kind": "thud",
+     "gain": 0.4
+    }
+   ]
+  }
+ ]
+}

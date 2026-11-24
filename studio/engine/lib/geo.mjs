@@ -8,8 +8,8 @@ import {createCanvas, loadImage} from '@napi-rs/canvas';
 import {clamp, ease, backOut, sampleTrack, rng} from './math.mjs';
 
 export const ORANGE = '#FF8A1F', WHITE = '#FFFFFF', DARK = '#111418';
-export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade'];
-const col = c => ({orange: ORANGE, white: WHITE, dark: DARK, blue: '#3FB6FF', red: '#E5484D', yellow: '#FFD23F', green: '#46C46B'}[c] || c || ORANGE);
+export const GEO_TYPES = ['satmap', 'globe', 'stars', 'marker', 'tag', 'route', 'area', 'dots', 'title', 'photo', 'stats', 'clouds', 'note', 'shade', 'backdrop', 'sticker', 'coupon', 'confetti'];
+const col = c => ({orange: ORANGE, white: WHITE, dark: DARK, blue: '#3FB6FF', red: '#E5484D', yellow: '#FFD23F', green: '#46C46B', habeco: '#FFD400', crimson: '#C8102E', teal: '#0B8C7A', brown: '#6B3A1E', cream: '#FFF6D6'}[c] || c || ORANGE);
 const F = {black: 'QBKBlack', italic: 'QBKItalic', bold: 'QBKBold'};
 
 // ---------- Web Mercator ----------
@@ -200,9 +200,9 @@ function photo(ctx, e, t, s) {
     ctx.restore(); if (e.shade !== false) shade(ctx, {}, t, s); if (e.credit) credit(ctx, s, e.credit, s.height - 330, 'left'); return;
   }
   const W = e.w ?? 760, ratio = e.ratio ?? (im.height / im.width), H = W * ratio, B = e.border ?? 16, CB = e.credit ? 44 : B;
-  const q = clamp(k / 0.55), [x, y0] = [e.x ?? s.width / 2, e.y ?? 960], y = y0 + (1 - backOut(q)) * 260, rot = (e.rotate ?? -0.03) + (1 - ease(q)) * 0.12;
+  const q = clamp(k / 0.55), sl = {left: [-900, 0], right: [900, 0], up: [0, 260]}[e.slide || 'up'], [x0p, y0] = [e.x ?? s.width / 2, e.y ?? 960], x = x0p + (1 - backOut(q)) * sl[0], y = y0 + (1 - backOut(q)) * sl[1], rot = (e.rotate ?? -0.03) + (1 - ease(q)) * 0.12;
   ctx.save(); ctx.globalAlpha = a * clamp(q * 2.5); ctx.translate(x, y); ctx.rotate(rot);
-  ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 34; ctx.shadowOffsetY = 12; ctx.fillStyle = '#F7F5F0'; ctx.fillRect(-W / 2 - B, -H / 2 - B, W + 2 * B, H + B + CB); ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 34; ctx.shadowOffsetY = 12; ctx.fillStyle = e.frameColor ? col(e.frameColor) : '#F7F5F0'; ctx.fillRect(-W / 2 - B, -H / 2 - B, W + 2 * B, H + B + CB); ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
   ctx.save(); ctx.beginPath(); ctx.rect(-W / 2, -H / 2, W, H); ctx.clip();
   const sc = Math.max(W / im.width, H / im.height) * kb, iw = im.width * sc, ih = im.height * sc, fx = e.focus?.[0] ?? 0.5, fy = e.focus?.[1] ?? 0.5;
   ctx.drawImage(im, -W / 2 + (W - iw) * fx, -H / 2 + (H - ih) * fy, iw, ih); ctx.restore();
@@ -252,5 +252,63 @@ function clouds(ctx, e, t, s) {
 function note(ctx, e, t, s) { ctx.save(); ctx.globalAlpha = fadeA(e, t) * 0.85; ctx.font = `${e.size ?? 22}px ${F.bold}`; ctx.fillStyle = '#D5D9DF'; ctx.textAlign = e.align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(e.text, e.x ?? 66, e.y ?? 1330); ctx.restore(); }
 export function credit(ctx, s, text, y = 120, align = 'right') { ctx.save(); ctx.font = `18px ${F.bold}`; ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(text, align === 'right' ? s.width - 40 : 40, y); ctx.restore(); }
 
-const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade};
+
+// ---------- "bảng hiệu quán" (quảng cáo quán ăn): nền màu có hoa văn, sticker, phiếu quà, pháo giấy ----------
+function backdrop(ctx, e, t, s) {
+  const k = local(e, t), W = s.width, H = s.height, c1 = col(e.color || 'habeco'), c2 = col(e.color2 || 'cream');
+  ctx.save();
+  if (e.enter === 'wipe') { const q = ease(clamp(k / (e.enterDur ?? 0.35))); ctx.beginPath(); ctx.rect(0, H * (1 - q), W, H * q + 1); ctx.clip(); }
+  ctx.fillStyle = c1; ctx.fillRect(0, 0, W, H);
+  ctx.globalAlpha = e.patternAlpha ?? 0.22; ctx.fillStyle = c2;
+  if (e.pattern === 'rays') { const n = e.n ?? 18, cx = W / 2, cy = e.cy ?? H * 0.42, R = Math.hypot(W, H), a0 = k * (e.spin ?? 0.15);
+    for (let i = 0; i < n; i++) { const a = a0 + i * 2 * Math.PI / n; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R, a, a + Math.PI / n); ctx.closePath(); ctx.fill(); } }
+  else if (e.pattern === 'stripes') { const w = e.stripe ?? 70, off = (k * 60) % (w * 2); ctx.translate(W / 2, H / 2); ctx.rotate(-0.5); for (let x = -H - off; x < H; x += w * 2) ctx.fillRect(x, -H, w, H * 2); }
+  else if (e.pattern === 'dots') { const g = e.grid ?? 90; for (let y = 0; y < H + g; y += g) for (let x = ((y / g) % 2) * g / 2; x < W + g; x += g) { ctx.beginPath(); ctx.arc(x, y + (k * 30) % g, g * 0.16, 0, Math.PI * 2); ctx.fill(); } }
+  ctx.restore();
+}
+function starPath(ctx, r, n = 14) { ctx.beginPath(); for (let i = 0; i < n * 2; i++) { const a = i * Math.PI / n, rr = i % 2 ? r * 0.78 : r; ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } ctx.closePath(); }
+// sticker: lines [{text, size, color, font}] hoặc text; shape 'box' | 'burst' | 'pill'
+function sticker(ctx, e, t, s, v) {
+  const [x, y] = pos(e, t, s, v), k = local(e, t), a = fadeA({...e, enter: 'none'}, t), q = clamp(k / 0.4);
+  if (q <= 0) return;
+  const lines = e.lines || [{text: e.text, size: e.size}], pad = e.pad ?? 30;
+  ctx.save(); ctx.globalAlpha = a * clamp(q * 3);
+  const wob = e.wobble === false ? 0 : Math.sin(k * (e.shake ? 22 : 3)) * (e.shake ? 0.05 : 0.025) * (e.shake ? Math.max(0.25, 1 - k / 1.2) : 1);
+  ctx.translate(x, y); ctx.rotate((e.rotate ?? -0.05) + wob + (1 - q) * 0.5); const sc = backOut(q) * (e.scale ?? 1); ctx.scale(sc, sc);
+  let w = 0, h = 0; const m = lines.map(l => { const sz = l.size ?? 70, fam = l.font === 'italic' ? F.italic : l.font === 'bold' ? F.bold : F.black; ctx.font = `${sz}px ${fam}`; const tw = Math.min(ctx.measureText(l.text).width, (e.maxW ?? 900)); w = Math.max(w, tw); h += sz * 1.08; return {...l, sz, fam, tw}; });
+  const bw = w + pad * 2, bh = h + pad * 1.3;
+  ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 8; ctx.shadowOffsetY = 10;
+  ctx.fillStyle = col(e.bg || 'crimson'); ctx.strokeStyle = col(e.outline || 'white'); ctx.lineWidth = e.outlineW ?? 8;
+  if (e.shape === 'burst') { const r = Math.max(bw, bh) * 0.62; starPath(ctx, r, e.points ?? 14); ctx.fill(); ctx.shadowColor = 'transparent'; ctx.stroke(); }
+  else { rr(ctx, -bw / 2, -bh / 2, bw, bh, e.shape === 'pill' ? bh / 2 : (e.radius ?? 18)); ctx.fill(); ctx.shadowColor = 'transparent'; ctx.stroke(); }
+  ctx.shadowColor = 'transparent'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  let yy = -h / 2; for (const l of m) { ctx.font = `${l.sz}px ${l.fam}`; const sz = l.tw < ctx.measureText(l.text).width ? fitFont(ctx, l.text, l.fam, l.sz, e.maxW ?? 900) : l.sz; ctx.fillStyle = col(l.color || e.color || 'white'); ctx.fillText(l.text, 0, yy + l.sz * 0.56); yy += l.sz * 1.08; }
+  ctx.restore();
+}
+// phiếu quà: viền răng cưa, đường cắt nét đứt, dòng trên (điều kiện) + dòng dưới (quà)
+function coupon(ctx, e, t, s, v) {
+  const [x, y] = pos(e, t, s, v), k = local(e, t), a = fadeA({...e, enter: 'none'}, t), q = clamp(k / 0.45); if (q <= 0) return;
+  const W = e.w ?? 900, H = e.h ?? 300, split = e.split ?? 0.42;
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(x + (1 - backOut(q)) * (e.slide === 'right' ? 1000 : -1000), y); ctx.rotate(e.rotate ?? -0.03);
+  ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowOffsetY = 12; ctx.shadowBlur = 20;
+  ctx.fillStyle = col(e.bg || 'cream'); ctx.beginPath(); const r = 26; ctx.moveTo(-W / 2, -H / 2); ctx.lineTo(W / 2, -H / 2); ctx.lineTo(W / 2, -r); ctx.arc(W / 2, 0, r, -Math.PI / 2, Math.PI / 2, true); ctx.lineTo(W / 2, H / 2); ctx.lineTo(-W / 2, H / 2); ctx.lineTo(-W / 2, r); ctx.arc(-W / 2, 0, r, Math.PI / 2, -Math.PI / 2, true); ctx.closePath(); ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.fillStyle = col(e.band || 'crimson'); ctx.fillRect(-W / 2, -H / 2, W, H * split);
+  ctx.strokeStyle = col(e.band || 'crimson'); ctx.lineWidth = 4; ctx.setLineDash([14, 10]); ctx.strokeRect(-W / 2 + 16, -H / 2 + 16, W - 32, H - 32); ctx.setLineDash([]);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  let sz = fitFont(ctx, e.top || '', F.black, e.topSize ?? 64, W - 80); ctx.fillStyle = col(e.topColor || 'habeco'); ctx.fillText(e.top || '', 0, -H / 2 + H * split / 2 + 4);
+  const g = clamp((k - 0.35) / 0.35), gs = 1 + 0.25 * (1 - backOut(g));
+  ctx.save(); ctx.translate(0, -H / 2 + H * split + H * (1 - split) / 2); ctx.scale(gs, gs); ctx.globalAlpha = a * g;
+  sz = fitFont(ctx, e.bottom || '', F.black, e.bottomSize ?? 76, W - 80); ctx.fillStyle = col(e.bottomColor || 'crimson'); ctx.fillText(e.bottom || '', 0, 4); ctx.restore();
+  ctx.restore();
+}
+function confetti(ctx, e, t, s) {
+  const k = local(e, t), r = rng(e.seed ?? 9), n = e.n ?? 70, cs = (e.colors || ['habeco', 'crimson', 'teal', 'white']).map(col), a = fadeA(e, t);
+  ctx.save(); ctx.globalAlpha = a;
+  for (let i = 0; i < n; i++) { const x0 = r() * s.width, vy = 380 + r() * 420, d = r() * 0.6, sw = r() * 6, w = 14 + r() * 14, c = cs[i % cs.length], tt = k - d; if (tt < 0) continue;
+    const y = -40 + tt * vy, x = x0 + Math.sin(tt * 3 + sw) * 40; if (y > s.height + 40) continue;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(tt * (4 + sw)); ctx.scale(1, Math.cos(tt * 6 + sw)); ctx.fillStyle = c; ctx.fillRect(-w / 2, -w / 4, w, w / 2); ctx.restore(); }
+  ctx.restore();
+}
+
+const PAINT = {satmap, globe, stars, marker, tag, route, area, dots, title, photo, stats, clouds, note, shade, backdrop, sticker, coupon, confetti};
 export function drawGeo(ctx, e, t, s, v, shotDur) { e._shotDur = shotDur; PAINT[e.type](ctx, e, t, s, v); }

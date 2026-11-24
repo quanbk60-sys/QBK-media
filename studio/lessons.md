@@ -32,3 +32,7 @@ Mọi agent **đọc file này trước khi làm việc**. Nhà sản xuất th�
 
 ## Vận hành
 - **Tiết kiệm hạn mức:** dựng video ở session mới (do app gọi), không trong chat dài. Biên kịch dùng Sonnet (Opus chỉ cho chủ đề nhạy cảm), đạo diễn kiêm dựng phim, kiểm định nhẹ, họa sĩ chỉ khi thiếu đồ. *(Người dùng, 08/11/2026)*
+
+## Quảng cáo quán ăn, quán nhậu
+- Lời đọc nói về món và quà, không rủ "đi nhậu"; luôn có cảnh báo "Người dưới 18 tuổi không sử dụng rượu bia · Đã uống rượu bia không lái xe". Mẫu: `projects/quan-coc/`. *(Quán Cóc, 24/11/2026)*
+- Người dùng muốn giọng "không như AI": viết lời như nói chuyện (nè, nha, hen; câu ngắn; có câu đùa) và dùng `tts.py --style` để chỉ dẫn cách nói. Chép lại bằng Gemini để soát trước khi dựng. *(Quán Cóc)*

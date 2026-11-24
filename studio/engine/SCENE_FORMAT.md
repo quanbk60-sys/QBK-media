@@ -168,6 +168,12 @@ Nền ảnh vệ tinh thật, không người que. Thẻ kiến thức: `studio/
 | `clouds` | mây trôi: `n`, `y0`, `y1`, `speed`, `opacity` |
 | `note` | chú thích nhỏ ("*minh họa"): `text`, `x`, `y` |
 | `shade` | dải tối trên/dưới thêm: `top`, `bottom` |
+| `backdrop` | nền màu toàn khung (dùng cho quảng cáo quán): `color`, `color2`, `pattern` (`rays`/`stripes`/`dots`), `patternAlpha`, `spin`, `enter: "wipe"` |
+| `sticker` | nhãn dán: `lines` [{`text`, `size`, `color`, `font` (italic/bold)}], `x`, `y`, `bg`, `outline`, `shape` (`box`/`pill`/`burst`), `rotate`, `shake: true` (lắc mạnh lúc hiện), `wobble: false` |
+| `coupon` | phiếu quà: `top` (điều kiện), `bottom` (quà), `w`, `h`, `band`, `bg`, `slide: "right"` |
+| `confetti` | pháo giấy rơi: `n`, `colors`, `seed` |
+
+Màu có tên thêm: `habeco` (vàng), `crimson`, `teal`, `brown`, `cream`. `photo` có thêm `frameColor` và `slide` (`left`/`right`/`up`). Phim mẫu quảng cáo quán: `projects/quan-coc/`.
 
 Phụ đề của `ve-tinh`: chữ trắng Inter Display Black viền đen. Nên đặt `captions.y` = 1450; giữ ô số liệu và nhãn trên y ≈ 1340.
 Render nặng hơn vẽ tay (địa cầu tính từng điểm ảnh): khoảng 4–5 s máy cho 1 s phim.

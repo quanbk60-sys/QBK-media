@@ -1,0 +1,60 @@
+{
+ "levels": [
+  {
+   "z": 4,
+   "file": "z4.jpg",
+   "x0": 0,
+   "y0": 0,
+   "w": 4096,
+   "h": 4096,
+   "world": true
+  },
+  {
+   "z": 7,
+   "file": "z7_1412.jpg",
+   "x0": 25023,
+   "y0": 14141,
+   "w": 2000,
+   "h": 2600,
+   "world": false
+  },
+  {
+   "z": 10,
+   "file": "z10_6892.jpg",
+   "x0": 207091,
+   "y0": 122223,
+   "w": 2000,
+   "h": 3000,
+   "world": false
+  },
+  {
+   "z": 13,
+   "file": "z13_7908.jpg",
+   "x0": 1663824,
+   "y0": 988211,
+   "w": 2000,
+   "h": 3200,
+   "world": false
+  },
+  {
+   "z": 16,
+   "file": "z16_1709.jpg",
+   "x0": 13317586,
+   "y0": 7916796,
+   "w": 2200,
+   "h": 3400,
+   "world": false
+  },
+  {
+   "z": 18,
+   "file": "z18_9443.jpg",
+   "x0": 53273545,
+   "y0": 31672202,
+   "w": 2400,
+   "h": 3600,
+   "world": false
+  }
+ ],
+ "source": "Esri World Imagery",
+ "credit": "Esri, Maxar, Earthstar Geographics"
+}
